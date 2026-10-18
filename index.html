@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="sk" data-skin="zse">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Zdieľňa – trhovisko na zdieľanie elektriny od ZSE a VSE. Hackathon 2026, prototyp.">
+<title>Zdieľňa – slnko od suseda</title>
+<link rel="icon" href="assets/zse.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+<header class="top" id="top"></header>
+<div class="shell" id="shell"><nav class="side" id="side" aria-label="Hlavná navigácia"></nav><main class="main" id="main"></main></div>
+<nav class="bnav" id="bnav" aria-label="Spodná navigácia"></nav>
+<aside class="drawer" id="drawer" aria-label="Parametre dema"></aside>
+<div id="modal"></div>
+<button class="fab" id="fab" data-act="chat" aria-label="Otvoriť AI asistenta" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span class="dot" aria-hidden="true"></span></button>
+<section class="chat" id="chat" role="dialog" aria-label="AI asistent (demo)"></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="cap" id="cap" role="status"></div>
+
+<script src="js/core.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/views-app.js"></script>
+<script src="js/views-public.js"></script>
+<script src="js/views-map.js"></script>
+<script src="js/views-ideas.js"></script>
+<script src="js/badges.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

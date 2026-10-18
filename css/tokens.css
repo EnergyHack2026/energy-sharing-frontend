@@ -1,0 +1,93 @@
+/* =====================================================================
+   Zdieľňa – dizajnové tokeny
+   Jediné miesto, kde sa definujú farby, písmo a rozmery. Komponenty
+   (app.css, landing.css) používajú iba var(--…), nikdy priamy hex.
+
+   Značkové farby sú prevzaté zo zse.sk a vse.sk (ich CSS, okt. 2026).
+   Kontrast textu je overený voči WCAG AA (≥ 4,5 : 1):
+   - ZSE červená #F21C0A má na bielej iba 4,25 : 1 → na malý text
+     a odkazy používame --brand-ink (#B1190C), červenú len na plochy
+     a tučné tlačidlá.
+   - VSE azúrová #01A0D5 má 3 : 1 → iba plochy, ikony a grafy.
+   Aplikácia je zámerne iba svetlá (projektor, menej testovania).
+   ===================================================================== */
+:root{
+  color-scheme:light;
+
+  /* písmo – Figtree používa VSE; ZSE má systémové písmo, takže nekoliduje */
+  --font:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --fs-xs:12px;   /* minimum – nič menšie */
+  --fs-sm:13px;
+  --fs-md:15px;   /* bežný text */
+  --fs-lg:17px;   /* úvodný odsek (lead) */
+  --fs-h3:17px;
+  --fs-h2:22px;
+  --fs-h1:32px;
+  --fs-display:clamp(40px,5vw,68px);
+
+  /* plochy a text */
+  --bg:#FBF9F5;          /* krémové pozadie stránky */
+  --card:#FFFFFF;
+  --ink:#1E1B22;         /* hlavný text */
+  --mut:#5F6170;         /* sekundárny text – 5,8 : 1 na --bg */
+  --line:#E8E3DB;
+  --line-2:#D6CFC4;      /* výraznejší okraj (outline tlačidlá) */
+  --tint-warm:#F6EEE4;   /* sekcie pre výrobcu */
+  --tint-green:#ECF1E6;  /* sekcie pre odberateľa */
+  --tint-cool:#EAF0F7;
+
+  /* tmavý pás (hero, klub) – prepisuje ho skin */
+  --surface-dark:#1E1B22;
+  --on-dark:#ECE9F1;
+  --on-dark-mut:#B9B4C4;
+  --line-dark:rgba(255,255,255,.14);
+
+  /* rozmery */
+  --r-sm:10px;
+  --r:16px;
+  --r-lg:22px;
+  --r-pill:999px;        /* tlačidlá – obe značky používajú zaoblené „pill“ */
+  --sh:0 1px 2px rgba(30,27,34,.05),0 6px 18px rgba(30,27,34,.06);
+  --sh-lg:0 18px 50px rgba(30,27,34,.14);
+
+  /* pevné značky (strechy na mape) */
+  --zse:#F21C0A; --vse:#143C8C;
+
+  /* batéria – mimo palety značiek, rovnaká v oboch */
+  --purple:#6A35C0; --purple-t:#F0E8FB;
+}
+
+/* ---------- ZSE ---------- */
+:root[data-skin="zse"]{
+  --brand:#F21C0A; --brand-d:#B1190C; --brand-ink:#B1190C; --brand-t:#FDE9E6; --on-brand:#FFFFFF;
+  --brand2:#0AACF2;                       /* sekundárna modrá zo zse.sk */
+  --surface-dark:#1E1B22; --accent-dark:#FF7A6B; --on-dark-mut:#B9B4C4;
+
+  --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;   /* výroba / slnko */
+  --green:#4E7210;  --green-t:#EEF4E0;                          /* zdieľané / úspech */
+  --blue:#0A6E9C;   --blue-t:#E1F4FD;                           /* spotreba / info */
+  --orange:#9E4A0A; --orange-t:#FDEBDD;                         /* výkup / upozornenie */
+  --red:#B1190C;    --red-t:#FDE9E6;
+}
+
+/* ---------- VSE ---------- */
+:root[data-skin="vse"]{
+  --brand:#143C8C; --brand-d:#0E2C68; --brand-ink:#143C8C; --brand-t:#E3EAF7; --on-brand:#FFFFFF;
+  --brand2:#01A0D5;                       /* azúrová zo vse.sk */
+  --surface-dark:#0E2C68; --accent-dark:#6FD0F2; --on-dark-mut:#A9BEE3;
+
+  --yellow:#F5A623; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
+  --green:#3A7316;  --green-t:#E9F3E1;   /* #5EA62B z vse.sk, stmavené pre text */
+  --blue:#0B6E98;   --blue-t:#E1F4FB;    /* #01A0D5, stmavené pre text */
+  --orange:#A84E0C; --orange-t:#FDEBDD;  /* #EC721A, stmavené pre text */
+  --red:#B02A37;    --red-t:#FBE7E9;
+}
+
+/* Sémantika grafov – rovnaký význam v celej aplikácii aj na úvode */
+:root{
+  --c-prod:var(--yellow);    /* výroba / prebytok */
+  --c-cons:var(--blue);      /* spotreba */
+  --c-shared:var(--green);   /* zdieľaná časť */
+  --c-bat:var(--purple);     /* batéria */
+  --c-grid:var(--orange);    /* výkupca / sieť */
+}
