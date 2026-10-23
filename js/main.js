@@ -25,7 +25,7 @@ function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
   document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',v==='landing');document.body.classList.toggle('jury',J);
   const brandSeg=J?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
-  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka"><img src="${LOGOS[S.skin]}" alt="${BR()}"><span>${APP_NAME}<span class="dot">.</span></span></button>`;
+  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${v==='landing'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
@@ -99,7 +99,7 @@ function syncInputs(){
 function render(full=true){
   customerSkin();
   document.documentElement.dataset.skin=S.skin;
-  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=LOGOS[S.skin]}
+  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=curView()==='landing'?LOGO_APP:LOGOS[S.skin]}
   if(full){renderShell();const dr=$('#drawer');const st=dr.scrollTop;dr.innerHTML=drawerHtml();dr.scrollTop=st}
   $('#drawer').classList.toggle('open',S.drawer);$('#drawer').setAttribute('aria-hidden',String(!S.drawer));
   renderMain();

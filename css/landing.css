@@ -7,6 +7,7 @@
 body.marketing .main{max-width:none;padding:0 0 40px}
 .marketing .top{background:var(--bg);border-color:var(--line);padding:16px max(24px,calc((100vw - 1240px)/2));gap:22px;flex-wrap:nowrap}
 .marketing .brand img{height:30px}
+.marketing .brand span{display:inline}  /* úvod nemá logo – názov Zdieľňa ostáva aj v mobile */
 .marketing .top .btn{white-space:nowrap}
 .marketing .top .btn:not(.dark){background:transparent}
 .market-nav{display:flex;gap:24px;align-items:center;margin-left:24px}
