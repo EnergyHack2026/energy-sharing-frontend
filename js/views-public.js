@@ -39,9 +39,7 @@ function vLanding(){
  <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <form id="lp-eic-form" novalidate><label class="lp-eic-label" for="lp-eic">Zistite, čo môže zdieľanie priniesť vám</label><div class="lp-eic-box"><input id="lp-eic" name="eic" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="lp-eic-help${l.error?' lp-eic-error':''}" aria-invalid="${l.error?'true':'false'}" placeholder="Váš 16-miestny EIC kód" maxlength="24" value="${esc(l.eic||'')}"><button class="btn pri" type="button" data-act="eiccheck">Zistiť môj potenciál <span aria-hidden="true">→</span></button></div>${l.error?`<div class="lp-error" id="lp-eic-error" role="alert">${esc(l.error)}</div>`:''}
- <p class="lp-eic-help" id="lp-eic-help">EIC nájdete na faktúre za elektrinu. <a href="#eic-faq">Kde presne?</a> Nemáte ho poruke? <button type="button" class="lp-chip" data-act="eicfill">Vložiť ukážkový kód</button></p></form>
- <div class="lp-demo-links"><span>Nemáte kód poruke?</span><button class="link" data-act="eicdemo:anna">Skúsiť výrobcu</button><span aria-hidden="true">·</span><button class="link" data-act="eicdemo:peter">Skúsiť odberateľa</button></div>
+ <div class="lp-join-cta"><h2>Chcete sa pridať do sveta zdieľania energie?</h2><p>Stačí kód EIC z faktúry za elektrinu. Hneď uvidíte, čo vám zdieľanie prinesie – bez záväzku.</p><button class="btn join lg" data-act="view:join">Pridať sa <span aria-hidden="true">→</span></button></div>
  <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
@@ -64,9 +62,24 @@ function vLanding(){
  <details><summary>Začne sa zdieľanie hneď po zadaní EIC?</summary><p>Nie. Najskôr si pozriete ponuku, potvrdíte potrebné údaje a súhlasy a odošlete žiadosť. Zdieľanie začne až po schválení a aktivácii. Jedno odberné miesto môže byť aktívne len v jednej skupine zdieľania.</p></details>
  <details><summary>Môžem si elektrinu z obeda nechať na večer?</summary><p>Zdieľanie sa vyhodnocuje v rovnakých 15-minútových intervaloch. Presun na večer vyžaduje skutočné uloženie energie, napríklad do fyzickej batérie. Samotné zdieľanie ju neukladá.</p></details>
  </div></div></section>
- <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><a class="btn pri lg" href="#lp-eic">Zistiť môj potenciál →</a></section>
+ <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><button class="btn pri lg" data-act="view:join">Pridať sa →</button></section>
  <footer class="lp-footer"><div><b>Zdieľňa<span class="dot">.</span></b>Slnko od suseda</div><nav class="lp-footer-links" aria-label="Odkazy v pätičke"><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a><a href="#lp-faq">Otázky a odpovede</a></nav></footer><div class="lp-disclaimer">Hackathonový koncept. Nie je to dostupná komerčná služba ani záväzná ponuka. Čísla na tejto stránke počíta model dema z ilustračných dát. Reálne zapojenie vyžaduje overenie zákazníka, oprávnenie na prístup k dátam, vhodné meranie a aktiváciu skupiny.</div></div>
  </div>`;
+}
+
+/* pridanie sa – zadanie EIC (z úvodu cez „Pridať sa“); neutrálny vzhľad ako úvod, značka až podľa EIC */
+function vJoin(){
+ const l=S.landing||{},ok=l.checked&&!l.error;
+ return `<div class="lp"><section class="lp-hero lp-join" aria-labelledby="join-heading"><div class="lp-wrap"><div class="lp-join-card">
+ <span class="kicker">Pridajte sa do Zdieľne</span>
+ <h1 id="join-heading">Začnite jedným kódom<span class="sig">.</span></h1>
+ <p class="lp-intro">Zadajte EIC kód svojho odberného miesta. Podľa neho pripravíme odhad, čo vám zdieľanie prinesie, a spojíme vás s vaším dodávateľom elektriny.</p>
+ <form id="lp-eic-form" novalidate><label class="lp-eic-label" for="lp-eic">Zistite, čo môže zdieľanie priniesť vám</label><div class="lp-eic-box"><input id="lp-eic" name="eic" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="lp-eic-help${l.error?' lp-eic-error':''}" aria-invalid="${l.error?'true':'false'}" placeholder="Váš 16-miestny EIC kód" maxlength="24" value="${esc(l.eic||'')}"><button class="btn pri" type="button" data-act="eiccheck">Zistiť môj potenciál <span aria-hidden="true">→</span></button></div>${l.error?`<div class="lp-error" id="lp-eic-error" role="alert">${esc(l.error)}</div>`:''}
+ <p class="lp-eic-help" id="lp-eic-help">EIC nájdete na faktúre za elektrinu. Nemáte ho poruke? <button type="button" class="lp-chip" data-act="eicfill">Vložiť ukážkový kód</button></p></form>
+ <div class="lp-demo-links"><span>Nemáte kód poruke?</span><button class="link" data-act="eicdemo:anna">Skúsiť výrobcu</button><span aria-hidden="true">·</span><button class="link" data-act="eicdemo:peter">Skúsiť odberateľa</button></div>
+ ${ok?`<p class="lp-ok" role="status">✓ Kód ${esc(maskEic(l.eic))} je v poriadku.</p>`:''}
+ <details class="lp-join-faq"><summary>Kde nájdem EIC kód?</summary><p>EIC je 16-miestny kód odberného miesta. Nájdete ho na faktúre za elektrinu alebo v zákazníckom účte pri údajoch o odbernom mieste. Samotný kód nie je prihlásenie ani súhlas so zdieľaním – zdieľanie začne až po vašom potvrdení a schválení žiadosti.</p></details>
+ </div></div></section></div>`;
 }
 
 function benefitNums(){
