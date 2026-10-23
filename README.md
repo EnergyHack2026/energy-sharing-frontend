@@ -34,6 +34,24 @@ index.html#jury=1                              # jury mode on (jury=0 off)
 
 Views: `landing join potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
 
+## Docker on Ubuntu
+
+From the frontend directory, with Docker Engine and the Compose plugin installed:
+
+```bash
+docker compose up -d --build
+docker compose ps
+curl -I http://localhost:8000/
+```
+
+Open `http://SERVER_IP:8000/`. Allow inbound TCP 8000 in the server/provider firewall if necessary.
+The container serves the static app using Nginx and restarts automatically with Docker.
+After pulling changes, run `docker compose up -d --build` again.
+Logs: `docker compose logs --tail 100 frontend`. Stop: `docker compose down`.
+
+This deploys the current prototype with simulated data; it does not connect it to the backend API.
+PWA installation and offline service workers require HTTPS, except on localhost.
+
 ## Final version (branch `final`)
 
 The `final` branch is the version for the jury. It starts with the landing page only; features from `main`
