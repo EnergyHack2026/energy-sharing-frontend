@@ -32,7 +32,7 @@ index.html#jury=1                              # jury mode on (jury=0 off)
 
 `persona=admin` or `skin=…` in the link switches jury mode on automatically.
 
-Views: `landing join potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
+Views: `landing potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
 
 ## Final version (branch `final`)
 
@@ -62,7 +62,7 @@ js/core.js          utils + state S
 js/engine.js        model: profiles, allocation, settlement (no DOM)
 js/ui.js            icon set, form helper F(), charts, QR, map pieces
 js/views-app.js     Home, Market, Group, Reports, Rewards, Profile, Admin, Onboarding
-js/views-public.js  Landing („Pridať sa“ → Join), Join (EIC entry; valid EIC → Registration, or Potential while Registration is off), Benefits, Registration, Váš potenciál (deep link only)
+js/views-public.js  Landing (valid EIC → straight to Registration), Benefits, Registration, Váš potenciál (deep link only)
 js/views-map.js     Map
 js/views-ideas.js   Ideas (7 visions)
 js/badges.js        Odmeny → Odznaky: badge definitions, SVG badge, stage, unlock, share card, welcome popup
