@@ -810,6 +810,17 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .supply-list li:before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:800}
 .supply-price{margin-top:16px;padding:14px 16px;border-radius:var(--r);background:var(--tint-green);display:grid;gap:4px}
 .supply-price b{font-size:24px;letter-spacing:-.03em}.supply-price b span{font-size:var(--fs-sm);font-weight:500;color:var(--mut)}
+.supply-h{font-size:var(--fs-md);margin:20px 0 10px}
+.supply-co{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.supply-co button{display:flex;align-items:center;gap:12px;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:var(--r);padding:12px 14px;color:var(--ink);cursor:pointer}
+.supply-co button span{display:grid;gap:2px}
+.supply-co button img{height:22px;width:auto}
+.supply-co button.on{border-color:var(--brand);background:var(--brand-t)}
+.supply-price .link{margin-top:6px;font-weight:700;color:var(--brand-ink);justify-self:start}
+.supply-err{margin-top:10px;color:var(--red);font-size:var(--fs-sm);font-weight:700}
+.supply-done{display:flex;gap:14px;align-items:flex-start;margin-top:14px;padding:16px;border-radius:var(--r);background:var(--tint-green)}
+.supply-ok{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-weight:800}
+@media(max-width:520px){.supply-co{grid-template-columns:1fr}}
 
 </style>
 <style>
@@ -1248,7 +1259,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  sup:{co:'zse',email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
@@ -2570,15 +2581,30 @@ function vBenefits(){
    <p class="xs mut" style="margin-top:10px">Všetky sumy sú odhady, nie garancia. Predpoklady: prebytok ${fm(S.p.surplus,1)} kWh/deň, ${S.bat.on?`batéria ${fm(S.bat.cap,0)} kWh, `:''}výkup ${fpr(S.p.feedin)} €/kWh, provízia ${feeTxt()}. Dajú sa zmeniť v „⚙ Upraviť čísla a časy“.</p></div>
   </div>`;
 }
-/* ponuka dodávky ZSE/VSE pre zákazníkov iných dodávateľov – nenápadná, nikdy podmienka zdieľania */
+/* ponuka dodávky ZSE/VSE pre zákazníkov iných dodávateľov – nenápadná, nikdy podmienka zdieľania.
+   Dodávateľ podľa regiónu odberného miesta, kontakt so súhlasom, potvrdenie s adresou, kam ponuka príde. */
+const SUP={zse:{name:'ZSE',reg:'Západné Slovensko',web:'https://www.zse.sk/',price:0.1137},vse:{name:'VSE',reg:'Východné Slovensko',web:'https://www.vse.sk/',price:null}};
 function supplyModal(){
+ const u=S.sup,c=SUP[u.co];
+ const head=t=>`<div class="row between"><h2>${t}</h2><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>`;
+ const wrap=b=>`<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Ponuka dodávky ZSE a VSE">${b}</div></div>`;
+ if(u.sent)return wrap(`${head('Ďakujeme, máte to vybavené')}
+  <div class="supply-done"><span class="supply-ok" aria-hidden="true">✓</span><p>Ponuku dodávky od <b>${c.name}</b> vám pošleme na <b>${esc(u.email)}</b>${u.tel?` a ozveme sa aj na číslo <b>${esc(u.tel)}</b>`:''} do 2 pracovných dní.</p></div>
+  <p class="sm mut" style="margin-top:12px">Medzitým môžete pokojne pokračovať v registrácii – zdieľanie funguje aj s vaším súčasným dodávateľom.</p>
+  <div class="row" style="margin-top:18px"><button class="btn pri" data-act="closemodal">Pokračovať v registrácii</button></div>`);
  const b=(t,d)=>`<li><b>${t}</b><span class="xs mut">${d}</span></li>`;
- return `<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Ponuka dodávky ZSE a VSE"><div class="row between"><h2>Elektrina od ZSE alebo VSE</h2><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
- <p style="margin:10px 0 16px">Zdieľanie funguje s akýmkoľvek dodávateľom. Ako zákazník ZSE alebo VSE z neho však máte najviac.</p>
- <ul class="supply-list">${b('Prihlásenie jedným klikom','Odberné miesto, meranie aj zmluvy doplníme za vás.')}${b('Výhody navyše v Slnečnom klube','Od úrovne Zlato zľava na dodávku a nižšia provízia pri zdieľaní.')}${b('Jedno vyúčtovanie','Dodávka aj zdieľaná elektrina na jednej faktúre.')}</ul>
- <div class="supply-price"><span class="xs mut">Dodávka pre domácnosti ZSE 2026</span><b>od ${fm(0.1137,4)} € <span>/ kWh bez DPH</span></b><span class="xs mut">DomovMini, jednopásmová sadzba · bez distribučných a fixných poplatkov</span></div>
- <div class="row" style="margin-top:18px"><button class="btn pri" data-act="supplyreq">Pošlite mi ponuku</button><button class="btn" data-act="closemodal">Teraz nie</button></div>
- <p class="xs mut" style="margin-top:12px">Zmena dodávateľa je dobrovoľná a nie je podmienkou zdieľania.</p></div></div>`;
+ return wrap(`${head('Elektrina od ZSE alebo VSE')}
+  <p style="margin:10px 0 16px">Zdieľanie funguje s akýmkoľvek dodávateľom. Ako zákazník ZSE alebo VSE z neho však máte najviac.</p>
+  <ul class="supply-list">${b('Prihlásenie jedným klikom','Odberné miesto, meranie aj zmluvy doplníme za vás.')}${b('Výhody navyše v Slnečnom klube','Od úrovne Zlato zľava na dodávku a nižšia provízia pri zdieľaní.')}${b('Jedno vyúčtovanie','Dodávka aj zdieľaná elektrina na jednej faktúre.')}</ul>
+  <h3 class="supply-h">Kde máte odberné miesto?</h3>
+  <div class="supply-co" role="radiogroup" aria-label="Dodávateľ podľa regiónu">${Object.entries(SUP).map(([k,x])=>`<button type="button" role="radio" aria-checked="${u.co===k}" class="${u.co===k?'on':''}" data-act="supco:${k}"><img src="${LOGO_OFF[k]}" alt=""><span><b>${x.reg}</b><span class="xs mut">dodávateľ ${x.name}</span></span></button>`).join('')}</div>
+  <div class="supply-price">${c.price?`<span class="xs mut">Dodávka pre domácnosti ${c.name} 2026</span><b>od ${fm(c.price,4)} € <span>/ kWh bez DPH</span></b><span class="xs mut">DomovMini, jednopásmová sadzba · bez distribučných a fixných poplatkov</span>`:`<span class="xs mut">Dodávka pre domácnosti ${c.name}</span><b class="sm">Aktuálne ceny nájdete v cenníku ${c.name}.</b>`}<a class="link" href="${c.web}" target="_blank" rel="noopener">Pozrieť cenníky na ${c.web.replace(/^https:\/\/|\/$/g,'')} ↗</a></div>
+  <h3 class="supply-h">Kam vám máme poslať ponuku?</h3>
+  <div class="fields">${F('E-mail','sup.email',{t:'x'})}${F('Telefón (nepovinné)','sup.tel',{t:'x'})}</div>
+  <div style="margin-top:10px">${F(`Súhlasím so spracovaním e-mailu a telefónu na zaslanie ponuky od ${c.name}.`,'sup.ok',{t:'c'})}</div>
+  ${u.err?`<p class="supply-err" role="alert">${esc(u.err)}</p>`:''}
+  <div class="row" style="margin-top:16px"><button class="btn pri" data-act="supplyreq">Poslať mi ponuku</button><button class="btn" data-act="closemodal">Teraz nie</button></div>
+  <p class="xs mut" style="margin-top:12px">Zmena dodávateľa je dobrovoľná a nie je podmienkou zdieľania.</p>`);
 }
 function calcModal(){
   const c=S.calc;
@@ -3582,8 +3608,11 @@ const ACT={
   detail:a=>{S.modal=a;render(false)},
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
-  supply:()=>{S.modal='supply';render(false)},
-  supplyreq:()=>{S.modal=null;render(false);toast('Ďakujeme – ponuku dodávky vám pošleme e-mailom. Zdieľanie môžete využívať aj bez zmeny dodávateľa.')},
+  supply:()=>{S.sup.sent=false;S.sup.err='';S.modal='supply';render(false)},
+  supco:a=>{S.sup.co=a;S.sup.err='';renderModal()},
+  supplyreq:()=>{const u=S.sup,e=String(u.email||'').trim();
+    u.err=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail, na ktorý vám pošleme ponuku.':!u.ok?'Pre zaslanie ponuky potrebujeme váš súhlas.':'';
+    if(!u.err){u.email=e;u.sent=true;logEv(`Záujem o dodávku ${SUP[u.co].name}: ${e}`)}renderModal()},
   more:()=>{S.modal='more';render(false)},
   interest:a=>{S.modal=null;const p=S.persona;if(p==='admin')return;const m=S.mem[p];
     if(m==='NONE'||m==='MATCH'){S.mem[p]='READY';logEv(`${nm(p)}: žiadosť pripravená (${gname(S.group)})`);toast('Žiadosť pripravená – odošlite ju v časti Moja skupina');notify('state',p,'Žiadosť je pripravená','Odošlite ju v časti Moja skupina.','group');S.view='group'}

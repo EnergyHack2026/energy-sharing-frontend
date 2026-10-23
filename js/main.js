@@ -202,8 +202,11 @@ const ACT={
   detail:a=>{S.modal=a;render(false)},
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
-  supply:()=>{S.modal='supply';render(false)},
-  supplyreq:()=>{S.modal=null;render(false);toast('Ďakujeme – ponuku dodávky vám pošleme e-mailom. Zdieľanie môžete využívať aj bez zmeny dodávateľa.')},
+  supply:()=>{S.sup.sent=false;S.sup.err='';S.modal='supply';render(false)},
+  supco:a=>{S.sup.co=a;S.sup.err='';renderModal()},
+  supplyreq:()=>{const u=S.sup,e=String(u.email||'').trim();
+    u.err=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail, na ktorý vám pošleme ponuku.':!u.ok?'Pre zaslanie ponuky potrebujeme váš súhlas.':'';
+    if(!u.err){u.email=e;u.sent=true;logEv(`Záujem o dodávku ${SUP[u.co].name}: ${e}`)}renderModal()},
   more:()=>{S.modal='more';render(false)},
   interest:a=>{S.modal=null;const p=S.persona;if(p==='admin')return;const m=S.mem[p];
     if(m==='NONE'||m==='MATCH'){S.mem[p]='READY';logEv(`${nm(p)}: žiadosť pripravená (${gname(S.group)})`);toast('Žiadosť pripravená – odošlite ju v časti Moja skupina');notify('state',p,'Žiadosť je pripravená','Odošlite ju v časti Moja skupina.','group');S.view='group'}
