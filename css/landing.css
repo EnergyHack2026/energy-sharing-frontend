@@ -83,7 +83,9 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-path ul{padding:0;list-style:none;font-size:var(--fs-sm);line-height:2.1;margin:20px 0 26px}
 .lp-path li:before{content:'✓';margin-right:10px;color:var(--brand);font-weight:800}
 .lp-path.consumer li:before{color:var(--green)}
-.lp-path .btn{align-self:start;margin-top:auto}
+.lp-path .btn{align-self:start;margin-top:auto;position:relative;z-index:1}
+.lp-path .btn span{transition:transform .18s ease}.lp-path .btn:hover span{transform:translateX(4px)}
+@media(prefers-reduced-motion:reduce){.lp-path .btn span{transition:none}}
 .lp-path .path-art{position:absolute;right:24px;bottom:30px;width:110px;height:110px;color:var(--brand);opacity:.22;transform:rotate(-8deg)}
 .lp-path.consumer .path-art{color:var(--green);transform:rotate(8deg)}
 
