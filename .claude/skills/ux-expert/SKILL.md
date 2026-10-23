@@ -12,6 +12,7 @@ Najprv si prečítaj podklady v `doc/` a `README.md` v koreni repa (pravidlá di
 - [doc/zadanie.md](../../../doc/zadanie.md) – zadanie a kritériá poroty,
 - [doc/cenniky.md](../../../doc/cenniky.md) – ceny dodávky (DD1–DD6) a výkupu (Virtuálna batéria Flexi),
 - [doc/data-model.md](../../../doc/data-model.md) – kmeňové dáta, 15-min spotreba a prebytky, EIC, IMS, TDO, HDO.
+- [doc/odmenovanie-a-akvizicia.md](../../../doc/odmenovanie-a-akvizicia.md) – model odmeňovania a akvizícia do ZSE/VSE (kontroluj súlad Odmien, Registrácie a reportu).
 
 Ceny, pojmy a údaje v UI porovnaj s cenníkmi a dátovým modelom. Ak prototyp používa iné hodnoty
 (napr. výkup alebo dodávkovú cenu) alebo pole, ktoré v dátach neexistuje, nahlás to ako zistenie (dôveryhodnosť). Potom čítaj kód relevantných view v `js/` a štýly v `css/`.
