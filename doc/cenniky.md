@@ -67,8 +67,9 @@ Väčšina domácností nie je platiteľom DPH → **vykupuje sa za cenu bez DPH
 
 | Parameter v kóde | Hodnota v prototype | Podľa cenníka |
 |---|---|---|
-| `S.p.feedin` (výkup) | 0,05 €/kWh | 0,036 €/kWh cez deň (pásmo 2), 0,034 víkend |
+| `S.p.feedin` (výkup) | 0,036 €/kWh ✅ (vo `final`, predtým 0,05) | 0,036 €/kWh cez deň (pásmo 2), 0,034 víkend |
 | `S.c.ref` (dodávková cena odberateľa) | 0,17 €/kWh | domácnosti 0,1137 – 0,1533 bez DPH (max 0,1824 s DPH); pre firmy cenník nemáme |
-| `S.calc.pfeed` / `S.calc.cref` (kalkulačka) | 0,05 / 0,17 | ako vyššie |
+| `S.calc.pfeed` / `S.calc.cref` (kalkulačka) | 0,036 ✅ / 0,17 | ako vyššie |
+| `S.bat.price` (večer z batérie) | 0,115 €/kWh ✅ (vo `final`, predtým 0,14) | pod DD2 0,1233 (najčastejšia sadzba, 60 % OM) – 0,14 bolo drahšie než všetky jednopásmové sadzby; pre DD1 (0,1137) je 0,115 stále o kúsok drahšia |
 | `S.p.price` (ponuka Anny) | 0,11 €/kWh | v okne 0,036 – 0,123 (DD2) ✅ |
 | `S.fee` (provízia E.SK) | 15 €/MWh alebo 12 % | cenník to nerieši – vlastný návrh biznis modelu |
