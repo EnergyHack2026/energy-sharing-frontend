@@ -848,7 +848,6 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-eic-help a{color:var(--on-dark)}
 .lp-demo-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--on-dark-mut);margin-top:18px}
 .lp-demo-links .link{color:var(--on-dark)}
-.lp-ok{color:var(--on-dark-ok);font-size:var(--fs-sm);font-weight:700;margin-top:9px;max-width:520px}
 .lp-error{color:var(--on-dark-err);font-size:var(--fs-sm);margin-top:9px;max-width:520px}
 .lp-hero-checks{display:flex;gap:22px;font-size:var(--fs-sm);color:var(--on-dark);margin-top:28px;flex-wrap:wrap}
 .lp-hero-checks span{display:flex;gap:7px;align-items:center}
@@ -1019,6 +1018,19 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-chip{border:1px dashed var(--line-dark);background:rgba(255,255,255,.08);color:var(--on-dark);border-radius:var(--r-pill);padding:3px 10px;font:inherit;font-size:var(--fs-xs);font-weight:700;cursor:pointer;margin-left:4px}
 .lp-chip:hover{background:rgba(255,255,255,.16)}
 
+/* ---------- výzva „Pridať sa“ v hero a stránka Pridajte sa (join) ---------- */
+.lp-join-cta{margin-top:4px}
+.lp-join-box{align-items:center}
+.lp-join-q{flex:1;padding:12px 16px;color:var(--ink);font-weight:700;font-size:var(--fs-md);line-height:1.35}
+.lp-join{min-height:calc(100vh - 64px);display:flex;align-items:center}
+.lp-join .lp-wrap{width:100%}
+.lp-join-card{max-width:640px}
+.lp-join-card h1{margin-bottom:18px}
+.lp-ok{color:var(--on-dark-ok);font-size:var(--fs-sm);font-weight:700;margin-top:12px}
+.lp-join-faq{margin-top:28px;max-width:560px;color:var(--on-dark-mut);font-size:var(--fs-sm);line-height:1.6;border-top:1px solid var(--line-dark);padding-top:18px}
+.lp-join-faq summary{color:var(--on-dark);font-weight:700;cursor:pointer}
+.lp-join-faq p{margin-top:10px}
+
 </style>
 </head>
 <body>
@@ -1066,7 +1078,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing']);
+const ON=new Set(['landing','join']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -2326,10 +2338,7 @@ function vLanding(){
  <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <form id="lp-eic-form" novalidate><label class="lp-eic-label" for="lp-eic">Zistite, čo môže zdieľanie priniesť vám</label><div class="lp-eic-box"><input id="lp-eic" name="eic" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="lp-eic-help${l.error?' lp-eic-error':''}" aria-invalid="${l.error?'true':'false'}" placeholder="Váš 16-miestny EIC kód" maxlength="24" value="${esc(l.eic||'')}"><button class="btn pri" type="button" data-act="eiccheck">Zistiť môj potenciál <span aria-hidden="true">→</span></button></div>${l.error?`<div class="lp-error" id="lp-eic-error" role="alert">${esc(l.error)}</div>`:''}
- <p class="lp-eic-help" id="lp-eic-help">EIC nájdete na faktúre za elektrinu. <a href="#eic-faq">Kde presne?</a> Nemáte ho poruke? <button type="button" class="lp-chip" data-act="eicfill">Vložiť ukážkový kód</button></p></form>
- ${l.checked&&!l.error?`<p class="lp-ok" role="status">✓ Kód ${esc(maskEic(l.eic))} je v poriadku.</p>`:''}
- <div class="lp-demo-links"><span>Nemáte kód poruke?</span><button class="link" data-act="eicdemo:anna">Skúsiť výrobcu</button><span aria-hidden="true">·</span><button class="link" data-act="eicdemo:peter">Skúsiť odberateľa</button></div>
+ <div class="lp-join-cta"><span class="lp-eic-label">Zistite, čo môže zdieľanie priniesť vám</span><div class="lp-eic-box lp-join-box"><span class="lp-join-q">Chcete sa pridať do sveta zdieľania energie?</span><button class="btn pri" type="button" data-act="view:join">Pridať sa <span aria-hidden="true">→</span></button></div><p class="lp-eic-help">Stačí kód EIC z faktúry za elektrinu – hneď uvidíte svoj odhad, bez záväzku.</p></div>
  <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
@@ -2352,9 +2361,24 @@ function vLanding(){
  <details><summary>Začne sa zdieľanie hneď po zadaní EIC?</summary><p>Nie. Najskôr si pozriete ponuku, potvrdíte potrebné údaje a súhlasy a odošlete žiadosť. Zdieľanie začne až po schválení a aktivácii. Jedno odberné miesto môže byť aktívne len v jednej skupine zdieľania.</p></details>
  <details><summary>Môžem si elektrinu z obeda nechať na večer?</summary><p>Zdieľanie sa vyhodnocuje v rovnakých 15-minútových intervaloch. Presun na večer vyžaduje skutočné uloženie energie, napríklad do fyzickej batérie. Samotné zdieľanie ju neukladá.</p></details>
  </div></div></section>
- <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><a class="btn pri lg" href="#lp-eic">Zistiť môj potenciál →</a></section>
+ <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><button class="btn pri lg" data-act="view:join">Pridať sa →</button></section>
  <footer class="lp-footer"><div><b>Zdieľňa<span class="dot">.</span></b>Slnko od suseda</div><nav class="lp-footer-links" aria-label="Odkazy v pätičke"><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a><a href="#lp-faq">Otázky a odpovede</a></nav></footer><div class="lp-disclaimer">Hackathonový koncept. Nie je to dostupná komerčná služba ani záväzná ponuka. Čísla na tejto stránke počíta model dema z ilustračných dát. Reálne zapojenie vyžaduje overenie zákazníka, oprávnenie na prístup k dátam, vhodné meranie a aktiváciu skupiny.</div></div>
  </div>`;
+}
+
+/* pridanie sa – zadanie EIC (z úvodu cez „Pridať sa“); neutrálny vzhľad ako úvod, značka až podľa EIC */
+function vJoin(){
+ const l=S.landing||{},ok=l.checked&&!l.error;
+ return `<div class="lp"><section class="lp-hero lp-join" aria-labelledby="join-heading"><div class="lp-wrap"><div class="lp-join-card">
+ <span class="kicker">Pridajte sa do Zdieľne</span>
+ <h1 id="join-heading">Začnite jedným kódom<span class="sig">.</span></h1>
+ <p class="lp-intro">Zadajte EIC kód svojho odberného miesta. Podľa neho pripravíme odhad, čo vám zdieľanie prinesie, a spojíme vás s vaším dodávateľom elektriny.</p>
+ <form id="lp-eic-form" novalidate><label class="lp-eic-label" for="lp-eic">Zistite, čo môže zdieľanie priniesť vám</label><div class="lp-eic-box"><input id="lp-eic" name="eic" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="lp-eic-help${l.error?' lp-eic-error':''}" aria-invalid="${l.error?'true':'false'}" placeholder="Váš 16-miestny EIC kód" maxlength="24" value="${esc(l.eic||'')}"><button class="btn pri" type="button" data-act="eiccheck">Zistiť môj potenciál <span aria-hidden="true">→</span></button></div>${l.error?`<div class="lp-error" id="lp-eic-error" role="alert">${esc(l.error)}</div>`:''}
+ <p class="lp-eic-help" id="lp-eic-help">EIC nájdete na faktúre za elektrinu. Nemáte ho poruke? <button type="button" class="lp-chip" data-act="eicfill">Vložiť ukážkový kód</button></p></form>
+ <div class="lp-demo-links"><span>Nemáte kód poruke?</span><button class="link" data-act="eicdemo:anna">Skúsiť výrobcu</button><span aria-hidden="true">·</span><button class="link" data-act="eicdemo:peter">Skúsiť odberateľa</button></div>
+ ${ok?`<p class="lp-ok" role="status">✓ Kód ${esc(maskEic(l.eic))} je v poriadku.</p>`:''}
+ <details class="lp-join-faq"><summary>Kde nájdem EIC kód?</summary><p>EIC je 16-miestny kód odberného miesta. Nájdete ho na faktúre za elektrinu alebo v zákazníckom účte pri údajoch o odbernom mieste. Samotný kód nie je prihlásenie ani súhlas so zdieľaním – zdieľanie začne až po vašom potvrdení a schválení žiadosti.</p></details>
+ </div></div></section></div>`;
 }
 
 function benefitNums(){
@@ -3205,7 +3229,9 @@ function renderChat(){
 /* js/main.js */
 'use strict';
 /* ---------- shell render ---------- */
-const PUB=['landing','potential','benefits','register'];
+const PUB=['landing','join','potential','benefits','register'];
+/* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
+const NEUTRAL=['landing','join'];
 const NAV=[['home','Domov','home'],['market','Trhovisko','market'],['group','Moja skupina','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 /* cesta zákazníka: začiatok → koniec */
@@ -3213,7 +3239,7 @@ const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['regis
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
 const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(!isOn(v))v='landing';return v};
 /* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
-const ACT_VIEW={landingoffer:'market',chat:'chat',tour:'tour',
+const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
   landingfeature:a=>({battery:'home',solidarity:'i_sol',reports:'reports'}[a]||'rewards')};
 function gateActs(root){
   root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
@@ -3221,21 +3247,22 @@ function gateActs(root){
 }
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
-  if(curView()==='landing'){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
+  if(NEUTRAL.includes(curView())){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
   if(S.jury&&S.skin!=='neutral')return;
   if(!S.jury&&S.persona==='admin')S.persona='peter';
   const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',v==='landing');document.body.classList.toggle('jury',J);
-  const brandSeg=J&&v!=='landing'?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
-  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${v==='landing'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',NEUTRAL.includes(v));document.body.classList.toggle('jury',J);
+  const brandSeg=J&&!NEUTRAL.includes(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
+  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
   const gear=J?`<button class="btn sm" data-act="drawer" aria-label="Upraviť čísla a časy">${icon('sliders')}<span class="hide-m">Čísla a časy</span></button>`:'';
-  $('#top').innerHTML=v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
+  $('#top').innerHTML=v==='join'?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
+   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k));
@@ -3249,7 +3276,7 @@ function renderShell(){
   gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
-const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
+const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
 function modalHtml(){
   const m=S.modal;if(!m)return '';
   if(m==='welcome')return welcomeModal();
@@ -3304,7 +3331,7 @@ function syncInputs(){
 function render(full=true){
   customerSkin();
   document.documentElement.dataset.skin=S.skin;
-  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=curView()==='landing'?LOGO_APP:LOGOS[S.skin]}
+  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=S.skin==='neutral'?LOGO_APP:LOGOS[S.skin]}
   if(full){renderShell();const dr=$('#drawer');const st=dr.scrollTop;dr.innerHTML=drawerHtml();dr.scrollTop=st}
   $('#drawer').classList.toggle('open',S.drawer);$('#drawer').setAttribute('aria-hidden',String(!S.drawer));
   renderMain();
@@ -3340,7 +3367,7 @@ function lpLookup(raw){
  const eic=String(raw||'').replace(/\s/g,'').toUpperCase();
  if(!/^[A-Z0-9-]{16}$/.test(eic)){S.landing={eic,error:'Zadajte 16 znakov EIC kódu z faktúry alebo vložte ukážkový kód.',checked:false};render(false);document.getElementById('lp-eic')?.focus();return false}
  S.landing={eic,error:'',checked:true};const d=EIC_DEMO[eic];if(d&&d.persona){S.persona=d.persona;S.ob.role=d.role}
- /* ďalší krok: registrácia, inak odhad potenciálu; kým nie sú vo finále zapnuté, kód sa iba overí na úvode */
+ /* ďalší krok: registrácia, inak odhad potenciálu; kým nie sú vo finále zapnuté, kód sa iba overí */
  const nx=isOn('register')?'register':isOn('potential')?'potential':null;
  if(!nx){render(false);return true}
  if(nx==='register')S.reg.step='choose';pubGo(nx);return true;
@@ -3350,7 +3377,7 @@ document.addEventListener('submit',e=>{if(e.target.id!=='lp-eic-form')return;e.p
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='lp-eic'){e.preventDefault();lpLookup(e.target.value)}});
 document.addEventListener('input',e=>{if(e.target.id==='lp-eic'){S.landing=S.landing||{};S.landing.eic=e.target.value;S.landing.checked=false}});
 const ACT={
-  eicdemo:a=>{S.persona=a==='anna'?'anna':'peter';S.ob.role=a==='anna'?'prod':'cons';const eic=a==='anna'?'24ZZS0000000001A':'24ZZS0000000002B';if(S.view!=='landing')S.view='landing';lpLookup(eic)},
+  eicdemo:a=>{S.persona=a==='anna'?'anna':'peter';S.ob.role=a==='anna'?'prod':'cons';const eic=a==='anna'?'24ZZS0000000001A':'24ZZS0000000002B';S.view='join';lpLookup(eic)},
   eiccheck:()=>lpLookup(($('#lp-eic')||{}).value),
   eicfill:()=>{const i=$('#lp-eic');S.landing={eic:EIC_SAMPLE,error:'',checked:false};if(i){i.value=EIC_SAMPLE;i.focus()}render(false);const j=$('#lp-eic');if(j)j.focus()},
   /* „Som výrobca / Som odberateľ“ na obrazovke Váš potenciál */
