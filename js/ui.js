@@ -52,11 +52,13 @@ const pill=(c,t)=>`<span class="pill ${c}">${t}</span>`;
 const kpi=(l,v,d='',c='')=>`<div class="card kpi"><div class="l">${l}</div><div class="v ${c}">${v}</div>${d?`<div class="d">${d}</div>`:''}</div>`;
 /* hero pás na začiatku každej obrazovky – rovnaký jazyk ako úvodná stránka
    o: {kicker,title,lead,acts,aside,top,foot,cls} */
+/* červená bodka – podpis značky: iba posledná bodka nadpisu, nikdy dve za sebou */
+const sig=t=>String(t).replace(/\.((?:<\/em>)?)\s*$/,'<span class="sig">.</span>$1');
 function hero(o){
-  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${o.title}</h1>${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
+  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${sig(o.title)}</h1>${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
 }
 const hstat=(tag,val,sub='',cls='')=>`<div class="hstat ${cls}"><span class="tag">${tag}</span><b>${val}</b>${sub?`<span>${sub}</span>`:''}</div>`;
-const secHead=(k,t,l='')=>`<div class="sec-head"><div>${k?`<span class="kicker">${k}</span>`:''}<h2>${t}</h2></div>${l?`<p class="lead">${l}</p>`:''}</div>`;
+const secHead=(k,t,l='')=>`<div class="sec-head"><div>${k?`<span class="kicker">${k}</span>`:''}<h2>${sig(t)}</h2></div>${l?`<p class="lead">${l}</p>`:''}</div>`;
 function feeTxt(){return S.fee.mode===FEE_PCT?fm(S.fee.pct,1)+' % z tržby':fm(S.fee.fix,1)+' €/MWh ('+fpr(S.fee.fix/1000)+' €/kWh) vr. DPH'}
 function priceWarn(){
   const np=netPrice(S.p.price);

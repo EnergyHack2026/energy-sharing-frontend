@@ -31,6 +31,7 @@ Podklady v tomto repe (Zdieľňa, Hackathon 2026 Challenge #2):
 - propozície a hodnotiace kritériá: [doc/zadanie.md](../../../doc/zadanie.md),
 - cenníky dodávky a výkupu: [doc/cenniky.md](../../../doc/cenniky.md) (vrátane rozdielov oproti prototypu),
 - štruktúra dát od E.SK (kmeňové dáta, 15-min spotreba a prebytky, ďalšie zdroje): [doc/data-model.md](../../../doc/data-model.md),
+- model odmeňovania (Slnečný klub) a akvizícia zákazníkov do ZSE/VSE: [doc/odmenovanie-a-akvizicia.md](../../../doc/odmenovanie-a-akvizicia.md) – použi pri gamifikácii a biznis modeli,
 - opis aplikácie, mapa súborov, pravidlá dizajnu a deep linky na screenshoty: `README.md` v koreni repa,
 - zdrojový kód: `index.html`, `js/` (dátový model a výpočty v `js/engine.js`, stav v `js/core.js`), `css/`.
 

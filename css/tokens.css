@@ -66,6 +66,13 @@
   /* stavové farby na tmavom páse a drobnosti (žiadny hex mimo tokenov) */
   --on-dark-ok:#CDEAA0; --on-dark-warn:#FFC08A; --on-dark-err:#FFD2C3; --online:#2FD36B; --roof-mix:#F2C2A0;
 
+  /* červená bodka – podpis značky Zdieľňa (logo, koniec nadpisov); rovnaká vo všetkých skinoch, iba dekoratívna */
+  --sig:#E5322D;
+
+  /* nočná scéna úvodu – polárna žiara, sklenené karty, žiariace okná (dekor) */
+  --aurora-1:#2EE6A8; --aurora-2:#7C5CFF; --aurora-3:#22D3EE;
+  --night-glass:rgba(11,20,36,.74); --accent-glow:rgba(94,234,181,.2); --window-glow:#FFD27A;
+
   /* batéria – mimo palety značiek, rovnaká v oboch */
   --purple:#6A35C0; --purple-t:#F0E8FB;
 }
@@ -83,6 +90,22 @@
   --green:#4E7210;  --green-t:#EEF4E0;                          /* zdieľané / úspech */
   --blue:#0A6E9C;   --blue-t:#E1F4FD;                           /* spotreba / info */
   --orange:#9E4A0A; --orange-t:#FDEBDD;                         /* výkup / upozornenie */
+  --red:#B1190C;    --red-t:#FDE9E6;
+}
+
+/* ---------- Neutrálna (úvod a registrácia – bez značky ZSE/VSE) ----------
+   Nočný štýl: tmavomodrá obloha s polárnou žiarou, mätový akcent, žiariace okná.
+   Kontrast: akcent #5EEAB5 na #0B1424 12 : 1, text #0B1424 na #0E9F6E 5,4 : 1,
+   --brand-ink #0B6B4C na bielej 6,5 : 1, ikony #0E9F6E na bielej 3,4 : 1. */
+:root[data-skin="neutral"]{
+  --brand:#0E9F6E; --brand-d:#34D399; --brand-ink:#0B6B4C; --brand-t:#E3F7EF; --on-brand:#0B1424;
+  --brand2:#7C5CFF;
+  --surface-dark:#0B1424; --surface-dark-2:#070E1A; --accent-dark:#5EEAB5; --on-dark:#EAF2F8; --on-dark-mut:#A8B6C8;
+
+  --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
+  --green:#4E7210;  --green-t:#EEF4E0;
+  --blue:#0A6E9C;   --blue-t:#E1F4FD;
+  --orange:#9E4A0A; --orange-t:#FDEBDD;
   --red:#B1190C;    --red-t:#FDE9E6;
 }
 

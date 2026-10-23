@@ -1,6 +1,10 @@
 'use strict';
 const APP_NAME='Zdieľňa';
 const LOGOS={zse:'assets/zse.png',vse:'assets/vse.png'},SKN={zse:'ZSE',vse:'VSE'};
+/* značka Zdieľne bez ZSE/VSE – úvodná stránka */
+const LOGO_APP='assets/zdielna-dot.svg';
+/* oficiálne logá zo zse.sk a vse.sk (bez podkladu) – tlačidlá výberu spoločnosti v registrácii */
+const LOGO_OFF={zse:'assets/zse-logo.svg',vse:'assets/vse-logo.png'};
 /* ---------- utils ---------- */
 const pad=n=>String(n).padStart(2,'0');
 const T2I=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(t||'');if(!m)return 0;return Math.max(0,Math.min(96,Math.round((+m[1]*60+ +m[2])/15)))};
@@ -22,6 +26,12 @@ const inWin=(i,a,b)=>a<=b?(i>=a&&i<b):(i>=a||i<b);
 const BR=()=>SKN[S.skin]||'ZSE';
 const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
 
+/* ---------- finálna verzia: zapnuté časti ----------
+   Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
+   Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
+const ON=new Set(['landing','register']);
+const isOn=k=>ON.has(k);
+
 /* ---------- state ---------- */
 const FEE_FIX='pevná (€/MWh)',FEE_PCT='% z tržby',VIS_PUB='verejná',VIS_HID='skrytá',VIS_LOCK='uzamknutá',MAXC=10;
 const PRIO=['zarobiť','ušetriť','darovať'];
@@ -38,8 +48,8 @@ const defaults=()=>({
   pl:{idx:24,playing:false,est:false,speed:1},
   mapHi:null,
   chat:{open:false,msgs:[],typing:false},mtab:'off',exitSel:'',
-  p:{price:0.11,share:100,surplus:10,pStart:'10:30',pEnd:'15:30',weather:100,conf:'vysoká',ims:true,own:67,auto:false,feedin:0.05,occ:7,vis:VIS_PUB,code:'SLNKO-4821',indiv:{on:false,price:0.09},pw:{label:'pračka',kwh:1.2,orig:'10:45',time:'10:45',accepted:false,cheat:false},pb:{label:'bojler',kwh:1.5,orig:'15:00',time:'15:00',accepted:false,cheat:false},pev:{label:'nabíjanie elektromobilu',kwh:2.0,orig:'14:45',time:'14:45',accepted:false,cheat:false}},
-  bat:{on:true,cap:10,pow:1.25,eff:90,minSoc:10,pct:70,eStart:'18:00',eEnd:'22:00',price:0.14,ownFirst:false,carry:0},
+  p:{price:0.11,share:100,surplus:10,pStart:'10:30',pEnd:'15:30',weather:100,conf:'vysoká',ims:true,own:67,auto:false,feedin:0.036,occ:7,vis:VIS_PUB,code:'SLNKO-4821',indiv:{on:false,price:0.09},pw:{label:'pračka',kwh:1.2,orig:'10:45',time:'10:45',accepted:false,cheat:false},pb:{label:'bojler',kwh:1.5,orig:'15:00',time:'15:00',accepted:false,cheat:false},pev:{label:'nabíjanie elektromobilu',kwh:2.0,orig:'14:45',time:'14:45',accepted:false,cheat:false}},
+  bat:{on:true,cap:10,pow:1.25,eff:90,minSoc:10,pct:70,eStart:'18:00',eEnd:'22:00',price:0.115,ownFirst:false,carry:0},
   c:{max:0.13,maxEve:0.15,ref:0.17,daily:7.0,cStart:'10:00',cEnd:'16:00',base:0.1,appKwh:1.2,appTime:'19:00',appOrig:'19:00',accepted:false,ims:true,washCheat:false,ev:{label:'nabíjanie vozidla',kwh:2.0,orig:'20:00',time:'20:00',accepted:false,cheat:false},wh:{label:'ohrev vody',kwh:1.5,orig:'06:00',time:'06:00',accepted:false,cheat:false},ice:{label:'výrobník ľadu',kwh:1.0,orig:'17:00',time:'17:00',accepted:false,cheat:false}},
   om:{anna:{id:'SK-OM-1101',addr:'Krajinská 8, Piešťany',type:'Domácnosť',pv:true,kwp:6.5},peter:{id:'SK-OM-0001',addr:'Hlavná 12, Trnava',type:'Podnikanie (bistro)',pv:false,kwp:0}},
   meter:{idx:48,anna:1.20,peter:1.00},
@@ -47,7 +57,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  calc:{pkwh:100,pprice:0.11,pfeed:0.05,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},

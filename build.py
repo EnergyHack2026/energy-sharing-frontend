@@ -12,9 +12,10 @@ read = lambda p: open(os.path.join(root, p), encoding='utf-8').read()
 
 def data_uri(path):
     b = open(os.path.join(root, path), 'rb').read()
-    return 'data:image/png;base64,' + base64.b64encode(b).decode()
+    mime = 'image/jpeg' if path.endswith('.jpg') else 'image/svg+xml' if path.endswith('.svg') else 'image/png'
+    return 'data:' + mime + ';base64,' + base64.b64encode(b).decode()
 
-logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png')}
+logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png', 'assets/hero-bg.jpg', 'assets/zse-logo.svg', 'assets/vse-logo.png')}
 html = read('index.html')
 
 # CSS: <link rel="stylesheet" href="css/x.css"> → <style>…</style>

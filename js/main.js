@@ -1,41 +1,54 @@
 'use strict';
 /* ---------- shell render ---------- */
-const PUB=['landing','potential','benefits','register'];
+const PUB=['landing','join','potential','benefits','register'];
+/* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
+const NEUTRAL=['landing','join'];
+const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
 const NAV=[['home','Domov','home'],['market','Trhovisko','market'],['group','Moja skupina','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
-const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';return v};
+const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(!isOn(v))v='landing';return v};
+/* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
+const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
+  landingfeature:a=>({battery:'home',solidarity:'i_sol',reports:'reports'}[a]||'rewards')};
+function gateActs(root){
+  root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
+    const t=n==='view'?a:typeof m==='function'?m(a):m;if(t&&!isOn(t))el.hidden=true});
+}
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
-  if(S.jury)return;
-  if(S.persona==='admin')S.persona='peter';
+  if(isNeutral(curView())){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
+  if(S.jury&&S.skin!=='neutral')return;
+  if(!S.jury&&S.persona==='admin')S.persona='peter';
   const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',v==='landing');document.body.classList.toggle('jury',J);
-  const brandSeg=J?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
-  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka"><img src="${LOGOS[S.skin]}" alt="${BR()}"><span>${APP_NAME}<span class="dot">.</span></span></button>`;
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&S.reg.step==='wiz'));document.body.classList.toggle('jury',J);
+  const brandSeg=J&&!isNeutral(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
+  const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
   const gear=J?`<button class="btn sm" data-act="drawer" aria-label="Upraviť čísla a časy">${icon('sliders')}<span class="hide-m">Čísla a časy</span></button>`:'';
-  $('#top').innerHTML=v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
+  $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
+   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;
-  const items=p==='admin'?NAV_ADMIN:NAV;
+  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k));
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
   const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span></button>`;
-  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
-  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
+  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
+  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.filter(([k])=>isOn(k)).map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
     +`<div class="side-foot"><button class="jury-btn" data-act="jury" aria-pressed="${J}">🎬 ${J?'Vypnúť režim poroty':'Režim poroty'}</button></div>`;
-  const bn=p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]];
+  const bn=(p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]]).filter(([k])=>isOn(k));
   $('#bnav').innerHTML=bn.map(btn).join('')+`<button data-act="more"><span class="ic">${icon('menu')}</span><span>Viac</span></button>`;
+  gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
-const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
+const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
 function modalHtml(){
   const m=S.modal;if(!m)return '';
   if(m==='welcome')return welcomeModal();
@@ -43,14 +56,14 @@ function modalHtml(){
   if(m==='bell')return bellPanel();
   if(String(m).startsWith('bdgnew:'))return bdgModal(m.slice(7),true);
   if(String(m).startsWith('bdg:'))return bdgModal(m.slice(4),false);
-  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='more')return moreSheet();
+  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='supply')return supplyModal();if(m==='login')return loginModal();if(m==='acc')return accModal();if(m==='more')return moreSheet();
   if(String(m).startsWith('ver:'))return verModal(m.slice(4));
   return detailModal(m);
 }
 /* prekreslí iba modál a zachová fokus (prehrávač dňa) */
 function renderModal(){
   const act=document.activeElement,inM=act&&$('#modal').contains(act)&&act.dataset,fa=inM?act.dataset.act:null,fk=inM?act.dataset.k:null;
-  $('#modal').innerHTML=modalHtml();
+  $('#modal').innerHTML=modalHtml();gateActs($('#modal'));
   const el=fk?$('#modal').querySelector(`[data-k="${fk}"]`):fa?$('#modal').querySelector(`[data-act="${CSS.escape(fa)}"]`):null;if(el)el.focus({preventScroll:true})
 }
 function renderMain(){
@@ -61,6 +74,7 @@ function renderMain(){
   checkWelcome();
   $('#main').innerHTML=(VIEWS[v]||vHome)();
   $('#modal').innerHTML=modalHtml();
+  gateActs($('#main'));gateActs($('#modal'));
   const root=inModal?$('#modal'):$('#main');
   if(fk){const el=root.querySelector(`[data-k="${fk}"]`);if(el){el.focus();if(sel)try{el.setSelectionRange(sel[0],sel[1])}catch(e){}}}
   else if(fa){const el=root.querySelector(`[data-act="${CSS.escape(fa)}"]`);if(el)el.focus({preventScroll:true})}
@@ -89,7 +103,7 @@ function syncInputs(){
 function render(full=true){
   customerSkin();
   document.documentElement.dataset.skin=S.skin;
-  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=LOGOS[S.skin]}
+  {const ic=document.querySelector('link[rel=icon]');if(ic)ic.href=S.skin==='neutral'?LOGO_APP:LOGOS[S.skin]}
   if(full){renderShell();const dr=$('#drawer');const st=dr.scrollTop;dr.innerHTML=drawerHtml();dr.scrollTop=st}
   $('#drawer').classList.toggle('open',S.drawer);$('#drawer').setAttribute('aria-hidden',String(!S.drawer));
   renderMain();
@@ -125,14 +139,17 @@ function lpLookup(raw){
  const eic=String(raw||'').replace(/\s/g,'').toUpperCase();
  if(!/^[A-Z0-9-]{16}$/.test(eic)){S.landing={eic,error:'Zadajte 16 znakov EIC kódu z faktúry alebo vložte ukážkový kód.',checked:false};render(false);document.getElementById('lp-eic')?.focus();return false}
  S.landing={eic,error:'',checked:true};const d=EIC_DEMO[eic];if(d&&d.persona){S.persona=d.persona;S.ob.role=d.role}
- S.reg.step='choose';pubGo('register');return true;
+ /* ďalší krok: registrácia, inak odhad potenciálu; kým nie sú vo finále zapnuté, kód sa iba overí */
+ const nx=isOn('register')?'register':isOn('potential')?'potential':null;
+ if(!nx){render(false);return true}
+ if(nx==='register')S.reg.step='choose';pubGo(nx);return true;
 }
 document.addEventListener('submit',e=>{if(e.target.id!=='lp-eic-form')return;e.preventDefault();lpLookup(document.getElementById('lp-eic').value)});
 /* tlačidlo aj Enter fungujú aj tam, kde prehliadač blokuje odoslanie formulára (náhľady so sandboxom) */
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='lp-eic'){e.preventDefault();lpLookup(e.target.value)}});
 document.addEventListener('input',e=>{if(e.target.id==='lp-eic'){S.landing=S.landing||{};S.landing.eic=e.target.value;S.landing.checked=false}});
 const ACT={
-  eicdemo:a=>{S.persona=a==='anna'?'anna':'peter';S.ob.role=a==='anna'?'prod':'cons';const eic=a==='anna'?'24ZZS0000000001A':'24ZZS0000000002B';if(S.view!=='landing')S.view='landing';lpLookup(eic)},
+  eicdemo:a=>{S.persona=a==='anna'?'anna':'peter';S.ob.role=a==='anna'?'prod':'cons';const eic=a==='anna'?'24ZZS0000000001A':'24ZZS0000000002B';S.view='join';lpLookup(eic)},
   eiccheck:()=>lpLookup(($('#lp-eic')||{}).value),
   eicfill:()=>{const i=$('#lp-eic');S.landing={eic:EIC_SAMPLE,error:'',checked:false};if(i){i.value=EIC_SAMPLE;i.focus()}render(false);const j=$('#lp-eic');if(j)j.focus()},
   /* „Som výrobca / Som odberateľ“ na obrazovke Váš potenciál */
@@ -185,6 +202,16 @@ const ACT={
   detail:a=>{S.modal=a;render(false)},
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
+  login:()=>{S.modal='login';render(false)},
+  acc:()=>{S.acc.err='';S.acc.done=false;S.modal='acc';render(false)},
+  accdemo:()=>{Object.assign(S.acc,{cno:'5300009999',psc:'917 01',email:'peter.demo@zdielna.sk',err:''});renderModal()},
+  accreq:()=>{const a=S.acc,cno=String(a.cno||'').replace(/\s/g,''),psc=String(a.psc||'').replace(/\s/g,''),e=String(a.email||'').trim();
+    a.err=!/^\d{10}$/.test(cno)?'Zadajte 10-miestne zákaznícke číslo z faktúry.':!/^\d{5}$/.test(psc)?'Zadajte PSČ odberného miesta (5 číslic).':!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail – bude vaším prihlasovacím menom.':!a.ok?'Na vytvorenie účtu potrebujeme váš súhlas.':'';
+    if(!a.err){a.email=e;a.done=true;logEv(`Vytvorený zákaznícky účet (demo): ${cno} · ${e}`)}renderModal()},
+  supply:()=>{S.sup.sent=false;S.sup.err='';S.modal='supply';render(false)},
+  supplyreq:()=>{const u=S.sup,e=String(u.email||'').trim();
+    u.err=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail, na ktorý vám pošleme ponuku.':!u.ok?'Pre zaslanie ponuky potrebujeme váš súhlas.':'';
+    if(!u.err){u.email=e;u.sent=true;logEv(`Záujem o dodávku ZSE/VSE: ${e}`)}renderModal()},
   more:()=>{S.modal='more';render(false)},
   interest:a=>{S.modal=null;const p=S.persona;if(p==='admin')return;const m=S.mem[p];
     if(m==='NONE'||m==='MATCH'){S.mem[p]='READY';logEv(`${nm(p)}: žiadosť pripravená (${gname(S.group)})`);toast('Žiadosť pripravená – odošlite ju v časti Moja skupina');notify('state',p,'Žiadosť je pripravená','Odošlite ju v časti Moja skupina.','group');S.view='group'}
@@ -226,11 +253,22 @@ const ACT={
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
+  wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
+  wzicon:a=>{const [i,k]=a.split(':');S.wz.oms[+i].icon=k;render(false)},
+  wznext:()=>{const W=S.wz;W.err='';
+    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(!W.ok1)W.err='Potvrďte výber odberných miest a správnosť údajov.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.'}
+    if(W.step===2&&!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zapojenia.';
+    if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
+  wzsubmit:()=>{const W=S.wz,per=S.persona==='admin'?'peter':S.persona;W.err='';
+    if(!W.ok4){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
+    W.sent=true;S.reg.sent=true;S.group=S.ob.group;if(['NONE','MATCH','READY'].includes(S.mem[per]))S.mem[per]='PENDING';
+    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');window.scrollTo(0,0);render(false)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
-  sso:co=>{const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
+  sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
+    const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
     S.skin=co;S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;
     logEv(`${s.name}: automatické prihlásenie (zákazník ${SKN[co]}, demo)`);render(true);
-    const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;if(S.reg.load>=SSO_STEPS.length){S.reg.step='acc';window.scrollTo(0,0)}render(false);if(S.reg.step==='load')setTimeout(tick,420)};setTimeout(tick,420)},
+    const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;if(S.reg.load>=SSO_STEPS.length){wzLoad(per,co);S.reg.step='wiz';window.scrollTo(0,0)}render(false);if(S.reg.step==='load')setTimeout(tick,420)};setTimeout(tick,420)},
   ssosubmit:()=>{const per=S.persona==='admin'?'peter':S.persona;const m=S.mem[per];S.reg.sent=true;S.reg.group=S.ob.group;window.scrollTo(0,0);
     if(m==='NONE'||m==='MATCH'||m==='READY'){S.group=S.ob.group;S.mem[per]='PENDING';logEv(`${nm(per)}: žiadosť odoslaná cez účet ${BR()} (${gname(S.group)})`);toast('Žiadosť odoslaná – čaká na kontrolu distribútora a aktiváciu');notify('state',per,'Žiadosť odoslaná',`Skupina ${gname(S.group)} – čaká na kontrolu distribútora.`,'group')}else toast(`Demo: žiadosť do skupiny ${gname(S.reg.group)} odoslaná (${nm(per)} je v demo dátach už aktívny člen)`);
     render(true)},
@@ -331,6 +369,8 @@ async function runTour(){
 /* zákaznícky režim: „Práve teraz“ ide podľa hodín (ak deep link neurčil čas) */
 if(!S.jury&&!new URLSearchParams(location.hash.slice(1)).has('t'))S.sim.idx=realIdx();
 render(true);
+/* priesvitná lišta nad hero: po začatí scrollovania je plná, aby menu ostalo čitateľné nad obsahom */
+{const onScroll=()=>document.body.classList.toggle('scrolled',window.scrollY>24);addEventListener('scroll',onScroll,{passive:true});onScroll()}
 setInterval(()=>{if(S.jury||S.sim.playing||S.tourOn)return;const r=realIdx();if(r===S.sim.idx)return;notifyTick(S.sim.idx,r);S.sim.idx=r;if(!S.modal&&!PUB.includes(curView()))render(false)},30000);
 /* aplikácia v mobile (PWA) – service worker iba cez http(s), nie z file:// ani zo samostatného zdielna.html */
 if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)&&!window.__STANDALONE)navigator.serviceWorker.register('sw.js').catch(()=>{});

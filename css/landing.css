@@ -7,6 +7,7 @@
 body.marketing .main{max-width:none;padding:0 0 40px}
 .marketing .top{background:var(--bg);border-color:var(--line);padding:16px max(24px,calc((100vw - 1240px)/2));gap:22px;flex-wrap:nowrap}
 .marketing .brand img{height:30px}
+.marketing .brand span{display:inline}  /* úvod nemá logo – názov Zdieľňa ostáva aj v mobile */
 .marketing .top .btn{white-space:nowrap}
 .marketing .top .btn:not(.dark){background:transparent}
 .market-nav{display:flex;gap:24px;align-items:center;margin-left:24px}
@@ -82,7 +83,9 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-path ul{padding:0;list-style:none;font-size:var(--fs-sm);line-height:2.1;margin:20px 0 26px}
 .lp-path li:before{content:'✓';margin-right:10px;color:var(--brand);font-weight:800}
 .lp-path.consumer li:before{color:var(--green)}
-.lp-path .btn{align-self:start;margin-top:auto}
+.lp-path .btn{align-self:start;margin-top:auto;position:relative;z-index:1}
+.lp-path .btn span{transition:transform .18s ease}.lp-path .btn:hover span{transform:translateX(4px)}
+@media(prefers-reduced-motion:reduce){.lp-path .btn span{transition:none}}
 .lp-path .path-art{position:absolute;right:24px;bottom:30px;width:110px;height:110px;color:var(--brand);opacity:.22;transform:rotate(-8deg)}
 .lp-path.consumer .path-art{color:var(--green);transform:rotate(8deg)}
 
@@ -107,11 +110,16 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-progress span{display:block;height:100%;background:var(--accent-dark);border-radius:var(--r-pill)}
 .lp-challenge-bottom{display:flex;justify-content:space-between;font-size:var(--fs-sm);color:var(--on-dark-mut)}
 .lp-challenge-bottom b{color:#fff}
+.lp-level{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-dark)}
+.lp-level-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.lp-level-steps span{font-size:var(--fs-xs);font-weight:700;text-align:center;padding:6px 4px;border-radius:var(--r-pill);border:1px solid var(--line-dark);color:var(--on-dark-mut)}
+.lp-level-steps span.done{color:var(--on-dark);border-color:color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+.lp-level-steps span.cur{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink)}
 
 /* ---------- ponuky ---------- */
 .lp-offers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .lp-offer{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--card)}
-.lp-offer-art{height:150px;background:var(--yellow-t);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--ink)}
+.lp-offer-art{height:150px;background:var(--yellow-t);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--yellow-ink)}
 .lp-offer:nth-child(2) .lp-offer-art{background:var(--purple-t);color:var(--purple)}
 .lp-offer:nth-child(3) .lp-offer-art{background:var(--tint-green);color:var(--green)}
 .lp-offer-art svg{width:150px;height:125px}
@@ -120,14 +128,16 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-offer-body{padding:24px}
 .lp-offer-body h3{font-size:20px}
 .lp-offer-body>p{font-size:var(--fs-sm);color:var(--mut);margin-top:6px}
-.lp-offer-price{font-size:34px;font-weight:800;letter-spacing:-.045em;margin:18px 0}
+.lp-offer-price{font-size:34px;font-weight:800;letter-spacing:-.045em;margin:18px 0 10px}
+.lp-offer-save{align-self:flex-start;margin-bottom:16px}
+.lp-offer{display:flex;flex-direction:column}.lp-offer-body{flex:1;display:flex;flex-direction:column}.lp-offer-body .btn{margin-top:auto}
 .lp-offer-price span{font-size:var(--fs-sm);font-weight:500;letter-spacing:0;color:var(--mut)}
 .lp-offer-meta{display:flex;justify-content:space-between;font-size:var(--fs-sm);border-top:1px solid var(--line);padding:13px 0 18px;color:var(--mut)}
 .lp-offer-meta b{color:var(--ink)}
 
 /* ---------- predikcia ---------- */
-.lp-smart{background:var(--tint-green)}
-.lp-smart-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.lp-smart{background:var(--bg)}  /* svetlé pozadie stránky – oddelí sa od béžového „Ako to funguje“ */
+.lp-smart-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
 .lp-chart-card{border-radius:var(--r-lg);background:var(--card);padding:28px;box-shadow:var(--sh-lg);transform:rotate(-1.5deg)}
 .lp-chart-card svg{width:100%;height:auto}
 .lp-chart-legend{display:flex;gap:20px;font-size:var(--fs-xs);margin:18px 0;color:var(--mut)}
@@ -150,10 +160,9 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-final p{color:var(--mut);font-size:var(--fs-md);margin:18px auto 26px}
 .lp-footer{padding:44px 0 10px;display:flex;justify-content:space-between;gap:24px;font-size:var(--fs-sm);color:var(--mut)}
 .lp-footer b{color:var(--ink);font-size:20px;display:block;margin-bottom:6px;letter-spacing:-.03em}
-.lp-footer .dot{color:var(--brand)}
+.lp-footer .dot{color:var(--sig)}
 .lp-footer-links{display:flex;gap:22px;align-items:start;flex-wrap:wrap}
 .lp-footer-links a{text-decoration:none}
-.lp-disclaimer{border-top:1px solid var(--line);padding:20px 0;font-size:var(--fs-xs);color:var(--mut);line-height:1.7}
 
 /* ---------- responzívnosť ---------- */
 @media(min-width:1550px){.lp-hero{padding-top:95px;padding-bottom:65px}}
@@ -211,3 +220,201 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 /* čip „Vložiť ukážkový kód“ */
 .lp-chip{border:1px dashed var(--line-dark);background:rgba(255,255,255,.08);color:var(--on-dark);border-radius:var(--r-pill);padding:3px 10px;font:inherit;font-size:var(--fs-xs);font-weight:700;cursor:pointer;margin-left:4px}
 .lp-chip:hover{background:rgba(255,255,255,.16)}
+
+/* ---------- výzva „Pridať sa“ v hero a stránka Pridajte sa (join) ---------- */
+/* rýchla akcia v hero: celý pruh je jedno tlačidlo, jemne žiari, aby si ho zákazník všimol hneď */
+.lp-quick{display:flex;align-items:center;gap:16px;width:100%;max-width:580px;margin-top:6px;padding:9px 9px 9px 26px;background:var(--card);color:var(--ink);border:0;border-radius:var(--r-pill);font:inherit;text-align:left;cursor:pointer;box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg);transition:transform .18s ease,box-shadow .18s ease;animation:lp-glow 2.8s ease-in-out infinite}
+.lp-quick:hover{transform:translateY(-2px);box-shadow:0 0 0 8px var(--accent-glow),var(--sh-lg)}
+.lp-quick:focus-visible{outline:3px solid var(--accent-dark);outline-offset:6px}
+.lp-quick-q{flex:1;font-size:var(--fs-lg);font-weight:800;line-height:1.3;letter-spacing:-.01em}
+.lp-quick-btn{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;background:var(--accent-dark);color:var(--ink);font-weight:800;font-size:var(--fs-lg);padding:16px 30px;border-radius:var(--r-pill)}
+.lp-quick-arr{transition:transform .18s ease}
+.lp-quick:hover .lp-quick-arr,.lp-quick:focus-visible .lp-quick-arr{transform:translateX(5px)}
+@keyframes lp-glow{0%,100%{box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg)}50%{box-shadow:0 0 0 9px var(--accent-glow),var(--sh-lg)}}
+.lp-quick+.lp-hero-checks{margin-top:34px}
+@media(prefers-reduced-motion:reduce){.lp-quick{animation:none;transition:none}.lp-quick-arr{transition:none}}
+@media(max-width:620px){.lp-quick{flex-direction:column;align-items:stretch;gap:12px;padding:18px;border-radius:var(--r-lg)}.lp-quick-q{text-align:center}.lp-quick-btn{justify-content:center}}
+.lp-join{min-height:calc(100vh - 64px);display:flex;align-items:center}
+.lp-join .lp-wrap{width:100%}
+.lp-join-card{max-width:640px}
+.lp-join-card h1{margin-bottom:18px}
+.lp-ok{color:var(--on-dark-ok);font-size:var(--fs-sm);font-weight:700;margin-top:12px}
+.lp-join-faq{margin-top:28px;max-width:560px;color:var(--on-dark-mut);font-size:var(--fs-sm);line-height:1.6;border-top:1px solid var(--line-dark);padding-top:18px}
+.lp-join-faq summary{color:var(--on-dark);font-weight:700;cursor:pointer}
+.lp-join-faq p{margin-top:10px}
+
+/* ---------- registrácia – výber spôsobu (dizajn úvodnej stránky) ---------- */
+.lp-reg{padding:64px 0 56px}
+.lp-reg h1{max-width:none}
+.lp-reg-choose{padding-top:56px}
+.lp-reg-choose .lp-path{min-height:340px}
+.lp-reg-choose .logos{margin-top:24px}
+.lp-reg{background-color:var(--surface-dark);background-size:cover;background-position:right 30%;background-repeat:no-repeat}
+.lp-reg:before{display:none}
+.lp-reg-choose .lp-path.consumer .btn{margin-top:28px}
+.lp-reg-tip{margin-top:16px!important;font-size:var(--fs-sm)!important;color:var(--mut);max-width:420px}
+.lp-reg-tip .link{font-weight:700;color:var(--brand-ink)}
+
+/* ---------- nočný štýl úvodu: polárna žiara, hviezdy, sklenené karty, žiariaca scéna ---------- */
+.marketing .top{background:var(--surface-dark);border-color:var(--line-dark)}
+.marketing .brand{color:var(--on-dark)}
+.marketing .market-nav a{color:var(--on-dark-mut)}
+.marketing .market-nav a:hover{color:var(--on-dark)}
+.marketing .top .btn:not(.dark){color:var(--on-dark);border-color:var(--line-dark)}
+.lp-hero:before{width:auto;height:auto;border-radius:0;inset:-25% -10% -5% 30%;
+  background:radial-gradient(26% 72% at 58% 26%,color-mix(in srgb,var(--aurora-1) 62%,transparent),transparent 70%),
+    radial-gradient(20% 80% at 74% 18%,color-mix(in srgb,var(--aurora-1) 48%,transparent),transparent 72%),
+    radial-gradient(28% 75% at 93% 26%,color-mix(in srgb,var(--aurora-2) 66%,transparent),transparent 72%),
+    radial-gradient(22% 46% at 44% 8%,color-mix(in srgb,var(--aurora-3) 42%,transparent),transparent 70%);
+  filter:blur(22px);animation:lp-aurora 16s ease-in-out infinite alternate}
+.lp-hero:after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1.2px 1.2px at 12% 18%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 28% 8%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.4px 1.4px at 46% 22%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 58% 6%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.3px 1.3px at 72% 14%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 84% 30%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 93% 9%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 66% 40%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1px 1px at 38% 4%,var(--on-dark) 50%,transparent 52%),radial-gradient(1.2px 1.2px at 78% 52%,var(--on-dark) 50%,transparent 52%)}
+.lp-hero .lp-wrap{position:relative;z-index:1}
+@keyframes lp-aurora{from{transform:translateX(0) skewX(0deg)}to{transform:translateX(-5%) skewX(-7deg)}}
+.lp-hero .lp-float{background:var(--night-glass);color:var(--on-dark);border:1px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);backdrop-filter:blur(10px);
+  box-shadow:0 0 26px color-mix(in srgb,var(--accent-dark) 22%,transparent),0 14px 50px rgba(0,0,0,.35)}
+.lp-hero .lp-float .tag,.lp-hero .lp-live{color:var(--on-dark-mut)}
+.lp-hero .lp-float .positive{color:var(--accent-dark)}
+.lp-hero .lp-live i{background:var(--accent-dark);box-shadow:0 0 8px var(--accent-dark)}
+.lp-hero-checks{gap:14px 26px;font-size:var(--fs-md)}
+.lp-hero-checks>span{gap:12px}
+.lp-chk-dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--accent-dark);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent-dark) 18%,transparent),0 0 12px var(--accent-dark)}
+@media(prefers-reduced-motion:reduce){.lp-hero:before{animation:none}}
+.lp-hero:before{opacity:.45}
+.lp-float-ic{position:absolute;right:16px;top:16px;width:22px;height:22px;color:var(--accent-dark)}
+.lp-float.one{padding-right:52px}.lp-float.two{padding-right:48px}
+
+/* ---------- hero: celé pozadie je obrázok scény (hero-bg.jpg v priečinku assets, 1659 × 948) ----------
+   Ľavá časť obrázka je tmavá – je pod textom. Živé karty z enginu sa vznášajú nad scénou. */
+.lp-hero.bg{background-color:var(--surface-dark);background-position:100% 0;background-size:cover;background-repeat:no-repeat}
+.lp-hero.bg:before{display:none}
+.lp-scene.bg-cards .lp-float{border:1.5px solid color-mix(in srgb,var(--accent-dark) 80%,transparent);
+  box-shadow:0 0 22px color-mix(in srgb,var(--accent-dark) 35%,transparent),inset 0 0 18px color-mix(in srgb,var(--accent-dark) 10%,transparent),0 14px 40px rgba(0,0,0,.35);padding-right:52px}
+.lp-scene.bg-cards .lp-float.one{transform:rotate(3deg)}
+.lp-scene.bg-cards .lp-float.two{transform:rotate(-3.5deg)}
+.lp-scene.bg-cards .lp-float-ic{top:50%;margin-top:-11px}
+@media(min-width:821px){
+ .lp-hero.bg{min-height:max(620px,calc(100vw*948/1659));margin-top:-65px;padding-top:137px}
+ .lp-hero.bg .lp-wrap,.lp-hero.bg .lp-hero-grid{position:static}
+ .lp-hero.bg .lp-hero-grid>div:first-child{position:relative;z-index:2}
+ .lp-scene.bg-cards{position:absolute;inset:0;margin:0;max-width:none;pointer-events:none}
+ .lp-scene.bg-cards .lp-float.one{top:22%;right:4%;left:auto}
+ .lp-scene.bg-cards .lp-float.two{top:64%;left:50%;bottom:auto}
+ /* priesvitná lišta – obloha pokračuje až pod ňu */
+ .marketing:has(.lp-hero.bg) .top{background:color-mix(in srgb,var(--surface-dark) 38%,transparent);border-color:color-mix(in srgb,var(--on-dark) 8%,transparent)}
+}
+@media(max-width:820px){
+ .lp-hero.bg{background-size:auto 112vw;background-position:78% 100%;padding-bottom:0}
+ .lp-scene.bg-cards{min-height:100vw;margin-top:12px}
+ .lp-hero.bg:before{display:block;content:'';inset:auto 0 auto 0;top:calc(100% - 112vw);width:auto;height:34vw;border-radius:0;filter:none;opacity:1;animation:none;background:linear-gradient(to bottom,var(--surface-dark),transparent)}
+ .lp-scene.bg-cards .lp-float.one{top:0;right:0}
+ .lp-scene.bg-cards .lp-float.two{bottom:2%;left:0}
+}
+/* po scrollovaní je lišta plná (nie priesvitná) s tieňom – čitateľná nad svetlými sekciami */
+.marketing .top{transition:background-color .2s ease,box-shadow .2s ease,border-color .2s ease}
+body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{background:var(--surface-dark);border-color:var(--line-dark);box-shadow:0 6px 24px rgba(0,0,0,.28)}
+@media(prefers-reduced-motion:reduce){.marketing .top{transition:none}}
+/* odkazy v hornej lište: nadpis sekcie je vždy rovnako ďaleko pod prilepenou lištou.
+   Sekcia má vlastný vnútorný odstup, preto scroll-margin = lišta + vzduch − padding sekcie. */
+.lp [id]{scroll-margin-top:65px}
+.lp-section[id]{scroll-margin-top:11px}   /* 65 lišta + 36 vzduch − 90 padding */
+#lp-club{scroll-margin-top:89px}          /* tmavý blok bez vnútorného odstupu: 65 + 24 */
+@media(max-width:820px){
+ .lp [id]{scroll-margin-top:56px}
+ .lp-section[id]{scroll-margin-top:24px}  /* 56 + 28 − 60 */
+ #lp-club{scroll-margin-top:76px}
+}
+.lp-reg-choose .logos img{height:28px;width:auto;border-radius:0}
+/* registrácia – symetrické karty: rovnaký nadpis, akcie zarovnané na spodok, rovnako široké tlačidlá spoločností */
+.lp-reg-choose .lp-path{display:flex;flex-direction:column}
+.lp-reg-choose .lp-path h3{max-width:none}
+.lp-reg-choose .lp-path>p:not(.lp-reg-tip){max-width:460px;margin-bottom:28px}
+.lp-reg-choose .lp-path .logos,.lp-reg-choose .lp-path.consumer .btn{margin-top:auto!important}
+.lp-reg-choose .logos{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:460px}
+.lp-reg-choose .logos button{justify-content:center;min-height:52px;padding:8px 16px}
+.lp-reg-choose .lp-path.consumer .btn{align-self:flex-start;min-height:52px;padding-inline:26px}
+.lp-reg-tip{min-height:3.2em}
+@media(max-width:520px){.lp-reg-choose .logos{grid-template-columns:1fr}}
+.lp-reg-choose .logos{max-width:520px}
+.lp-reg-choose .logos button{white-space:nowrap;gap:12px}
+.lp-reg-choose .logos img{height:24px}
+.lp-reg-choose .lp-path .path-art{display:none}
+.lp-reg-choose .lp-reg-tip{max-width:460px}
+/* registrácia – tmavý pás s krokmi (progress indicator) namiesto obrázka */
+.lp-reg{background:var(--surface-dark);padding:56px 0 48px}
+.lp-reg-grid{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.lp-reg .lp-intro{margin-bottom:0}
+.lp-steps{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:0}
+.lp-steps li{display:flex;align-items:center;gap:10px;color:var(--on-dark-mut);font-size:var(--fs-sm);font-weight:700}
+.lp-steps li+li:before{content:'';width:40px;height:2px;background:var(--line-dark);margin:0 14px}
+.lp-steps .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);color:var(--accent-dark)}
+.lp-steps li.cur{color:var(--on-dark)}
+.lp-steps li.cur .n{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+@media(max-width:820px){.lp-reg{padding:40px 0 36px}.lp-steps{flex-wrap:wrap;row-gap:10px}.lp-steps li+li:before{width:18px;margin:0 8px}.lp-steps .t{font-size:var(--fs-xs)}}
+/* dual brand – jedno tlačidlo prihlásenia účtom ZSE · VSE */
+.lp-reg-choose .logos.dual{display:flex;max-width:none}
+.lp-reg-choose .logos.dual button{gap:16px;padding:10px 24px 10px 18px;min-height:56px}
+.dual-logos{display:flex;align-items:center;gap:12px}
+.dual-logos i{width:1px;height:24px;background:var(--line-2)}
+/* dve akcie v karte ZSE · VSE: hlavná (prihlásenie) a vedľajšia (vytvorenie účtu), rovnaká výška */
+.lp-reg-choose .logos.dual{flex-wrap:wrap;gap:12px}
+.lp-reg-choose .logos.dual .acc-btn{min-height:56px;padding:10px 22px;font-weight:800;border:2px solid var(--ink);color:var(--ink);background:transparent;border-radius:var(--r-pill)}
+.lp-reg-choose .logos.dual .acc-btn:hover{background:var(--ink);color:var(--card)}
+@media(max-width:520px){.lp-reg-choose .logos.dual button{width:100%;justify-content:center}}
+/* hierarchia: prihlásenie = hlavná (plné tmavé, logá v bielom štítku), vytvorenie účtu = vedľajšia (obrys) */
+.lp-reg-choose .logos.dual{flex-wrap:nowrap}
+.lp-reg-choose .logos.dual .login-btn{background:var(--ink);border-color:var(--ink);color:var(--card);padding:6px 22px 6px 6px;gap:14px}
+.lp-reg-choose .logos.dual .login-btn:hover{background:var(--surface-dark-2);border-color:var(--surface-dark-2)}
+.lp-reg-choose .logos.dual .login-btn .dual-logos{background:var(--card);border-radius:var(--r-pill);padding:10px 16px;gap:10px}
+.lp-reg-choose .logos.dual .login-btn .dual-logos img{height:20px}
+.lp-reg-choose .logos.dual .acc-btn{border-width:1.5px}
+.lp-reg-choose .logos.dual .acc-btn:hover{background:var(--card);color:var(--ink)}
+@media(max-width:620px){.lp-reg-choose .logos.dual{flex-wrap:wrap}}
+.lp-reg-choose .logos.dual .login-btn,.lp-reg-choose .logos.dual .acc-btn{min-height:60px}
+/* ---------- sprievodca po prihlásení (4 kroky) ---------- */
+.wz-steps{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;align-items:center;row-gap:10px}
+.wz-steps li{display:flex;align-items:center;gap:10px;color:var(--on-dark-mut);font-size:var(--fs-sm);font-weight:700}
+.wz-steps li+li:before{content:'';width:36px;height:2px;background:var(--line-dark);margin:0 12px}
+.wz-steps .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);color:var(--accent-dark)}
+.wz-steps li.done .n{background:color-mix(in srgb,var(--accent-dark) 22%,transparent)}
+.wz-steps li.cur{color:var(--on-dark)}
+.wz-steps li.cur .n{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+.wz{padding-top:48px}
+.wz-lead{max-width:720px;margin-bottom:24px}
+.wz-list{display:grid;gap:16px}
+.wz-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;display:grid;gap:14px}
+.wz-card.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-t)}
+.wz-om-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.wz-om-top>div{display:grid;gap:4px}
+.wz-addr{font-size:var(--fs-h3)}
+.wz-om-edit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+.wz-icons{display:flex;gap:8px;flex-wrap:wrap}
+.wz-icons button{width:44px;height:44px;border-radius:var(--r-sm);border:1.5px solid var(--line-2);background:var(--card);display:grid;place-items:center;color:var(--ink);cursor:pointer}
+.wz-icons button .icon{width:22px;height:22px}
+.wz-icons button.on{border-color:var(--brand);background:var(--brand-t);color:var(--brand-ink)}
+.wz-om-head{display:flex;align-items:center;gap:14px}
+.wz-om-head>div{display:grid;gap:2px}
+.wz-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
+.wz-ic .icon{width:22px;height:22px}
+.wz-opts{display:grid;gap:10px}
+.wz-opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer}
+.wz-opt input{width:20px;height:20px;margin-top:2px;accent-color:var(--brand);flex:none}
+.wz-opt span{display:grid;gap:2px}
+.wz-opt.miss{cursor:default;background:var(--orange-t);border-color:transparent;display:grid;gap:4px}
+.wz-opt.miss .xs{color:var(--orange)}
+.wz-tbd{padding:12px 14px;border-radius:var(--r);background:var(--bg);border:1px dashed var(--line-2)}
+.wz-sum-row{display:grid;grid-template-columns:160px minmax(0,1fr) auto;gap:12px;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
+.wz-sum-row .link{font-weight:700;color:var(--brand-ink)}
+.wz-confirm{margin-top:20px}
+.wz-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+.wz-done{grid-template-columns:auto 1fr;align-items:start;background:var(--tint-green);border:0}
+.wz-done h2{margin-bottom:6px}
+.wz-h{margin:28px 0 14px;font-size:var(--fs-h3)}
+.wz-list .wz-card:has(.pill){grid-template-columns:1fr auto;align-items:center}
+@media(max-width:820px){.wz-steps .t{display:none}.wz-steps li.cur .t{display:inline}.wz-steps li+li:before{width:18px;margin:0 8px}.wz-om-edit{grid-template-columns:1fr}.wz-sum-row{grid-template-columns:1fr auto}.wz-sum-row>.xs{grid-column:1/-1}}
+.wz .wz-done h2{font-size:var(--fs-h2);letter-spacing:-.02em;max-width:none}
+.lp .wz .wz-h{font-size:var(--fs-h2);letter-spacing:-.02em}

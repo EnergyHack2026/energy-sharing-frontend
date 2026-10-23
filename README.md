@@ -32,7 +32,22 @@ index.html#jury=1                              # jury mode on (jury=0 off)
 
 `persona=admin` or `skin=…` in the link switches jury mode on automatically.
 
-Views: `landing potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
+Views: `landing join potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
+
+## Final version (branch `final`)
+
+The `final` branch is the version for the jury. It starts with the landing page only; features from `main`
+are switched on one by one. Switching is done in one place, `ON` in `js/core.js`:
+
+```js
+const ON=new Set(['landing']);          // e.g. add 'register','potential','home','market'
+```
+
+Keys are views from `VIEWS` (`js/main.js`) plus `chat` (AI assistant) and `tour` (demo story).
+A disabled view falls back to the landing page; buttons and menu items leading to it are hidden
+(`gateActs()` in `js/main.js`). Code of disabled features stays in the repo.
+
+Workflow: one small branch per feature from `final` (e.g. `feat/register`) → check in the browser → merge into `final`.
 
 ## Layout
 
@@ -47,7 +62,7 @@ js/core.js          utils + state S
 js/engine.js        model: profiles, allocation, settlement (no DOM)
 js/ui.js            icon set, form helper F(), charts, QR, map pieces
 js/views-app.js     Home, Market, Group, Reports, Rewards, Profile, Admin, Onboarding
-js/views-public.js  Landing (valid EIC → straight to Registration), Benefits, Registration, Váš potenciál (deep link only)
+js/views-public.js  Landing („Pridať sa“ → Registration), Join (EIC entry, currently not linked), Registration (choice step in the landing design, brand-neutral), Benefits, Registration, Váš potenciál (deep link only)
 js/views-map.js     Map
 js/views-ideas.js   Ideas (7 visions)
 js/badges.js        Odmeny → Odznaky: badge definitions, SVG badge, stage, unlock, share card, welcome popup
@@ -83,6 +98,14 @@ The landing page is the template for every screen.
 10. **Every screen starts with a hero band** – `hero({kicker,title,lead,acts,aside,top,foot})` in `js/ui.js`
     (dark band, big title with `<em>` accent, floating stat cards `hstat()`), section titles via `secHead()`.
     Same language as `.lp-hero` / `.lp-club` on the landing page. No "simulácia" footnotes in the app.
+11. **Red dot = brand signature.** The wordmark is always „Zdieľňa" + red dot (`--sig`, same in every skin).
+    Use the red dot wherever it fits: the final full stop of `h1`/`h2` headings – `hero()` and `secHead()` add it
+    automatically (`sig()` in `js/ui.js`), in hand-written markup use `<span class="sig">.</span>`.
+    **Never two red dots in a row:** only the last full stop of a heading is red (e.g. „Začnite jedným kódom.
+    Objavte nové možnosti" + red dot), no red dot in kickers, `h3` or body text, nor on a line right before a red-dot heading.
+12. **Landing page is brand-neutral** – no ZSE/VSE logo, name or colours (skin `neutral`, dark `#1E1B22` + solar amber).
+    ZSE/VSE branding appears only inside the app. Exception: the registration step text may name
+    „účet ZSE alebo VSE" (text only, no logo or colours).
 
 ## Regions (map)
 
