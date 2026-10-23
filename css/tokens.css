@@ -37,7 +37,7 @@
   --tint-cool:#EAF0F7;
 
   /* tmavý pás (hero, klub) – prepisuje ho skin */
-  --surface-dark:#1E1B22;
+  --surface-dark:#1E1B22; --surface-dark-2:#141218;
   --on-dark:#ECE9F1;
   --on-dark-mut:#B9B4C4;
   --line-dark:rgba(255,255,255,.14);
@@ -52,6 +52,19 @@
 
   /* pevné značky (strechy na mape) */
   --zse:#F21C0A; --vse:#143C8C;
+  /* mapa regiónov – tmavý jazyk hero; stred (SSE) je mimo služby */
+  --map-zse:#5A3436; --map-zse-ink:#FF8A7A; --map-zse-roof:#E8705F;
+  --map-sse:#4E4032; --map-sse-ink:#F2B062;
+  --map-vse:#3A3E55; --map-vse-ink:#8FB3F2; --map-vse-roof:#6C8FD6;
+  --map-edge:rgba(255,255,255,.22); --map-tree:#7FA088; --map-wall:#F4ECE0; --map-wall-2:#D6CBBD; --map-flow:#F5B33A;
+  --map-bat:#B79BF2; --map-gift:#FF9EC0;
+
+  /* slniečko – uvítacia hláška */
+  --sun-1:#FFF6C2; --sun-2:#FFC530; --sun-3:#F59E0B; --sun-edge:#FFE08A; --sun-ink:#5A3A00; --sun-glow:rgba(255,197,48,.18);
+  --sun-bg:#FFF8E6;
+
+  /* stavové farby na tmavom páse a drobnosti (žiadny hex mimo tokenov) */
+  --on-dark-ok:#CDEAA0; --on-dark-warn:#FFC08A; --on-dark-err:#FFD2C3; --online:#2FD36B; --roof-mix:#F2C2A0;
 
   /* batéria – mimo palety značiek, rovnaká v oboch */
   --purple:#6A35C0; --purple-t:#F0E8FB;
@@ -61,7 +74,10 @@
 :root[data-skin="zse"]{
   --brand:#F21C0A; --brand-d:#B1190C; --brand-ink:#B1190C; --brand-t:#FDE9E6; --on-brand:#FFFFFF;
   --brand2:#0AACF2;                       /* sekundárna modrá zo zse.sk */
-  --surface-dark:#1E1B22; --accent-dark:#FF7A6B; --on-dark-mut:#B9B4C4;
+  /* tmavé plochy ZSE sú tmavo červené (ako VSE tmavomodré) – kontrast textu overený:
+     #F6E7E4 10 : 1, #F2C0B6 7,5 : 1, akcent #FFC9A3 8,1 : 1 */
+  --surface-dark:#6E1009; --surface-dark-2:#4D0B06; --accent-dark:#FFC9A3; --on-dark:#F6E7E4; --on-dark-mut:#F2C0B6;
+  --map-zse:#9A2C22; --map-sse:#5C3A26; --map-vse:#4A3E5E; --map-zse-ink:#FFC9A3; --map-vse-ink:#C2D3F7;
 
   --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;   /* výroba / slnko */
   --green:#4E7210;  --green-t:#EEF4E0;                          /* zdieľané / úspech */
@@ -74,7 +90,8 @@
 :root[data-skin="vse"]{
   --brand:#143C8C; --brand-d:#0E2C68; --brand-ink:#143C8C; --brand-t:#E3EAF7; --on-brand:#FFFFFF;
   --brand2:#01A0D5;                       /* azúrová zo vse.sk */
-  --surface-dark:#0E2C68; --accent-dark:#6FD0F2; --on-dark-mut:#A9BEE3;
+  --surface-dark:#0E2C68; --surface-dark-2:#091E4A; --accent-dark:#6FD0F2; --on-dark-mut:#A9BEE3;
+  --map-zse:#5A3446; --map-sse:#4E4636; --map-vse:#2D5099; --map-vse-ink:#B8D8FA;
 
   --yellow:#F5A623; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
   --green:#3A7316;  --green-t:#E9F3E1;   /* #5EA62B z vse.sk, stmavené pre text */

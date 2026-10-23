@@ -58,7 +58,9 @@ function runDay(appT,o={}){
   const P=profiles(appT,o.mul||1);
   const A=o.forecast?{a:P.fpFull,c:P.fc,cb:P.fcBase}:actuals(P);
   const share=Math.max(0,S.p.share)/100,off=o.off||{};
-  const aAct=(o.potential||isAct(S.mem.anna))&&!off.anna,pAct=(o.potential||isAct(S.mem.peter))&&!off.peter;
+  /* OM na Strednom Slovensku (SSE) nemôže zdieľať – oblasť je zatiaľ mimo služby */
+  const inSse=w=>!o.twin&&regionOf(geo(S.om[w].addr).ll)==='sse';
+  const aAct=(o.potential||isAct(S.mem.anna))&&!off.anna&&!inSse('anna'),pAct=(o.potential||isAct(S.mem.peter))&&!off.peter&&!inSse('peter');
   const others=S.sim.others||o.twin,cfg=cascadeCfg(o),B=S.bat,bOn=B.on&&aAct;
   const cap=Math.max(0,B.cap),minK=cap*clamp(B.minSoc,0,100)/100,eff=clamp(B.eff/100,0.01,1),pow=Math.max(0,B.pow);
   const eS=T2I(B.eStart),eE=T2I(B.eEnd);
@@ -144,7 +146,7 @@ function matchScore(sup,price,dem,max,ref,conf){
 }
 const UNC={'vysoká':.10,'stredná':.20,'nízka':.35};
 const memoC={};
-function memo(tag,fn){const k=tag+JSON.stringify([S.p,S.c,S.bat,S.sim.dev,S.sim.others,S.sim.win,S.sim.days,S.o,S.meter,S.fee,S.agent,S.bank.on,S.bank.pct,S.bank.bal,S.don,S.gifts,S.mem]);if(k in memoC)return memoC[k];const v=fn();const ks=Object.keys(memoC);if(ks.length>400)delete memoC[ks[0]];memoC[k]=v;return v}
+function memo(tag,fn){const k=tag+JSON.stringify([S.om,S.p,S.c,S.bat,S.sim.dev,S.sim.others,S.sim.win,S.sim.days,S.o,S.meter,S.fee,S.agent,S.bank.on,S.bank.pct,S.bank.bal,S.don,S.gifts,S.mem]);if(k in memoC)return memoC[k];const v=fn();const ks=Object.keys(memoC);if(ks.length>400)delete memoC[ks[0]];memoC[k]=v;return v}
 const potRun=()=>memo('pot',()=>runDay(S.c.appTime,{forecast:true,potential:true}));
 const dayRun=()=>runDay(S.c.appTime);
 /* očakávaná ponuka z batérie (pre Smart Match): uložená energia rozložená do večerného okna */
@@ -223,7 +225,7 @@ function checkFU(){
     const owner=who==='anna'?'p':'c',keys=who==='anna'?['pw','pb']:['wash','ev','wh'];
     if(keys.some(k=>doneG(owner,k))){
       S.fu[who]={from:S.day,shown:false};
-      setTimeout(()=>{if(S.fu[who]){S.fu[who].shown=true;toast('🎯 Nová výzva sa zobrazila – zapojiť sa môžete až po polnoci');render(false)}},3500);
+      setTimeout(()=>{if(S.fu[who]){S.fu[who].shown=true;toast('🎯 Nová výzva sa zobrazila – zapojiť sa môžete až po polnoci');notify('chal',who,'Nová výzva za splnenie','Zapojiť sa môžete po polnoci.','rewards');render(false)}},3500);
     }
   }
 }
@@ -293,7 +295,14 @@ const coinEur=()=>S.bank.rate/100*S.bank.winter;
 const TOWNS={'bratislava':[17.11,48.15],'trnava':[17.59,48.38],'piestany':[17.83,48.59],'nitra':[18.09,48.31],'trencin':[18.04,48.89],'hlohovec':[17.80,48.43],'senica':[17.37,48.68],'zilina':[18.74,49.22],'martin':[18.92,49.07],'banska bystrica':[19.15,48.74],'zvolen':[19.13,48.58],'poprad':[20.30,49.06],'presov':[21.24,49.00],'kosice':[21.26,48.72],'michalovce':[21.92,48.75],'bardejov':[21.28,49.29],'humenne':[21.91,48.93],'spisska nova ves':[20.56,48.94],'komarno':[18.13,47.76],'dunajska streda':[17.62,47.99],'levice':[18.60,48.22],'lucenec':[19.67,48.33],'roznava':[20.53,48.66],'malacky':[17.02,48.44],'pezinok':[17.27,48.29],'nove zamky':[18.16,47.99],'prievidza':[18.62,48.77],'ruzomberok':[19.30,49.08],'liptovsky mikulas':[19.61,49.08],'vranov nad toplou':[21.68,48.89],'trebisov':[21.72,48.63]};
 const ZSE_LON=20.05;
 function geo(addr){const a=norm(addr);let best=null;for(const t of Object.keys(TOWNS))if(a.includes(t)&&(!best||t.length>best.length))best=t;return best?{town:best,ll:TOWNS[best]}:{town:'bratislava',ll:TOWNS.bratislava,guess:true}}
-const regionOf=ll=>ll[0]<ZSE_LON?'zse':'vse';
+/* tri oblasti: Západ (ZSE), Stred (SSE – zatiaľ mimo služby), Východ (VSE).
+   Hranice sú približné (kraje TT/TN/NR/BA | ZA/BB | PO/KE), stačia na umiestnenie OM. */
+const RB_W=[[18.45,49.37],[18.55,49.15],[18.7,48.95],[18.8,48.75],[18.75,48.55],[18.85,48.3],[19.0,48.07]];
+const RB_E=[[20.05,49.18],[20.1,48.95],[20.2,48.75],[20.25,48.5],[20.3,48.27]];
+function inPoly(pt,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const [xi,yi]=poly[i],[xj,yj]=poly[j];if((yi>pt[1])!==(yj>pt[1])&&pt[0]<(xj-xi)*(pt[1]-yi)/(yj-yi)+xi)c=!c}return c}
+/* polygón naľavo / napravo od hraničnej čiary (predĺženej mimo územia) */
+const sidePoly=(B,dir)=>[[B[0][0],52],...B,[B[B.length-1][0],46],[dir<0?15:24,46],[dir<0?15:24,52]];
+const regionOf=ll=>inPoly(ll,sidePoly(RB_W,-1))?'zse':inPoly(ll,sidePoly(RB_E,1))?'vse':'sse';
 const SK_OUT=[[17.06,48.07],[16.98,48.17],[16.88,48.32],[16.9,48.45],[16.95,48.6],[17.15,48.81],[17.4,48.83],[17.65,48.85],[17.9,48.92],[18.1,49.05],[18.25,49.25],[18.45,49.37],[18.6,49.47],[18.8,49.52],[18.95,49.42],[19.25,49.52],[19.45,49.6],[19.7,49.35],[19.9,49.2],[20.05,49.18],[20.15,49.26],[20.35,49.4],[20.55,49.38],[20.9,49.3],[21.1,49.38],[21.45,49.43],[21.85,49.37],[22.05,49.22],[22.4,49.1],[22.57,49.08],[22.47,48.85],[22.35,48.7],[22.15,48.41],[21.75,48.33],[21.45,48.55],[21.2,48.52],[20.95,48.52],[20.6,48.55],[20.3,48.27],[20.0,48.17],[19.65,48.23],[19.45,48.1],[19.0,48.07],[18.82,47.98],[18.72,47.82],[18.3,47.75],[18.1,47.76],[17.75,47.75],[17.5,47.9],[17.25,48.0]];
 const MAPW=760,MAPH=380;
 const prj=ll=>[(ll[0]-16.75)*0.66*192+14,(49.66-ll[1])*192+12];

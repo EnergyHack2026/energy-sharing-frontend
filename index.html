@@ -6,6 +6,11 @@
 <meta name="description" content="Zdieľňa – trhovisko na zdieľanie elektriny od ZSE a VSE. Hackathon 2026, prototyp.">
 <title>Zdieľňa – slnko od suseda</title>
 <link rel="icon" href="assets/zse.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#6E1009">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zdieľňa">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +20,9 @@
 </head>
 <body>
 <header class="top" id="top"></header>
-<div class="shell" id="shell"><nav class="side" id="side" aria-label="Hlavná navigácia"></nav><main class="main" id="main"></main></div>
+<div class="shell" id="shell"><nav class="side" id="side" aria-label="Hlavná navigácia"></nav><main class="main" id="main"><div id="boot-msg" style="max-width:640px;margin:60px auto;padding:24px;border:1px solid #E8E3DB;border-radius:16px;font-family:system-ui,sans-serif;line-height:1.6;color:#1E1B22;background:#fff">
+<b>Načítavam Zdieľňu…</b><br>
+Ak táto správa nezmizne, prehliadač nenašiel priečinky <code>css/</code> a <code>js/</code>. Rozbaľte celý zip a otvorte <code>index.html</code> z rozbaleného priečinka (nie priamo zo zipu) – alebo otvorte samostatný súbor <code>zdielna.html</code>, ktorý funguje aj sám.</div></main></div>
 <nav class="bnav" id="bnav" aria-label="Spodná navigácia"></nav>
 <aside class="drawer" id="drawer" aria-label="Parametre dema"></aside>
 <div id="modal"></div>
@@ -32,6 +39,7 @@
 <script src="js/views-map.js"></script>
 <script src="js/views-ideas.js"></script>
 <script src="js/badges.js"></script>
+<script src="js/notify.js"></script>
 <script src="js/chat.js"></script>
 <script src="js/main.js"></script>
 </body>

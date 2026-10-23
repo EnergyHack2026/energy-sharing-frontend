@@ -1,2 +1,5 @@
 # Pôvodné podklady od E.SK (xlsx, docx) obsahujú osobné údaje – necommitovať
 doc/podklady/
+
+# Zip s mockupom – obsah je rozbalený v repe
+doc/mockup/

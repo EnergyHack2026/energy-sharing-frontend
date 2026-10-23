@@ -13,7 +13,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .market-nav a{color:var(--mut);text-decoration:none;font-size:var(--fs-sm);font-weight:700;white-space:nowrap}
 .market-nav a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:6px}
 
-.lp{--lp-roof:color-mix(in srgb,var(--brand) 55%,#f2c2a0)}
+.lp{--lp-roof:color-mix(in srgb,var(--brand) 55%,var(--roof-mix))}
 .lp a{color:inherit}
 .lp h2{font-size:clamp(30px,3.4vw,46px);line-height:1.1;letter-spacing:-.045em;font-weight:800;max-width:16ch}
 .lp h3{font-size:22px;letter-spacing:-.025em;line-height:1.2}
@@ -42,7 +42,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-eic-help a{color:var(--on-dark)}
 .lp-demo-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--on-dark-mut);margin-top:18px}
 .lp-demo-links .link{color:var(--on-dark)}
-.lp-error{color:#FFD2C3;font-size:var(--fs-sm);margin-top:9px;max-width:520px}
+.lp-error{color:var(--on-dark-err);font-size:var(--fs-sm);margin-top:9px;max-width:520px}
 .lp-hero-checks{display:flex;gap:22px;font-size:var(--fs-sm);color:var(--on-dark);margin-top:28px;flex-wrap:wrap}
 .lp-hero-checks span{display:flex;gap:7px;align-items:center}
 .lp-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-dark);display:inline-block}
@@ -208,3 +208,6 @@ body.marketing .main{max-width:none;padding:0 0 40px}
  .lp-footer{flex-direction:column}
  .lp-result{padding:22px}
 }
+/* čip „Vložiť ukážkový kód“ */
+.lp-chip{border:1px dashed var(--line-dark);background:rgba(255,255,255,.08);color:var(--on-dark);border-radius:var(--r-pill);padding:3px 10px;font:inherit;font-size:var(--fs-xs);font-weight:700;cursor:pointer;margin-left:4px}
+.lp-chip:hover{background:rgba(255,255,255,.16)}

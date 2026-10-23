@@ -29,7 +29,11 @@ const ICONS={
  bank:'<path d="M3 10 12 4l9 6M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18"/>',
  bot:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13v1m6-1v1M9 17h6"/>',
  city:'<path d="M3 21h18M5 21V10l5-3v14m0-9h5V6l4 2v13"/>',
- arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>'
+ arrow:'<path d="M5 12h14m-6-6 6 6-6 6"/>',
+ bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+ sunrise:'<path d="M3 18h18M5 21h14M12 3v4m-7.8 3.2 2.1 2.1m13.5-2.1-2.1 2.1M7 18a5 5 0 0 1 10 0"/>',
+ play:'<path d="M7 4.5v15l12-7.5-12-7.5Z"/>',
+ print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>'
 };
 function icon(name,cl='icon'){return `<svg class="${cl}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||ICONS.sun}</svg>`}
 /* ---------- UI helpers ---------- */
@@ -46,7 +50,13 @@ const F=(label,k,o={})=>{
 };
 const pill=(c,t)=>`<span class="pill ${c}">${t}</span>`;
 const kpi=(l,v,d='',c='')=>`<div class="card kpi"><div class="l">${l}</div><div class="v ${c}">${v}</div>${d?`<div class="d">${d}</div>`:''}</div>`;
-const FOOT=()=>`<div class="foot" role="note">ℹ️ Simulácia s ilustračnými dátami – nejde o záväznú ponuku. Sumy zahŕňajú iba cenu komodity (u výrobcu aj províziu ${BR()} z predanej energie); nezahŕňajú distribučné, prenosové ani fixné poplatky. Odhady nie sú garantovaným výsledkom. Funkcie v sekcii Nápady sú vízie, nie existujúce produkty.</div>`;
+/* hero pás na začiatku každej obrazovky – rovnaký jazyk ako úvodná stránka
+   o: {kicker,title,lead,acts,aside,top,foot,cls} */
+function hero(o){
+  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${o.title}</h1>${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
+}
+const hstat=(tag,val,sub='',cls='')=>`<div class="hstat ${cls}"><span class="tag">${tag}</span><b>${val}</b>${sub?`<span>${sub}</span>`:''}</div>`;
+const secHead=(k,t,l='')=>`<div class="sec-head"><div>${k?`<span class="kicker">${k}</span>`:''}<h2>${t}</h2></div>${l?`<p class="lead">${l}</p>`:''}</div>`;
 function feeTxt(){return S.fee.mode===FEE_PCT?fm(S.fee.pct,1)+' % z tržby':fm(S.fee.fix,1)+' €/MWh ('+fpr(S.fee.fix/1000)+' €/kWh) vr. DPH'}
 function priceWarn(){
   const np=netPrice(S.p.price);
@@ -59,7 +69,7 @@ function feeInfo(){const np=netPrice(S.p.price),d=np-S.p.feedin;return `<div cla
 function condList(){return `<details><summary>Podmienky účasti (ukážka)</summary><ul class="sm mut" style="margin:8px 0 0 18px;padding:0"><li>Odberné miesto môže byť naraz iba v jednej skupine.</li><li>Výrobca ponecháva svoju zmluvu o výkupe – nenasdieľaná energia ide jeho výkupcovi.</li><li>Výrobca je vlastníkom alebo oprávneným užívateľom výrobne; odberateľ je odberateľom na danom OM.</li><li>Na zdieľanie je potrebné inteligentné meranie (IMS) s 15-minútovými údajmi.</li><li>Vstup potvrdzuje po kontrole distribútor, ktorý ho môže zamietnuť.</li><li>Zdieľanie sa spúšťa k 1. dňu nasledujúceho mesiaca.</li><li>Výpoveď: členstvo sa končí ku koncu nasledujúceho mesiaca, do inej skupiny je možné vstúpiť až potom.</li></ul></details>`}
 function settleCard(){
   const st=[['Po skončení mesiaca','Systém uzavrie 15-minútové alokácie a skontroluje súčty.'],['Do 5. dňa','Návrh vyúčtovania – každý vidí svoje alokácie, ceny a sumy.'],['Do 10. dňa',`Vyúčtovanie: odberateľ platí inkasom, výrobcovi sa zo sumy odpočíta provízia ${BR()}.`],['Do 20. dňa','Výplata výrobcovi. Ak je provízia vyššia než príjem, rozdiel sa doplatí inkasom.']];
-  return `<div class="card"><h3>Ako prebieha mesačné vyúčtovanie</h3><div class="gap" style="margin-top:8px">${st.map((s,i)=>`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="pill b" style="min-width:26px;justify-content:center">${i+1}</span><div><b>${s[0]}</b><div class="xs mut">${s[1]}</div></div></div>`).join('')}</div><p class="xs mut" style="margin-top:8px">Ukážkový harmonogram prototypu.</p></div>`;
+  return `<div class="card"><h3>Ako prebieha mesačné vyúčtovanie</h3><div class="gap" style="margin-top:8px">${st.map((s,i)=>`<div class="row" style="align-items:flex-start;flex-wrap:nowrap"><span class="pill b" style="min-width:26px;justify-content:center">${i+1}</span><div><b>${s[0]}</b><div class="xs mut">${s[1]}</div></div></div>`).join('')}</div><div class="row" style="margin-top:12px"><button class="btn sm" data-act="rtab:inv">Pozrieť ukážku vyúčtovania →</button><span class="xs mut">Ukážkový harmonogram prototypu.</span></div></div>`;
 }
 const confPill=c=>pill(c==='vysoká'?'g':c==='stredná'?'o':'r','Istota odhadu: '+c);
 function stepper(m){
@@ -86,7 +96,7 @@ function mono(pts){
 let chartUid=0;
 function chart(res,o={}){
   const uid='c'+(++chartUid);
-  const W=720,H=266,L=40,R=12,T=20,B=30,lo=24,hi=S.bat.on?92:80,idx=o.idx??96;
+  const W=720,H=272,L=40,R=12,T=28,B=30,lo=24,hi=S.bat.on?92:80,idx=o.idx??96;
   const P=res.P,A=res.A,sh=res.share;
   const x=i=>L+(W-L-R)*(i-lo)/(hi-lo);
   const aa=A.a.map(v=>v*sh);
@@ -105,7 +115,7 @@ function chart(res,o={}){
    <linearGradient id="${uid}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".16"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient>
   </defs>`;
   for(let k=0;k<=4;k++){const v=mx*k/4;s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1" ${k?'stroke-dasharray="2 5"':''} opacity="${k?.8:1}"/><text x="${L-8}" y="${y(v)+3.5}" font-size="10" fill="var(--mut)" text-anchor="end">${fm(v,2)}</text>`}
-  s+=`<text x="4" y="${T-5}" font-size="9" fill="var(--mut)">kWh / 15 min</text>`;
+  s+=`<text x="4" y="${T-14}" font-size="9" fill="var(--mut)">kWh / 15 min</text>`;
   for(let h=6;h*4<=hi;h+=2)s+=`<text x="${x(h*4)}" y="${H-10}" font-size="10" fill="var(--mut)" text-anchor="middle">${pad(h)}:00</text>`;
   if(S.bat.on){const ea=Math.max(lo,res.eS??T2I(S.bat.eStart)),eb=Math.min(hi,res.eE??T2I(S.bat.eEnd));if(eb>ea)s+=`<rect x="${x(ea)}" y="${T}" width="${x(eb)-x(ea)}" height="${H-T-B}" fill="var(--purple)" opacity=".06"/><text x="${(x(ea)+x(eb))/2}" y="${T+14}" font-size="10.5" font-weight="700" fill="var(--purple)" text-anchor="middle">🔋 večer z batérie</text>`}
   if(o.win&&o.win.a!=null){const wx=x(o.win.a),ww=x(o.win.b)-wx;s+=`<rect x="${wx}" y="${T}" width="${ww}" height="${H-T-B}" rx="10" fill="var(--yellow)" opacity=".12" stroke="var(--yellow)" stroke-opacity=".5" stroke-dasharray="3 4"/><text x="${wx+ww/2}" y="${T+14}" font-size="10.5" font-weight="700" fill="var(--yellow)" text-anchor="middle">☀ najlepšie okno ${I2T(o.win.a)}–${I2T(o.win.b)}</text>`}
@@ -131,6 +141,71 @@ function chart(res,o={}){
   const lg=o.forecast?`<span><i style="border-color:var(--yellow);border-top-style:dashed"></i>odhad výroby (prebytok)</span><span><i style="border-color:var(--blue);border-top-style:dashed"></i>odhad spotreby</span>${o.band?'<span>▒ rozpätie odhadu</span>':''}${bl}`:
    `<span><i style="border-color:var(--yellow)"></i>skutočný prebytok</span><span><i style="border-color:var(--blue)"></i>skutočná spotreba</span><span><i style="border-color:var(--green);border-top-width:6px"></i>zdieľaná časť</span>${bl}<span><i style="border-color:var(--yellow);border-top-style:dashed"></i>odhad výroby</span><span><i style="border-color:var(--blue);border-top-style:dashed"></i>odhad spotreby</span>`;
   return s+`<div class="legend">${lg}</div>`;
+}
+/* ---------- prehrávač dňa (Domov): graf pre laika + popisy vypočítané z dát ---------- */
+const PL_LO=24,PL_HI=92;
+/* série pre osobu: sun = prebytok strechy, use = spotreba, sh = zdieľané cez deň, bat = z batérie, out = výkupca */
+function storySeries(res,per){
+  const z=()=>new Array(96).fill(0),sh=z(),bat=z();
+  for(const r of res.recs){if(r.kind)continue;if(per==='peter'?r.to==='peter':r.from==='anna'){if(r.src==='bat')bat[r.i]+=r.kwh;else sh[r.i]+=r.kwh}}
+  return {sun:res.A.a.map(v=>v*res.share),use:res.A.c,sh,bat,out:res.R.vykup};
+}
+function dayNotes(res,per){
+  const X=storySeries(res,per),P=res.P,w=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i]))),N=[];
+  const first=(a,t=.01,from=PL_LO)=>{for(let i=from;i<PL_HI;i++)if(a[i]>t)return i;return -1};
+  const add=(i,txt)=>{if(i>=PL_LO&&i<=PL_HI)N.push({i,txt})};
+  const a=agg(res),sunS=first(X.sun,.05);
+  if(per==='peter'){
+    add(PL_LO,'Ráno beriete elektrinu zo siete – susedove panely ešte nevyrábajú.');
+    if(sunS>=0)add(sunS,'Slnko na streche suseda už vyrába viac, než sám minie.');
+    const fs=first(X.sh);if(fs>=0&&fs>sunS+1)add(fs,'Prvá elektrina od suseda prichádza k vám.');
+    if(w)add(w.a,`Najlepší čas do ${I2T(w.b)}: elektrina od suseda je lacnejšia (${fpr(S.p.price)} € namiesto ${fpr(S.c.ref)} € zo siete).`);
+    let pk=-1,pv=0;for(let i=PL_LO;i<PL_HI;i++)if(X.sh[i]>pv){pv=X.sh[i];pk=i}
+    if(pk>=0&&(!w||Math.abs(pk-w.a)>=3))add(pk,`Najviac naraz: ${fm(pv,2)} kWh za 15 minút od suseda.`);
+    const fb=first(X.bat);
+    if(fb>=0)add(fb,'Slnko zapadlo – teraz vám svieti batéria suseda.');
+    else{let le=-1;for(let i=PL_LO;i<PL_HI;i++)if(X.sh[i]>.01)le=i;if(le>=0)add(le+1,'Slnko slabne – zvyšok dňa beriete zo siete.')}
+    add(PL_HI,`Spolu ${fm(a.peter.recv,1)} kWh od suseda · úspora ${eur(a.peter.saved)}.`);
+  }else{
+    add(PL_LO,'Ráno strecha ešte nevyrába – domácnosť ide zo siete.');
+    if(sunS>=0)add(sunS,'Panely vyrábajú viac, než minie domácnosť – prebytok ide susedom.');
+    if(w)add(w.a,`Do ${I2T(w.b)} susedia berú najviac – predávate za ${fpr(S.p.price)} €/kWh.`);
+    const fc=first(res.R.ch),fo=first(X.out);
+    if(fc>=0)add(fc,'Susedia už majú dosť – zvyšok sa ukladá do batérie na večer.');
+    if(fo>=0&&(fc<0||fo-fc>=2))add(fo,fc>=0?'Batéria je plná – zvyšok ide výkupcovi.':'Susedia už majú dosť – zvyšok ide výkupcovi.');
+    const fb=first(X.bat);if(fb>=0)add(fb,`Večer predávate z batérie za ${fpr(S.bat.price)} €/kWh.`);
+    add(PL_HI,`Spolu predané ${fm(a.anna.shared+a.anna.batSold,1)} kWh · čistý príjem ${eur(a.anna.net)}.`);
+  }
+  N.sort((x,y)=>x.i-y.i);
+  for(let k=1;k<N.length;k++)if(N[k].i-N[k-1].i<2)N[k].i=Math.min(PL_HI,N[k-1].i+2);
+  return N;
+}
+function storyChart(res,per,o){
+  const W=760,H=300,L=46,R=18,T=30,B=34,lo=PL_LO,hi=PL_HI,idx=clamp(o.idx,lo,hi),X=storySeries(res,per),P=res.P;
+  const x=i=>L+(W-L-R)*(i-lo)/(hi-lo);
+  const base=per==='peter'?[X.use,X.sun]:[X.sun];
+  const mx=Math.max(.3,...base.flatMap(a=>a.slice(lo,hi)),...(o.est?[...P.fpFull.slice(lo,hi).map(v=>v*res.share),...P.fc.slice(lo,hi)]:[]))*1.15;
+  const y=v=>T+(H-T-B)*(1-v/mx);
+  const pts=(a,e=hi)=>{const p=[];for(let i=lo;i<=e&&i<96;i++)p.push([x(i),y(a[i])]);return p};
+  const line=(a,e)=>mono(pts(a,e)),area=(a,e=hi)=>{const p=pts(a,e);return p.length<2?'':mono(p)+`L${p[p.length-1][0].toFixed(1)},${y(0)}L${p[0][0].toFixed(1)},${y(0)}Z`};
+  const w=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Priebeh dňa do ${I2T(idx)}"><defs><clipPath id="plclip"><rect x="0" y="0" width="${x(idx)}" height="${H}"/></clipPath></defs>`;
+  for(let k=1;k<=3;k++){const v=mx*k/3.45;s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="2 6"/><text x="${L-8}" y="${y(v)+4}" font-size="12" fill="var(--mut)" text-anchor="end">${fm(v,1)}</text>`}
+  s+=`<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line-2)"/><text x="4" y="${T-14}" font-size="12" fill="var(--mut)">kWh / 15 min</text>`;
+  for(let h=6;h<=21;h+=3)s+=`<text x="${x(h*4)}" y="${H-10}" font-size="12" fill="var(--mut)" text-anchor="middle">${pad(h)}:00</text>`;
+  if(w)s+=`<rect x="${x(w.a)}" y="${T}" width="${x(w.b)-x(w.a)}" height="${H-T-B}" rx="10" fill="var(--yellow-t)"/><text x="${(x(w.a)+x(w.b))/2}" y="${H-B-8}" font-size="12" font-weight="800" fill="var(--yellow-ink)" text-anchor="middle">☀ najlepší čas</text>`;
+  if(o.est){s+=`<path d="${line(P.fpFull.map(v=>v*res.share))}" fill="none" stroke="var(--yellow)" stroke-width="1.6" stroke-dasharray="4 5" opacity=".8"/>`;if(per==='peter')s+=`<path d="${line(P.fc)}" fill="none" stroke="var(--blue)" stroke-width="1.6" stroke-dasharray="4 5" opacity=".8"/>`}
+  s+=`<g clip-path="url(#plclip)">`;
+  s+=`<path d="${area(X.sun)}" fill="var(--yellow)" opacity=".2"/><path d="${line(X.sun)}" fill="none" stroke="var(--yellow)" stroke-width="2.6" stroke-linejoin="round"/>`;
+  if(per==='anna')s+=`<path d="${area(X.out)}" fill="var(--orange)" opacity=".28"/>`;
+  s+=`<path d="${area(X.sh)}" fill="var(--green)" opacity=".55"/><path d="${area(X.bat)}" fill="var(--purple)" opacity=".55"/>`;
+  if(per==='peter')s+=`<path d="${line(X.use)}" fill="none" stroke="var(--blue)" stroke-width="2.6" stroke-linejoin="round"/>`;
+  s+=`</g>`;
+  const cx=x(idx);s+=`<line x1="${cx}" x2="${cx}" y1="${T}" y2="${H-B}" stroke="var(--surface-dark)" stroke-width="1.5" stroke-dasharray="3 3"/><rect x="${cx-24}" y="${T-24}" width="48" height="18" rx="9" fill="var(--surface-dark)"/><text x="${cx}" y="${T-11}" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">${I2T(idx)}</text>`;
+  /* očíslované body príbehu */
+  (o.notes||[]).forEach((n,k)=>{if(n.i>idx)return;const vy=Math.max(...[X.sun,X.sh,X.bat,per==='peter'?X.use:X.out].map(a=>a[Math.min(95,n.i)]||0)),py=Math.max(T+12,y(vy)-18),on=o.cur===k;
+    s+=`<g><line x1="${x(n.i)}" x2="${x(n.i)}" y1="${py+9}" y2="${y(vy)}" stroke="var(--surface-dark)" opacity=".4"/><circle cx="${x(n.i)}" cy="${py}" r="${on?12:10}" fill="${on?'var(--brand)':'var(--surface-dark)'}" stroke="#fff" stroke-width="2"/><text x="${x(n.i)}" y="${py+4}" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">${k+1}</text></g>`});
+  return s+'</svg>';
 }
 /* graf stavu nabitia batérie (SoC) */
 function socChart(socA,o={}){
@@ -219,17 +294,61 @@ function houseSvg(x,y,o){
    ${o.label?`<text x="${w/2}" y="${h+11}" font-size="9" font-weight="700" fill="var(--ink)" text-anchor="middle" paint-order="stroke" stroke="var(--card)" stroke-width="3">${esc(o.label)}</text>`:''}
   </g>`;
 }
+/* ---------- nová mapa (tmavý jazyk hero): oblasti, stromy, izometrické domčeky ---------- */
+/* uzavretá Catmull-Rom krivka cez body → hladký obrys */
+function smoothPath(P,t=.5){const n=P.length;let d=`M${P[0][0].toFixed(1)},${P[0][1].toFixed(1)}`;
+  for(let i=0;i<n;i++){const p0=P[(i-1+n)%n],p1=P[i],p2=P[(i+1)%n],p3=P[(i+2)%n];
+    const c1=[p1[0]+(p2[0]-p0[0])*t/3,p1[1]+(p2[1]-p0[1])*t/3],c2=[p2[0]-(p3[0]-p1[0])*t/3,p2[1]-(p3[1]-p1[1])*t/3];
+    d+=`C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`}
+  return d+'Z'}
+const polyD=L=>'M'+L.map(ll=>prj(ll).map(v=>v.toFixed(1)).join(',')).join('L')+'Z';
+const MAP_TREES=[[18.95,49.3],[19.25,49.3],[19.55,49.18],[19.85,49.02],[19.1,48.98],[19.4,48.5],[19.75,48.55],[19.1,48.28],[19.6,48.35],[19.9,48.45],[18.95,48.88],[19.25,49.05]];
+/* podklad mapy: tieň (hrúbka), tri oblasti orezané hladkým obrysom, popisy, stromy v strede */
+/* polygón Stredu (medzi hranicami RB_W a RB_E) */
+const ssePoly=()=>[[RB_W[0][0],52],...RB_W,[RB_W[RB_W.length-1][0],46],[RB_E[RB_E.length-1][0],46],...[...RB_E].reverse(),[RB_E[0][0],52]];
+/* podklad mapy; hi = zvýraznená časť z legendy (zse | sse | vse | …) */
+function mapBase(H=420,hi=null){
+  const out=smoothPath(SK_OUT.map(prj)),isReg=['zse','sse','vse'].includes(hi),cls=r=>isReg?(hi===r?'hi':'dim'):'';
+  const lbl=(ll,k,a,b)=>{const [x,y]=prj(ll);return `<text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="800" letter-spacing="3" fill="var(--map-${k}-ink)">${a}</text><text x="${x}" y="${y+15}" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="1.5" fill="var(--on-dark-mut)">${b}</text>`};
+  let trees='';for(const ll of MAP_TREES){const [x,y]=prj(ll);trees+=`<g transform="translate(${x.toFixed(1)},${y.toFixed(1)})" aria-hidden="true"><ellipse cy="1" rx="6" ry="2.2" fill="rgba(0,0,0,.35)"/><rect x="-.8" y="-6" width="1.6" height="7" fill="#5b4a3a"/><ellipse cy="-11" rx="4.6" ry="7.5" fill="var(--map-tree)"/></g>`}
+  return `<defs><clipPath id="skclip"><path d="${out}"/></clipPath><radialGradient id="mapglow" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#fff" stop-opacity=".07"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+   <g fill="none" stroke="rgba(255,255,255,.05)"><circle cx="380" cy="210" r="150"/><circle cx="380" cy="210" r="250"/><circle cx="380" cy="210" r="350"/></g>
+   <path d="${out}" fill="rgba(0,0,0,.45)" transform="translate(0,12)"/>
+   <g clip-path="url(#skclip)">
+    <g class="reg-g ${cls('sse')}"><path d="${polyD(ssePoly())}" fill="var(--map-sse)"/></g>
+    <g class="reg-g ${cls('zse')}"><path d="${polyD(sidePoly(RB_W,-1))}" fill="var(--map-zse)"/></g>
+    <g class="reg-g ${cls('vse')}"><path d="${polyD(sidePoly(RB_E,1))}" fill="var(--map-vse)"/></g>
+    <path d="M${RB_W.map(ll=>prj(ll).join(',')).join('L')}M${RB_E.map(ll=>prj(ll).join(',')).join('L')}" fill="none" stroke="var(--map-edge)" stroke-width="1.2" stroke-dasharray="4 5"/>
+    <rect x="0" y="0" width="${MAPW}" height="${H}" fill="url(#mapglow)"/></g>
+   <path d="${out}" fill="none" stroke="var(--map-edge)" stroke-width="1.4"/>
+   <g class="reg-g ${cls('zse')}">${lbl([18.1,49.02],'zse','ZÁPAD','ZSE')}</g><g class="reg-g ${cls('sse')}">${lbl([19.45,48.72],'sse','STRED','SSE · MIMO SLUŽBY')}${trees}</g><g class="reg-g ${cls('vse')}">${lbl([21.55,49.17],'vse','VÝCHOD','VSE')}</g>`;
+}
+/* izometrický domček z úvodnej stránky (lpHouse) v mierke mapy; (x,y) = päta domu */
+function mapHouse(x,y,o){
+  const sc=o.big?.27:.22,roof=o.roof==='vse'?'var(--map-vse-roof)':'var(--map-zse-roof)',glow=clamp(o.glow||0,0,1),soc=clamp(o.soc??.6,0,1);
+  return `<g class="house mhouse ${o.sel?'sel':''} ${o.dim?'dim':''} ${o.hi?'hi':''}" transform="translate(${x.toFixed(1)},${y.toFixed(1)})" ${o.act?`data-act="${o.act}" tabindex="0" role="button" aria-label="${esc(o.aria||o.label||'')}"`:''}>
+   <ellipse cx="0" cy="0" rx="${(19*sc/.22).toFixed(1)}" ry="${(7*sc/.22).toFixed(1)}" fill="rgba(0,0,0,.45)"/>
+   <rect class="hl" x="-21" y="-38" width="42" height="44" rx="10" fill="transparent" stroke="${o.noims?'rgba(255,255,255,.55)':'transparent'}" stroke-dasharray="${o.noims?'3 3':''}"/>
+   <g transform="translate(${(-95*sc).toFixed(1)},${(-160*sc).toFixed(1)}) scale(${sc})">${lpHouse(roof,'var(--map-wall)',!!o.pv)}${o.pv?`<path d="m47 61 47-27 48 28-47 27Z" fill="var(--yellow)" opacity="${(glow*.75).toFixed(2)}"/>`:''}</g>
+   ${o.bat?`<g transform="translate(14,-16)"><rect width="7" height="11" rx="1.6" fill="var(--purple)" stroke="#fff" stroke-width=".7"/><rect x="1.4" y="${(1.4+8.2*(1-soc)).toFixed(1)}" width="4.2" height="${(8.2*soc).toFixed(1)}" fill="#b9f5c9"/></g>`:''}
+   ${o.bistro?`<text x="-17" y="-20" font-size="10">🍽</text>`:''}
+   ${o.label?`<g transform="translate(0,${o.own?-44:12})"><rect x="${-(o.label.length*3.3+(o.own?14:9))}" y="-9" width="${o.label.length*6.6+(o.own?28:18)}" height="17" rx="8.5" fill="${o.own?'#fff':'rgba(0,0,0,.55)'}" stroke="${o.own?'none':'rgba(255,255,255,.35)'}" stroke-dasharray="${o.own?'':'3 2'}"/>${o.own?`<circle cx="${-(o.label.length*3.3)-5}" cy="-.5" r="3" fill="var(--brand)"/>`:''}<text x="${o.own?4:0}" y="3.5" font-size="10" font-weight="800" fill="${o.own?'var(--ink)':'#fff'}" text-anchor="middle">${esc(o.label)}</text></g>`:''}
+  </g>`;
+}
 /* krivka toku + častice (pohybuje ich spoločná slučka requestAnimationFrame) */
 function flowSvg(id,a,b,kwh,color,o={}){
   const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy)||1,bend=o.bend??0.22;
   const cx=mx-dy/len*len*bend,cy=my+dx/len*len*bend;
   const d=`M${a[0].toFixed(1)},${a[1].toFixed(1)}Q${cx.toFixed(1)},${cy.toFixed(1)} ${b[0].toFixed(1)},${b[1].toFixed(1)}`;
   const on=kwh>1e-4,wd=on?Math.min(7,1.4+kwh*(o.scale||8)):1.2,rm=RM();
+  if(o.dot){const w2=on?Math.min(4.5,2+kwh*4):1.6;let t=`<path id="${id}" class="fl" d="${d}" fill="none" stroke="${color}" stroke-width="${w2.toFixed(2)}" stroke-linecap="round" stroke-dasharray="0.1 ${(w2*2.6).toFixed(1)}" opacity="${on?.95:.3}" ${rm&&on?`marker-end="url(#arr_${o.mk||'g'})"`:''} data-k="${kwh.toFixed(4)}"/><circle cx="${a[0].toFixed(1)}" cy="${a[1].toFixed(1)}" r="3" fill="${color}" opacity="${on?1:.4}"/><circle cx="${b[0].toFixed(1)}" cy="${b[1].toFixed(1)}" r="3" fill="${color}" opacity="${on?1:.4}"/>`;
+    if(on&&!rm){const np=o.n||2;for(let k=0;k<np;k++)t+=`<circle class="fp" data-f="${id}" data-o="${(k/np).toFixed(3)}" r="${(3.2+Math.min(2.5,kwh*3)).toFixed(1)}" fill="${color}" stroke="var(--surface-dark)" stroke-width="1.5" cx="${a[0]}" cy="${a[1]}"/>`}
+    return t}
   let s=`<path id="${id}" class="fl" d="${d}" fill="none" stroke="${color}" stroke-width="${wd.toFixed(2)}" stroke-linecap="round" opacity="${on?.55:.18}" ${on?'':'stroke-dasharray="3 5"'} ${rm&&on?`marker-end="url(#arr_${o.mk||'g'})"`:''} data-k="${kwh.toFixed(4)}"/>`;
   if(on&&!rm){const np=o.n||3;for(let k=0;k<np;k++)s+=`<circle class="fp" data-f="${id}" data-o="${(k/np).toFixed(3)}" r="${(2.2+Math.min(3,kwh*4)).toFixed(1)}" fill="${color}" stroke="#fff" stroke-width="1" cx="${a[0]}" cy="${a[1]}"/>`}
   return s;
 }
-const arrowDefs=()=>`<defs>${[['g','var(--green)'],['p','var(--purple)'],['y','#f5b400']].map(([k,c])=>`<marker id="arr_${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`).join('')}</defs>`;
+const arrowDefs=()=>`<defs>${[['g','var(--green)'],['p','var(--purple)'],['y','#f5b400'],['m','var(--map-flow)'],['q','var(--map-bat)'],['h','var(--map-gift)']].map(([k,c])=>`<marker id="arr_${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="${c}"/></marker>`).join('')}</defs>`;
 const FLOWPH={};let flowRAF=0,flowLast=0;
 function flowTick(t){
   flowRAF=0;const dt=flowLast?Math.min(0.1,(t-flowLast)/1000):0;flowLast=t;
