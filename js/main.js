@@ -56,7 +56,7 @@ function modalHtml(){
   if(m==='bell')return bellPanel();
   if(String(m).startsWith('bdgnew:'))return bdgModal(m.slice(7),true);
   if(String(m).startsWith('bdg:'))return bdgModal(m.slice(4),false);
-  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='more')return moreSheet();
+  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='supply')return supplyModal();if(m==='more')return moreSheet();
   if(String(m).startsWith('ver:'))return verModal(m.slice(4));
   return detailModal(m);
 }
@@ -202,6 +202,8 @@ const ACT={
   detail:a=>{S.modal=a;render(false)},
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
+  supply:()=>{S.modal='supply';render(false)},
+  supplyreq:()=>{S.modal=null;render(false);toast('Ďakujeme – ponuku dodávky vám pošleme e-mailom. Zdieľanie môžete využívať aj bez zmeny dodávateľa.')},
   more:()=>{S.modal='more';render(false)},
   interest:a=>{S.modal=null;const p=S.persona;if(p==='admin')return;const m=S.mem[p];
     if(m==='NONE'||m==='MATCH'){S.mem[p]='READY';logEv(`${nm(p)}: žiadosť pripravená (${gname(S.group)})`);toast('Žiadosť pripravená – odošlite ju v časti Moja skupina');notify('state',p,'Žiadosť je pripravená','Odošlite ju v časti Moja skupina.','group');S.view='group'}
