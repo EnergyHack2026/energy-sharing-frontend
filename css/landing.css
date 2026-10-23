@@ -119,7 +119,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 /* ---------- ponuky ---------- */
 .lp-offers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .lp-offer{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--card)}
-.lp-offer-art{height:150px;background:var(--yellow-t);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--ink)}
+.lp-offer-art{height:150px;background:var(--yellow-t);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--yellow-ink)}
 .lp-offer:nth-child(2) .lp-offer-art{background:var(--purple-t);color:var(--purple)}
 .lp-offer:nth-child(3) .lp-offer-art{background:var(--tint-green);color:var(--green)}
 .lp-offer-art svg{width:150px;height:125px}
