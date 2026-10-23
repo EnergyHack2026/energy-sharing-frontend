@@ -72,6 +72,9 @@
   /* nočná scéna úvodu – polárna žiara, sklenené karty, žiariace okná (dekor) */
   --aurora-1:#2EE6A8; --aurora-2:#7C5CFF; --aurora-3:#22D3EE;
   --night-glass:rgba(11,20,36,.74); --accent-glow:rgba(94,234,181,.2); --window-glow:#FFD27A;
+  --house-front:#E8E1D4; --house-side:#B4AC9F; --house-roof:#262D3D; --house-roof-edge:#161B26; --panel:#1F4FA8; --panel-line:#7AA2F7;
+  --ground-1:#1A3A33; --ground-2:#0F1B2D; --ground-edge:#09111E; --drive:#24304A; --tree:#1F5B40; --tree-hi:#3A8F62; --trunk:#3B2E25;
+  --car:#F1F3F6; --car-shade:#C6CCD6; --car-glass:#1B2433; --lamp:#5B6475;
 
   /* batéria – mimo palety značiek, rovnaká v oboch */
   --purple:#6A35C0; --purple-t:#F0E8FB;

@@ -277,3 +277,10 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-chk-ic{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--accent-dark);border:1.5px solid color-mix(in srgb,var(--accent-dark) 70%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 18%,transparent)}
 .lp-chk-ic .icon{width:19px;height:19px}
 @media(prefers-reduced-motion:reduce){.lp-hero:before{animation:none}}
+.lp-aurora{position:absolute;top:0;right:0;width:70%;height:100%;pointer-events:none;opacity:.9;transform-origin:top center;animation:lp-curtain 18s ease-in-out infinite alternate}
+@keyframes lp-curtain{from{transform:skewX(0deg) scaleY(1)}to{transform:skewX(-6deg) scaleY(1.04) translateX(-3%)}}
+.lp-hero:before{opacity:.45}
+.lp-float-ic{position:absolute;right:16px;top:16px;width:22px;height:22px;color:var(--accent-dark)}
+.lp-float.one{padding-right:52px}.lp-float.two{padding-right:48px}
+@media(prefers-reduced-motion:reduce){.lp-aurora{animation:none}}
+@media(max-width:900px){.lp-aurora{width:100%;opacity:.6}}
