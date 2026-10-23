@@ -234,7 +234,7 @@ function bdgShare(id){
    <text x="540" y="990" font-family="Arial,sans-serif" font-size="68" font-weight="800" fill="#ffffff" text-anchor="middle">${esc(b.name)}${b.kind==='rep'?' ×'+st.count:''}</text>
    <text x="540" y="1060" font-family="Arial,sans-serif" font-size="34" fill="#d9d5e2" text-anchor="middle">${esc(bdgLine(st).slice(0,60))}</text>
    <text x="540" y="1110" font-family="Arial,sans-serif" font-size="30" fill="#b9b4c4" text-anchor="middle">${esc(fdate(st.date))}</text>
-   <text x="540" y="1270" font-family="Arial,sans-serif" font-size="40" font-weight="800" fill="#ffffff" text-anchor="middle">Zdieľňa<tspan fill="${ac}">.</tspan> <tspan font-weight="400" fill="#b9b4c4">slnko od suseda · ${BR()}</tspan></text></svg>`;
+   <text x="540" y="1270" font-family="Arial,sans-serif" font-size="40" font-weight="800" fill="#ffffff" text-anchor="middle">Zdieľňa<tspan fill="${tokHex('--sig')}">.</tspan> <tspan font-weight="400" fill="#b9b4c4">slnko od suseda · ${BR()}</tspan></text></svg>`;
   const img=new Image(),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
   img.onload=()=>{try{const cv=document.createElement('canvas');cv.width=1080;cv.height=1350;cv.getContext('2d').drawImage(img,0,0);URL.revokeObjectURL(url);
     cv.toBlob(bl=>{const u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='zdielna-odznak-'+b.id+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)},'image/png');toast('Karta odznaku stiahnutá')}catch(e){toast('Zdieľanie sa nepodarilo')}};

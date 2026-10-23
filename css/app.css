@@ -54,7 +54,7 @@ p{margin:0}
 .top .btn:not(.pri):not(.dark){background:transparent}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px;letter-spacing:-.03em;background:none;border:0;color:var(--ink);padding:0}
 .brand img{height:30px;border-radius:6px;display:block}
-.brand .dot{color:var(--brand)}
+.brand .dot,.sig{color:var(--sig)}
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-pill);padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{border:0;background:none;padding:7px 13px;border-radius:var(--r-pill);color:var(--mut);font-weight:700}
 .seg button[aria-pressed=true]{background:var(--surface-dark);color:#fff}

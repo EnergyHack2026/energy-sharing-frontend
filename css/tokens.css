@@ -66,6 +66,9 @@
   /* stavové farby na tmavom páse a drobnosti (žiadny hex mimo tokenov) */
   --on-dark-ok:#CDEAA0; --on-dark-warn:#FFC08A; --on-dark-err:#FFD2C3; --online:#2FD36B; --roof-mix:#F2C2A0;
 
+  /* červená bodka – podpis značky Zdieľňa (logo, koniec nadpisov); rovnaká vo všetkých skinoch, iba dekoratívna */
+  --sig:#E5322D;
+
   /* batéria – mimo palety značiek, rovnaká v oboch */
   --purple:#6A35C0; --purple-t:#F0E8FB;
 }

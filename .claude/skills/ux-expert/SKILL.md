@@ -66,6 +66,16 @@ Porota je E.SK – riešenie musí pôsobiť ako niečo, čo by mohli nasadiť p
 - Je to zábavné na pohľad (animácia odomknutia, zdieľateľná karta), ale nezahlcuje hlavné úlohy.
 
 ## E. Remeslo UI (pravidlá projektu z README)
+- **Značka Zdieľňa a červená bodka.** Názov je všade „Zdieľňa" s červenou bodkou (`--sig`, rovnaká vo všetkých
+  skinoch). Červená bodka je podpis značky – kde sa dá, končí ňou nadpis `h1`/`h2` (`sig()` v `js/ui.js`,
+  ručne `<span class="sig">.</span>`). Kontroluj:
+  - chýba bodka tam, kde by mohla byť (logo, pätička, faktúra, zdieľateľné karty, nadpisy končiace bodkou),
+  - **nikdy dve červené bodky za sebou** – v nadpise s dvomi vetami je červená iba posledná
+    („Začnite jedným kódom. Objavte nové možnosti" + červená bodka); žiadna červená bodka v kickri, `h3`
+    ani v texte, ani na riadku tesne pred nadpisom s červenou bodkou,
+  - bodka nie je farbou značky ZSE/VSE (`--brand`), ale vždy `--sig`.
+- **Úvodná stránka je firemne neutrálna:** žiadne logo, názov ani farby ZSE/VSE (skin `neutral`). Značka ZSE/VSE
+  sa objaví až v aplikácii. Akýkoľvek výskyt ZSE/VSE na úvode je 🔴 zistenie.
 - Žiadny raw hex v `js/` ani mimo `css/tokens.css`; nová farba = nový token.
 - Dátové farby majú pevný význam všade: výroba `--c-prod`, spotreba `--c-cons`, zdieľané `--c-shared`,
   batéria `--c-bat`, sieť/výkup `--c-grid`. Legenda pri každom grafe.

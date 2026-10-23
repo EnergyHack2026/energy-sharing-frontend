@@ -98,6 +98,13 @@ The landing page is the template for every screen.
 10. **Every screen starts with a hero band** – `hero({kicker,title,lead,acts,aside,top,foot})` in `js/ui.js`
     (dark band, big title with `<em>` accent, floating stat cards `hstat()`), section titles via `secHead()`.
     Same language as `.lp-hero` / `.lp-club` on the landing page. No "simulácia" footnotes in the app.
+11. **Red dot = brand signature.** The wordmark is always „Zdieľňa" + red dot (`--sig`, same in every skin).
+    Use the red dot wherever it fits: the final full stop of `h1`/`h2` headings – `hero()` and `secHead()` add it
+    automatically (`sig()` in `js/ui.js`), in hand-written markup use `<span class="sig">.</span>`.
+    **Never two red dots in a row:** only the last full stop of a heading is red (e.g. „Začnite jedným kódom.
+    Objavte nové možnosti" + red dot), no red dot in kickers, `h3` or body text, nor on a line right before a red-dot heading.
+12. **Landing page is brand-neutral** – no ZSE/VSE logo, name or colours (skin `neutral`, dark `#1E1B22` + solar amber).
+    ZSE/VSE branding appears only inside the app.
 
 ## Regions (map)
 
