@@ -86,6 +86,9 @@
 
   /* nočná scéna úvodu – polárna žiara, sklenené karty, žiariace okná (dekor) */
   --aurora-1:#2EE6A8; --aurora-2:#7C5CFF; --aurora-3:#22D3EE;
+  /* ilustrácie ponúk – obloha podľa času dňa */
+  --sky-day-1:#BFE6FF; --sky-day-2:#FFF3D1; --sky-dusk-1:#1B2350; --sky-dusk-2:#7A4D9C; --sky-good-1:#DFF3E6; --sky-good-2:#FFF4DC;
+  --lawn:#8CC59A; --lawn-dusk:#2C4A47; --roof-dusk:#3A3F5C; --wall-dusk:#E4D8C6; --wall-side:#D6CBBD; --roof-school:#C9704F; --school-win:#7FB6E0; --lamp-pole:#5B6475;
   --night-glass:rgba(11,20,36,.74); --accent-glow:rgba(94,234,181,.2); --window-glow:#FFD27A;
 
   /* batéria – mimo palety značiek, rovnaká v oboch */
@@ -1127,6 +1130,17 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .marketing .top{transition:background-color .2s ease,box-shadow .2s ease,border-color .2s ease}
 body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{background:var(--surface-dark);border-color:var(--line-dark);box-shadow:0 6px 24px rgba(0,0,0,.28)}
 @media(prefers-reduced-motion:reduce){.marketing .top{transition:none}}
+/* ilustrácie ponúk a časová os dňa */
+.lp-offer-art .lp-oscene{position:absolute;inset:0;width:100%;height:100%}
+.lp-offer-art .pill{z-index:1}
+.lp-tl{margin:-4px 0 16px}
+.lp-tl-track{position:relative;height:8px;border-radius:var(--r-pill);background:var(--line)}
+.lp-tl-track i{position:absolute;top:0;bottom:0;border-radius:var(--r-pill);background:var(--c-prod);box-shadow:0 0 8px color-mix(in srgb,var(--c-prod) 60%,transparent)}
+.lp-offer:nth-child(2) .lp-tl-track i{background:var(--c-bat);box-shadow:0 0 8px color-mix(in srgb,var(--c-bat) 60%,transparent)}
+.lp-tl-track i.all{left:0;right:0;background:repeating-linear-gradient(90deg,var(--c-shared) 0 6px,transparent 6px 10px);opacity:.6;box-shadow:none}
+.lp-tl-ticks{position:relative;height:14px;margin-top:4px;font-size:var(--fs-xs);color:var(--mut)}
+.lp-tl-ticks span{position:absolute;transform:translateX(-50%)}
+.lp-tl-ticks span:first-child{transform:none}.lp-tl-ticks span:last-child{transform:translateX(-100%)}
 
 </style>
 </head>
@@ -2405,7 +2419,7 @@ const EIC_DEMO={
 const EIC_SAMPLE='24ZZS0000000003C';
 const maskEic=e=>e&&e.length>=10?e.slice(0,5)+'••••••'+e.slice(-5):'ukážkový profil';
 /* ilustrácia domu; farby berie z tokenov, aby sa menila so značkou */
-function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
+function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true,lit=false){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="${lit?'var(--window-glow)':'#4a4652'}"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="${lit?'var(--window-glow)':'#625d6c'}"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
 /* polárna žiara v hero – zvislé vlniace sa závesy (zelená, fialová, tyrkysová) */
 const lpAurora=()=>`<svg class="lp-aurora" viewBox="0 0 800 520" preserveAspectRatio="none" aria-hidden="true"><defs>
  ${[['g','--aurora-1'],['p','--aurora-2'],['c','--aurora-3']].map(([k,v])=>`<linearGradient id="lpa${k}" x2="0" y2="1"><stop stop-color="var(${v})" stop-opacity="0"/><stop offset=".3" stop-color="var(${v})" stop-opacity=".85"/><stop offset=".7" stop-color="var(${v})" stop-opacity=".3"/><stop offset="1" stop-color="var(${v})" stop-opacity="0"/></linearGradient>`).join('')}
@@ -2415,6 +2429,41 @@ const lpAurora=()=>`<svg class="lp-aurora" viewBox="0 0 800 520" preserveAspectR
 /* úrovne Slnečného klubu: body posúvajú zákazníka vyššie, s úrovňou rastú výhody od dodávateľa */
 const LEVELS=[['Bronz',0],['Striebro',250],['Zlato',500],['Slnko',1000]];
 function lvlOf(p){let i=0;LEVELS.forEach(([,t],k)=>{if(p>=t)i=k});const nx=LEVELS[i+1];return {i,name:LEVELS[i][0],next:nx&&nx[0],need:nx?nx[1]-p:0}}
+/* ilustrácie ponúk: malé scény v štýle hero – obloha podľa času dňa, domy, svietiaca energia; farby z tokenov */
+function lpOfferArt(kind){
+ const id='lpo'+kind;
+ const sky={day:['--sky-day-1','--sky-day-2'],dusk:['--sky-dusk-1','--sky-dusk-2'],good:['--sky-good-1','--sky-good-2']}[kind];
+ const lawn=kind==='dusk'?'var(--lawn-dusk)':'var(--lawn)';
+ const lit=kind==='dusk';
+ const flow=(d,c='var(--yellow)')=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" opacity=".35" filter="url(#${id}b)"/><path d="${d}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 7"/>`;
+ const house=(x,y,k,panels)=>`<g transform="translate(${x} ${y}) scale(${k})">${lpHouse(kind==='dusk'?'var(--roof-dusk)':'var(--lp-roof)',kind==='dusk'?'var(--wall-dusk)':'var(--map-wall)',panels,lit)}</g>`;
+ let extra='';
+ if(kind==='day')extra=`<g filter="url(#${id}g)"><circle cx="262" cy="34" r="15" fill="var(--yellow)"/></g><g stroke="var(--yellow)" stroke-width="2.4" stroke-linecap="round"><path d="M262 10v-5M262 63v-5M238 34h-5M291 34h-5M245 17l-3-3M282 54l-3-3M245 51l-3 3M282 14l-3 3"/></g>`
+   +house(34,40,.52,true)+house(196,58,.42,false)+flow('M118 112C150 130 182 126 214 110');
+ if(kind==='dusk')extra=[[40,22],[78,12],[120,30],[170,14],[300,52],[226,20]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.4" fill="var(--on-dark)" opacity=".85"/>`).join('')
+   +`<path d="M270 20a16 16 0 1 0 14 24 13 13 0 1 1-14-24Z" fill="var(--on-dark)" opacity=".92" filter="url(#${id}g)"/>`
+   +house(34,40,.52,true)+house(196,58,.42,false)
+   +`<g transform="translate(96 92)"><rect width="13" height="20" rx="2.5" fill="var(--purple)" filter="url(#${id}g)"/><rect x="3" y="4" width="7" height="12" rx="1" fill="var(--accent-dark)"/><rect x="4" y="-3" width="5" height="3" rx="1" fill="var(--purple)"/></g>`
+   +flow('M110 110C146 132 182 126 214 110','var(--accent-dark)');
+ if(kind==='good')extra=house(30,40,.52,true)
+   +`<g transform="translate(196 62)"><path d="M0 34 44 10l52 30-44 25Z" fill="var(--roof-school)"/><path d="M0 34v34l52 30V64Z" fill="var(--map-wall)"/><path d="M52 64v34l44-25V40Z" fill="var(--wall-side)"/>`
+   +[[8,48],[22,56],[36,64]].map(([x,y])=>`<path d="m${x} ${y} 9 5v10l-9-5Z" fill="var(--school-win)"/>`).join('')
+   +`<path d="M44 10V-12" stroke="var(--lamp-pole)" stroke-width="2"/><path d="M44-12h16l-4 5 4 5H44Z" fill="var(--sig)"/></g>`
+   +flow('M118 112C150 132 180 126 206 112')
+   +`<path d="M160 96c-4-5-12-2-10 4 1 4 10 9 10 9s9-5 10-9c2-6-6-9-10-4Z" fill="var(--sig)" filter="url(#${id}g)"/>`;
+ return `<svg class="lp-oscene" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
+  <linearGradient id="${id}s" x2="0" y2="1"><stop stop-color="var(${sky[0]})"/><stop offset="1" stop-color="var(${sky[1]})"/></linearGradient>
+  <filter id="${id}g" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="${id}b"><feGaussianBlur stdDeviation="3"/></filter></defs>
+  <rect width="320" height="150" fill="url(#${id}s)"/><path d="M0 116 320 98v52H0Z" fill="${lawn}"/>${extra}</svg>`;
+}
+/* časová os dňa 0–24 h so zvýrazneným oknom ponuky */
+function lpTimeline(a,b){
+ const ticks=[0,6,12,18,24].map(h=>`<span style="left:${h/24*100}%">${h}</span>`).join('');
+ if(!a)return `<div class="lp-tl" role="img" aria-label="Dostupné podľa ponuky darcov"><div class="lp-tl-track"><i class="all"></i></div><div class="lp-tl-ticks">${ticks}</div></div>`;
+ const s=T2I(a)/96*100,e=T2I(b)/96*100;
+ return `<div class="lp-tl" role="img" aria-label="Dostupné ${a} – ${b}"><div class="lp-tl-track"><i style="left:${s}%;width:${e-s}%"></i></div><div class="lp-tl-ticks">${ticks}</div></div>`;
+}
 /* bežná dodávka pre domácnosti – jednopásmová sadzba DD2, VT bez DPH (doc/cenniky.md) */
 const SUPPLY_HH=0.1233;
 /* čísla na úvode počíta ten istý engine ako aplikácia */
@@ -2447,7 +2496,7 @@ function vLanding(){
  </div></div></section>
  <section class="lp-section lp-how" id="lp-how"><div class="lp-wrap"><div class="lp-how-grid"><div><span class="kicker">Menej vybavovania. Viac energie.</span><h2>Začína sa to jedným klikom<span class="sig">.</span></h2><p class="lead">Nájdeme vám vhodných partnerov na zdieľanie a postaráme sa o prehľad aj vyúčtovanie. Vy máte svoju energiu pod kontrolou.</p></div><div class="lp-step-grid"><article><span class="lp-step-num">01</span><h3>Zaregistrujte sa</h3><p>Prihláste sa účtom ZSE alebo VSE a údaje doplníme za vás. Máte iného dodávateľa? Stačí registrácia s EIC kódom z faktúry.</p></article><article><span class="lp-step-num">02</span><h3>Nájdite svoju zhodu</h3><p>Porovnajte cenu aj čas. Vyberte si ponuku alebo nastavte vlastné prebytky.</p></article><article><span class="lp-step-num">03</span><h3>Zdieľajte a sledujte</h3><p>Po schválení zapojenia uvidíte zdieľané kWh, príjem, úsporu aj zúčtovanie.</p></article></div></div></div></section>
  <div class="lp-wrap" id="lp-club"><section class="lp-club"><div><span class="kicker">Zoznámte sa so Slnečným klubom</span><h2>Dobré návyky. Získate viac<span class="sig">.</span></h2><p class="lead">Zbierajte body za spotrebu v čase prebytkov. Získajte nižšiu províziu, lepšie ponuky a ďalšie výhody alebo body darujte cez Solidárne slnko.</p><button class="btn light lg" data-act="landingfeature:rewards">Objaviť slnečné výzvy →</button></div><div class="lp-challenge"><span class="pill y">+ ${n.pts} bodov · dnešná výzva</span><h3>Dnes perieme so slnkom.</h3><p>Presuňte plánované pranie do okna ${n.win}. Malá zmena pre vás, lepšie využité prebytky pre všetkých.</p><div class="lp-progress" role="img" aria-label="Komunitný cieľ splnený na ${pct(n.goal)}"><span style="width:${(n.goal*100).toFixed(0)}%"></span></div><div class="lp-challenge-bottom"><span>Cieľ skupiny Slnečný kruh 17</span><b>${pct(n.goal)} splnené</b></div>${(l=>`<div class="lp-level"><div class="lp-level-steps" role="img" aria-label="Úroveň ${l.name} z ${LEVELS.length}">${LEVELS.map(([nm],k)=>`<span class="${k<l.i?'done':k===l.i?'cur':''}">${nm}</span>`).join('')}</div><div class="lp-challenge-bottom"><span>Vaša úroveň: <b>${l.name}</b></span><span>${l.next?`${fm(l.need,0)} bodov do úrovne ${l.next}`:'Najvyššia úroveň'}</span></div></div>`)(lvlOf(S.pts.base))}<p class="note">Body pripíšeme po overení elektromerom – za presun spotreby, nikdy za vyššiu spotrebu.</p></div></section></div>
- <section class="lp-section" id="lp-offers"><div class="lp-wrap"><div class="lp-section-head"><div><span class="kicker">Trhovisko plné možností</span><h2>Elektrina, ktorá zapadne do vášho dňa<span class="sig">.</span></h2></div><p class="lead">Vyberte si elektrinu od susedov za nižšiu cenu, ako platíte dodávateľovi. Spotrebujte ju vtedy, keď je jej najviac.</p></div><div class="lp-offers">${offers.map(([h,p,price,time,tag,i,save,who,cta],idx)=>`<article class="lp-offer"><div class="lp-offer-art"><span class="pill c">${tag}</span>${idx===0?`<svg viewBox="0 0 190 175" aria-hidden="true">${lpHouse()}</svg>`:icon(i)}</div><div class="lp-offer-body"><h3>${h}</h3><p>${p}</p><div class="lp-offer-price">${fm(price,2)} € <span>/ kWh bez DPH</span></div><span class="pill g lp-offer-save">${save}</span><div class="lp-offer-meta"><span>${time}</span><b>${who}</b></div><button class="btn ${idx===2?'out':'dark'} block" data-act="view:register">${cta} <span aria-hidden="true">→</span></button></div></article>`).join('')}</div><p class="note">Ceny sú bez DPH a bez distribučných, regulovaných a fixných poplatkov. Úspora oproti bežnej sadzbe pre domácnosti ${fm(SUPPLY_HH,4)} €/kWh bez DPH. Darovanie závisí od zapojenia oprávneného príjemcu.</p></div></section>
+ <section class="lp-section" id="lp-offers"><div class="lp-wrap"><div class="lp-section-head"><div><span class="kicker">Trhovisko plné možností</span><h2>Elektrina, ktorá zapadne do vášho dňa<span class="sig">.</span></h2></div><p class="lead">Vyberte si elektrinu od susedov za nižšiu cenu, ako platíte dodávateľovi. Spotrebujte ju vtedy, keď je jej najviac.</p></div><div class="lp-offers">${offers.map(([h,p,price,time,tag,i,save,who,cta],idx)=>`<article class="lp-offer"><div class="lp-offer-art"><span class="pill c">${tag}</span>${lpOfferArt(['day','dusk','good'][idx])}</div><div class="lp-offer-body">${idx===0?lpTimeline(S.p.pStart,S.p.pEnd):idx===1?lpTimeline(S.bat.eStart,S.bat.eEnd):lpTimeline()}<h3>${h}</h3><p>${p}</p><div class="lp-offer-price">${fm(price,2)} € <span>/ kWh bez DPH</span></div><span class="pill g lp-offer-save">${save}</span><div class="lp-offer-meta"><span>${time}</span><b>${who}</b></div><button class="btn ${idx===2?'out':'dark'} block" data-act="view:register">${cta} <span aria-hidden="true">→</span></button></div></article>`).join('')}</div><p class="note">Ceny sú bez DPH a bez distribučných, regulovaných a fixných poplatkov. Úspora oproti bežnej sadzbe pre domácnosti ${fm(SUPPLY_HH,4)} €/kWh bez DPH. Darovanie závisí od zapojenia oprávneného príjemcu.</p></div></section>
  <section class="lp-section lp-smart"><div class="lp-wrap lp-smart-grid"><div><span class="kicker">Trochu iný čas. Lepší výsledok.</span><h2>Slnko má svoj plán. Vy z neho môžete vyťažiť viac<span class="sig">.</span></h2><p class="lead">Umývačka po obede. Nabíjanie cez deň. Malý posun plánovanej spotreby môže znamenať viac využitej elektriny a väčšiu úsporu.</p><p class="lead">Predikcia ukáže vhodný čas. Vy rozhodnete, čo sa vám hodí.</p><button class="btn dark lg" style="margin-top:24px" data-act="landingfeature:forecast">Vyskúšať posun spotreby →</button></div><div class="lp-chart-card"><div class="row between"><h3>Váš slnečný zajtrajšok</h3><span class="pill c">Ukážka predikcie</span></div><div class="lp-chart-legend"><span><i class="prod"></i> Dostupné prebytky</span><span><i class="cons"></i> Vaša spotreba</span></div><svg viewBox="0 0 430 205" role="img" aria-label="Ilustračný graf: dostupné prebytky vrcholia na poludnie a presun spotreby zvyšuje ich využitie"><path d="M20 40h390M20 90h390M20 140h390M20 175h390" stroke="var(--line)" fill="none"/><rect x="156" y="20" width="120" height="155" fill="var(--yellow-t)" rx="8"/><path d="M20 175C70 175 90 160 123 127S164 43 209 37 262 72 299 118 345 169 410 175Z" fill="var(--c-prod)" fill-opacity=".28"/><path d="M20 175C70 175 90 160 123 127S164 43 209 37 262 72 299 118 345 169 410 175" stroke="var(--c-prod)" stroke-width="3" fill="none"/><path d="M20 149 75 143 120 151 158 95 185 115 217 68 249 104 277 127 318 140 365 147 410 139" stroke="var(--c-cons)" stroke-width="3" fill="none"/><g fill="var(--mut)" font-family="Figtree,sans-serif" font-size="11"><text x="14" y="199">06:00</text><text x="140" y="199">10:00</text><text x="267" y="199">14:00</text><text x="380" y="199">18:00</text></g></svg><div class="lp-chart-result"><b>Vaše slnečné okno: ${n.win}</b>Skúste sem presunúť plánované nabíjanie alebo umývanie riadu.</div><p class="note">Ilustračná predikcia. Skutočná výroba aj spotreba sa môžu líšiť.</p></div></div></section>
  <section class="lp-section"><div class="lp-wrap"><div class="lp-section-head"><div><span class="kicker">Viac než predaj prebytkov</span><h2>Každá domácnosť má svoju supervýhodu<span class="sig">.</span></h2></div><p class="lead">Panely, batéria, elektromobil alebo len chuť využívať energiu rozumnejšie.</p></div><div class="lp-ecosystem">${[['battery','Máte batériu?','Slnko nemusí skončiť západom. Pozrite si, kedy má zmysel ponúknuť energiu uloženú vo fyzickej batérii.','Preskúmať batériu','battery'],['car','Nabíjate doma?','Spojte plánované nabíjanie s časom prebytkov. V deme uvidíte, čo presun spraví s využitím aj cenou.','Nabíjať v správny čas','ev'],['chart','Chcete mať jasno?','Prebytky, využitie, príjem aj provízia. V jednom prehľade, s vysvetlením každej sumy.','Pozrieť prehľady','reports']].map(([i,h,p,b,a])=>`<article class="lp-eco">${icon(i)}<h3>${h}</h3><p>${p}</p><button class="link" data-act="landingfeature:${a}">${b} →</button></article>`).join('')}</div></div></section>
  <section class="lp-section" id="lp-faq"><div class="lp-wrap lp-faq"><div><span class="kicker">Dobré otázky si zaslúžia jasné odpovede</span><h2>Poďme si to rozsvietiť<span class="sig">.</span></h2><p class="lead">Zdieľanie bez zbytočného žargónu.${isOn('chat')?' Ak niečo chýba, opýtajte sa nášho demo asistenta.':''}</p><button class="link" style="margin-top:24px" data-act="chat">Opýtať sa asistenta →</button></div><div>
