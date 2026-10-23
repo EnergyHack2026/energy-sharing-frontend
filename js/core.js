@@ -61,7 +61,7 @@ const defaults=()=>({
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
-  don:{on:false,pct:40,rcp:'r1',need:30},
+  don:{on:false,pct:40,rcp:'r1',need:30},esg:{on:false,kwh:20,rcp:'r2'},
   bank:{on:false,pct:100,bal:120,rate:90,fee:5,winter:0.19,month:0,pays:[],playing:false},
   gifts:[],send:{to:'k1',code:'',kwh:3,occ:'Narodeniny',msg:'Všetko najlepšie! Posielam ti kúsok slnka z Piešťan.',fee:0,src:'bank',anim:null,last:null},
   agent:{on:false,done:[],minA:0.09,maxP:0.12,goal:200,prio:'zarobiť',appl:{pw:true,pb:true,wash:true,ev:true},cancel:{}},

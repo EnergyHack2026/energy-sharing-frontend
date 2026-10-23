@@ -373,7 +373,7 @@ function vWizard(){
 /* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
 const REG_LOCKED={challenges:['Výzvy','Denné výzvy na presun spotreby do slnečného okna a slnečné body.'],group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
  reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
- cert:['Certifikát','Certifikát a nálepka pre vašu prevádzku podľa podielu slnka od susedov.'],
+ cert:['Dobrý sused','Znak a nálepka s QR kódom pre prevádzky, ktoré berú slnko od susedov a pomáhajú v okolí.'],
  rewards:[IWT+' odmeny','Začnete zbierať '+IWT+' a odznaky a meniť ich za výhody.']};
 const regPer=()=>S.persona==='admin'?'peter':S.persona;
 const regPending=()=>!!(S.wz&&S.wz.sent)&&S.mem[regPer()]==='PENDING';

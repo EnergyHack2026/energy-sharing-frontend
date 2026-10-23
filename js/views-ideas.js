@@ -18,31 +18,55 @@ function ideaHead(id,story){
 const gains=(cu,co)=>`<div class="gains"><div class="card" style="border-top:5px solid var(--green)"><h3>Čo z toho má zákazník</h3><ul class="sm">${cu.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="card" style="border-top:5px solid var(--brand)"><h3>Čo z toho má ${BR()}</h3><ul class="sm">${co.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`;
 function badgeShare(){const a=agg(dayRun()),sh=a.peter.cons>0?a.peter.recv/a.peter.cons:0,lv=sh>=.6?'zlato':sh>=.4?'striebro':sh>=.2?'bronz':null;return {sh,lv,a}}
 const LVC={zlato:['#b8860b','🥇'],striebro:['#8a94a6','🥈'],bronz:['#a0522d','🥉']};
-function stickerSvg(name,sh,lv,month){
-  const [c,md]=LVC[lv]||['#5d6675','☀'],qr=QR(`Zdieľňa | ${name.slice(0,24)} | ${Math.round(sh*100)} % slnka od susedov | ${month}`),n=qr.length;
-  let q='';for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(qr[y][x])q+=`M${x},${y}h1v1h-1z`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Nálepka Na slnku od susedov"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d3b1f"/><stop offset=".6" stop-color="#14833b"/><stop offset="1" stop-color="#e7a400"/></linearGradient></defs><circle cx="200" cy="200" r="196" fill="url(#sg)"/><circle cx="200" cy="200" r="182" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 7" opacity=".8"/>
-  <text x="200" y="74" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" text-anchor="middle">FUNGUJEME NA SLNKU</text><text x="200" y="100" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" text-anchor="middle">OD SUSEDOV</text>
-  <g transform="translate(130,116)"><rect width="140" height="140" rx="10" fill="#fff"/><g transform="translate(10,10) scale(${(120/n).toFixed(4)})"><path d="${q}" fill="#111"/></g></g>
-  <text x="200" y="292" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="800" text-anchor="middle">NASKENUJTE</text>
-  <text x="200" y="320" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="14" text-anchor="middle">a pozrite, koľko slnka je v našej prevádzke</text>
-  <text x="200" y="350" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" text-anchor="middle">${esc(name.slice(0,26))} · ${esc(month)}</text>
-  <circle cx="330" cy="88" r="30" fill="${c}" stroke="#fff" stroke-width="3"/><text x="330" y="96" font-size="24" text-anchor="middle">${md}</text></svg>`;
+/* ---------- Dobrý sused: znak iba pre prevádzky, ktoré spĺňajú všetky tri podmienky ----------
+   1 – energia zo slnka od susedov (aspoň 20 % spotreby), 2 – darujú cez Solidárne slnko, 3 – overené meraním (IMS).
+   Bez všeobecných „zelených“ tvrdení – na nálepke aj profile iba merateľné čísla.
+   QR kód na nálepke otvorí verejný profil prevádzky s ponukou pridať sa do Zdieľne (s odporúčacím kódom prevádzky). */
+const ESG_MIN=.2;
+const esgSlug=n=>String(n||'prevadzka').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const esgRef=n=>'ZDIELNA-'+esgSlug(n).replace(/-/g,'').slice(0,6).toUpperCase();
+const esgUrl=n=>`https://zdielna.sk/p/${esgSlug(n)}?ref=${esgRef(n)}`;
+function esgStats(){
+  const {sh,a}=badgeShare(),d=S.sim.days,E=S.esg,r=RCP[E.rcp]||RCP.r2;
+  const saved=a.peter.saved*d,donKwh=E.on?E.kwh:0,unit=a.peter.recv>0?a.peter.paid/a.peter.recv:S.p.price,donEur=donKwh*unit,val=donKwh*S.c.ref;
+  const okE=sh>=ESG_MIN,okS=E.on&&donKwh>0,okG=!!S.c.ims;
+  return {sh,a,d,saved,donEur,donKwh,unit,val,r,okE,okS,okG,ok:okE&&okS&&okG,co2:a.peter.recv*d*S.twin.co2};
 }
-/* certifikát „Slnko od susedov“ – Odmeny → Certifikát, iba pre odberné miesta typu Prevádzka */
+const esgOk=()=>isShop()&&esgStats().ok;
+/* nálepka na dvere – znak + QR kód s odkazom na verejný profil */
+function stickerSvg(name,sh){
+  const qr=QR(esgUrl(name)),n=qr.length;let q='';for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(qr[y][x])q+=`M${x},${y}h1v1h-1z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Nálepka Dobrý sused"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1424"/><stop offset=".65" stop-color="#0b3b2e"/><stop offset="1" stop-color="#0e9f6e"/></linearGradient></defs>
+  <circle cx="200" cy="200" r="196" fill="url(#sg)"/><circle cx="200" cy="200" r="182" fill="none" stroke="#5eeab5" stroke-width="3" stroke-dasharray="6 7" opacity=".8"/>
+  <text x="200" y="62" fill="#5eeab5" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="800" letter-spacing="3" text-anchor="middle">ZDIEĽŇA</text>
+  <text x="200" y="104" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="800" text-anchor="middle">DOBRÝ SUSED</text>
+  <g transform="translate(140,124)"><rect width="120" height="120" rx="10" fill="#fff"/><g transform="translate(8,8) scale(${(104/n).toFixed(4)})"><path d="${q}" fill="#0b1424"/></g></g>
+  <text x="200" y="288" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="800" text-anchor="middle">NASKENUJTE A POZRITE,</text>
+  <text x="200" y="310" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="14" text-anchor="middle">koľko slnka berieme od susedov</text><text x="200" y="328" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="14" text-anchor="middle">a komu pomáhame</text>
+  <text x="200" y="354" fill="#5eeab5" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">${esc(String(name).slice(0,28))}</text></svg>`;
+}
+const esgPill=(k,t,ok)=>`<span class="esg-p ${ok?'ok':''}"><b>${k}</b>${t}</span>`;
 function vCert(){
-  const {sh,lv,a}=badgeShare(),month=new Date().toLocaleDateString('sk-SK',{month:'long',year:'numeric'}),name=S.badge.name||'Bistro';
-  const months=[['máj',1.25],['jún',1.35],['júl',1.4],['aug',1.3],['sep',1.0],['okt',0.7]].map(([m,mul])=>{const r=agg(runDay(S.c.appTime,{mul}));return [m,r.peter.cons>0?r.peter.recv/r.peter.cons:0]});
-  const nb=[['Kaviareň Pri fontáne','Trnava',.64],['Pekáreň Klások','Hlohovec',.47],['Kvetinárstvo Lúka','Piešťany',.28],[name,'Trnava',sh]].sort((x,y)=>y[2]-x[2]);
-  const lvOf=s=>s>=.6?'zlato':s>=.4?'striebro':s>=.2?'bronz':null;
-  return `<div class="gap">${hero({kicker:'Slnečný klub · certifikát',title:'Prevádzka <em>na slnku od susedov.</em>',lead:'Ukážte zákazníkom, koľko elektriny vo vašej prevádzke pochádza zo striech susedov. Certifikát sa počíta z 15-minútových meraní, nálepka s QR kódom ide na dvere.',extra:`<div class="hero-tabs">${rewardTabs()}</div>`})}
-  <div class="grid g2"><div class="cert"><div class="lv">${lv?LVC[lv][1]+' '+lv:'zatiaľ bez úrovne'} · certifikát ${esc(month)}</div><div style="margin-top:14px;font-size:18px;font-weight:700">${esc(name)}</div><div class="pc" style="margin-top:8px">${Math.round(sh*100)} %</div><div style="margin-top:4px;font-weight:600">elektriny zo susedných striech</div><div class="sm" style="opacity:.9;margin-top:12px">Dnes ${fm(a.peter.recv,1)} kWh zo ${fm(a.peter.cons,1)} kWh spotreby${a.peter.recvBat>0?` (z toho ${fm(a.peter.recvBat,1)} kWh večer z batérie suseda)`:''}. Vypočítané z 15-minútových alokácií.</div><div class="sm" style="margin-top:10px">Úrovne: 🥉 od 20 % · 🥈 od 40 % · 🥇 od 60 %</div></div>
-   <div class="card" style="text-align:center"><h3>Nálepka na dvere s QR kódom</h3><div style="max-width:260px;margin:10px auto" id="sticker">${stickerSvg(name,sh,lv,month)}</div><div class="row" style="justify-content:center"><button class="btn pri sm" data-act="stickerpng">⬇ Stiahnuť nálepku (PNG)</button></div><p class="xs mut" style="margin-top:6px">Nálepka neuvádza percento – aktuálny podiel slnka hosť uvidí po naskenovaní QR kódu. QR kód je skutočný.</p></div></div>
-  <div class="grid g2"><div class="card"><h3>Nastavenie</h3><div class="fields one" style="margin-top:8px">${F('Názov prevádzky','badge.name',{t:'x'})}</div><p class="xs mut" style="margin-top:8px">Podiel zvýšite presunom spotreby do slnečného okna (Odmeny), vyššou max. cenou alebo večerným nákupom z batérie suseda.</p>
-    <h3 style="margin-top:12px">Posledných 6 mesiacov</h3><div class="gap" style="margin-top:6px">${months.map(([m,v])=>`<div><div class="row between sm"><span>${m}</span><b>${pct(v)} ${lvOf(v)?LVC[lvOf(v)][1]:''}</b></div><div class="bar"><i style="width:${Math.min(100,v*100)}%"></i></div></div>`).join('')}</div><p class="xs mut" style="margin-top:6px">Mesiace sa líšia počasím (ilustračne 70–140 % dnešnej výroby).</p></div>
-   <div class="card"><h3>Náhľad verejnej stránky prevádzky</h3><div style="border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:8px"><div class="row between"><b style="font-size:17px">${esc(name)}</b>${lv?pill('g',LVC[lv][1]+' '+lv):''}</div><div class="xs mut">Trnava · člen skupiny ${gname(S.group)}</div><p class="sm" style="margin-top:8px">„Tento mesiac sme fungovali z <b>${Math.round(sh*100)} %</b> na slnku od našich susedov.“</p><div class="row" style="margin-top:8px">${pill('y','☀ '+fm(a.peter.recv*S.sim.days,0)+' kWh / mesiac')}${pill('n','CO₂ −'+fm(a.peter.recv*S.sim.days*S.twin.co2,0)+' kg')}</div></div>
-    <h3 style="margin-top:14px">Zapojené prevádzky v okolí</h3><table style="margin-top:4px"><tbody>${nb.map(([n,t,s])=>`<tr><td><b>${esc(n)}</b><div class="xs mut">${t}</div></td><td class="n">${pct(s)} ${lvOf(s)?LVC[lvOf(s)][1]:''}</td></tr>`).join('')}</tbody></table><p class="xs mut" style="margin-top:4px">Ostatné prevádzky sú ilustračné.</p></div></div>
-  </div>`;
+  const x=esgStats(),name=S.badge.name||'Bistro',month=new Date().toLocaleDateString('sk-SK',{month:'long',year:'numeric'});
+  const crit=[['1','Slnko od susedov',`${pct(x.sh)} spotreby z prebytkov susedov (potrebné aspoň ${pct(ESG_MIN)})`,x.okE,x.okE?'':'<button class="link" data-act="view:challenges">Ako zvýšiť podiel →</button>'],
+   ['2','Pomáha v okolí',x.okS?`Darujete ${fm(x.donKwh,0)} kWh mesačne pre ${x.r.name}`:'Darujte kWh zo slnka susedov cez Solidárne slnko – nastavíte nižšie.',x.okS,''],
+   ['3','Overené meraním','Údaje z inteligentného elektromera (IMS), zúčtovanie cez Zdieľňu.',x.okG,'']];
+  const head=hero({kicker:'Slnečný klub · Dobrý sused',title:x.ok?'Ste dobrý sused. <em>Ukážte to zákazníkom.</em>':'Staňte sa <em>dobrým susedom.</em>',
+    lead:x.ok?'Vaša prevádzka spĺňa všetky tri podmienky. Nálepka s QR kódom ukáže zákazníkom konkrétne čísla – koľko slnka beriete od susedov a komu pomáhate – a pozve ich do Zdieľne.':'Znak dostanú iba prevádzky, ktoré berú elektrinu zo slnka od susedov a zároveň pomáhajú tým, ktorí to potrebujú. Splňte všetky tri podmienky.',
+    aside:hstat('Splnené podmienky',`${[x.okE,x.okS,x.okG].filter(Boolean).length} / 3`,x.ok?'znak je aktívny':'znak sa odomkne po splnení všetkých')});
+  const checks=`<div class="card"><span class="kicker">Podmienky znaku</span><h3>Tri podmienky</h3><div class="esg-crit">${crit.map(([k,t,d,ok,act])=>`<div class="esg-c ${ok?'ok':''}"><span class="esg-k">${ok?'✓':k}</span><div><b>${t}</b><p class="sm mut">${d}</p>${act}</div></div>`).join('')}</div></div>`;
+  const don=`<div class="card" id="esg-don"><h3>${icon('heart')} Solidárne slnko pre prevádzky</h3><p class="sm mut" style="margin-top:4px">Darujte kWh elektriny zo slnka vašich susedov. Odoberieme ich vo vašom mene a doručíme rodine, škole alebo charite vo vašom okolí – bez provízie a poplatkov.</p>
+   <div class="fields" style="margin-top:10px">${F('Darovať kWh mesačne','esg.on',{t:'c'})}${S.esg.on?F('Koľko kWh mesačne','esg.kwh',{t:'r',min:5,max:100,step:5,u:' kWh'})+F('Príjemca','esg.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])}):''}</div>
+   ${S.esg.on?`<p class="sm" style="margin-top:8px">Mesačne <b>${fm(x.donKwh,0)} kWh</b> pre ${x.r.name} (${x.r.via}) – pre príjemcu hodnota ${eur(x.val)}. Vás to stojí ${eur(x.donEur)} za cenu zdieľania ${fpr(x.unit)} €/kWh, teda ${pct(x.donEur/Math.max(.01,x.saved))} z vašej mesačnej úspory ${eur(x.saved)}.</p>`:''}</div>`;
+  const profile=`<div class="card"><span class="kicker">Čo uvidí zákazník po naskenovaní</span><h3>Verejný profil prevádzky</h3>
+   <div class="esg-phone"><div class="esg-scr"><span class="esg-badge">${icon('heart')} Dobrý sused</span><b class="esg-name">${esc(name)}</b><span class="xs mut">Trnava · člen Zdieľne od ${esc(month)}</span>
+    <div class="esg-pills">${esgPill('1',`${pct(x.sh)} elektriny zo slnka susedov`,x.okE)}${esgPill('2',x.okS?`${fm(x.donKwh,0)} kWh mesačne pre ${x.r.name}`:'darovanie zatiaľ nezapnuté',x.okS)}${esgPill('3','overené meraním IMS',x.okG)}</div>
+    <div class="esg-cta"><b>Chcete aj vy elektrinu od susedov?</b><span class="xs">Pridajte sa do Zdieľne s kódom <b>${esgRef(name)}</b> – zákazník aj prevádzka získajú iWatt.</span><button class="btn pri sm" data-act="view:landing">Pridať sa do Zdieľne</button></div></div></div>
+   <p class="xs mut" style="margin-top:8px">QR kód vedie na <code>${esc(esgUrl(name))}</code> (ukážka). Odporúčanie sa započíta podľa pravidiel prémie za odporúčanie.</p></div>`;
+  const sticker=`<div class="card esg-st ${x.ok?'':'off'}" style="text-align:center"><h3>Nálepka na dvere s QR kódom</h3><div class="esg-st-img" id="sticker">${stickerSvg(name,x.sh)}</div>
+   ${x.ok?'<div class="row" style="justify-content:center"><button class="btn pri sm" data-act="stickerpng">⬇ Stiahnuť nálepku (PNG)</button></div>':`<p class="sm mut">Nálepku si stiahnete po splnení všetkých troch podmienok.</p>`}
+   <div class="fields one" style="margin-top:10px;text-align:left">${F('Názov prevádzky na nálepke','badge.name',{t:'x'})}</div></div>`;
+  return `<div class="gap">${head}<div class="grid g2">${checks}${sticker}</div><div class="grid g2">${don}${profile}</div></div>`;
 }
 function vIdeaSol(){
   const on=S.don.on,res=on?dayRun():runDay(S.c.appTime,{cfg:{...manualCfg(),donPct:S.don.pct}}),a=agg(res),A=a.anna,d=S.sim.days,r=RCP[S.don.rcp];

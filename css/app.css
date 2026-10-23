@@ -901,3 +901,24 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .iw-card .iw-card-f{margin-top:auto;min-height:40px}
 .iw-shop .iw-card-f{flex-direction:column;align-items:flex-start;gap:10px}
 .iw-card .iw-card-t{align-content:start}
+/* ---------- Zodpovedná prevádzka (ESG) ---------- */
+.esg-crit{display:grid;gap:10px;margin-top:10px}
+.esg-c{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r)}
+.esg-c.ok{background:var(--green-t);border-color:transparent}
+.esg-c p{margin:2px 0 4px}
+.esg-k{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:800;border:1.5px solid var(--line-2);color:var(--mut)}
+.esg-c.ok .esg-k{background:var(--green);border-color:var(--green);color:var(--card)}
+.esg-st-img{max-width:240px;margin:10px auto}
+.esg-st.off .esg-st-img{filter:grayscale(1);opacity:.45}
+#esg-don h3{display:flex;align-items:center;gap:8px}#esg-don h3 .icon{width:20px;height:20px;color:var(--brand)}
+.esg-phone{margin:12px auto 0;max-width:320px;border:8px solid var(--surface-dark);border-radius:28px;background:var(--card);overflow:hidden}
+.esg-scr{padding:18px;display:grid;gap:8px}
+.esg-badge{display:inline-flex;align-items:center;gap:6px;justify-self:start;padding:4px 10px;border-radius:var(--r-pill);background:var(--surface-dark);color:var(--accent-dark);font-size:var(--fs-xs);font-weight:800}
+.esg-badge .icon{width:14px;height:14px}
+.esg-name{font-size:var(--fs-h3)}
+.esg-pills{display:grid;gap:6px;margin-top:4px}
+.esg-p{display:flex;gap:8px;align-items:center;font-size:var(--fs-sm);color:var(--mut)}
+.esg-p b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:var(--fs-xs);background:var(--bg);border:1px solid var(--line-2)}
+.esg-p.ok{color:var(--ink)}.esg-p.ok b{background:var(--green);border-color:var(--green);color:var(--card)}
+.esg-cta{display:grid;gap:6px;margin-top:6px;padding:12px;border-radius:var(--r);background:var(--tint-green)}
+.esg-cta .btn{justify-self:start}
