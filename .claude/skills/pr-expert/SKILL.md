@@ -28,7 +28,9 @@ Preštuduj všetky dodané podklady:
 - potvrdené informácie o dátach, backende a použitých technológiách.
 
 Podklady v tomto repe (Zdieľňa, Hackathon 2026 Challenge #2):
-- propozície a hodnotiace kritériá: [../ux-expert/zadanie.md](../ux-expert/zadanie.md),
+- propozície a hodnotiace kritériá: [doc/zadanie.md](../../../doc/zadanie.md),
+- cenníky dodávky a výkupu: [doc/cenniky.md](../../../doc/cenniky.md) (vrátane rozdielov oproti prototypu),
+- štruktúra dát od E.SK (kmeňové dáta, 15-min spotreba a prebytky, ďalšie zdroje): [doc/data-model.md](../../../doc/data-model.md),
 - opis aplikácie, mapa súborov, pravidlá dizajnu a deep linky na screenshoty: `README.md` v koreni repa,
 - zdrojový kód: `index.html`, `js/` (dátový model a výpočty v `js/engine.js`, stav v `js/core.js`), `css/`.
 
@@ -115,6 +117,8 @@ Nepredpokladaj, že publikum pochopí fungovanie len z obrázka rozhrania.
 
 ## 4. Predstav dátovú štruktúru
 
+Vychádzaj z [doc/data-model.md](../../../doc/data-model.md). Ukáž dátové zdroje od E.SK (kmeňové dáta ↔ 15-min spotreba ↔ 15-min prebytky, kľúč EIC), ich súhrnné čísla (napr. 2 307 odberných miest, 1 007 výrobcov, 2 000 s IMS) a ako sa mapujú na prototyp. Jasne oddeľ, čo prototyp dnes simuluje a čo by čítal z reálnych dát. Nikdy neukazuj osobné údaje z kmeňových dát (mená, dátumy narodenia).
+
 Priprav zrozumiteľný pohľad na dáta aplikácie. Podľa skutočného riešenia vysvetli:
 - odkiaľ údaje prichádzajú,
 - ktoré sú hlavné dátové entity alebo objekty,
@@ -160,6 +164,8 @@ Backend neodvodzuj iba zo screenshotov. Vychádzaj z kódu, dokumentácie alebo 
 ## 6. Predstav biznis model
 
 Biznis model je povinná súčasť prezentácie. Propozície vyžadujú „prezentáciu obchodného prínosu pre zákazníkov a spoločnosť E.SK“, porota hodnotí „Prínos a realizovateľnosť“ a zadanie žiada „business logiku, ako sa budú tvoriť skupiny zdieľania“. Venuj mu vlastnú snímku (ideálne dve) v hlavnej prezentácii, nie v prílohe.
+
+Ceny ber z [doc/cenniky.md](../../../doc/cenniky.md): výkup cez deň 0,036 €/kWh (pásmo 2) vs. dodávka domácností 0,1137 – 0,1533 €/kWh bez DPH. Toto cenové okno je hlavný argument biznis modelu. Ak sa prototyp od cenníka líši, v prezentácii použi cenník alebo rozdiel výslovne pomenuj. Uvádzaj, či sú ceny s DPH alebo bez DPH.
 
 Vychádzaj z toho, čo je v prototype implementované, a over to v kóde:
 - ceny a provízia: `js/core.js` (`S.p.price`, `S.p.feedin`, `S.c.ref`, `S.fee` – pevná €/MWh alebo % z obchodu),
