@@ -7,6 +7,9 @@ const ICONS={
  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
  chart:'<path d="M3 3v18h18M7 15l4-5 4 3 5-8"/>',
  battery:'<rect x="3" y="6" width="17" height="12" rx="3"/><path d="M22 10v4M7 10v4m4-4v4m4-4v4"/>',
+ shop:'<path d="M4 10v10h16V10M3 4h18l-1 6H4L3 4Z"/><path d="M4 10a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M10 20v-5h4v5"/>',
+ cabin:'<path d="M12 3 3 20h18L12 3Z"/><path d="M9.5 20v-6h5v6M12 3v4"/>',
+ plug:'<path d="M9 2v5m6-5v5M6 7h12v4a6 6 0 0 1-12 0V7Zm6 10v5"/>',
  car:'<path d="m4 10 2-6h12l2 6M3 10h18v9H3v-9Zm2 9v2m14-2v2M6 14h2m8 0h2"/>',
  gift:'<path d="M3 8h18v5H3zM5 13v8h14v-8M12 8v13"/><path d="M12 8C3 8 6 0 10 4l2 4Zm0 0c9 0 6-8 2-4l-2 4Z"/>',
  home:'<path d="m2 11 10-9 10 9M5 9v12h14V9M9 21v-7h6v7"/>',
@@ -33,9 +36,28 @@ const ICONS={
  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
  sunrise:'<path d="M3 18h18M5 21h14M12 3v4m-7.8 3.2 2.1 2.1m13.5-2.1-2.1 2.1M7 18a5 5 0 0 1 10 0"/>',
  play:'<path d="M7 4.5v15l12-7.5-12-7.5Z"/>',
- print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>'
+ print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>',
+ plug:'<path d="M9 3v5m6-5v5M6 8h12v3a6 6 0 0 1-12 0V8Zm6 9v4"/>',
+ grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+ lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ /* typy odberných miest (sprievodca registrácie) – každý s odlišnou siluetou */
+ om_house:'<path d="M3 11 12 3l9 8"/><path d="M5 9.5V21h14V9.5M10 21v-6h4v6M16 5.5V3.5h2.5v4"/>',
+ om_flat:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h1.5m3 0H15M9 11h1.5m3 0H15M9 15h1.5m3 0H15M10.5 21v-3h3v3"/>',
+ om_shop:'<path d="M5.5 4h13L20 9H4l1.5-5Z"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v9h14v-9M10 21v-5h4v5"/>',
+ om_cabin:'<path d="M12 3 3 21h18L12 3Z"/><path d="M10 21v-5h4v5M8 13h8"/>',
+ om_garage:'<path d="M3 9.5 12 4l9 5.5V21H3V9.5Z"/><path d="M7 21v-8h10v8M7 15.7h10M7 18.4h10"/>',
+ om_other:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>'
 };
 function icon(name,cl='icon'){return `<svg class="${cl}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||ICONS.sun}</svg>`}
+/* ---------- odberné miesto: typ objektu, ikona a štítky profilu – rovnaké na všetkých obrazovkách ---------- */
+const OM_TYPES=[['om_house','Dom'],['om_flat','Byt'],['om_shop','Prevádzka'],['om_cabin','Chata'],['om_garage','Garáž'],['om_other','Iné']];
+const OM_LEGACY={'Domácnosť':'om_house','Podnikanie (bistro)':'om_shop','Podnikanie':'om_shop'};   /* staršie hodnoty v uloženom stave */
+const omKind=t=>OM_LEGACY[t]||(OM_TYPES.some(([k])=>k===t)?t:'om_house');
+const omLabel=t=>OM_TYPES.find(([k])=>k===omKind(t))[1];
+const omIc=(t,cl='')=>`<span class="om-ic ${cl}" title="${omLabel(t)}">${icon(omKind(t))}</span>`;
+const omTags=prod=>`<span class="om-tags">${prod?`<span class="om-tag prod"><i>${icon('sun')}</i>Výroba</span>`:''}<span class="om-tag cons"><i>${icon('plug')}</i>Spotreba</span></span>`;
+/* výberové pole typu objektu s ikonou zvoleného typu */
+const omTypeField=(k,v,label='Typ objektu')=>`<label class="f"><span>${label}</span><span class="om-sel">${icon(omKind(v))}<select data-k="${k}" data-t="s">${OM_TYPES.map(([x,l])=>`<option value="${x}" ${x===omKind(v)?'selected':''}>${l}</option>`).join('')}</select></span></label>`;
 /* ---------- UI helpers ---------- */
 const F=(label,k,o={})=>{
   const v=getPath(k),t=o.t||'n';
@@ -55,7 +77,7 @@ const kpi=(l,v,d='',c='')=>`<div class="card kpi"><div class="l">${l}</div><div 
 /* červená bodka – podpis značky: iba posledná bodka nadpisu, nikdy dve za sebou */
 const sig=t=>String(t).replace(/\.((?:<\/em>)?)\s*$/,'<span class="sig">.</span>$1');
 function hero(o){
-  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${sig(o.title)}</h1>${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
+  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${sig(o.title)}</h1>${o.sub?`<div class="hero-sub">${o.sub}</div>`:''}${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
 }
 const hstat=(tag,val,sub='',cls='')=>`<div class="hstat ${cls}"><span class="tag">${tag}</span><b>${val}</b>${sub?`<span>${sub}</span>`:''}</div>`;
 const secHead=(k,t,l='')=>`<div class="sec-head"><div>${k?`<span class="kicker">${k}</span>`:''}<h2>${sig(t)}</h2></div>${l?`<p class="lead">${l}</p>`:''}</div>`;
@@ -367,19 +389,11 @@ function startFlows(){if(!flowRAF&&(document.querySelector('.fp')||S.send.anim))
 
 /* ---------- karty ponuky výrobcu ---------- */
 function annaOfferCard(){
-  const occ=S.p.occ,full=occ>=MAXC,vis=S.p.vis,ip=S.p.indiv;
-  const vt={[VIS_PUB]:'Ponuka je viditeľná v trhovisku a noví odberatelia ju môžu žiadať.',[VIS_HID]:'Ponuka zmizne z trhoviska, noví odberatelia sa pripoja iba cez váš prepájací kód.',[VIS_LOCK]:'Ponuka zmizne z trhoviska a prestane fungovať aj kód – nikto nový sa nepripojí.'}[vis];
+  const occ=S.p.occ,full=occ>=MAXC;
   return `<div class="card"><h3>Správa vašej ponuky</h3>
   <div class="row between" style="margin-top:8px"><span class="sm">Obsadenosť: <b>${occ} / ${MAXC}</b> odberateľov</span>${full?pill('r','plná'):pill('g','voľných miest: '+(MAXC-occ))}</div>
   <div class="bar ${full?'o':''}" style="margin-top:6px"><i style="width:${Math.min(100,occ/MAXC*100)}%"></i></div>
-  <p class="xs mut" style="margin-top:4px">Jeden výrobca môže zdieľať najviac s ${MAXC} odberateľmi.</p>
-  <h3 style="margin-top:14px">Viditeľnosť ponuky</h3>
-  <div class="seg" role="group" aria-label="Viditeľnosť ponuky" style="margin-top:6px">${[VIS_PUB,VIS_HID,VIS_LOCK].map(v=>`<button data-act="setvis:${v}" aria-pressed="${vis===v}">${v}</button>`).join('')}</div>
-  <p class="xs mut" style="margin-top:6px">${vt} Existujúcich členov to neovplyvní.</p>
-  <h3 style="margin-top:14px">Prepájací kód a individuálna cena</h3>
-  <div class="row" style="margin-top:6px"><span class="pill n" style="font-size:14px;letter-spacing:.04em">${esc(S.p.code)}</span><button class="btn sm" data-act="copycode">Kopírovať</button><button class="btn sm" data-act="newcode">Nový kód</button></div>
-  <div class="fields" style="margin-top:10px">${F('Individuálna cena pre Petra (malý podnik)','p.indiv.on',{t:'c'})}${F('Cena pre Petra','p.indiv.price',{step:.005,u:'€/kWh'})}</div>
-  <p class="xs mut" style="margin-top:6px">${ip.on?`Peter platí ${fpr(ip.price)} €/kWh, vy dostanete po provízii ${fpr(netPrice(ip.price))} €/kWh.${ip.price>S.c.max?' ⚠ Cena je nad maximom Petra – energia sa mu nepridelí.':''}`:'Ostatní členovia platia verejnú cenu. Zapnutím nastavíte inú cenu len pre vybraného člena (napr. rodina).'}</p></div>`;
+  <p class="xs mut" style="margin-top:4px">Jeden výrobca môže zdieľať najviac s ${MAXC} odberateľmi.</p></div>`;
 }
 function batCard(compact){
   const B=S.bat;

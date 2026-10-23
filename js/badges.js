@@ -9,7 +9,7 @@ const BCAT={
   rytmus:{name:'Slnečný rytmus',shape:'circle',sub:'Presun spotreby do slnečného okna'},
   strecha:{name:'Strecha, ktorá zdieľa',shape:'roof',sub:'Výroba a predaj prebytkov'},
   komunita:{name:'Komunita',shape:'hex',sub:'Spoločné ciele – bez rebríčka jednotlivcov'},
-  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie a darčeky'},
+  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie'},
   sezona:{name:'Sezónne',shape:'star',sub:'Iba v určitom období roka'}
 };
 /* kind: once = raz · rep = opakovateľný (×N) · tier = úrovne podľa hodnoty */
@@ -29,19 +29,15 @@ const BADGES=[
  {id:'better',cat:'strecha',who:'anna',kind:'tier',tiers:[10,100,500],unit:'€',icon:'coins',col:'--c-prod',name:'Lepšie než výkup',how:'Zárobok navyše oproti tomu, keby ste všetko predali výkupcovi.',live:c=>Math.max(0,c.annaVs)},
 
  {id:'goal',cat:'komunita',who:'both',kind:'rep',metal:'gold',icon:'group',col:'--c-shared',name:'Cieľ skupiny',how:'Skupina využila aspoň 80 % prebytkov dňa. Spoločný úspech, bez rebríčka. Vyhodnocuje sa o 24:00.',live:c=>c.eod&&c.annaSucc>=.8},
- {id:'connector',cat:'komunita',who:'anna',kind:'once',metal:'silver',icon:'market',col:'--brand',name:'Prepájač',how:'Nový sused sa pripojil cez váš prepájací kód.',live:()=>S.codeOk},
  {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Slnečný kruh 17.'},
  {id:'morning',cat:'komunita',who:'both',kind:'tier',tiers:[3,7,30],unit:'dní',icon:'sunrise',col:'--c-prod',name:'Ranné slniečko',how:'Dni, keď ste sa pozreli do Zdieľne. Každý deň dostanete na štart slnečné body – a za sériu viac.',live:c=>c.visits},
- {id:'eastwest',cat:'komunita',who:'both',kind:'once',metal:'silver',icon:'map',col:'--c-cons',name:'Západ – východ',how:'Vaša elektrina putovala medzi oblasťami ZSE a VSE, napríklad cez Pošli slnko.',live:c=>c.eastWest},
 
- {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko alebo Pošli slnko.',live:c=>c.don>0.001||c.gifts>0},
+ {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko.',live:c=>c.don>0.001},
  {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Solidárne slnko – bez provízie a bez poplatkov.',live:c=>c.don},
- {id:'sent',cat:'srdce',who:'anna',kind:'rep',metal:'silver',icon:'gift',col:'--c-prod',name:'Poslané slnko',how:'Darček cez Pošli slnko bol odoslaný blízkemu človeku.',count:c=>c.gifts},
 
  {id:'longest',cat:'sezona',who:'both',kind:'once',metal:'slnko',icon:'sun',col:'--c-prod',name:'Najdlhší deň',how:'Zdieľali ste 21. júna, v deň letného slnovratu.'},
  {id:'spring',cat:'sezona',who:'both',kind:'once',metal:'silver',icon:'leaf',col:'--c-shared',name:'Prvý jarný lúč',how:'Prvé zdieľanie po zime.'},
  {id:'autumn',cat:'sezona',who:'both',kind:'tier',tiers:[10],unit:'dní',icon:'leaf',col:'--c-grid',name:'Jesenný lovec',how:'10 zamračených októbrových dní (výroba pod 70 %), keď ste aj tak zdieľali.',live:c=>c.cloudy?1:0},
- {id:'xmas',cat:'sezona',who:'anna',kind:'once',metal:'slnko',secret:true,icon:'gift',col:'--brand',name:'Vianoce zo slnka',how:'Do 24. decembra máte v Slnečnej banke cieľ, ktorý si nastavil AI správca.',live:()=>S.bank.bal>=S.agent.goal,prog:()=>[S.bank.bal,S.agent.goal,'kWh']}
 ];
 /* ilustračná história (dátumy ISO) – nastavená tak, aby sa v deme dali odznaky odomknúť */
 const BDG_BASE={
@@ -49,7 +45,7 @@ const BDG_BASE={
  streak:{val:5},shifted:{val:98.2,dates:{10:'2026-06-03'}},saved:{val:61.3,dates:{10:'2026-06-20'}},
  first_share:{date:'2026-04-03'},shared:{val:993,dates:{100:'2026-04-29'}},nowaste:{count:23,date:'2026-10-11'},
  forecast:{count:11,date:'2026-10-09'},evening:{count:41,date:'2026-10-17'},better:{val:72.4,dates:{10:'2026-05-18'}},
- goal:{count:3,date:'2026-09-30'},morning:{val:1},connector:{date:'2026-06-02'},founder:{date:'2026-03-20'},
+ goal:{count:3,date:'2026-09-30'},morning:{val:1},founder:{date:'2026-03-20'},
  longest:{date:'2026-06-21'},spring:{date:'2026-03-08'},autumn:{val:6}
 };
 const BDG=()=>S.bdg||(S.bdg={base:JSON.parse(JSON.stringify(BDG_BASE)),seen:{},cnt:{},sel:{},fresh:{}});
@@ -184,7 +180,7 @@ function bdgModal(id,isNew){
     <h2>${esc(st.secret?'Tajný odznak':b.name)}${b.kind==='rep'&&st.earned?` <span class="bdg-x">×${st.count}</span>`:''}</h2>
     <p>${st.earned?'Získané '+fdate(st.date):st.secret?'Odhalí sa, keď ho získate.':'Zatiaľ nezískaný'}</p></div>
    <div style="padding:18px 20px 20px">
-    <p>${esc(st.secret?'Tento odznak je prekvapenie. Patrí k Slnečnej banke a AI správcovi.':b.how)}</p>
+    <p>${esc(st.secret?'Tento odznak je prekvapenie.':b.how)}</p>
     ${!st.secret&&(st.prog)?`<div style="margin-top:12px">${bdgBar(st.prog)}</div>`:''}
     ${b.kind!=='once'?`<p class="sm mut" style="margin-top:10px">${esc(bdgLine(st))}</p>`:''}
     ${tiers}
@@ -245,7 +241,7 @@ function bdgShare(id){
 const welcomePts=streak=>Math.min(30,5+5*streak);
 function checkWelcome(){
   const per=S.persona;if(per!=='anna'&&per!=='peter')return;
-  if(S.tourOn||S.modal||PUB.includes(curView()))return;
+  if(S.tourOn||S.modal||PUB.includes(curView())||regPending())return;   /* body až po schválení registrácie */
   const v=S.visit[per]||(S.visit[per]={day:0,streak:0});if(v.day===S.day)return;
   const streak=v.day===S.day-1?v.streak+1:1,pts=welcomePts(streak);
   v.day=S.day;v.streak=streak;

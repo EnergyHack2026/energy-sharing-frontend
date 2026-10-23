@@ -391,11 +391,7 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-om-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .wz-om-top>div{display:grid;gap:4px}
 .wz-addr{font-size:var(--fs-h3)}
-.wz-om-edit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
-.wz-icons{display:flex;gap:8px;flex-wrap:wrap}
-.wz-icons button{width:44px;height:44px;border-radius:var(--r-sm);border:1.5px solid var(--line-2);background:var(--card);display:grid;place-items:center;color:var(--ink);cursor:pointer}
-.wz-icons button .icon{width:22px;height:22px}
-.wz-icons button.on{border-color:var(--brand);background:var(--brand-t);color:var(--brand-ink)}
+.wz-om-edit{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:16px;align-items:end}
 .wz-om-head{display:flex;align-items:center;gap:14px}
 .wz-om-head>div{display:grid;gap:2px}
 .wz-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
@@ -455,3 +451,51 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-bm-req{padding:14px 16px;border-radius:var(--r);background:var(--orange-t);display:grid;gap:4px}
 .wz-bm-req p{margin:0}
 .wz-bm-act{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px}
+.wz-sum-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+/* review registrácie: čitateľný podnadpis v banneri, väčšie Áno / Nie, odhad, načítanie, Slnečný klub */
+.lp-hero .lead{color:var(--on-dark-mut)}
+.wz-q .seg button{min-height:44px;min-width:56px}
+.wz-q abbr,.wz abbr{text-decoration:underline dotted;cursor:help}
+.wz-est{gap:4px;margin-bottom:16px;background:var(--tint-green);border:0}
+.wz-est-n{font-size:var(--fs-h2);letter-spacing:-.02em}.wz-est-n small{font-size:var(--fs-md);font-weight:600}
+.wz-load{max-width:560px}
+.wz-club{grid-template-columns:auto 1fr auto;align-items:center;margin-top:16px}
+.wz-club p{margin:2px 0 0}
+.wz-opt.miss .pill,.wz-opt.miss .link{justify-self:start}
+.lp .wz .wz-h{max-width:none}
+/* odberné miesto: ikona typu v krúžku, štítky Výroba / Spotreba, výber typu (rovnaké vo všetkých obrazovkách) */
+.om-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
+.om-ic .icon{width:20px;height:20px}
+.om-row{display:flex;align-items:center;gap:12px}
+.om-tags{display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle}
+.om-tag{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px 0 4px;border-radius:var(--r-pill);font-size:var(--fs-sm);font-weight:700;color:var(--ink);white-space:nowrap}
+.om-tag i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center}
+.om-tag i .icon{width:13px;height:13px;stroke-width:2.2}
+.om-tag.prod{background:var(--yellow-t)}.om-tag.prod i{background:var(--c-prod);color:var(--ink)}
+.om-tag.cons{background:var(--blue-t)}.om-tag.cons i{background:var(--c-cons);color:var(--card)}
+.om-sel{position:relative;display:block}
+.om-sel .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--mut);pointer-events:none}
+.om-sel select{width:100%;padding-left:40px}
+.wz-om-edit input,.wz-om-edit select{min-height:44px}
+.wz-om-id{display:flex;align-items:center;gap:14px}
+.wz-om-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+.wz-pr-name{display:flex;align-items:center;gap:12px}.wz-pr-name>div{display:grid;gap:2px}
+@media(max-width:620px){.wz-om-edit{grid-template-columns:1fr}}
+.wz-om-top>.wz-om-id{display:flex;gap:14px}
+/* Nastavenia: pevné šírky stĺpcov, aby boli riadky všetkých miest zarovnané pod sebou */
+@media(min-width:901px){
+ .wz-pr-row{grid-template-columns:minmax(0,1fr) 210px 150px 260px 150px}
+ .wz-pr-row>.wz-tags{justify-self:start}
+ .wz-pr-row>.btn,.wz-pr-row>.pill{justify-self:end}
+}
+/* podpisové tlačidlo „Vstúpiť do Zdieľne.“ – písmo ako logo Zdieľňa (800, stiahnuté písmená), biele s červenou bodkou */
+.btn.sig-btn{font-size:21px;font-weight:800;letter-spacing:-.03em;color:var(--on-dark)}
+/* vlastná cena pod tromi stratégiami */
+.wz-own{border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--card);padding:16px 20px;display:grid;gap:12px}
+.wz-own.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-t)}
+.wz-own-h{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.wz-own-h input{width:20px;height:20px;margin-top:2px;accent-color:var(--brand);flex:none}
+.wz-own-h>span{display:grid;gap:2px}
+.wz-own-in{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:16px;align-items:end;padding-left:32px}
+.wz-warn{margin:6px 0 0;color:var(--orange);font-weight:700}
+@media(max-width:620px){.wz-own-in{grid-template-columns:1fr;padding-left:0}}

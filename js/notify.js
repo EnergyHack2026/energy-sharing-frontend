@@ -30,5 +30,5 @@ function bellPanel(){
   return `<div class="modal-bg bell-bg" data-act="closemodal"><div class="bellpanel" role="dialog" aria-modal="true" aria-label="Notifikácie">
    <div class="row between"><div><span class="kicker" style="margin-bottom:2px">Notifikácie</span><b>${un?un+' neprečítané':'Všetko prečítané'}</b></div><div class="row">${un?`<button class="link" data-act="notesread">Označiť všetko</button>`:''}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div></div>
    <div class="notes">${L.length?L.map(n=>`<button class="note ${n.read?'':'unread'}" data-act="note:${n.id}"><span class="note-ic">${icon(NOTE_IC[n.kind]||'info')}</span><span class="note-b"><b>${esc(n.title)}</b><span>${esc(n.text)}</span><span class="note-t">${n.day?'Deň '+n.day+' · ':''}${n.t}</span></span>${n.read?'':'<i class="note-dot" aria-label="neprečítané"></i>'}</button>`).join(''):`<p class="sm mut" style="padding:20px 4px">Zatiaľ nič nové. Ozveme sa pred slnečným oknom.</p>`}</div>
-   <p class="xs mut" style="margin-top:8px">Čo vám posielame, nastavíte v <button class="link" data-act="view:profile">Profile</button>.</p></div></div>`;
+   <p class="xs mut" style="margin-top:8px">Čo vám posielame, nastavíte v <button class="link" data-act="view:profile">Nastaveniach</button>.</p></div></div>`;
 }

@@ -18,12 +18,38 @@ nie doslova na slnku. „Slnko“ ostáva iba v komunikácii (slnečné okno, Sl
 | Odberateľ | splnená výzva (napr. „práčka v slnečnom okne“) potvrdená elektromerom |
 | Odberateľ aj výrobca | séria splnených dní / týždňov |
 | Výrobca | spoľahlivá ponuka (presná predikcia), vysoký podiel prebytkov u susedov namiesto výkupu |
-| Celá skupina | spoločný cieľ (napr. 80 % využitých prebytkov za mesiac) → bonus všetkým |
+| Odberateľ aj výrobca | potvrdená registrácia – jednorazové body a odznak (viď nižšie) |
+| Odberateľ aj výrobca | odporúčanie Zdieľne – body za každú MWh, ktorú odobral odporučený zákazník (viď nižšie) |
+
+### Registrácia – body a odznak
+- Po **potvrdenej registrácii** (distribútor žiadosť schválil a členstvo sa aktivovalo, nie už pri odoslaní žiadosti)
+  dostane zákazník jednorazovo **50 bodov** a odznak **„Vitajte v Zdieľni“**.
+- Odznak je prvý v zbierke a dá sa zdieľať – je to zároveň prirodzená chvíľa ponúknuť odporúčanie.
+- Hodnota 50 bodov je ukážková (na doladenie s hranicami úrovní).
+
+### Prémia za odporúčanie
+Zákazník odporučí Zdieľňu (osobný odkaz alebo kód). Prémia sa začne počítať, až keď odporučený zákazník
+**potvrdene dokončí registráciu a začne odoberať** zdieľanú elektrinu. Odporúčajúci potom dostáva body
+**za každú MWh, ktorú odporučený zákazník odobral** zo zdieľania.
+
+Odobraté MWh sa **segmentujú podľa času odberu** (15-min intervaly). Najviac bodov je za odber v **peaku prebytku**:
+
+| Segment odberu | Ako sa určí | Body za MWh (ukážka) |
+|---|---|---|
+| **Peak prebytku** | intervaly s najvyšším predikovaným prebytkom v skupine – určí ich **predikčný model** deň vopred (napr. horných 25 % intervalov dňa), overí sa nameranými dátami | **30** |
+| Prebytok mimo peaku | ostatné intervaly s predikovaným alebo nameraným prebytkom | 15 |
+| Bez prebytku | odber mimo prebytku | 0 |
+
+Pravidlá:
+- Body dostáva odporúčajúci, odporučený zákazník má vlastné body zo Slnečného klubu ako ostatní.
+- Za odber bez prebytku sa body nedávajú – prémia tak nemotivuje k vyššej spotrebe, len k spotrebe v správnom čase.
+- Prémia platí obmedzený čas (napr. 12 mesiacov od aktivácie odporučeného) a má mesačný strop na jedného odporučeného.
+- Odporúčajúci aj odporučený musia mať overené odberné miesto (IMS); samoodporúčanie (to isté odberné miesto alebo domácnosť) sa nepočíta.
+- Hodnoty bodov, podiel peaku a dĺžka platnosti sú ukážkové – doladiť podľa hraníc úrovní a nákladov na výhody.
 
 ### Výzvy
 - **Denná** – jeden spotrebič, jedno okno („Dnes perieme so slnkom – presuňte pranie do okna 11:00 – 13:45. +11 bodov“).
 - **Týždenná** – napr. „3 prania v slnečnom okne tento týždeň“.
-- **Skupinová** – spoločný cieľ skupiny (pruh „Cieľ skupiny Slnečný kruh 17“).
 
 Priebeh: návrh podľa predikcie a zvyčajného času spotrebiča → zákazník prijme → elektromer overí presun →
 body podľa presunutých kWh (s denným stropom).
@@ -47,11 +73,13 @@ S úrovňou rastú výhody od dodávateľa:
 Odznaky sú zábavné ocenenie navyše a dajú sa zdieľať.
 
 ### Prečo sa zákazník vracia
-Denné upozornenie na slnečné okno, týždenná výzva, sezónne odznaky, mesačný report (kWh, €, CO₂).
+Denné upozornenie na slnečné okno, týždenná výzva, sezónne odznaky, mesačný report (kWh, €, CO₂),
+prehľad bodov za odporúčaných zákazníkov (koľko MWh odobrali a koľko z toho v peaku).
 
 ### Prínos pre E.SK
 Viac zdieľaných kWh → viac provízie; menej odchýlok → nižšie náklady na vyrovnávanie (z nich sa dajú financovať výhody);
-vyššia lojalita – zákazník je v appke každý týždeň, nie raz ročne.
+vyššia lojalita – zákazník je v appke každý týždeň, nie raz ročne; odporúčania privádzajú nových členov
+a body za peak posúvajú ich odber tam, kde je prebytok najväčší.
 
 **Komunikácia:** „Zo zdieľania zarábate a šetríte. Slnečný klub vám pridá výhody navyše – nižšiu províziu a zľavy od dodávateľa.“
 
@@ -72,3 +100,4 @@ na firemne neutrálnu úvodnú stránku.
 ## Vety na prezentáciu
 - *„Odmeňujeme spotrebu vtedy, keď má sused prebytok – overenú elektromerom, nikdy nie vyššiu spotrebu.“*
 - *„Trhovisko je otvorené všetkým, ale zákazník ZSE/VSE z neho má najviac – a to je náš akvizičný kanál.“*
+- *„Odporučte suseda – za každú jeho MWh v čase najväčšieho prebytku dostanete najviac bodov.“*

@@ -198,7 +198,7 @@ function calcModal(){
   <p class="xs mut" style="margin-top:10px">Zisk = kWh × (cena − provízia − výkupná cena); úspora = kWh × (súčasná cena − cena zdieľania). Rovnaký vzorec ako v celej aplikácii. Odhad, nie garancia.</p>
   <div class="row" style="margin-top:10px"><button class="btn pri" data-act="view:register">Zaregistrovať sa</button><button class="btn" data-act="closemodal">Zavrieť</button></div></div></div>`;
 }
-const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'Domácnosť',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'Podnikanie (bistro)',pv:false}};
+const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'om_house',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'om_shop',pv:false}};
 const SSO_STEPS=['Overujem zákaznícky účet','Načítavam odberné miesta','Kontrolujem inteligentné meranie (IMS)','Načítavam zmluvy'];
 /* ---------- registrácia, krok 2: porovnanie skupín a ďalší postup ---------- */
 /* odhad pre skupinu z enginu: objem × zhoda skupiny (f), cena posunutá o typický rozdiel v skupine (dp) */
@@ -246,38 +246,50 @@ const WZ_STRAT={match:{t:'Uprednostniť spárovanie',d:'Viac možností na prepo
  price:{t:'Uprednostniť cenu',d:'Výhodnejšia cena, menej možností',sell:0.122,buy:0.084,ch:33,sh:26}};
 const wzProd=o=>o.pv;                                   /* miesto vyrába (FVE) */
 const wzRec=o=>wzProd(o)?'bal':o.mwh>=10?'match':'bal'; /* odporúčanie podľa profilu miesta */
-const wzPrice=(o,k=o.strat||wzRec(o))=>WZ_STRAT[k][wzProd(o)?'sell':'buy'];
-const wzPriceLbl=o=>wzProd(o)?'Ponuková cena':'Max. nákupná cena';
-const wzTags=o=>`<span class="wz-tags">${wzProd(o)?'<span class="pill y">Výroba</span>':''}<span class="pill b">Spotreba</span></span>`;
-const WZ_ICONS=[['home','Dom'],['city','Byt'],['console','Prevádzka'],['leaf','Chata'],['car','Garáž'],['bolt','Iné']];
+const wzPrice=(o,k=o.strat||wzRec(o))=>k==='own'?o.own:WZ_STRAT[k][wzProd(o)?'sell':'buy'];
+const wzStratName=k=>k==='own'?'Vlastná cena':WZ_STRAT[k].t;
+/* upozornenie pri vlastnej cene mimo cenového okna výkup – dodávka (cenníky bez DPH); cenu neblokuje */
+const wzOwnWarn=(o,p)=>!(p>0)?'Zadajte cenu v €/kWh.':wzProd(o)?(p<=S.p.feedin?`Nižšia ako výkup ${fpr(S.p.feedin)} €/kWh – do výkupu by ste predali výhodnejšie.`:p>=WZ_SUP[1]?'Vyššia ako dodávková cena susedov – ponuku pravdepodobne nikto neprijme.':''):(p>=WZ_SUP[1]?'Vyššia ako dodávková cena – na zdieľaní neušetríte.':p<=S.p.feedin?'Nižšia ako výkup – za túto cenu výrobcovia pravdepodobne nepredajú.':'');
+const wzPriceLbl=o=>wzProd(o)?'Predáte za':'Zaplatíte najviac';
+/* kontext ceny podľa doc/cenniky.md (bez DPH): výrobca vs. výkup, odberateľ vs. dodávka domácností DD1–DD6 */
+const WZ_SUP=[0.1137,0.1533];
+const wzCtx=(o,p=wzPrice(o))=>wzProd(o)?(p>S.p.feedin?`${fm(p/S.p.feedin,1)}× viac ako výkup ${fpr(S.p.feedin)} €/kWh`:`výkup ${fpr(S.p.feedin)} €/kWh`):`dodávka ${fpr(WZ_SUP[0])} – ${fpr(WZ_SUP[1])} €/kWh`;
+/* stav miesta bez inteligentného merania – zapojí sa až po inštalácii; po žiadosti o IMS to ukáže všade */
+const wzNoIms=o=>o.imsReq?'<span class="pill y" title="Žiadosť o inteligentný elektromer (IMS) je podaná">Čaká na IMS · žiadosť podaná</span>':'<span class="pill y" title="Čaká na inteligentný elektromer (IMS)">Čaká na IMS</span>';
+const wzImsReq=o=>o.imsReq?'<span class="pill g">Žiadosť o IMS podaná</span>':`<button class="link" data-act="wzims:${S.wz.oms.indexOf(o)}">Požiadať o inštaláciu</button>`;
+const EIC=`<abbr title="Kód odberného miesta – nájdete ho na faktúre">EIC</abbr>`;
+const wzTags=o=>omTags(wzProd(o));
 const WZ_OPTS={cons:['Využívať zdieľanú elektrinu','Elektrinu od susedov dostanete lacnejšie, keď ju práve spotrebujete.'],
  prod:['Ponúkať prebytky z výroby','Prebytky z fotovoltiky ponúknete susedom za vlastnú alebo odporúčanú cenu.'],
  bat:['Ponúkať energiu z batérie','Večer ponúknete energiu uloženú v batérii, keď už slnko nesvieti.']};
 /* odberné miesta načítané z účtu (demo podľa persony); dostupné možnosti podľa údajov z databázy */
 function wzLoad(per,co){
  const s=SSO[per],isP=per==='anna';
- const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'home':'console',mwh:isP?4.2:18.6,on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
- const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'leaf',mwh:1.1,on:false,ims:false,pv:false,bat:false};
+ const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'om_house':'om_shop',mwh:isP?4.2:18.6,pmwh:isP?6.8:0,on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
+ const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'om_cabin',mwh:1.1,on:true,ims:false,pv:false,bat:false};
  /* príklad miesta s výrobou aj spotrebou (rodinný dom s FVE) – Anna ho má ako hlavné miesto */
- const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'home',mwh:5.4,on:true,ims:true,pv:true,bat:false};
+ const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'om_house',mwh:5.4,pmwh:5.6,on:true,ims:true,pv:true,bat:false};
  const oms=isP?[main,cot]:[main,home,cot];
  /* batéria: jedna otázka Áno / Nie pri mieste s výrobou (null = neodpovedané); Áno otvorí okno s výhodami a žiadosťou o kontakt */
- oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.batAns=null});
+ oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.own=null;o.batAns=null;o.imsReq=false});
  /* elektromobil: jedna otázka za zákazníka, nie za odberné miesto */
- S.wz={step:1,oms,ev:null,ok3:false,sent:false,err:'',edit:-1,pick:null};
+ S.wz={step:1,oms,ev:null,sent:false,err:'',edit:-1,pick:null,own:null};
 }
+/* kroky registrácie – rovnaké na výbere spôsobu (n=1) aj v sprievodcovi (n=2–4) */
+const REG_STEPS=['Prihlásenie',...WZ_STEPS];
 function wzBar(n){
- return `<ol class="wz-steps" aria-label="Kroky sprievodcu">${WZ_STEPS.map((t,i)=>{const k=i+1,c=k<n?'done':k===n?'cur':'';return `<li class="${c}" ${k===n?'aria-current="step"':''}><span class="n">${k<n?'✓':k}</span><span class="t">${t}</span></li>`}).join('')}</ol>`;
+ return `<ol class="wz-steps" aria-label="Kroky registrácie">${REG_STEPS.map((t,i)=>{const k=i+1,c=k<n?'done':k===n?'cur':'';return `<li class="${c}" ${k===n?'aria-current="step"':''}><span class="n">${k<n?'✓':k}</span><span class="t">${t}</span></li>`}).join('')}</ol>`;
 }
-function wzNav(back,next,nextLbl='Ďalej',dis=false){
- return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn pri lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
+/* cls: 'pri' (zelené Ďalej) alebo 'dark' – podpisové tlačidlo značky (čierne, biely text, červená bodka) */
+function wzNav(back,next,nextLbl='Ďalej',dis=false,cls='pri'){
+ return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn ${cls} lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
 }
-const wzHead=(o)=>`<div class="wz-om-head"><span class="wz-ic">${icon(o.icon)}</span><div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.addr)} · EIC ${esc(o.eic)}</span></div></div>`;
+const wzHead=(o)=>`<div class="wz-om-head">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="wz-om-meta"><span class="xs mut">${esc(o.addr)} · ${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>`;
 /* okno po „Áno“ pri batérii: výhody, čo je potrebné, žiadosť o kontakt */
 function battModal(i){
  const o=S.wz&&S.wz.oms[i];if(!o)return '';
  return `<div class="modal-bg" data-act="closemodal"><div class="modal wz-bm" role="dialog" aria-modal="true" aria-labelledby="bm-h">
-  <div class="row between"><span class="wz-ic">${icon('bolt')}</span><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
+  <div class="row between">${omIc(o.icon)}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
   <h2 id="bm-h" style="margin-top:14px">Zdieľanie energie z batérie</h2>
   <p class="mut">${esc(o.name||o.addr)} · ${esc(o.addr)}</p>
   <ul class="wz-bm-list">
@@ -291,60 +303,108 @@ function battModal(i){
 }
 function vWizard(){
  const W=S.wz,n=W.step,sel=W.oms.filter(o=>o.on);
- const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n} z ${WZ_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
+ const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n+1} z ${REG_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n+1)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
  const end='</div></section></div>';
  const err=W.err?`<p class="supply-err" role="alert">${esc(W.err)}</p>`:'';
- if(W.sent)return top+`<div class="wz-card wz-done"><span class="supply-ok" aria-hidden="true">✓</span><div><h2>Ďakujeme, žiadosť je odoslaná</h2><p class="mut">Odoslanie žiadosti ešte neznamená aktiváciu zdieľania. Distribútor overí odberné miesta a o výsledku vás budeme informovať e-mailom aj v aplikácii.</p></div></div>
-  <h2 class="wz-h">Stav odberných miest</h2><div class="wz-list">${W.oms.map(o=>{const st=!o.on?['n','Nezapojené']:!o.ims?['y','Čaká na inteligentné meranie']:['b','Čaká na kontrolu distribútora'];return `<div class="wz-card">${wzHead(o)}<span class="pill ${st[0]}">${st[1]}</span></div>`}).join('')}</div>
-  <div class="wz-nav"><span></span><button class="btn pri lg" data-act="view:landing">Hotovo <span aria-hidden="true">→</span></button></div>`+end;
+ const isP=(S.persona==='admin'?'peter':S.persona)==='anna';
+ if(W.sent){const g=GROUPS.find(x=>x.id===S.group)||GROUPS[0];
+  return top+`<div class="wz-card wz-done"><span class="supply-ok" aria-hidden="true">✓</span><div><h2>Ďakujeme, žiadosť je odoslaná</h2><p class="mut">Odoslanie žiadosti ešte neznamená aktiváciu zdieľania. Distribútor overí odberné miesta a o výsledku vás budeme informovať e-mailom aj v aplikácii.</p></div></div>
+  <h2 class="wz-h">Stav odberných miest</h2><div class="wz-list">${W.oms.map(o=>{const st=!o.on?['n','Nezapojené']:!o.ims?(o.imsReq?['y','Čaká na IMS · žiadosť podaná']:['y','Čaká na IMS']):['b','Čaká na kontrolu distribútora'];return `<div class="wz-card">${wzHead(o)}<span class="pill ${st[0]}">${st[1]}</span></div>`}).join('')}</div>
+  <h2 class="wz-h">Od žiadosti po prvé vyúčtovanie</h2><div class="wz-card">${regTimeline(isP,'PENDING',g)}</div>
+  <div class="wz-card wz-club"><span class="wz-ic">${icon('star')}</span><div><b>Slnečný klub</b><p class="sm mut">Slnečné body začnete zbierať od prvého dňa zdieľania – za každú kWh, ktorú presuniete do času, keď svieti slnko.</p></div><button class="link" data-act="view:rewards">Pozrieť odmeny →</button></div>
+  <div class="wz-nav"><span></span><button class="btn pri lg" data-act="view:landing">Hotovo <span aria-hidden="true">→</span></button></div>`+end;}
  /* otázka Áno / Nie pri odbernom mieste */
  const yn=(id,v,act,q)=>`<div class="wz-q"><span id="wzq-${id}">${q}</span><span class="seg" role="group" aria-labelledby="wzq-${id}">${[[1,'Áno'],[0,'Nie']].map(([b,l])=>`<button type="button" aria-pressed="${v===!!b}" data-act="${act}:${b}">${l}</button>`).join('')}</span></div>`;
  /* možnosti zdieľania jedného odberného miesta – dostupné podľa údajov z databázy */
  const opts=(o,i)=>`<div class="wz-opts"><span class="wz-opts-h">Možnosti zdieľania</span>${Object.entries(WZ_OPTS).map(([k,[t,d]])=>{
     if(k==='bat')return '';   /* batéria má vlastné otázky nižšie */
     const avail=k==='cons'?o.ims:o.ims&&o.pv;
-    if(!avail)return (k==='cons'&&!o.ims)?`<div class="wz-opt miss"><b>${t}</b><span class="xs">Chýbajú údaje na overenie: odberné miesto nemá inteligentné meranie (IMS). <button class="link" data-act="imsreq">Požiadať o inštaláciu</button></span></div>`:'';
+    if(!avail)return (k==='cons'&&!o.ims)?`<div class="wz-opt miss"><b>${t}</b><span class="xs">Chýbajú údaje na overenie: odberné miesto nemá inteligentný elektromer (IMS). ${wzImsReq(o)}</span></div>`:'';
     return `<label class="wz-opt"><input type="checkbox" data-k="wz.oms.${i}.opts.${k}" data-t="c" ${o.opts[k]?'checked':''}><span><b>${t}</b><span class="xs mut">${d}</span></span></label>`}).join('')}
    ${o.pv?yn('bat-'+i,o.batAns,'wzbat:'+i,'Máte na tomto mieste batériu a chcete z nej zdieľať energiu vo vybraných časoch?'):''}
    ${o.pv&&o.batAns?`<p class="wz-info sm">✓ Zákaznícke centrum vás bude kontaktovať a spoločne overíme možnosti zapojenia batérie.</p>`:''}</div>`;
  if(n===1)return top+`<p class="lead wz-lead">Načítali sme odberné miesta z vášho účtu. Označte, ktoré chcete zapojiť, pomenujte ich a rovno vyberte, ako budú zdieľať. Dostupné možnosti sú predvolene zapnuté – zrušte tie, o ktoré nemáte záujem.</p>
-  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div><b class="wz-addr">${esc(o.addr)}</b><span class="xs mut">EIC ${esc(o.eic)}</span>${wzTags(o)}</div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
-   <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}<div class="f"><span>Ikona</span><div class="wz-icons" role="radiogroup" aria-label="Ikona objektu">${WZ_ICONS.map(([k,l])=>`<button type="button" role="radio" aria-checked="${o.icon===k}" aria-label="${l}" title="${l}" class="${o.icon===k?'on':''}" data-act="wzicon:${i}:${k}">${icon(k)}</button>`).join('')}</div></div></div>
+  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div class="wz-om-id">${omIc(o.icon)}<div><b class="wz-addr">${esc(o.addr)}</b><span class="wz-om-meta"><span class="xs mut">${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
+   <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}${omTypeField('wz.oms.'+i+'.icon',o.icon)}</div>
    ${o.on?opts(o,i):''}</div>`).join('')}</div>
-  <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil?')}</div>
+  <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil? <span class="xs mut">Nepovinné</span>')}</div>
   ${err}
   ${wzNav(0,'wznext')}`+end;
  if(n===2){
   const strat=(o,k)=>{const x=WZ_STRAT[k],rec=k===wzRec(o),on=W.pick===k,vol=Math.round(o.mwh*1000/12*x.sh/100);
    return `<label class="wz-st ${rec?'rec':''} ${on?'on':''}"><input type="radio" name="wz-st" data-act="wzpick:${k}" ${on?'checked':''}>
     <span class="wz-st-h"><b>${x.t}</b>${rec?'<span class="pill g">Odporúčame pre vás</span>':''}</span><span class="xs mut">${x.d}</span>
-    <span class="wz-st-p"><b>${fpr(wzPrice(o,k))}</b> €/kWh</span>
+    <span class="wz-st-p"><b>${fpr(wzPrice(o,k))}</b> €/kWh</span><span class="xs mut">${wzCtx(o,wzPrice(o,k))}</span>
     <span class="wz-st-ch"><b>${x.ch} %</b><span class="xs mut">modelová šanca spárovania*</span></span><span class="bar" aria-hidden="true"><i style="width:${x.ch}%"></i></span>
     <span class="xs mut">Odhad spárovaného objemu</span><b>${vol} kWh / modelový mesiac</b>
     <span class="xs mut">Priemerný spárovaný podiel</span><b>${x.sh} %</b></label>`};
-  return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť.</p>
+  return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť. Ceny sú bez DPH.</p>
   <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,k=o.strat||wzRec(o);
    return `<div class="wz-card wz-pr ${ed?'on':''}"><div class="wz-pr-row">
-    <div class="wz-pr-name"><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">EIC ${esc(o.eic)}</span></div>${wzTags(o)}
-    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b></div>
-    <div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':WZ_STRAT[k].t}</span></div>
-    ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}</div>
+    <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
+    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${fm(o.pmwh,1)} MWh</b>`:''}</div>
+    ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs mut">${wzCtx(o)}</span><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':wzStratName(k)}</span></div>
+    ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}`}</div>
     ${ed?`<fieldset class="wz-strats"><legend>Cenová stratégia – ${esc(o.name)}</legend>${['match','bal','price'].map(k=>strat(o,k)).join('')}</fieldset>
+    <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(o)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
+     ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(o),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(o,W.own)}</span>${wzOwnWarn(o,W.own)?`<p class="wz-warn">${wzOwnWarn(o,W.own)}</p>`:''}</div></div>`:''}</div>
     <p class="xs mut">* Modelový odhad podľa profilu miesta a ponúk v skupine, nie záväzný prísľub.</p>
     <div class="wz-pr-act"><button class="btn" data-act="wzedit:-1">Zrušiť</button><button class="btn pri" data-act="wzprice:${i}">Potvrdiť výber</button></div>`:''}</div>`}).join('')}</div>${err}
   ${wzNav(1,'wznext')}`+end;}
  const yn3=v=>v===true?'Áno':v===false?'Nie':'Neuvedené';
  const batTxt=o=>o.batAns?'Áno – zákaznícke centrum vás bude kontaktovať':o.batAns===false?'Nie':'Neuvedené';
  const optTxt=o=>{const L=Object.entries(o.opts).filter(([,v])=>v).map(([k])=>WZ_OPTS[k][0]);return L.length?L.join(' · '):(o.ims?'Žiadna možnosť nevybraná':'Čaká na inteligentné meranie')};
- return top+`<p class="lead wz-lead">Skontrolujte údaje pred odoslaním žiadosti. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
-  <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum">${wzHead(o)}
-   <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>
+ /* odhad prínosu pred odoslaním – z enginu pre odporúčanú skupinu, s rozptylom podľa istoty predikcie */
+ const best=grpBest(isP),y=grpEst(best,isP).m*12,u=UNC[S.p.conf]||.2;
+ return top+`<p class="lead wz-lead">Skontrolujte údaje a vstúpte do Zdieľne. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
+  <div class="wz-card wz-est"><span class="xs mut">${isP?'Odhad zárobku navyše oproti výkupu':'Odhad úspory na cene elektriny'}</span><b class="wz-est-n">${eur0(y)} <small>ročne</small></b><span class="xs mut">rozpätie ${eur0(y*(1-u))} – ${eur0(y*(1+u))} · modelový odhad pri odporúčaných cenách, nie garancia</span></div>
+  <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum"><div class="wz-sum-top">${wzHead(o)}${o.ims?'':wzNoIms(o)}</div>
+   <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${!o.ims?`
+   <div class="wz-sum-row"><span class="xs mut">Stav</span><span>${o.imsReq?'Žiadosť o inteligentný elektromer je podaná. Miesto zapojíme hneď po jeho inštalácii.':'Zapojíme ho hneď po inštalácii inteligentného elektromera.'}</span>${o.imsReq?'':wzImsReq(o)}</div>`:`
    <div class="wz-sum-row"><span class="xs mut">Možnosti zdieľania</span><span>${optTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${o.pv?`
    <div class="wz-sum-row"><span class="xs mut">Zdieľanie z batérie</span><span>${batTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>`:''}
-   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${wzPriceLbl(o)} ${fpr(wzPrice(o))} €/kWh · ${(o.strat&&o.strat!==wzRec(o))?WZ_STRAT[o.strat].t:'odporúčaná cena'}</span><button class="link" data-act="wzgo:2">Upraviť</button></div></div>`).join('')}</div>
+   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${wzPriceLbl(o)} ${fpr(wzPrice(o))} €/kWh · ${(o.strat&&o.strat!==wzRec(o))?wzStratName(o.strat):'odporúčaná cena'}</span><button class="link" data-act="wzgo:2">Upraviť</button></div>`}</div>`).join('')}</div>
   <div class="wz-card wz-sum wz-extra"><div class="wz-sum-row"><span class="xs mut">Elektromobil</span><span>${yn3(W.ev)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div></div>
-  <div class="wz-confirm">${F('Potvrdzujem správnosť údajov a vybraných nastavení.','wz.ok3',{t:'c'})}</div>${err}
-  ${wzNav(2,'wzsubmit','Potvrdiť a odoslať žiadosť')}`+end;
+  ${err}
+  ${wzNav(2,'wzsubmit','Vstúpiť do Zdieľne<span class="sig">.</span>',false,'dark sig-btn')}`+end;
+}
+/* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
+const REG_LOCKED={group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
+ reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
+ rewards:['Odmeny','Začnete zbierať slnečné body a odznaky v Slnečnom klube.']};
+const regPer=()=>S.persona==='admin'?'peter':S.persona;
+const regPending=()=>!!(S.wz&&S.wz.sent)&&S.mem[regPer()]==='PENDING';
+/* kroky žiadosti – rovnaké ako v časovej osi regTimeline */
+function regSteps4(){
+ const now=new Date(),act=new Date(now.getFullYear(),now.getMonth()+1,1),inv=new Date(act.getFullYear(),act.getMonth()+1,10);
+ const D=x=>x.toLocaleDateString('sk-SK',{day:'numeric',month:'numeric',year:'numeric'});
+ return [['Žiadosť odoslaná','dnes','done'],['Kontrola distribútora','do 5 pracovných dní','cur'],['Začína zdieľanie',D(act),''],['Prvé vyúčtovanie','do '+D(inv),'']];
+}
+/* stavový riadok – na každej obrazovke portálu, kým žiadosť nie je schválená */
+function pendingBar(){
+ const L=regSteps4();
+ return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Skupina zdieľania, Prehľady a Odmeny sú zamknuté.</span></div>
+  ${S.jury?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
+  <ol class="pend-steps">${L.map(([t,w,c],i)=>`<li class="${c}" ${c==='cur'?'aria-current="step"':''}><span class="n">${c==='done'?'✓':i+1}</span><span><b>${t}</b><span class="xs mut">${w}</span></span></li>`).join('')}</ol></section>`;
+}
+/* Domov počas čakania: stav žiadosti, odberné miesta, odhad a čo sa odomkne */
+function vHomePending(){
+ const per=regPer(),isP=per==='anna',W=S.wz,g=GROUPS.find(x=>x.id===S.group)||GROUPS[0],best=grpBest(isP),y=grpEst(best,isP).m*12;
+ const st=o=>!o.on?['n','Nezapojené']:!o.ims?['y',o.imsReq?'Čaká na IMS · žiadosť podaná':'Čaká na IMS']:['b','Čaká na kontrolu distribútora'];
+ return `<div class="gap">${hero({kicker:'Vitajte v Zdieľni',title:`${esc(SSO[per].name.split(' ')[0])}, <em>vaša žiadosť je na ceste.</em>`,
+   lead:'Distribútor overí vaše odberné miesta do 5 pracovných dní. Hneď po schválení sa odomkne celá Zdieľňa a začnete zdieľať.',
+   acts:S.jury?'<button class="btn" data-act="regapprove">🎬 Simulovať schválenie</button>':'',
+   aside:hstat(isP?'Odhad zárobku navyše':'Odhad úspory',eur0(y)+' ročne','modelový odhad, nie garancia')})}
+  ${pendingBar()}
+  <div class="card"><span class="kicker">Vaše odberné miesta</span><h3>Stav zapojenia</h3><div class="pend-oms">${(W.oms||[]).map(o=>{const s=st(o);return `<div class="pend-om">${wzHead(o)}<span class="pill ${s[0]}">${s[1]}</span></div>`}).join('')}</div></div>
+  <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
+  <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
+   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button>, <button class="link" data-act="view:ideas">nápady</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
+}
+/* zamknutá obrazovka počas čakania na schválenie */
+function vLocked(v){
+ const [t,d]=REG_LOCKED[v];
+ return `<div class="gap"><div class="card pend-locked"><span class="pend-ic lg">${icon('lock')}</span><h2>${t} sprístupníme po schválení<span class="sig">.</span></h2><p class="mut">${d} Sprístupní sa hneď, ako distribútor schváli vašu žiadosť – dáme vám vedieť e-mailom aj v aplikácii.</p><button class="btn pri" data-act="view:home">Späť na Domov</button></div></div>`;
 }
 function vRegister(){
   const R=S.reg,per=S.persona==='admin'?'peter':S.persona,sso=SSO[per],co=R.company,coN=SKN[co];
@@ -356,7 +416,7 @@ function vRegister(){
   if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="reg-heading"><div class="lp-wrap">
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
-   <div class="lp-reg-grid"><div><p class="lp-intro">Vyberte spôsob registrácie nižšie.</p></div><ol class="lp-steps" aria-label="Kroky registrácie">${['Spôsob prihlásenia','Overenie údajov','Výber skupiny'].map((t,k)=>`<li class="${k===0?'cur':''}" ${k===0?'aria-current="step"':''}><span class="n">${k+1}</span><span class="t">${t}</span></li>`).join('')}</ol></div>
+   <div class="lp-reg-grid"><div><p class="lp-intro">Vyberte spôsob registrácie nižšie.</p></div><ol class="lp-steps" aria-label="Kroky registrácie">${REG_STEPS.map((t,k)=>`<li class="${k===0?'cur':''}" ${k===0?'aria-current="step"':''}><span class="n">${k+1}</span><span class="t">${t}</span></li>`).join('')}</ol></div>
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE alebo VSE</h3><p>Prihláste sa svojím zákazníckym účtom – spoločnosť rozpoznáme sami a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme za vás.</p>
@@ -364,14 +424,16 @@ function vRegister(){
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
     <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše. <button class="link" data-act="supply">Pozrieť ponuku dodávky →</button></p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;
-  if(R.step==='load')return `<div class="gap"><div class="card" style="max-width:560px;margin:0 auto">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><h2>Načítavam váš účet…</h2></div><div class="chk-list" style="margin-top:12px">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div>`;
+  /* načítanie účtu – v rovnakom dizajne ako sprievodca */
+  if(R.step==='load')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="load-heading"><div class="lp-wrap"><span class="kicker">Registrácia · krok 1 z ${REG_STEPS.length}</span><h1 id="load-heading">Načítavam váš účet<span class="sig">.</span></h1>${wzBar(1)}</div></section>
+   <section class="lp-section wz"><div class="lp-wrap"><div class="wz-card wz-load">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><b>Účet ${coN}</b></div><div class="chk-list" role="status" aria-live="polite">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div></section></div>`;
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';
   const sent=!!R.sent,g=GROUPS.find(x=>x.id===(sent?R.group:S.ob.group))||GROUPS[0];
   const reg=regionOf(geo(om.addr).ll),best=sent?g:grpBest(isP),bm=grpEst(best,isP).m*12;
   const ok=(t,sub,c='ok')=>`<div class="vf ${c}"><span class="vf-i" aria-hidden="true">${c==='ok'?'✓':c==='no'?'✕':'!'}</span><div><b>${t}</b>${sub?`<div class="xs mut">${sub}</div>`:''}</div></div>`;
   const rows=[
    ok(`Zákaznícky účet ${coN} overený`,`${sso.name} · č. ${co==='zse'?'4100':'7300'}${isP?'2187':'5530'} (ilustračné) · bez zadávania hesla`),
-   ok(`${esc(om.id)} – ${ims?'môže zdieľať':'zatiaľ nemôže zdieľať'}`,`${esc(om.addr)} · ${esc(om.type)} · ${ims?'inteligentné meranie (IMS) s 15-min údajmi ✓':'chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>'}`,ims?'ok':'no'),
+   ok(`${esc(om.id)} – ${ims?'môže zdieľať':'zatiaľ nemôže zdieľať'}`,`${esc(om.addr)} · ${omLabel(om.type)} · ${ims?'inteligentné meranie (IMS) s 15-min údajmi ✓':'chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>'}`,ims?'ok':'no'),
    ok('SK-OM-0002 – zatiaľ nemôže zdieľať','Záhradná 3, Piešťany · chata · chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>','no'),
    ok(isP?`Rola: výrobca – fotovoltika ${fm(om.kwp||6.5,1)} kWp${S.bat.on?` + batéria ${fm(S.bat.cap,0)} kWh`:''}`:'Rola: odberateľ – bez vlastných panelov',isP?'Prebytky ponúknete susedom, zvyšok ide ako doteraz výkupcovi.':'Budete dostávať slnečnú elektrinu zo striech susedov.'),
    ok(`Zmluvy ostávajú: dodávka ${coN}${isP?' aj výkup prebytkov':''}`,'Dodávateľa ani elektromer meniť nemusíte.'),
@@ -388,6 +450,6 @@ function vRegister(){
    ${sent?'':`<div class="card"><h3>Potvrďte súhlas a odošlite žiadosť</h3><div style="margin-top:8px">${F('Súhlasím s použitím 15-minútových dát z inteligentného merania','ob.consent',{t:'c'})}</div>${condList()}
     <div class="row" style="margin-top:14px"><button class="btn pri lg" data-act="ssosubmit" ${S.ob.consent?'':'disabled'}>Odoslať žiadosť do skupiny ${g.name} →</button><button class="btn" data-act="regback">Zmeniť spôsob</button></div>${S.ob.consent?'':'<p class="xs mut" style="margin-top:6px">Tlačidlo sa odomkne po zaškrtnutí súhlasu.</p>'}</div>`}
    <div class="card"><span class="kicker">${sent?'Čo bude ďalej':'Čo sa stane po odoslaní'}</span><h3>Od žiadosti po prvé vyúčtovanie</h3>${regTimeline(isP,sent?'PENDING':'NONE',g)}
-    ${sent?`<div class="row" style="margin-top:16px"><button class="btn pri" data-act="view:group">Moja skupina →</button><button class="btn" data-act="view:home">Pozrieť, ako bude vyzerať Domov</button></div>`:''}</div></div>`;
+    ${sent?`<div class="row" style="margin-top:16px"><button class="btn pri" data-act="view:group">Skupina zdieľania →</button><button class="btn" data-act="view:home">Pozrieť, ako bude vyzerať Domov</button></div>`:''}</div></div>`;
 }
 

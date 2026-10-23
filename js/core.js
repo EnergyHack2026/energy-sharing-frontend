@@ -29,7 +29,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register']);
+const ON=new Set(['landing','register','home','group','reports','rewards','profile','map','ideas','i_badge','i_sol','i_ev','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -43,7 +43,7 @@ const defaults=()=>({
   visit:{anna:{day:0,streak:0},peter:{day:0,streak:0}},welcome:null,
   /* notifikácie v zvončeku; for = komu patrí (anna | peter | both) */
   notes:[{id:'n0',day:0,t:'08:00',kind:'month',for:'both',title:'Vyúčtovanie za september je pripravené',text:'Pozrite si ukážku mesačného vyúčtovania.',go:'reports:inv',read:false},
-         {id:'n1',day:0,t:'07:30',kind:'state',for:'both',title:'Vitajte v skupine Slnečný kruh 17',text:'Členstvo je aktívne – zdieľanie beží.',go:'group',read:true}],
+         {id:'n1',day:0,t:'07:30',kind:'state',for:'both',title:'Vitajte v skupine Spoločná energia',text:'Členstvo je aktívne – zdieľanie beží.',go:'group',read:true}],
   /* prehrávač dňa na Domove (oddelený od lišty času na Mape a v Nápadoch) */
   pl:{idx:24,playing:false,est:false,speed:1},
   mapHi:null,
@@ -51,7 +51,7 @@ const defaults=()=>({
   p:{price:0.11,share:100,surplus:10,pStart:'10:30',pEnd:'15:30',weather:100,conf:'vysoká',ims:true,own:67,auto:false,feedin:0.036,occ:7,vis:VIS_PUB,code:'SLNKO-4821',indiv:{on:false,price:0.09},pw:{label:'pračka',kwh:1.2,orig:'10:45',time:'10:45',accepted:false,cheat:false},pb:{label:'bojler',kwh:1.5,orig:'15:00',time:'15:00',accepted:false,cheat:false},pev:{label:'nabíjanie elektromobilu',kwh:2.0,orig:'14:45',time:'14:45',accepted:false,cheat:false}},
   bat:{on:true,cap:10,pow:1.25,eff:90,minSoc:10,pct:70,eStart:'18:00',eEnd:'22:00',price:0.115,ownFirst:false,carry:0},
   c:{max:0.13,maxEve:0.15,ref:0.17,daily:7.0,cStart:'10:00',cEnd:'16:00',base:0.1,appKwh:1.2,appTime:'19:00',appOrig:'19:00',accepted:false,ims:true,washCheat:false,ev:{label:'nabíjanie vozidla',kwh:2.0,orig:'20:00',time:'20:00',accepted:false,cheat:false},wh:{label:'ohrev vody',kwh:1.5,orig:'06:00',time:'06:00',accepted:false,cheat:false},ice:{label:'výrobník ľadu',kwh:1.0,orig:'17:00',time:'17:00',accepted:false,cheat:false}},
-  om:{anna:{id:'SK-OM-1101',addr:'Krajinská 8, Piešťany',type:'Domácnosť',pv:true,kwp:6.5},peter:{id:'SK-OM-0001',addr:'Hlavná 12, Trnava',type:'Podnikanie (bistro)',pv:false,kwp:0}},
+  om:{anna:{id:'SK-OM-1101',addr:'Krajinská 8, Piešťany',type:'om_house',pv:true,kwp:6.5},peter:{id:'SK-OM-0001',addr:'Hlavná 12, Trnava',type:'om_shop',pv:false,kwp:0}},
   meter:{idx:48,anna:1.20,peter:1.00},
   sim:{days:22,dev:8,others:false,win:2.75,idx:96,playing:false,speed:10},
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
@@ -80,9 +80,11 @@ const isAct=m=>m==='ACTIVE'||m==='ENDING';
 const MEM={NONE:'Bez skupiny',MATCH:'Predbežný match',READY:'Žiadosť pripravená',PENDING:'Čaká na aktiváciu',ACTIVE:'Aktívny člen',ENDING:'Čaká na ukončenie'};
 /* dp = typický rozdiel ceny v skupine oproti vašej cene (€/kWh) – iba na odhad pri výbere skupiny */
 const GROUPS=[
- {id:'g17',dp:0,name:'Slnečný kruh 17',prod:8,cons:21,cap:35,reg:'zse',town:'Trnava · Piešťany',succ:73,tag:'Odporúčaná skupina',why:'najlepší celkový časový súlad výroby a spotreby',f:1},
- {id:'g4',dp:-0.003,name:'Zelená dolina 4',prod:5,cons:12,cap:20,reg:'zse',town:'Nitra · Hlohovec',succ:68,tag:'Najnižšia očakávaná cena',why:'členovia s nižšími ponukovými cenami',f:.93},
- {id:'g9',dp:0.004,name:'Poludnie 9',prod:11,cons:30,cap:45,reg:'vse',town:'Prešov · Košice',succ:79,tag:'Najstabilnejší profil',why:'najvyššia spoľahlivosť predikcií členov',f:.88}
+ {id:'g17',code:'SE-ZSE-0417',dp:0,name:'Spoločná energia',prod:8,cons:21,cap:35,reg:'zse',town:'Trnava · Piešťany',succ:73,tag:'Odporúčaná skupina',why:'najlepší celkový časový súlad výroby a spotreby',f:1},
+ {id:'g4',code:'ZD-ZSE-0204',dp:-0.003,name:'Zelená dolina 4',prod:5,cons:12,cap:20,reg:'zse',town:'Nitra · Hlohovec',succ:68,tag:'Najnižšia očakávaná cena',why:'členovia s nižšími ponukovými cenami',f:.93},
+ {id:'g9',code:'PO-VSE-0609',dp:0.004,name:'Poludnie 9',prod:11,cons:30,cap:45,reg:'vse',town:'Prešov · Košice',succ:79,tag:'Najstabilnejší profil',why:'najvyššia spoľahlivosť predikcií členov',f:.88},
+ /* ukážka presunu: skupina s lepším časovým súladom pre odberateľa aj výrobcu (operátor do nej presúva) */
+ {id:'g21',code:'PS-ZSE-0521',dp:-0.002,name:'Poludňajšie slnko',prod:9,cons:18,cap:30,reg:'zse',town:'Trnava · Hlohovec',succ:81,tag:'Najlepší súlad s vaším profilom',why:'členovia vyrábajú presne v čase vašej spotreby',f:1.12}
 ];
 const RCP={r1:{name:'Rodina v núdzi – Hlohovec',via:'cez Mesto Hlohovec',ic:'🏠'},r2:{name:'ZŠ Komenského – Piešťany',via:'cez Mesto Piešťany',ic:'🏫'},r3:{name:'Charita – Trnava',via:'cez Trnavskú arcidiecéznu charitu (ilustračne)',ic:'🤝'}};
 const CONTACTS={k1:{name:'Babka Mária',town:'Košice',om:'SK-OM-7712'},k2:{name:'Brat Tomáš',town:'Poprad',om:'SK-OM-5520'},k3:{name:'Mama Eva',town:'Prešov',om:'SK-OM-8104'},k4:{name:'Kamarátka Lucia',town:'Bratislava',om:'SK-OM-2231'}};

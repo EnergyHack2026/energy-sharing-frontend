@@ -239,7 +239,7 @@ p{margin:0}
  .sim{position:static}
  .brand img{height:28px}
 }
-@media (max-width:440px){.brand span{display:none}}
+
 
 /* ---------- karty a mriežky ---------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;min-width:0}
@@ -820,6 +820,94 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .modal .acc-chip{display:inline-block;border:1px dashed var(--line-2);background:var(--bg);color:var(--ink);border-radius:var(--r-pill);padding:3px 10px;font:inherit;font-size:var(--fs-xs);font-weight:700;cursor:pointer;margin-left:4px}
 .modal .acc-chip:hover{background:var(--brand-t)}
 
+/* nápad „Pripravujeme…“ – sivá karta, neotvára sa */
+.idea.soon{background:var(--bg);border-style:dashed;box-shadow:none;filter:grayscale(1);opacity:.62;cursor:default;position:relative}
+.idea.soon:hover{transform:none;border-color:var(--line)}
+.idea-soon{align-self:flex-start;font-size:var(--fs-xs);font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);background:var(--line);border-radius:var(--r-pill);padding:4px 10px}
+.side button.sub.soon{opacity:.55;filter:grayscale(1);cursor:default}
+.side button.sub.soon:hover{background:none;color:var(--mut)}
+.side button.sub.soon small{display:block;font-size:var(--fs-xs);font-weight:600}
+
+/* ---------- energetické miesta (Profil, Moja skupina) ---------- */
+.places{display:grid;gap:12px}
+.place{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);overflow:hidden}
+.place-main{display:grid;grid-template-columns:minmax(200px,1.4fr) minmax(150px,1fr) minmax(110px,.8fr) minmax(190px,1.3fr) auto;gap:18px;align-items:center;padding:18px 22px}
+.place-ic{width:46px;height:46px;flex:none;border-radius:50%;background:var(--green-t);color:var(--green);display:grid;place-items:center}
+.place-ic .icon{width:22px;height:22px}
+.place-name{font-size:18px;letter-spacing:-.02em;display:block}
+.place abbr{text-decoration:underline dotted;cursor:help}
+.place-k{display:block;font-size:var(--fs-xs);color:var(--mut)}
+.place-v{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;margin:1px 0 2px}
+.place-main .xs{display:block}
+.place-act{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;border-radius:var(--r-pill);padding:4px 12px 4px 4px;font-weight:700;font-size:var(--fs-sm)}
+.chip i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.chip i .icon{width:14px;height:14px}
+.chip.prod{background:var(--yellow-t);color:var(--ink)}.chip.prod i{background:var(--yellow);color:var(--ink)}
+.chip.cons{background:var(--blue-t);color:var(--ink)}.chip.cons i{background:var(--blue);color:var(--card)}
+.place-grp{border-top:1px solid var(--line);background:var(--bg);padding:10px 22px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:var(--fs-sm)}
+.place-grp>span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.place-grp .icon{width:16px;height:16px;color:var(--mut)}
+.place.wait .place-ic{background:var(--tint-warm);color:var(--mut)}
+#price-card{scroll-margin-top:90px;transition:box-shadow .3s}
+#price-card.flash{box-shadow:0 0 0 3px var(--brand)}
+@media (max-width:1100px){.place-main{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.place-main>.row:first-child{grid-column:1/-1}.place-act{grid-column:1/-1;flex-direction:row;justify-content:flex-start}}
+@media (max-width:520px){.place-main{grid-template-columns:minmax(0,1fr);padding:16px}.place-grp{padding:10px 16px}}
+/* ---------- portál počas čakania na schválenie registrácie ---------- */
+.pend-bar{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--yellow);border-radius:var(--r-lg);padding:16px 20px;display:grid;gap:14px}
+.pend-bar-head{display:flex;align-items:center;gap:12px}
+.pend-bar-head>div{display:grid;gap:2px;flex:1}
+.pend-ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--yellow-t);color:var(--yellow-ink);flex:none}
+.pend-ic .icon{width:18px;height:18px}
+.pend-ic.lg{width:56px;height:56px}.pend-ic.lg .icon{width:26px;height:26px}
+.pend-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pend-steps li{display:flex;gap:10px;align-items:flex-start;color:var(--mut)}
+.pend-steps li>span:last-child{display:grid;gap:1px}
+.pend-steps .n{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--line-2);font-size:var(--fs-xs);font-weight:800;flex:none}
+.pend-steps li.done .n{background:var(--green);border-color:var(--green);color:var(--card)}
+.pend-steps li.cur{color:var(--ink)}.pend-steps li.cur .n{border-color:var(--yellow-ink);color:var(--yellow-ink);background:var(--yellow-t)}
+.pend-steps li.done b,.pend-steps li.cur b{color:var(--ink)}
+.pend-oms{display:grid;gap:10px;margin-top:10px}
+.pend-om{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.pend-locks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+.pend-lock{display:flex;gap:12px;padding:14px;border:1px dashed var(--line-2);border-radius:var(--r);background:var(--bg)}
+.pend-lock p{margin:2px 0 0}
+.pend-locked{display:grid;justify-items:center;text-align:center;gap:12px;padding:48px 24px}
+.pend-locked p{max-width:520px}
+.side .nav-lock{margin-left:auto;display:inline-grid;color:var(--mut)}.side .nav-lock .icon{width:14px;height:14px}
+@media(max-width:820px){.pend-steps{grid-template-columns:1fr 1fr}.pend-locks{grid-template-columns:1fr}}
+/* ---------- skupina zdieľania: ID, vyhodnotenie skupín, presun ---------- */
+.hero-sub{margin-top:6px;font-size:var(--fs-sm);font-weight:600;color:var(--on-dark-mut);letter-spacing:.02em}
+.gx{display:grid;gap:14px}
+.gx-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 22px;display:grid;gap:12px}
+.gx-card.cur{border-color:var(--green);background:var(--tint-green)}
+.gx-card.move{border:2px solid var(--brand);box-shadow:0 0 0 3px var(--brand-t)}
+.gx-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.gx-head h3{margin:0}
+.gx-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gx-list li{display:grid;gap:2px;padding-left:14px;position:relative}
+.gx-list li:before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.gx-list span{font-size:var(--fs-xs);color:var(--mut)}
+.gx-list b{font-size:var(--fs-lg)}
+.gx-move{margin:0;font-size:var(--fs-sm)}
+.gx-sub{margin:10px 0 0;font-size:var(--fs-md)}
+.gx-rest{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.gx-rest .gx-list{grid-template-columns:1fr}
+.gx-loss{margin:0;font-size:var(--fs-sm);color:var(--orange)}
+.grp-move-note{margin:6px 0 4px;padding:10px 12px;border-radius:var(--r);background:var(--brand-t);color:var(--ink)}
+.grp-move-home{display:flex;align-items:center;gap:14px;border-left:5px solid var(--brand)}
+.grp-move-home>div{flex:1}.grp-move-home p{margin:2px 0 0}
+/* poradie miest: úchyt a šípky */
+.place[draggable=true]{cursor:grab}
+.place.dragging{opacity:.5}
+.place.drop{box-shadow:0 0 0 2px var(--brand)}
+.place-drag{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--mut)}
+.place-drag>.icon{width:18px;height:18px}
+.place-mvs{display:flex;flex-direction:column}
+.place-mv{border:0;background:none;color:var(--mut);font-size:10px;line-height:1;padding:3px 6px;cursor:pointer;border-radius:4px}
+.place-mv:hover:not(:disabled){background:var(--bg);color:var(--ink)}.place-mv:disabled{opacity:.3;cursor:default}
+@media(max-width:820px){.gx-list{grid-template-columns:1fr}}
+
 </style>
 <style>
 /* =====================================================================
@@ -1215,11 +1303,7 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-om-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .wz-om-top>div{display:grid;gap:4px}
 .wz-addr{font-size:var(--fs-h3)}
-.wz-om-edit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
-.wz-icons{display:flex;gap:8px;flex-wrap:wrap}
-.wz-icons button{width:44px;height:44px;border-radius:var(--r-sm);border:1.5px solid var(--line-2);background:var(--card);display:grid;place-items:center;color:var(--ink);cursor:pointer}
-.wz-icons button .icon{width:22px;height:22px}
-.wz-icons button.on{border-color:var(--brand);background:var(--brand-t);color:var(--brand-ink)}
+.wz-om-edit{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:16px;align-items:end}
 .wz-om-head{display:flex;align-items:center;gap:14px}
 .wz-om-head>div{display:grid;gap:2px}
 .wz-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
@@ -1279,6 +1363,54 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-bm-req{padding:14px 16px;border-radius:var(--r);background:var(--orange-t);display:grid;gap:4px}
 .wz-bm-req p{margin:0}
 .wz-bm-act{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px}
+.wz-sum-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+/* review registrácie: čitateľný podnadpis v banneri, väčšie Áno / Nie, odhad, načítanie, Slnečný klub */
+.lp-hero .lead{color:var(--on-dark-mut)}
+.wz-q .seg button{min-height:44px;min-width:56px}
+.wz-q abbr,.wz abbr{text-decoration:underline dotted;cursor:help}
+.wz-est{gap:4px;margin-bottom:16px;background:var(--tint-green);border:0}
+.wz-est-n{font-size:var(--fs-h2);letter-spacing:-.02em}.wz-est-n small{font-size:var(--fs-md);font-weight:600}
+.wz-load{max-width:560px}
+.wz-club{grid-template-columns:auto 1fr auto;align-items:center;margin-top:16px}
+.wz-club p{margin:2px 0 0}
+.wz-opt.miss .pill,.wz-opt.miss .link{justify-self:start}
+.lp .wz .wz-h{max-width:none}
+/* odberné miesto: ikona typu v krúžku, štítky Výroba / Spotreba, výber typu (rovnaké vo všetkých obrazovkách) */
+.om-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
+.om-ic .icon{width:20px;height:20px}
+.om-row{display:flex;align-items:center;gap:12px}
+.om-tags{display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle}
+.om-tag{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px 0 4px;border-radius:var(--r-pill);font-size:var(--fs-sm);font-weight:700;color:var(--ink);white-space:nowrap}
+.om-tag i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center}
+.om-tag i .icon{width:13px;height:13px;stroke-width:2.2}
+.om-tag.prod{background:var(--yellow-t)}.om-tag.prod i{background:var(--c-prod);color:var(--ink)}
+.om-tag.cons{background:var(--blue-t)}.om-tag.cons i{background:var(--c-cons);color:var(--card)}
+.om-sel{position:relative;display:block}
+.om-sel .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--mut);pointer-events:none}
+.om-sel select{width:100%;padding-left:40px}
+.wz-om-edit input,.wz-om-edit select{min-height:44px}
+.wz-om-id{display:flex;align-items:center;gap:14px}
+.wz-om-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+.wz-pr-name{display:flex;align-items:center;gap:12px}.wz-pr-name>div{display:grid;gap:2px}
+@media(max-width:620px){.wz-om-edit{grid-template-columns:1fr}}
+.wz-om-top>.wz-om-id{display:flex;gap:14px}
+/* Nastavenia: pevné šírky stĺpcov, aby boli riadky všetkých miest zarovnané pod sebou */
+@media(min-width:901px){
+ .wz-pr-row{grid-template-columns:minmax(0,1fr) 210px 150px 260px 150px}
+ .wz-pr-row>.wz-tags{justify-self:start}
+ .wz-pr-row>.btn,.wz-pr-row>.pill{justify-self:end}
+}
+/* podpisové tlačidlo „Vstúpiť do Zdieľne.“ – písmo ako logo Zdieľňa (800, stiahnuté písmená), biele s červenou bodkou */
+.btn.sig-btn{font-size:21px;font-weight:800;letter-spacing:-.03em;color:var(--on-dark)}
+/* vlastná cena pod tromi stratégiami */
+.wz-own{border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--card);padding:16px 20px;display:grid;gap:12px}
+.wz-own.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-t)}
+.wz-own-h{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.wz-own-h input{width:20px;height:20px;margin-top:2px;accent-color:var(--brand);flex:none}
+.wz-own-h>span{display:grid;gap:2px}
+.wz-own-in{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:16px;align-items:end;padding-left:32px}
+.wz-warn{margin:6px 0 0;color:var(--orange);font-weight:700}
+@media(max-width:620px){.wz-own-in{grid-template-columns:1fr;padding-left:0}}
 
 </style>
 </head>
@@ -1329,7 +1461,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register']);
+const ON=new Set(['landing','register','home','group','reports','rewards','profile','map','ideas','i_badge','i_sol','i_ev','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -1343,7 +1475,7 @@ const defaults=()=>({
   visit:{anna:{day:0,streak:0},peter:{day:0,streak:0}},welcome:null,
   /* notifikácie v zvončeku; for = komu patrí (anna | peter | both) */
   notes:[{id:'n0',day:0,t:'08:00',kind:'month',for:'both',title:'Vyúčtovanie za september je pripravené',text:'Pozrite si ukážku mesačného vyúčtovania.',go:'reports:inv',read:false},
-         {id:'n1',day:0,t:'07:30',kind:'state',for:'both',title:'Vitajte v skupine Slnečný kruh 17',text:'Členstvo je aktívne – zdieľanie beží.',go:'group',read:true}],
+         {id:'n1',day:0,t:'07:30',kind:'state',for:'both',title:'Vitajte v skupine Spoločná energia',text:'Členstvo je aktívne – zdieľanie beží.',go:'group',read:true}],
   /* prehrávač dňa na Domove (oddelený od lišty času na Mape a v Nápadoch) */
   pl:{idx:24,playing:false,est:false,speed:1},
   mapHi:null,
@@ -1351,7 +1483,7 @@ const defaults=()=>({
   p:{price:0.11,share:100,surplus:10,pStart:'10:30',pEnd:'15:30',weather:100,conf:'vysoká',ims:true,own:67,auto:false,feedin:0.036,occ:7,vis:VIS_PUB,code:'SLNKO-4821',indiv:{on:false,price:0.09},pw:{label:'pračka',kwh:1.2,orig:'10:45',time:'10:45',accepted:false,cheat:false},pb:{label:'bojler',kwh:1.5,orig:'15:00',time:'15:00',accepted:false,cheat:false},pev:{label:'nabíjanie elektromobilu',kwh:2.0,orig:'14:45',time:'14:45',accepted:false,cheat:false}},
   bat:{on:true,cap:10,pow:1.25,eff:90,minSoc:10,pct:70,eStart:'18:00',eEnd:'22:00',price:0.115,ownFirst:false,carry:0},
   c:{max:0.13,maxEve:0.15,ref:0.17,daily:7.0,cStart:'10:00',cEnd:'16:00',base:0.1,appKwh:1.2,appTime:'19:00',appOrig:'19:00',accepted:false,ims:true,washCheat:false,ev:{label:'nabíjanie vozidla',kwh:2.0,orig:'20:00',time:'20:00',accepted:false,cheat:false},wh:{label:'ohrev vody',kwh:1.5,orig:'06:00',time:'06:00',accepted:false,cheat:false},ice:{label:'výrobník ľadu',kwh:1.0,orig:'17:00',time:'17:00',accepted:false,cheat:false}},
-  om:{anna:{id:'SK-OM-1101',addr:'Krajinská 8, Piešťany',type:'Domácnosť',pv:true,kwp:6.5},peter:{id:'SK-OM-0001',addr:'Hlavná 12, Trnava',type:'Podnikanie (bistro)',pv:false,kwp:0}},
+  om:{anna:{id:'SK-OM-1101',addr:'Krajinská 8, Piešťany',type:'om_house',pv:true,kwp:6.5},peter:{id:'SK-OM-0001',addr:'Hlavná 12, Trnava',type:'om_shop',pv:false,kwp:0}},
   meter:{idx:48,anna:1.20,peter:1.00},
   sim:{days:22,dev:8,others:false,win:2.75,idx:96,playing:false,speed:10},
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
@@ -1380,9 +1512,11 @@ const isAct=m=>m==='ACTIVE'||m==='ENDING';
 const MEM={NONE:'Bez skupiny',MATCH:'Predbežný match',READY:'Žiadosť pripravená',PENDING:'Čaká na aktiváciu',ACTIVE:'Aktívny člen',ENDING:'Čaká na ukončenie'};
 /* dp = typický rozdiel ceny v skupine oproti vašej cene (€/kWh) – iba na odhad pri výbere skupiny */
 const GROUPS=[
- {id:'g17',dp:0,name:'Slnečný kruh 17',prod:8,cons:21,cap:35,reg:'zse',town:'Trnava · Piešťany',succ:73,tag:'Odporúčaná skupina',why:'najlepší celkový časový súlad výroby a spotreby',f:1},
- {id:'g4',dp:-0.003,name:'Zelená dolina 4',prod:5,cons:12,cap:20,reg:'zse',town:'Nitra · Hlohovec',succ:68,tag:'Najnižšia očakávaná cena',why:'členovia s nižšími ponukovými cenami',f:.93},
- {id:'g9',dp:0.004,name:'Poludnie 9',prod:11,cons:30,cap:45,reg:'vse',town:'Prešov · Košice',succ:79,tag:'Najstabilnejší profil',why:'najvyššia spoľahlivosť predikcií členov',f:.88}
+ {id:'g17',code:'SE-ZSE-0417',dp:0,name:'Spoločná energia',prod:8,cons:21,cap:35,reg:'zse',town:'Trnava · Piešťany',succ:73,tag:'Odporúčaná skupina',why:'najlepší celkový časový súlad výroby a spotreby',f:1},
+ {id:'g4',code:'ZD-ZSE-0204',dp:-0.003,name:'Zelená dolina 4',prod:5,cons:12,cap:20,reg:'zse',town:'Nitra · Hlohovec',succ:68,tag:'Najnižšia očakávaná cena',why:'členovia s nižšími ponukovými cenami',f:.93},
+ {id:'g9',code:'PO-VSE-0609',dp:0.004,name:'Poludnie 9',prod:11,cons:30,cap:45,reg:'vse',town:'Prešov · Košice',succ:79,tag:'Najstabilnejší profil',why:'najvyššia spoľahlivosť predikcií členov',f:.88},
+ /* ukážka presunu: skupina s lepším časovým súladom pre odberateľa aj výrobcu (operátor do nej presúva) */
+ {id:'g21',code:'PS-ZSE-0521',dp:-0.002,name:'Poludňajšie slnko',prod:9,cons:18,cap:30,reg:'zse',town:'Trnava · Hlohovec',succ:81,tag:'Najlepší súlad s vaším profilom',why:'členovia vyrábajú presne v čase vašej spotreby',f:1.12}
 ];
 const RCP={r1:{name:'Rodina v núdzi – Hlohovec',via:'cez Mesto Hlohovec',ic:'🏠'},r2:{name:'ZŠ Komenského – Piešťany',via:'cez Mesto Piešťany',ic:'🏫'},r3:{name:'Charita – Trnava',via:'cez Trnavskú arcidiecéznu charitu (ilustračne)',ic:'🤝'}};
 const CONTACTS={k1:{name:'Babka Mária',town:'Košice',om:'SK-OM-7712'},k2:{name:'Brat Tomáš',town:'Poprad',om:'SK-OM-5520'},k3:{name:'Mama Eva',town:'Prešov',om:'SK-OM-8104'},k4:{name:'Kamarátka Lucia',town:'Bratislava',om:'SK-OM-2231'}};
@@ -1720,6 +1854,9 @@ const ICONS={
  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
  chart:'<path d="M3 3v18h18M7 15l4-5 4 3 5-8"/>',
  battery:'<rect x="3" y="6" width="17" height="12" rx="3"/><path d="M22 10v4M7 10v4m4-4v4m4-4v4"/>',
+ shop:'<path d="M4 10v10h16V10M3 4h18l-1 6H4L3 4Z"/><path d="M4 10a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0M10 20v-5h4v5"/>',
+ cabin:'<path d="M12 3 3 20h18L12 3Z"/><path d="M9.5 20v-6h5v6M12 3v4"/>',
+ plug:'<path d="M9 2v5m6-5v5M6 7h12v4a6 6 0 0 1-12 0V7Zm6 10v5"/>',
  car:'<path d="m4 10 2-6h12l2 6M3 10h18v9H3v-9Zm2 9v2m14-2v2M6 14h2m8 0h2"/>',
  gift:'<path d="M3 8h18v5H3zM5 13v8h14v-8M12 8v13"/><path d="M12 8C3 8 6 0 10 4l2 4Zm0 0c9 0 6-8 2-4l-2 4Z"/>',
  home:'<path d="m2 11 10-9 10 9M5 9v12h14V9M9 21v-7h6v7"/>',
@@ -1746,9 +1883,28 @@ const ICONS={
  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
  sunrise:'<path d="M3 18h18M5 21h14M12 3v4m-7.8 3.2 2.1 2.1m13.5-2.1-2.1 2.1M7 18a5 5 0 0 1 10 0"/>',
  play:'<path d="M7 4.5v15l12-7.5-12-7.5Z"/>',
- print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>'
+ print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>',
+ plug:'<path d="M9 3v5m6-5v5M6 8h12v3a6 6 0 0 1-12 0V8Zm6 9v4"/>',
+ grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+ lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ /* typy odberných miest (sprievodca registrácie) – každý s odlišnou siluetou */
+ om_house:'<path d="M3 11 12 3l9 8"/><path d="M5 9.5V21h14V9.5M10 21v-6h4v6M16 5.5V3.5h2.5v4"/>',
+ om_flat:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h1.5m3 0H15M9 11h1.5m3 0H15M9 15h1.5m3 0H15M10.5 21v-3h3v3"/>',
+ om_shop:'<path d="M5.5 4h13L20 9H4l1.5-5Z"/><path d="M4 9a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0A2.7 2.7 0 0 0 20 9"/><path d="M5 12v9h14v-9M10 21v-5h4v5"/>',
+ om_cabin:'<path d="M12 3 3 21h18L12 3Z"/><path d="M10 21v-5h4v5M8 13h8"/>',
+ om_garage:'<path d="M3 9.5 12 4l9 5.5V21H3V9.5Z"/><path d="M7 21v-8h10v8M7 15.7h10M7 18.4h10"/>',
+ om_other:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>'
 };
 function icon(name,cl='icon'){return `<svg class="${cl}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||ICONS.sun}</svg>`}
+/* ---------- odberné miesto: typ objektu, ikona a štítky profilu – rovnaké na všetkých obrazovkách ---------- */
+const OM_TYPES=[['om_house','Dom'],['om_flat','Byt'],['om_shop','Prevádzka'],['om_cabin','Chata'],['om_garage','Garáž'],['om_other','Iné']];
+const OM_LEGACY={'Domácnosť':'om_house','Podnikanie (bistro)':'om_shop','Podnikanie':'om_shop'};   /* staršie hodnoty v uloženom stave */
+const omKind=t=>OM_LEGACY[t]||(OM_TYPES.some(([k])=>k===t)?t:'om_house');
+const omLabel=t=>OM_TYPES.find(([k])=>k===omKind(t))[1];
+const omIc=(t,cl='')=>`<span class="om-ic ${cl}" title="${omLabel(t)}">${icon(omKind(t))}</span>`;
+const omTags=prod=>`<span class="om-tags">${prod?`<span class="om-tag prod"><i>${icon('sun')}</i>Výroba</span>`:''}<span class="om-tag cons"><i>${icon('plug')}</i>Spotreba</span></span>`;
+/* výberové pole typu objektu s ikonou zvoleného typu */
+const omTypeField=(k,v,label='Typ objektu')=>`<label class="f"><span>${label}</span><span class="om-sel">${icon(omKind(v))}<select data-k="${k}" data-t="s">${OM_TYPES.map(([x,l])=>`<option value="${x}" ${x===omKind(v)?'selected':''}>${l}</option>`).join('')}</select></span></label>`;
 /* ---------- UI helpers ---------- */
 const F=(label,k,o={})=>{
   const v=getPath(k),t=o.t||'n';
@@ -1768,7 +1924,7 @@ const kpi=(l,v,d='',c='')=>`<div class="card kpi"><div class="l">${l}</div><div 
 /* červená bodka – podpis značky: iba posledná bodka nadpisu, nikdy dve za sebou */
 const sig=t=>String(t).replace(/\.((?:<\/em>)?)\s*$/,'<span class="sig">.</span>$1');
 function hero(o){
-  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${sig(o.title)}</h1>${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
+  return `<section class="card hero ${o.cls||''}">${o.top?`<div class="hero-status">${o.top}</div>`:''}<div class="hero-grid${o.aside?'':' one'}"><div>${o.kicker?`<span class="kicker">${o.kicker}</span>`:''}<h1>${sig(o.title)}</h1>${o.sub?`<div class="hero-sub">${o.sub}</div>`:''}${o.lead?`<p class="lead">${o.lead}</p>`:''}${o.acts?`<div class="row hero-acts">${o.acts}</div>`:''}${o.extra||''}</div>${o.aside?`<div class="hero-aside">${o.aside}</div>`:''}</div>${o.foot?`<div class="hero-foot">${o.foot}</div>`:''}</section>`;
 }
 const hstat=(tag,val,sub='',cls='')=>`<div class="hstat ${cls}"><span class="tag">${tag}</span><b>${val}</b>${sub?`<span>${sub}</span>`:''}</div>`;
 const secHead=(k,t,l='')=>`<div class="sec-head"><div>${k?`<span class="kicker">${k}</span>`:''}<h2>${sig(t)}</h2></div>${l?`<p class="lead">${l}</p>`:''}</div>`;
@@ -2080,19 +2236,11 @@ function startFlows(){if(!flowRAF&&(document.querySelector('.fp')||S.send.anim))
 
 /* ---------- karty ponuky výrobcu ---------- */
 function annaOfferCard(){
-  const occ=S.p.occ,full=occ>=MAXC,vis=S.p.vis,ip=S.p.indiv;
-  const vt={[VIS_PUB]:'Ponuka je viditeľná v trhovisku a noví odberatelia ju môžu žiadať.',[VIS_HID]:'Ponuka zmizne z trhoviska, noví odberatelia sa pripoja iba cez váš prepájací kód.',[VIS_LOCK]:'Ponuka zmizne z trhoviska a prestane fungovať aj kód – nikto nový sa nepripojí.'}[vis];
+  const occ=S.p.occ,full=occ>=MAXC;
   return `<div class="card"><h3>Správa vašej ponuky</h3>
   <div class="row between" style="margin-top:8px"><span class="sm">Obsadenosť: <b>${occ} / ${MAXC}</b> odberateľov</span>${full?pill('r','plná'):pill('g','voľných miest: '+(MAXC-occ))}</div>
   <div class="bar ${full?'o':''}" style="margin-top:6px"><i style="width:${Math.min(100,occ/MAXC*100)}%"></i></div>
-  <p class="xs mut" style="margin-top:4px">Jeden výrobca môže zdieľať najviac s ${MAXC} odberateľmi.</p>
-  <h3 style="margin-top:14px">Viditeľnosť ponuky</h3>
-  <div class="seg" role="group" aria-label="Viditeľnosť ponuky" style="margin-top:6px">${[VIS_PUB,VIS_HID,VIS_LOCK].map(v=>`<button data-act="setvis:${v}" aria-pressed="${vis===v}">${v}</button>`).join('')}</div>
-  <p class="xs mut" style="margin-top:6px">${vt} Existujúcich členov to neovplyvní.</p>
-  <h3 style="margin-top:14px">Prepájací kód a individuálna cena</h3>
-  <div class="row" style="margin-top:6px"><span class="pill n" style="font-size:14px;letter-spacing:.04em">${esc(S.p.code)}</span><button class="btn sm" data-act="copycode">Kopírovať</button><button class="btn sm" data-act="newcode">Nový kód</button></div>
-  <div class="fields" style="margin-top:10px">${F('Individuálna cena pre Petra (malý podnik)','p.indiv.on',{t:'c'})}${F('Cena pre Petra','p.indiv.price',{step:.005,u:'€/kWh'})}</div>
-  <p class="xs mut" style="margin-top:6px">${ip.on?`Peter platí ${fpr(ip.price)} €/kWh, vy dostanete po provízii ${fpr(netPrice(ip.price))} €/kWh.${ip.price>S.c.max?' ⚠ Cena je nad maximom Petra – energia sa mu nepridelí.':''}`:'Ostatní členovia platia verejnú cenu. Zapnutím nastavíte inú cenu len pre vybraného člena (napr. rodina).'}</p></div>`;
+  <p class="xs mut" style="margin-top:4px">Jeden výrobca môže zdieľať najviac s ${MAXC} odberateľmi.</p></div>`;
 }
 function batCard(compact){
   const B=S.bat;
@@ -2130,7 +2278,7 @@ function simBar(){
 /* stav členstva – pri aktívnom členstve ako štítky v hero, inak samostatná karta */
 function memTop(){
   const m=S.mem[S.persona];if(S.persona==='admin'||!isAct(m))return '';
-  return pill('g','✓ '+gname(S.group)+' · aktívna')+(m==='ENDING'?pill('o','Čaká na ukončenie – zdieľanie pokračuje'):'')+(S.agent.on?pill('n','🤖 AI správca zapnutý'):'');
+  return pill('g','✓ '+gname(S.group)+' · aktívna')+(m==='ENDING'?pill('o','Čaká na ukončenie – zdieľanie pokračuje'):'');
 }
 function banner(){
   const m=S.mem[S.persona];
@@ -2187,8 +2335,9 @@ function vHome(){
       acts:`<button class="btn" data-act="view:rewards">Naplánovať spotrebu →</button>${S.jury?`<button class="btn ghost" data-act="tour">🎬 Demo príbeh</button>`:''}`,aside:nowWidget(per,res)});
   else h+=hero({top:memTop(),kicker:'Dnes môžete ponúknuť približne',title:`${fm(pot.anna.offered,1)} kWh <em>pre susedov.</em>`,
       lead:`Vaša cena <b>${fpr(S.p.price)} €/kWh</b>, po provízii ${BR()} vám zostane <b>${fpr(netPrice(S.p.price))} €/kWh</b>.${S.bat.on?` Večer z batérie <b>${fpr(S.bat.price)} €/kWh</b>.`:''}`,
-      acts:`<button class="btn" data-act="view:market">Pozrieť dopyt →</button>${S.jury?`<button class="btn ghost" data-act="tour">🎬 Demo príbeh</button>`:''}`,aside:nowWidget(per,res)});
+      acts:`<button class="btn" data-act="view:group">Skupina zdieľania →</button>${S.jury?`<button class="btn ghost" data-act="tour">🎬 Demo príbeh</button>`:''}`,aside:nowWidget(per,res)});
   h+=banner();
+  {const mv=isAct(S.mem[per])?grpMove(per):null;if(mv)h+=`<div class="card grp-move-home"><span class="pend-ic">${icon('group')}</span><div><b>Presúvame vás do výhodnejšej skupiny ${mv.g.name}</b><p class="sm mut">Od ${dateSk(mv.from)} · ${per==='anna'?'zisk':'úspora'} navyše približne <b>+${eur0(mv.gain)} ročne</b> · jednotková cena ${fpr(mv.cv.price)} → ${fpr(mv.v.price)} €/kWh. Nemusíte nič robiť.</p></div><button class="link" data-act="view:group">Skupina zdieľania →</button></div>`}
   if(per==='anna'){const w=priceWarn();if(w)h+=w}
   /* 6b – Váš deň: súhrn dňa doteraz + prehrávač */
   const first=res.recs.find(r=>!r.kind&&(per==='peter'?r.to==='peter':r.from==='anna'));
@@ -2229,7 +2378,7 @@ function playerModal(){
    <ol class="pl-steps">${N.map((n,k)=>`<li class="${n.i<=P.idx?'on':''}"><b>${k+1}</b><span><span class="b">${I2T(n.i)}</span> ${esc(n.txt)}</span></li>`).join('')}</ol>
   </div></div>`;
 }
-/* karty skupín s obsadenosťou – v Trhovisku (výber skupiny) aj v Mojej skupine */
+/* karty skupín s obsadenosťou (pôvodný výber skupiny) */
 function groupCards(){
   const per=S.persona==='admin'?'peter':S.persona,m=S.mem[per],free=m==='NONE'||m==='MATCH'||m==='READY';
   return `<div class="groups">${GROUPS.map(g=>{const o=gOcc(g),cur=g.id===S.group&&!free,sel=g.id===S.group&&m==='READY';
@@ -2238,33 +2387,7 @@ function groupCards(){
      <p class="xs mut">${g.town} · ${g.tag.toLowerCase()} · úspešnosť ${g.succ} %</p>
      <div><div class="occ"><span>${g.prod} výrobcov · ${g.cons} odberateľov</span><b>${o.n} / ${o.cap}</b></div><div class="bar ${o.p>=.9?'o':''}" style="margin-top:6px"><i style="width:${(o.p*100).toFixed(0)}%"></i></div><div class="xs mut" style="margin-top:4px">${o.full?'Bez voľných miest':'voľné miesta: '+o.free}</div></div>
      <div class="row acts">${act}</div></article>`}).join('')}</div>
-   <p class="note">Jedno odberné miesto môže byť aktívne iba v jednej skupine. Prestup do inej skupiny sa aktivuje až po skončení terajšieho členstva (ku koncu nasledujúceho mesiaca).</p>`;
-}
-function vMarket(){
-  const per=S.persona==='admin'?'peter':S.persona,list=per==='anna'?demandsForAnna():offersForPeter(),tab=S.mtab||'off';
-  const s=S.match.sort;
-  list.sort((a,b)=>s==='price'?(per==='anna'?b.max-a.max:a.price-b.price):b.m.total-a.m.total);
-  const best=[...list].sort((a,b)=>b.m.total-a.m.total)[0];
-  const tabs=`<span class="seg hero-tabs" role="tablist" aria-label="Trhovisko">${[['off',per==='anna'?'Dopyt':'Ponuky'],['grp','Skupiny']].map(([k,l])=>`<button role="tab" data-act="mtab:${k}" aria-pressed="${tab===k}">${l}</button>`).join('')}</span>`;
-  let h=`<div class="gap">`+hero({kicker:'Trhovisko',
-    title:per==='anna'?'Kto potrebuje <em>vašu elektrinu.</em>':'Elektrina, ktorá <em>zapadne do vášho dňa.</em>',
-    lead:tab==='grp'?'Vyberte si skupinu zdieľania priamo tu – vidíte, koľko má členov a voľných miest.':per==='anna'?`Po provízii ${BR()} vám zostane ${fpr(netPrice(S.p.price))} €/kWh cez deň${S.bat.on?` a ${fpr(netPrice(S.bat.price))} €/kWh večer z batérie`:''}.`:'Ponuky susedov s cenou vopred. Odberateľ neplatí žiadne poplatky.',
-    acts:tab==='off'?`<button class="btn pri" data-act="smart">✨ Nájsť najlepšie spojenie</button>`:'',
-    extra:`<div>${tabs}</div>`,
-    aside:tab==='off'&&best?hstat(per==='anna'?'Záujemcov':'Ponúk',String(list.length),'anonymizovaní členovia')+hstat('Najlepšia zhoda',pct(best.m.total),esc(best.label)):hstat('Skupín v ponuke',String(GROUPS.length),'oblasti ZSE a VSE')});
-  if(tab==='grp')return h+groupCards()+'</div>';
-  if(per==='peter')h+=`<div class="card"><div class="row between"><div><b>Máte prepájací kód?</b><div class="xs mut">Súkromná ponuka výrobcu sa zobrazí po zadaní kódu.</div></div><div class="row"><input id="codeIn" class="inp" placeholder="napr. SLNKO-4821" aria-label="Prepájací kód" style="width:180px;border-radius:var(--r-pill)"><button class="btn sm dark" data-act="usecode">Použiť kód</button>${S.codeOk?pill('g','✓ Kód uplatnený'):''}</div></div></div>`;
-  if(per==='peter'&&S.cmp.length)h+=`<div class="card"><div class="row between"><span class="sm">Porovnanie ponúk: <b>${S.cmp.length} / 3</b></span><div class="row"><button class="btn sm pri" data-act="cmpshow" ${S.cmp.length<2?'disabled':''}>Zobraziť porovnanie</button><button class="btn sm" data-act="cmpclear">Vyčistiť</button></div></div></div>`;
-  h+=`<div class="sec-head"><div><span class="kicker">${S.match.done&&best?'✨ Najlepšie spojenie: '+esc(best.label):'Zoradené podľa '+(s==='price'?'ceny':'zhody s vaším profilom')}</span><h2>${per==='anna'?'Dopyt po vašej elektrine':'Ponuky od susedov'}</h2></div><span class="seg" role="group" aria-label="Zoradenie"><button data-act="sort:match" aria-pressed="${s==='match'}">Podľa zhody</button><button data-act="sort:price" aria-pressed="${s==='price'}">Podľa ceny</button></span></div>`;
-  if(S.match.loading){h+=`<div class="offers" aria-busy="true" aria-label="Hľadám najlepšie spojenie">${[0,1,2].map(()=>`<div class="ocard"><div class="skel" style="height:18px;width:70%"></div><div class="skel" style="height:22px;width:40%"></div><div class="skel" style="height:4px"></div><div class="skel" style="height:26px;width:55%"></div></div>`).join('')}</div></div>`;return h}
-  h+=`<div class="offers">${list.map(o=>{
-    const m=o.m,comp=per==='anna'?o.max>=(o.ask??S.p.price)-1e-9:m.ok,full=per==='peter'&&o.occ>=MAXC&&!(String(o.id).startsWith('anna')&&isAct(S.mem.peter));
-    return `<article class="ocard ${best===o&&S.match.done?'best':''} ${o.eve?'eve':''} ${per==='anna'&&!o.eve?'dem':''}">
-     <div class="ocard-top"><span class="ocard-ic">${icon(o.eve?'battery':per==='anna'?'home':'sun')}</span><b>${esc(o.label)}</b><span class="ocard-ok ${comp?'':'no'}" title="${comp?'Cena je prípustná':'Cena je mimo vášho maxima'}" aria-label="${comp?'Cena prípustná':'Cena nekompatibilná'}">${comp?'✓':'✕'}</span></div>
-     <div class="ocard-mid"><span class="ocard-price">${per==='anna'?'max. '+fpr(o.max):fpr(o.price)} €<small>/ kWh</small></span><span class="ocard-pct">${pct(m.total)} zhoda</span></div>
-     <div class="ocard-bar" aria-hidden="true"><i style="width:${(m.total*100).toFixed(0)}%"></i></div>${o.priv?`<span class="priv">🔒 súkromná ponuka${o.indiv?' · individuálna cena':''}</span>`:''}
-     <div class="ocard-acts"><button class="btn sm pri" data-act="interest:${o.id}" ${comp&&!full?'':'disabled'}>${full?'Plná':'Mám záujem'}</button><button class="link" data-act="detail:${o.id}">Detail</button>${per==='peter'?`<span aria-hidden="true">·</span><button class="link" data-act="cmp:${o.id}" aria-pressed="${S.cmp.includes(o.id)}">${S.cmp.includes(o.id)?'✓ Porovnávam':'Porovnať'}</button>`:''}</div></article>`}).join('')}</div></div>`;
-  return h;
+   <p class="note">Jedno energetické miesto môže byť aktívne iba v jednej skupine. Prestup do inej skupiny sa aktivuje až po skončení terajšieho členstva (ku koncu nasledujúceho mesiaca).</p>`;
 }
 function detailModal(id){
   const per=S.persona==='admin'?'peter':S.persona,list=per==='anna'?demandsForAnna():offersForPeter(),o=list.find(x=>x.id===id);if(!o)return '';
@@ -2279,24 +2402,46 @@ function detailModal(id){
   <p class="sm mut">Odhadovaný zdieľaný objem: ${fm(m.vol*S.sim.days*.9,0)} – ${fm(m.vol*S.sim.days*1.1,0)} kWh mesačne (odhad, nie garancia).</p>
   <div class="row" style="margin-top:14px"><button class="btn pri" data-act="interest:${o.id}">Mám záujem</button><button class="btn" data-act="closemodal">Zavrieť</button></div></div></div>`;
 }
+/* ---------- vyhodnotenie skupín: skupiny riadi operátor; výhodnejšia → automatický presun ---------- */
+const dateSk=d=>d.toLocaleDateString('sk-SK',{day:'numeric',month:'numeric',year:'numeric'});
+const grpVals=(g,isP)=>{const e=grpEst(g,isP);return {kwh:e.k*12,price:e.price,eur:e.m*12}};
+/* presun platí od 1. dňa po skončení terajšieho členstva (koniec nasledujúceho mesiaca) */
+const grpMoveDate=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth()+2,1)};
+function grpMove(per){
+  const isP=per==='anna',cur=GROUPS.find(x=>x.id===S.group)||GROUPS[0],cv=grpVals(cur,isP);
+  const best=GROUPS.filter(g=>g.id!==cur.id&&!gOcc(g).full).map(g=>({g,v:grpVals(g,isP)})).sort((a,b)=>b.v.eur-a.v.eur)[0];
+  return best&&best.v.eur-cv.eur>=1?{...best,gain:best.v.eur-cv.eur,from:grpMoveDate(),cur,cv}:null;
+}
+const grpBul=(v,isP)=>`<ul class="gx-list"><li><span>${isP?'Predaná zdieľaná energia':'Odobratá zdieľaná energia'}</span><b>${fm(v.kwh,0)} kWh / rok</b></li><li><span>Jednotková cena</span><b>${fpr(v.price)} €/kWh</b></li><li><span>${isP?'Predpokladaný zisk':'Predpokladaná úspora'}</span><b>${eur0(v.eur)} / rok</b></li></ul>`;
+const grpHead=(g,extra='')=>`<div class="gx-head"><div><h3>${g.name}</h3><span class="xs mut">ID ${g.code} · ${REG[g.reg].co} · ${g.town}</span></div>${extra}</div>`;
+function groupEval(per){
+  const isP=per==='anna',cur=GROUPS.find(x=>x.id===S.group)||GROUPS[0],cv=grpVals(cur,isP),mv=grpMove(per);
+  const rest=GROUPS.filter(g=>g.id!==cur.id&&(!mv||g.id!==mv.g.id)).map(g=>({g,v:grpVals(g,isP)})).sort((a,b)=>b.v.eur-a.v.eur);
+  let h=`<div class="gx">`;
+  h+=`<article class="gx-card cur">${grpHead(cur,pill('g','✓ vaša skupina'))}${grpBul(cv,isP)}</article>`;
+  if(mv)h+=`<article class="gx-card move">${grpHead(mv.g,pill('g','+'+eur0(mv.gain)+' ročne'))}<p class="gx-move">Našli sme pre vás výhodnejšiu skupinu. <b>Od ${dateSk(mv.from)} vás do nej presúvame</b> – nemusíte nič robiť. Jednotková cena sa vám v nastaveniach zmení na ${fpr(mv.v.price)} €/kWh.</p>${grpBul(mv.v,isP)}</article>`;
+  if(rest.length)h+=`<h3 class="gx-sub">Ďalšie skupiny – presun by bol menej výhodný</h3><div class="gx-rest">${rest.map(({g,v})=>{const d=v.eur-cv.eur;return `<article class="gx-card">${grpHead(g)}${grpBul(v,isP)}<p class="gx-loss">${d<0?`Strata pri presune: <b>−${eur0(-d)} ročne</b>`:`Rozdiel: +${eur0(d)} ročne`}</p></article>`}).join('')}</div>`;
+  return h+`</div><p class="note">Odhad z modelového dňa pre vaše odberné miesto, nie garancia. Jedno miesto môže byť aktívne iba v jednej skupine; presun sa uskutoční ku koncu nasledujúceho mesiaca.</p>`;
+}
 function vGroup(){
   const per=S.persona==='admin'?'peter':S.persona,m=S.mem[per],g=GROUPS.find(x=>x.id===S.group),o=gOcc(g);
   const ims=per==='anna'?S.p.ims:S.c.ims,res=dayRun(),full=agg(res);
-  const lead={NONE:'Zatiaľ nie ste v žiadnej skupine. Vyberte si ju v Trhovisku.',MATCH:'Máte predbežnú zhodu – vyberte skupinu.',READY:'Žiadosť je pripravená na odoslanie.',PENDING:'Žiadosť čaká na kontrolu distribútora a aktiváciu.',ACTIVE:'Zdieľate elektrinu so susedmi v tejto skupine.',ENDING:'Požiadali ste o vystúpenie – zdieľanie pokračuje do konca členstva.'}[m];
-  let h=`<div class="gap">`+hero({top:pill(isAct(m)?'g':m==='NONE'?'n':'o',MEM[m])+`<span class="pill n">${REG[g.reg].co} · ${g.town}</span>`,kicker:'Moja skupina',title:m==='NONE'?'Nájdite svoju <em>skupinu.</em>':`${g.name.replace(/(\d+)$/,'<em>$1</em>')}`,lead,
+  const lead={NONE:'Zatiaľ nie ste v žiadnej skupine. Vyberte si ju nižšie.',MATCH:'Máte predbežnú zhodu – vyberte skupinu.',READY:'Žiadosť je pripravená na odoslanie.',PENDING:'Žiadosť čaká na kontrolu distribútora a aktiváciu.',ACTIVE:'Zdieľate elektrinu so susedmi v tejto skupine.',ENDING:'Požiadali ste o vystúpenie – zdieľanie pokračuje do konca členstva.'}[m];
+  let h=`<div class="gap">`+hero({top:pill(isAct(m)?'g':m==='NONE'?'n':'o',MEM[m])+`<span class="pill n">${REG[g.reg].co} · ${g.town}</span>`,kicker:'Skupina zdieľania',title:m==='NONE'?'Nájdite svoju <em>skupinu.</em>':g.name.replace(/(\S+)$/,'<em>$1.</em>'),sub:m==='NONE'?'':`ID skupiny ${g.code}`,lead,
     extra:`<div style="margin-top:24px">${stepper(m)}</div>`,
-    acts:m==='NONE'||m==='MATCH'?`<button class="btn" data-act="mtabgo:grp">Vybrať skupinu v Trhovisku →</button><button class="btn ghost" data-act="view:register">Registrácia</button>`:m==='READY'?`<button class="btn pri" data-act="submit">Odoslať žiadosť</button><button class="btn ghost" data-act="mtabgo:grp">Zmeniť skupinu</button>`:m==='ACTIVE'?`<button class="btn" data-act="drawer">Upraviť ponuku ⚙</button><button class="btn ghost" data-act="exit">Požiadať o vystúpenie</button>`:'',
+    acts:m==='NONE'||m==='MATCH'?`<button class="btn" data-act="view:register">Vybrať skupinu v registrácii →</button>`:m==='READY'?`<button class="btn pri" data-act="submit">Odoslať žiadosť</button>`:m==='ACTIVE'?`<button class="btn ghost" data-act="exit">Požiadať o vystúpenie</button>`:'',
     aside:hstat('Obsadenosť',`${o.n} / ${o.cap}`,`${g.prod} výrobcov · ${g.cons} odberateľov · voľné ${o.free}`)+hstat('Úspešnosť zdieľania',g.succ+' %','tento mesiac')});
   if(m==='READY'&&!ims)h+=`<div class="card" style="border-left:5px solid var(--orange)"><p class="sm">⚠ Bez IMS nie je možné prejsť do aktívneho stavu. Žiadosť môžete odoslať, ale aktivácia bude zablokovaná, kým nebude IMS overený.</p></div>`;
   if(m==='PENDING'){const pa=agg(potRun());h+=`<div class="card"><p>Po potvrdení prebehne kontrola distribútora; zdieľanie sa spustí k 1. dňu nasledujúceho mesiaca. Aktivuje ju operátor (prepnite na „Operátor“).</p><p class="sm mut" style="margin-top:6px">Očakávaný potenciál: ${per==='anna'?`${eur(pa.anna.net*S.sim.days)} čistého príjmu mesačne (po provízii ${BR()})`:`${eur(pa.peter.saved*S.sim.days)} úspory komodity mesačne`} (odhad).</p></div>`}
   if(isAct(m)){
     const succ=full.anna.offered>0?full.anna.shared/full.anna.offered:0;
     h+=`<div class="grid g2"><div class="card"><span class="kicker">Váš profil</span><p class="sm">${per==='anna'?`Výrobca • cena ${fpr(S.p.price)} €/kWh • ${S.p.share} % prebytku • automatická ponuka${S.bat.on?` • 🔋 batéria ${fm(S.bat.cap,1)} kWh, večer ${fpr(S.bat.price)} €/kWh`:''} • vaša úspešnosť dnes ${pct(succ)}`:`Odberateľ • max. cena ${fpr(S.c.max)} €/kWh (večer ${fpr(S.c.maxEve)} €/kWh) • automatické odporúčania zapnuté`}</p></div>
-    <div class="card"><span class="kicker">Ako sa energia prideľuje?</span><p class="sm mut">Najprv sa vyhodnotí aktuálny prebytok, spotreba a cenová kompatibilita. Pri nedostatku sa energia rozdelí pomerne medzi kompatibilných odberateľov. Zvyšok prebytku ide postupne do batérie, Slnečnej banky, Solidárneho slnka a darčekov (ak sú zapnuté) a nakoniec výkupcovi.</p></div></div>
+    <div class="card"><span class="kicker">Ako sa energia prideľuje?</span><p class="sm mut">Najprv sa vyhodnotí aktuálny prebytok, spotreba a cenová kompatibilita. Pri nedostatku sa energia rozdelí pomerne medzi kompatibilných odberateľov. Zvyšok prebytku ide postupne do batérie, Solidárneho slnka (ak je zapnuté) a nakoniec výkupcovi.</p></div></div>
     ${m==='ENDING'?`<div class="card" style="border-left:5px solid var(--orange)"><b>Žiadosť o výstup odoslaná.</b><p class="sm mut">Výstup nie je okamžitý – členstvo sa končí ku koncu nasledujúceho mesiaca a zdieľanie dovtedy pokračuje.</p>${S.reserve[per]?`<p class="sm" style="margin-top:6px">Uložená budúca rezervácia: <b>${esc(S.reserve[per])}</b> (aktivuje sa až po skončení členstva).</p>`:''}</div>`:''}`;
   }
-  if(per==='anna')h+=secHead('Vaša ponuka','Správa ponuky a batérie.')+annaOfferCard()+batCard(false);
-  h+=secHead('Dostupné skupiny','Obsadenosť skupín v ponuke.','Skupinu si môžete vybrať aj priamo v Trhovisku. Nové členstvo sa aktivuje až po skončení predchádzajúceho.')+groupCards();
+  {const L=myPlaces(per),inG=L.filter(p=>p.ims&&p.mem!=='NONE').map(p=>p.name);
+   h+=secHead('Vaše energetické miesta','Ktoré miesto je v akej skupine.',inG.length?`V skupine ${g.name}: ${inG.join(', ')}. Každé miesto má vlastné členstvo.`:'Zatiaľ nie je v skupine žiadne miesto.')+placesList(per);}
+  if(isAct(m))h+=secHead('Vyhodnotenie skupín','Ako ste na tom oproti iným skupinám.','Skupiny zdieľania riadime my – ak sa nájde výhodnejšia, presunieme vás do nej automaticky.')+groupEval(per);
   return h+'</div>';
 }
 function heat(){
@@ -2327,15 +2472,13 @@ function vReports(){
        <tr style="font-weight:700"><td>= Výplata za zdieľanie</td><td class="n">${eur(net)}</td></tr>
        ${own>0?`<tr><td>+ Vlastná večerná spotreba z batérie (${fm(A.batOwn*d,1)} kWh × ${fpr(S.c.ref)} €/kWh)</td><td class="n">${eur(own)}</td></tr>`:''}
        <tr><td>+ Zvyšných ${fm(A.vykup*d,1)} kWh predaných výkupcovi (${fpr(S.p.feedin)} €/kWh, odhad)</td><td class="n">${eur(bb)}</td></tr>
-       ${A.bank>0?`<tr><td class="mut">☀ Uložené v Slnečnej banke: ${fm(A.bank*d,1)} kWh (kredit na zimu, nie platba)</td><td class="n mut">—</td></tr>`:''}
        ${A.don>0?`<tr><td class="mut">🤝 Darované cez Solidárne slnko: ${fm(A.don*d,1)} kWh (0 € platba, 0 € provízia)</td><td class="n mut">0,00 €</td></tr>`:''}
-       ${A.gift>0?`<tr><td class="mut">🎁 Poslané cez Pošli slnko: ${fm(A.gift*d,1)} kWh</td><td class="n mut">${A.giftCom>0?'−'+eur(A.giftCom*d)+' doručenie':'0,00 €'}</td></tr>`:''}
        <tr style="font-weight:700"><td>= Celkový príjem so zdieľaním</td><td class="n">${eur(tot)}</td></tr>
        <tr><td class="mut">Bez zdieľania (všetko výkupcovi: ${fm(off,1)} kWh × ${fpr(S.p.feedin)} €/kWh)</td><td class="n mut">${eur(onlyV)}</td></tr>
        <tr style="font-weight:700"><td>Zisk oproti výkupu = predané kWh × (cena − provízia − výkupná cena)${S.bat.on?' + zisk z batérie':''}</td><td class="n" style="color:${vs>=0?'var(--green)':'var(--red)'}">${vs>=0?'+':''}${eur(vs)}</td></tr></tbody></table>
-       ${extra>0?`<p class="xs mut" style="margin-top:6px">Energia v Slnečnej banke, darovaná a poslaná nie je v zisku započítaná – výkupca by za ňu dal ${eur(extra*S.p.feedin)}.</p>`:''}
+       ${extra>0?`<p class="xs mut" style="margin-top:6px">Darovaná energia nie je v zisku započítaná – výkupca by za ňu dal ${eur(extra*S.p.feedin)}.</p>`:''}
        ${net<0?`<div class="pill r" style="margin-top:8px">⚠ Výplata je záporná – rozdiel sa doplatí inkasom</div>`:''}${priceWarn()}${batWarnHtml()}</div>
-      <div class="card"><h3>Energetický lievik (mesiac)</h3>${funnel([['Vyrobené',prod],['Spotrebované priamo',direct,'b'],['Dostupný prebytok (ponúknutý)',off,'y'],['Predané cez deň skupine',shr],...(S.bat.on?[['Uložené do batérie',A.batCh*d,'p'],['Predané večer z batérie',A.batSold*d,'p']]:[]),...(A.bank>0?[['Slnečná banka',A.bank*d,'y']]:[]),...(A.don>0?[['Solidárne slnko',A.don*d]]:[]),...(A.gift>0?[['Pošli slnko',A.gift*d]]:[]),['Výkupca',A.vykup*d,'o']])}</div>`;
+      <div class="card"><h3>Energetický lievik (mesiac)</h3>${funnel([['Vyrobené',prod],['Spotrebované priamo',direct,'b'],['Dostupný prebytok (ponúknutý)',off,'y'],['Predané cez deň skupine',shr],...(S.bat.on?[['Uložené do batérie',A.batCh*d,'p'],['Predané večer z batérie',A.batSold*d,'p']]:[]),...(A.don>0?[['Solidárne slnko',A.don*d]]:[]),['Výkupca',A.vykup*d,'o']])}</div>`;
     }
     if(per==='peter'||per==='admin'){
       const rec=a.peter.recv*d,cons=a.peter.cons*d;
@@ -2404,7 +2547,7 @@ function invoiceHtml(who){
   return `<div class="inv-wrap"><div class="row between no-print" style="margin-bottom:12px"><p class="sm mut">${who==='peter'?'Vyúčtovanie odberateľa – Peter':'Výpis výrobcu – Anna'} · v okne tlače zvoľte „Uložiť ako PDF“.</p><button class="btn pri sm" data-act="print">${icon('print')}Stiahnuť PDF</button></div>
    <article class="invoice"><span class="inv-stamp">Ukážka – nejde o daňový doklad</span>
     <div class="inv-head"><div><img src="${LOGOS[S.skin]}" alt="${BR()}"><div class="xs mut" style="margin-top:8px">Zdieľňa<span class="sig">.</span> · zdieľanie elektriny · služba ${BR()}</div></div><div style="text-align:right"><span class="kicker" style="margin:0">${who==='peter'?'Vyúčtovanie odberateľa':'Výpis vyúčtovania výrobcu'}</span><h2>${no}</h2><div class="sm mut">vystavené ${issue}</div></div></div>
-    <div class="inv-meta"><div><span>Zákazník</span>${esc(name)}<br>${esc(om.addr)}</div><div><span>Odberné miesto</span>${esc(om.id)}<br>skupina ${gname(S.group)}</div><div><span>Obdobie</span>1. – ${last}. ${mon}<br>${d} dní × dnešný profil</div></div>
+    <div class="inv-meta"><div><span>Zákazník</span>${esc(name)}<br>${esc(om.addr)}</div><div><span>Odberné miesto</span>${omLabel(om.type)} · ${esc(om.id)}<br>skupina ${gname(S.group)}</div><div><span>Obdobie</span>1. – ${last}. ${mon}<br>${d} dní × dnešný profil</div></div>
     <table><thead><tr><th>Položka</th><th class="n">Množstvo</th><th class="n">Cena</th><th class="n">Suma</th></tr></thead><tbody>${body}</tbody></table>${save}
     <p class="inv-note">${who==='peter'?`Ostatná spotreba (${fm((a.peter.cons-a.peter.recv)*d,0)} kWh) a distribučné, regulované a fixné poplatky sa účtujú na vašej bežnej faktúre za elektrinu ako doteraz. Úhrada inkasom do 10. dňa nasledujúceho mesiaca.`:`Provízia sa účtuje iba z predanej energie. Výplata do 20. dňa nasledujúceho mesiaca; ak by provízia prevýšila tržbu, rozdiel sa strhne inkasom.`} Sumy sú súčtom 15-minútových alokácií (Prehľady → Ledger).</p>
    </article></div>`;
@@ -2480,18 +2623,55 @@ function cmpModal(){
   <p class="xs mut" style="margin-top:8px">Odhady, nie garancia. Cenovo nekompatibilné ponuky majú úsporu 0 €. Zobrazené sú iba sumy za komoditu.</p>
   <div class="row" style="margin-top:12px"><button class="btn" data-act="closemodal">Zavrieť</button></div></div></div>`;
 }
+/* ---------- energetické miesta (OM) – spoločné pre Nastavenia aj Skupinu zdieľania ----------
+   Každé miesto má vlastné členstvo: hlavné OM je v skupine, chata čaká na inteligentné meranie. */
+const OM_EIC={anna:'24ZZS0000000001A',peter:'24ZZS0000000002B',chata:'24ZZS0000000012L'};
+const omName=t=>({om_house:'Rodinný dom',om_shop:'Bistro'})[omKind(t)]||omLabel(t);
+const omIcon=t=>omKind(t);   /* rovnaké ikony typov ako v registrácii */
+function myPlaces(pp){
+  const om=S.om[pp],isP=pp==='anna',res=dayRun(),a=agg(res),d=S.sim.days;
+  const main={key:'main',name:omName(om.type),icon:omIcon(om.type),eic:OM_EIC[pp],id:om.id,addr:om.addr,ims:isP?S.p.ims:S.c.ims,mem:S.mem[pp]||'NONE',
+    prod:isP&&!!om.pv,yProd:isP&&om.pv?(om.kwp||6.5)*1.05:0,
+    /* Peter: 15-min profil × 365 dní; Anna: ilustračná ročná spotreba domácnosti z vyúčtovania */
+    yCons:isP?4.2:sum(res.A.c)*365/1000,
+    month:isP?{kwh:(a.anna.shared+a.anna.batSold)*d,eur:a.anna.net*d}:{kwh:a.peter.recv*d,eur:a.peter.saved*d}};
+  const chata={key:'chata',name:'Chata',icon:'om_cabin',eic:OM_EIC.chata,id:'SK-OM-0002',addr:'Záhradná 3, Piešťany',ims:false,mem:'NONE',prod:false,yProd:0,yCons:1.1};
+  return [main,chata];
+}
+const mwh=v=>fm(v,1)+' MWh';
+function placeRow(p,pp){
+  const isP=pp==='anna',g=GROUPS.find(x=>x.id===S.group);
+  const chips=(p.prod?`<span class="chip prod"><i>${icon('sun')}</i>Výroba</span>`:'')+`<span class="chip cons"><i>${icon('plug')}</i>Spotreba</span>`;
+  const nums=`<div><span class="place-k">Ročná spotreba</span><b class="place-v">${mwh(p.yCons)}</b>${p.prod?`<span class="place-k" style="margin-top:6px">Ročná výroba</span><b class="place-v">${mwh(p.yProd)}</b>`:''}</div>`;
+  let price,act;
+  if(!p.ims){price=`<div><span class="place-k">Cena</span><span class="sm mut">Nastavíte po inštalácii inteligentného elektromera</span></div>`;act=(S.imsReqd||{})[p.key]?pill('y','Čaká na IMS · žiadosť podaná'):`${pill('y','Čaká na IMS')}<button class="btn sm" data-act="imsreq:${p.key}">Požiadať o IMS</button>`}
+  else if(isP){const ok=netPrice(S.p.price)>S.p.feedin;price=`<div><span class="place-k">Predáte za</span><b class="place-v">${fpr(S.p.price)} €/kWh</b><span class="xs mut">${fm(S.p.price/Math.max(.001,S.p.feedin),1)}× viac ako výkup ${fpr(S.p.feedin)} €/kWh${S.bat.on?` · večer ${fpr(S.bat.price)} €`:''}</span><span class="xs b" style="color:var(${ok?'--green':'--orange'})">${ok?'Odporúčaná cena':'Po provízii menej ako výkup'}</span></div>`;act=curView()==='group'?'':`<button class="btn" data-act="editprice">Upraviť cenu</button>`}
+  else{const ok=S.c.max+1e-9>=S.p.price;price=`<div><span class="place-k">Zaplatíte najviac</span><b class="place-v">${fpr(S.c.max)} €/kWh</b><span class="xs mut">ponuky ${fpr(S.p.price)}${S.bat.on?' – '+fpr(S.bat.price):''} €/kWh · zo siete ${fpr(S.c.ref)} €/kWh</span><span class="xs b" style="color:var(${ok?'--green':'--orange'})">${ok?'Odporúčaná cena':'Pod cenou ponúk – energia sa nepridelí'}</span></div>`;act=curView()==='group'?'':`<button class="btn" data-act="editprice">Upraviť cenu</button>`}
+  const m=p.mem,inG=m!=='NONE';
+  const grp=!p.ims?`<span>${icon('group')} <b>Bez skupiny</b> · do skupiny sa pridá až s inteligentným meraním (IMS).</span>`
+   :inG?`<span>${icon('group')} Skupina <b>${g.name}</b> ${pill(isAct(m)?'g':'o',MEM[m])}${isAct(m)&&p.month?` · tento mesiac ${fm(p.month.kwh,0)} kWh ${isP?'predaných susedom':'od susedov'} · <b>${eur(p.month.eur)}</b> ${isP?'čistý príjem':'úspora'}`:''}</span>${curView()==='group'?'':`<button class="link" data-act="view:group">Skupina zdieľania →</button>`}`
+   :`<span>${icon('group')} <b>Zatiaľ bez skupiny</b> · vyberte si skupinu susedov.</span><button class="link" data-act="view:register">Vybrať skupinu →</button>`;
+  const L=placeOrder(pp),i=L.indexOf(p.key),mv=(d,l,t)=>`<button type="button" class="place-mv" data-act="plmove:${p.key}:${d}" aria-label="${t}" ${i+d<0||i+d>=L.length?'disabled':''}>${l}</button>`;
+  return `<article class="place ${p.ims?'':'wait'}" draggable="true" data-pk="${p.key}"><div class="place-main">
+   <div class="row" style="flex-wrap:nowrap;gap:14px"><span class="place-drag" title="Potiahnutím zmeníte poradie">${icon('grip')}<span class="place-mvs">${mv(-1,'▲','Posunúť vyššie')}${mv(1,'▼','Posunúť nižšie')}</span></span><span class="place-ic">${icon(p.icon)}</span><div><b class="place-name">${p.name}</b><div class="xs mut"><abbr title="Energetický identifikačný kód">EIC</abbr> ${p.eic}</div><div class="xs mut">${esc(p.addr)}</div></div></div>
+   <div class="row" style="gap:8px">${chips}</div>${nums}${price}<div class="place-act">${act}</div></div>
+   <div class="place-grp">${grp}</div></article>`;
+}
+/* poradie miest si zákazník mení presunom (drag & drop) – platí v Nastaveniach aj v Skupine zdieľania */
+function placeOrder(pp){const keys=myPlaces(pp).map(p=>p.key),o=(S.placeOrder||[]).filter(k=>keys.includes(k));return [...o,...keys.filter(k=>!o.includes(k))]}
+function placesList(pp){const L=placeOrder(pp),P=myPlaces(pp).sort((a,b)=>L.indexOf(a.key)-L.indexOf(b.key));return `<div class="places">${P.map(p=>placeRow(p,pp)).join('')}</div><p class="xs mut" style="margin-top:6px">Poradie miest zmeníte potiahnutím za úchyt ⋮⋮ alebo šípkami.</p>`}
 function vProfile(){
   const per=S.persona,pp=per==='admin'?'peter':per,om=S.om[pp],ims=pp==='anna'?S.p.ims:S.c.ims,gg=geo(om.addr);
   const rg=regionOf(gg.ll);
-  return `<div class="gap">${hero({cls:'compact',kicker:'Profil a nastavenia',title:per==='anna'?'Anna <em>Kováčová.</em>':per==='peter'?'Peter <em>Malý.</em>':'Operátor <em>'+BR()+'.</em>',lead:`${esc(om.addr)} · ${esc(om.type)}`,top:pill(REG[rg].on?'g':'o',REG[rg].name+' · '+REG[rg].co+(REG[rg].on?'':' – mimo služby'))+pill(ims?'n':'o',ims?'IMS ✓':'IMS chýba')})}
+  return `<div class="gap">${hero({cls:'compact',kicker:'Nastavenia',title:per==='anna'?'Anna <em>Kováčová.</em>':per==='peter'?'Peter <em>Malý.</em>':'Operátor <em>'+BR()+'.</em>',lead:`${esc(om.addr)} · ${omLabel(om.type)}`,top:pill(REG[rg].on?'g':'o',REG[rg].name+' · '+REG[rg].co+(REG[rg].on?'':' – mimo služby'))+pill(ims?'n':'o',ims?'IMS ✓':'IMS chýba')})}
   ${REG[rg].on?'':`<div class="card" style="border-left:5px solid var(--orange)"><b>Stredné Slovensko zatiaľ nie je súčasťou služby.</b><p class="sm mut" style="margin-top:4px">Zdieľanie elektriny je dostupné v oblastiach ZSE (západ) a VSE (východ). Z tohto odberného miesta zatiaľ nemôžete elektrinu ponúkať ani odoberať.</p></div>`}
-  <div class="card"><div class="row between"><h3>Odberné miesta</h3><div class="row"><button class="btn sm" data-act="view:map">🗺 Na mape</button><button class="btn sm" data-act="addom">+ Pridať odberné miesto</button></div></div>
-  <div class="row between" style="margin-top:8px;padding-bottom:8px;border-bottom:1px solid var(--line)"><div><b>${esc(om.id)}</b><div class="sm mut">${esc(om.addr)} · ${esc(om.type)}${om.pv?` · FVE ${fm(om.kwp,1)} kWp`:''}${pp==='anna'&&S.bat.on?` · batéria ${fm(S.bat.cap,1)} kWh`:''}</div><div class="xs mut">Oblasť: ${REG[rg].co} (${REG[rg].name.toLowerCase()})${REG[rg].on?'':' – zdieľanie nedostupné'}${gg.guess?' – adresu sa nepodarilo presne určiť':''}</div></div><div class="row">${pill(ims?'b':'r',ims?'IMS ✓':'IMS chýba')}${pp==='anna'&&S.bat.on?pill('p','🔋 batéria'):''}${pill(isAct(S.mem[pp]||'NONE')?'g':'n',MEM[S.mem[pp]||'NONE'])}</div></div>
-  <div class="row between" style="margin-top:8px"><div><b>SK-OM-0002</b><div class="sm mut">Záhradná 3, Piešťany · Chata (ukážka)</div></div><div class="row">${pill('r','IMS chýba')}${pill('n','Bez skupiny')}<button class="btn sm" data-act="imsreq">Požiadať o IMS</button></div></div>
-  <div class="fields" style="margin-top:12px">${F('Adresa hlavného OM','om.'+pp+'.addr',{t:'x'})}${F('Typ objektu','om.'+pp+'.type',{t:'s',opts:['Domácnosť','Podnikanie (bistro)','Podnikanie']})}${pp==='anna'?F('Mám batériu','bat.on',{t:'c'})+F('Kapacita batérie','bat.cap',{step:.5,min:.5,u:'kWh'}):''}</div>
-  <p class="xs mut" style="margin-top:6px">Každé odberné miesto má vlastné členstvo, ponuky a reporty. Jedno OM môže byť aktívne iba v jednej skupine. Zmena adresy presunie domček na mape.</p></div>
-  <div class="card"><h3>IMS a dátové súhlasy</h3><div class="fields one" style="margin-top:8px">${pp==='anna'?F('Mám inteligentné meranie (IMS)','p.ims',{t:'c'}):F('Mám inteligentné meranie (IMS)','c.ims',{t:'c'})}</div>${ims?'':`<p class="sm" style="margin:8px 0">Na aktívne zdieľanie potrebujete inteligentné meranie.</p><button class="btn sm pri" data-act="imsreq">Požiadať o inštaláciu IMS</button><p class="xs mut" style="margin-top:6px">Presná cena a podmienky budú potvrdené po posúdení žiadosti.</p>`}</div>
-  <div class="card"><h3>Cenové nastavenia</h3><div class="fields" style="margin-top:8px">${pp==='anna'?F('Ponuková cena','p.price',{step:.005,u:'€/kWh'})+F('Ponúknuť z prebytku','p.share',{step:5,max:100,u:'%'})+F('Výkupná cena (zmluva s výkupcom)','p.feedin',{step:.005,u:'€/kWh'})+(S.bat.on?F('Večerná cena z batérie','bat.price',{step:.005,u:'€/kWh'}):''):F('Max. cena','c.max',{step:.005,u:'€/kWh'})+F('Max. cena večer','c.maxEve',{step:.005,u:'€/kWh'})+F('Referenčná cena','c.ref',{step:.005,u:'€/kWh'})}</div></div>
+  <div class="card"><div class="row between"><h3>Energetické miesta</h3><div class="row"><button class="btn sm" data-act="view:map">🗺 Na mape</button><button class="btn sm" data-act="addom">+ Pridať energetické miesto</button></div></div>
+  <p class="xs mut" style="margin:4px 0 12px">Oblasť: ${REG[rg].co} (${REG[rg].name.toLowerCase()})${REG[rg].on?'':' – zdieľanie nedostupné'}${gg.guess?' – adresu sa nepodarilo presne určiť':''}</p>
+  ${placesList(pp)}
+  <div class="fields" style="margin-top:12px">${F('Adresa: '+omName(om.type),'om.'+pp+'.addr',{t:'x'})}${omTypeField('om.'+pp+'.type',om.type)}${pp==='anna'?F('Mám batériu','bat.on',{t:'c'})+F('Kapacita batérie','bat.cap',{step:.5,min:.5,u:'kWh'}):''}</div>
+  <p class="xs mut" style="margin-top:6px">Každé energetické miesto má vlastné členstvo, ponuky a reporty. Jedno miesto môže byť aktívne iba v jednej skupine. Zmena adresy presunie domček na mape.</p></div>
+  <div class="card"><h3>IMS a dátové súhlasy</h3><div class="fields one" style="margin-top:8px">${pp==='anna'?F('Mám inteligentné meranie (IMS)','p.ims',{t:'c'}):F('Mám inteligentné meranie (IMS)','c.ims',{t:'c'})}</div>${ims?'':`<p class="sm" style="margin:8px 0">Na aktívne zdieľanie potrebujete inteligentné meranie.</p>${(S.imsReqd||{}).main?pill('y','Žiadosť o IMS podaná'):'<button class="btn sm pri" data-act="imsreq:main">Požiadať o inštaláciu IMS</button>'}<p class="xs mut" style="margin-top:6px">Presná cena a podmienky budú potvrdené po posúdení žiadosti.</p>`}</div>
+  <div class="card" id="price-card"><h3>Cenové nastavenia</h3>${(mv=>mv?`<p class="grp-move-note sm">Od <b>${dateSk(mv.from)}</b> vás presúvame do skupiny <b>${mv.g.name}</b> – jednotková cena sa zmení z ${fpr(mv.cv.price)} na <b>${fpr(mv.v.price)} €/kWh</b>.</p>`:'')(isAct(S.mem[pp])?grpMove(pp):null)}<div class="fields" style="margin-top:8px">${pp==='anna'?F('Ponuková cena','p.price',{step:.005,u:'€/kWh'})+F('Ponúknuť z prebytku','p.share',{step:5,max:100,u:'%'})+F('Výkupná cena (zmluva s výkupcom)','p.feedin',{step:.005,u:'€/kWh'})+(S.bat.on?F('Večerná cena z batérie','bat.price',{step:.005,u:'€/kWh'}):''):F('Max. cena','c.max',{step:.005,u:'€/kWh'})+F('Max. cena večer','c.maxEve',{step:.005,u:'€/kWh'})+F('Referenčná cena','c.ref',{step:.005,u:'€/kWh'})}</div></div>
   <div class="card"><h3>Notifikácie</h3><div class="fields" style="margin-top:8px">${F('Predikcia na zajtra a slnečné okno','notif.pred',{t:'c'})}${F('Nová denná výzva','notif.chal',{t:'c'})}${F('Zmena stavu žiadosti alebo členstva','notif.state',{t:'c'})}${F('Zmena ceny alebo individuálna cena','notif.price',{t:'c'})}${F('Mesačné vyúčtovanie','notif.month',{t:'c'})}</div><h3 style="margin-top:12px">Kanály</h3><div class="fields" style="margin-top:6px">${F('E-mail','notif.email',{t:'c'})}${F('Push v aplikácii','notif.push',{t:'c'})}</div><p class="xs mut" style="margin-top:6px">Ukážkové nastavenie – prototyp žiadne správy neodosiela.</p></div>
   ${per==='admin'?'':`<div class="card"><h3>Platby a inkaso</h3><p class="sm mut" style="margin-top:6px">${per==='anna'?`Výplatu za zdieľanie dostanete na účet zadaný pri registrácii. Ak by provízia ${BR()} prevýšila príjem, rozdiel sa strhne inkasom.`:'Faktúry za odobratú zdieľanú elektrinu sa uhrádzajú inkasom z vášho účtu.'}</p><div class="fields one" style="margin-top:8px">${F('Inkaso mám nastavené vo svojej banke','pay.sepa',{t:'c'})}</div><div style="margin-top:6px">${S.pay.sepa?pill('g','✓ Inkaso aktívne'):pill('o','○ Inkaso nie je nastavené')}</div><p class="xs mut" style="margin-top:6px">Súhlas s inkasom sa zakladá iba vo vašej banke. Uplatní sa od vyúčtovania nasledujúceho mesiaca.</p></div>`}
   <div class="card"><h3>História žiadostí</h3><div class="tw"><table><tbody>${S.log.slice(0,12).map(l=>`<tr><td>${l.t}</td><td>${esc(l.m)}</td></tr>`).join('')}</tbody></table></div></div>
@@ -2504,7 +2684,7 @@ function vAdmin(){
   const ok=Math.abs(a.debT-a.credT)<1e-9&&Math.abs(a.debT-a.netT-a.comT)<1e-9;
   const byP={};for(const r of res.recs){if(r.kind)continue;const k=r.from+(r.src==='bat'?'_bat':'');const o=byP[k]||(byP[k]={kwh:0,amt:0,com:0});o.kwh+=r.kwh;o.amt+=r.amt;o.com+=r.com}
   const A=a.anna,balOk=Math.abs(a.balKwh)<1e-6&&Math.abs(a.balBat)<1e-6;
-  const bp=bankProj(A.bank),evr=evSim(res),bs=badgeShare();
+  const evr=evSim(res),bs=badgeShare();
   const pend=reqs.filter(r=>r.m==='PENDING').length;
   return `<div class="gap">${hero({cls:'compact',kicker:'Operátorská konzola · '+BR(),title:'Všetko pod <em>kontrolou.</em>',lead:'Správa členstiev, ponúk a zúčtovania (virtuálne – bez komunikácie s OKTE).',top:pill(pend?'o':'n',pend?pend+' čakajúce žiadosti':'Žiadne čakajúce žiadosti')+pill('n','Provízia dnes '+eur(a.comT))+pill(ok?'g':'o',ok?'✓ audit súčtov v poriadku':'✕ nezhoda súčtov')})}
   <div class="card"><h3>Čakajúce žiadosti a stav OM</h3><div class="tw"><table><thead><tr><th>OM</th><th>Rola</th><th>IMS</th><th>Skupina</th><th>Stav</th><th>Akcia</th></tr></thead><tbody>${reqs.map(r=>`<tr><td>${r.w==='anna'?'OM Anna':'OM Peter'}</td><td>${r.w==='anna'?'Výrobca'+(S.bat.on?' 🔋':''):'Odberateľ'}</td><td>${r.ims?pill('g','✓ overené'):pill('r','✕ chýba')}</td><td>${gname(S.group)}</td><td>${pill(isAct(r.m)?'g':r.m==='PENDING'||r.m==='ENDING'?'o':'n',MEM[r.m])}</td><td>${r.m==='PENDING'?`<button class="btn sm pri" data-act="activate:${r.w}">Aktivovať</button><div class="xs mut">po kontrole distribútora</div>`:r.m==='ENDING'?`<button class="btn sm" data-act="endmem:${r.w}">Ukončiť členstvo</button>`:r.m==='ACTIVE'?`<button class="btn sm" data-act="endmem:${r.w}">Ukončiť (priamo)</button>`:'<span class="mut">—</span>'}${r.m==='PENDING'&&!r.ims?`<div class="xs" style="color:var(--red)">Aktivácia zablokovaná: OM nemá IMS</div>`:''}</td></tr>`).join('')}</tbody></table></div></div>
@@ -2513,7 +2693,7 @@ function vAdmin(){
   <div class="grid g2"><div class="card"><h3>Kvalita predikcií (predikcia vs. skutočnosť)</h3><div class="sm" style="margin-top:8px">Odchýlka výroby: <b>${fm(errA*100,1)} %</b></div><div class="bar y"><i style="width:${Math.min(100,errA*100*2)}%"></i></div><div class="sm" style="margin-top:8px">Odchýlka spotreby: <b>${fm(errC*100,1)} %</b></div><div class="bar b"><i style="width:${Math.min(100,errC*100*2)}%"></i></div><p class="xs mut" style="margin-top:6px">Mení sa parametrom „Odchýlka skutočnosti od odhadu“.</p></div>
   <div class="card"><h3>Zúčtovanie (celý deň)</h3><table><tbody><tr><td>Platby odberateľov</td><td class="n">${fm(a.debT,4)} €</td></tr><tr><td>Výplata výrobcom (po provízii)</td><td class="n">${fm(a.netT,4)} €</td></tr><tr><td>Provízia ${BR()}</td><td class="n">${fm(a.comT,4)} €</td></tr><tr><td>Darované (Solidárne slnko) – platba / provízia</td><td class="n">${fm(a.donT,2)} kWh · 0 € / 0 €</td></tr><tr><td>Počet alokácií</td><td class="n">${a.n}</td></tr></tbody></table><div class="pill ${ok?'g':'r'}" style="margin-top:8px">${ok?`✓ Platby odberateľov = výplata výrobcom + provízia ${BR()}`:'✕ Nezhoda súčtov'}</div></div></div>
   <div class="card"><div class="row between"><h3>⚖ Bilancia kWh – Anna (celý deň)</h3>${pill(balOk?'g':'r',balOk?'✓ každá kWh je zaúčtovaná':'✕ nezhoda')}</div>
-   <table style="margin-top:6px"><tbody><tr style="font-weight:700"><td>Ponúknutý prebytok</td><td class="n">${fm(A.offered,3)} kWh</td></tr><tr><td>= predané skupine cez deň</td><td class="n">${fm(A.shared,3)}</td></tr><tr><td>+ uložené do batérie</td><td class="n">${fm(A.batCh,3)}</td></tr><tr><td>+ Slnečná banka</td><td class="n">${fm(A.bank,3)}</td></tr><tr><td>+ Solidárne slnko</td><td class="n">${fm(A.don,3)}</td></tr><tr><td>+ Pošli slnko</td><td class="n">${fm(A.gift,3)}</td></tr><tr><td>+ výkupca</td><td class="n">${fm(A.vykup,3)}</td></tr></tbody></table>
+   <table style="margin-top:6px"><tbody><tr style="font-weight:700"><td>Ponúknutý prebytok</td><td class="n">${fm(A.offered,3)} kWh</td></tr><tr><td>= predané skupine cez deň</td><td class="n">${fm(A.shared,3)}</td></tr><tr><td>+ uložené do batérie</td><td class="n">${fm(A.batCh,3)}</td></tr><tr><td>+ Solidárne slnko</td><td class="n">${fm(A.don,3)}</td></tr><tr><td>+ výkupca</td><td class="n">${fm(A.vykup,3)}</td></tr></tbody></table>
    ${S.bat.on?`<table style="margin-top:10px"><tbody><tr style="font-weight:700"><td>🔋 Nabité do batérie</td><td class="n">${fm(A.batCh,3)} kWh</td></tr><tr><td>= predané večer</td><td class="n">${fm(A.batSold,3)}</td></tr><tr><td>+ vlastná spotreba</td><td class="n">${fm(A.batOwn,3)}</td></tr><tr><td>+ zmena zostatku (${fm(a.soc0,2)} → ${fm(a.socEnd,2)} kWh)</td><td class="n">${fm(a.socEnd-a.soc0,3)}</td></tr><tr><td>+ straty účinnosti</td><td class="n">${fm(A.batLoss,3)}</td></tr></tbody></table>`:''}</div>
   <div class="card" style="border-left:5px solid var(--brand)"><div class="row between"><h3>💶 Príjem ${BR()} z provízií</h3>${pill('n','účtuje sa iba výrobcovi')}</div>
    <div class="grid g4" style="margin-top:10px">${kpi('Dnes',eur(a.comT))}${kpi('Mesiac ('+S.sim.days+' dní)',eur(a.comT*S.sim.days))}${kpi('Rok (12 mesiacov)',eur(a.comT*S.sim.days*12),'odhad pri rovnakom profile')}${kpi('Efektívna sadzba',pct(a.credT>0?a.comT/a.credT:0),'z tržby výrobcov')}</div>
@@ -2521,8 +2701,8 @@ function vAdmin(){
    <div class="fields three" style="margin-top:12px">${F('Spôsob provízie','fee.mode',{t:'s',opts:[FEE_FIX,FEE_PCT]})}${F('Pevná provízia (vr. DPH)','fee.fix',{step:.5,u:'€/MWh'})}${F('Provízia v %','fee.pct',{step:.5,max:100,u:'% z tržby'})}</div>
    <p class="xs mut" style="margin-top:6px">Odberateľ neplatí žiadnu províziu. Darovaná energia (Solidárne slnko) je bez provízie. Ak je provízia vyššia než príjem výrobcu, rozdiel sa vyrovná inkasom.</p></div>
   <div class="card" style="border-left:5px solid var(--purple)"><div class="row between"><h3>💡 Nápady – súhrn</h3>${pill('vis','Vízia / koncept')}</div>
-   <div class="grid g4" style="margin-top:10px">${kpi('Zostatky Slnečnej banky',fm(S.bank.bal+A.bank,0)+' kWh','záväzok voči členom ≈ '+eur0((S.bank.bal+A.bank)*coinEur()))}${kpi('Darované dnes',fm(A.don,2)+' kWh','0 € provízia')}${kpi('Poslané (Pošli slnko)',fm(A.gift+sum(S.gifts.filter(g=>g.src==='bank').map(g=>g.kwh)),2)+' kWh',S.gifts.length+' darčekov')}${kpi('V2G objem dnes',fm(evr.disT,1)+' kWh','elektromobil → bistro')}</div>
-   <div class="row" style="margin-top:10px">${pill(bs.lv?'g':'n','Certifikované podniky: '+(3+(bs.lv?1:0)))}${pill(S.agent.on?'p':'n','AI správca: '+(S.agent.on?'zapnutý':'vypnutý'))}<button class="btn sm" data-act="view:ideas">Otvoriť Nápady</button></div></div>
+   <div class="grid g2" style="margin-top:10px">${kpi('Darované dnes (Solidárne slnko)',fm(A.don,2)+' kWh','0 € provízia')}${kpi('V2G objem dnes',fm(evr.disT,1)+' kWh','elektromobil → bistro')}</div>
+   <div class="row" style="margin-top:10px">${pill(bs.lv?'g':'n','Certifikované podniky: '+(3+(bs.lv?1:0)))}<button class="btn sm" data-act="view:ideas">Otvoriť Nápady</button></div></div>
   <div class="card"><h3>Overovanie výziev podľa IMS</h3><div class="tw"><table><thead><tr><th>Používateľ</th><th>Spotrebič</th><th>Presun</th><th>Výsledok kontroly</th></tr></thead><tbody>${(()=>{const L=[['c','wash','Peter'],['c','ev','Peter'],['c','wh','Peter'],['c','ice','Peter'],['p','pw','Anna'],['p','pb','Anna'],['p','pev','Anna']].filter(([o,k])=>A_(o,k).accepted);return L.length?L.map(([o,k,w])=>{const x=A_(o,k),v=verifyLoad(o,k);return `<tr><td>${w}</td><td>${x.label}</td><td>${x.orig} → ${x.time}</td><td>${v.ok?pill('g','✓ overené'):pill('r','⚠ podozrenie – spotreba nezodpovedá')}</td></tr>`}).join(''):'<tr><td colspan="4" class="mut">Zatiaľ žiadne prijaté výzvy.</td></tr>'})()}</tbody></table></div><p class="xs mut" style="margin-top:6px">Kontrola porovnáva 15-minútové merania IMS s týždenným profilom.</p></div>
   <div class="card"><h3>Správa gamifikácie</h3><div class="fields" style="margin-top:8px">${F('Denný limit bodov','pts.cap',{step:5,u:'b'})}</div></div>
   <div class="card"><h3>Audit udalostí</h3><div class="tw"><table><tbody>${S.log.map(l=>`<tr><td>${l.t}</td><td>${esc(l.m)}</td></tr>`).join('')}</tbody></table></div></div></div>`;
@@ -2532,7 +2712,7 @@ function vOnb(){
   const ims=isP?S.p.ims:S.c.ims;
   let body='';
   if(st===1)body=`<h2>Čo chcete robiť?</h2><div class="grid g3" style="margin-top:12px">${[['prod','Chcem ponúkať prebytky','☀'],['cons','Chcem získavať zdieľanú elektrinu','🔌'],['both','Chcem robiť oboje','⇄']].map(([k,l,i])=>`<button class="role" data-act="obrole:${k}" aria-pressed="${o.role===k}"><div style="font-size:26px">${i}</div><b>${l}</b></button>`).join('')}</div><p class="sm mut" style="margin-top:10px">Nastavenie môžete neskôr upraviť. Jedno odberné miesto však môže byť aktívne iba v jednej skupine zdieľania.</p>`;
-  if(st===2)body=`<h2>Pridajte odberné miesto</h2><div class="fields" style="margin-top:12px">${F('Identifikátor OM','om.'+per+'.id',{t:'x'})}${F('Adresa (mesto určí polohu na mape)','om.'+per+'.addr',{t:'x'})}${F('Typ objektu','om.'+per+'.type',{t:'s',opts:['Domácnosť','Podnikanie (bistro)','Podnikanie']})}${F('Fotovoltika','om.'+per+'.pv',{t:'c'})}${om.pv?F('Inštalovaný výkon','om.'+per+'.kwp',{step:.5,u:'kWp'})+F('Batéria','bat.on',{t:'c'})+(S.bat.on?F('Kapacita batérie','bat.cap',{step:.5,min:.5,u:'kWh'}):''):''}</div>`;
+  if(st===2)body=`<h2>Pridajte odberné miesto</h2><div class="fields" style="margin-top:12px">${F('Identifikátor OM','om.'+per+'.id',{t:'x'})}${F('Adresa (mesto určí polohu na mape)','om.'+per+'.addr',{t:'x'})}${omTypeField('om.'+per+'.type',om.type)}${F('Fotovoltika','om.'+per+'.pv',{t:'c'})}${om.pv?F('Inštalovaný výkon','om.'+per+'.kwp',{step:.5,u:'kWp'})+F('Batéria','bat.on',{t:'c'})+(S.bat.on?F('Kapacita batérie','bat.cap',{step:.5,min:.5,u:'kWh'}):''):''}</div>`;
   if(st===3)body=`<h2>Kontrola IMS</h2><div class="fields one" style="margin:12px 0">${isP?F('IMS je dostupný (demo prepínač)','p.ims',{t:'c'}):F('IMS je dostupný (demo prepínač)','c.ims',{t:'c'})}</div>${ims?`<div class="card" style="border-left:5px solid var(--green)"><b>✓ Inteligentné meranie overené</b><p class="sm mut">Máme k dispozícii 15-minútové údaje potrebné na predikciu a vyhodnotenie zdieľania.</p></div>`:`<div class="card" style="border-left:5px solid var(--orange)"><b>Na aktívne zdieľanie potrebujete inteligentné meranie.</b><div class="row" style="margin-top:8px"><button class="btn pri sm" data-act="imsreq">Požiadať o inštaláciu IMS</button><button class="btn sm" data-act="obnext">Zatiaľ si pozrieť odhad</button></div><p class="xs mut" style="margin-top:6px">Presná cena a podmienky budú potvrdené po posúdení žiadosti.</p></div>`}`;
   if(st===4)body=`<h2>Súhlas s použitím dát</h2><p class="sm mut" style="margin:8px 0">Na predikciu a vyhodnotenie zdieľania používame 15-minútové údaje z inteligentného merania.</p>${F('Súhlasím s použitím 15-minútových dát','ob.consent',{t:'c'})}`;
   if(st===5)body=`<h2>Cenové a spotrebné preferencie</h2><div class="fields" style="margin-top:12px">${(o.role!=='cons')?F('Minimálna cena (ponuka)','p.price',{step:.005,u:'€/kWh'})+F('Ponúknuť z predikovaného prebytku','p.share',{step:5,max:100,u:'%'})+F('Predikovaný prebytok / deň','p.surplus',{step:.1,u:'kWh'})+F('Prebytky od','p.pStart',{t:'t'})+F('Prebytky do','p.pEnd',{t:'t'})+F('Výkupná cena (vaša zmluva s výkupcom)','p.feedin',{step:.005,u:'€/kWh'})+(S.bat.on?F('Večerná cena z batérie','bat.price',{step:.005,u:'€/kWh'}):''):''}${(o.role!=='prod')?F('Maximálna cena','c.max',{step:.005,u:'€/kWh'})+F('Maximálna cena večer','c.maxEve',{step:.005,u:'€/kWh'})+F('Spotreba v okne / deň','c.daily',{step:.1,u:'kWh'})+F('Preferovaný čas od','c.cStart',{t:'t'})+F('Preferovaný čas do','c.cEnd',{t:'t'}):''}</div>${o.role!=='cons'?feeInfo()+batWarnHtml():''}${o.role!=='prod'?`<p class="sm mut" style="margin-top:10px">Flexibilná spotreba: umývačka ✓ · výrobník ľadu ✓ · automatické odporúčania zapnuté. Odberateľ neplatí žiadnu províziu ani poplatok.</p>`:''}`;
@@ -2748,7 +2928,7 @@ function calcModal(){
   <p class="xs mut" style="margin-top:10px">Zisk = kWh × (cena − provízia − výkupná cena); úspora = kWh × (súčasná cena − cena zdieľania). Rovnaký vzorec ako v celej aplikácii. Odhad, nie garancia.</p>
   <div class="row" style="margin-top:10px"><button class="btn pri" data-act="view:register">Zaregistrovať sa</button><button class="btn" data-act="closemodal">Zavrieť</button></div></div></div>`;
 }
-const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'Domácnosť',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'Podnikanie (bistro)',pv:false}};
+const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'om_house',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'om_shop',pv:false}};
 const SSO_STEPS=['Overujem zákaznícky účet','Načítavam odberné miesta','Kontrolujem inteligentné meranie (IMS)','Načítavam zmluvy'];
 /* ---------- registrácia, krok 2: porovnanie skupín a ďalší postup ---------- */
 /* odhad pre skupinu z enginu: objem × zhoda skupiny (f), cena posunutá o typický rozdiel v skupine (dp) */
@@ -2796,38 +2976,50 @@ const WZ_STRAT={match:{t:'Uprednostniť spárovanie',d:'Viac možností na prepo
  price:{t:'Uprednostniť cenu',d:'Výhodnejšia cena, menej možností',sell:0.122,buy:0.084,ch:33,sh:26}};
 const wzProd=o=>o.pv;                                   /* miesto vyrába (FVE) */
 const wzRec=o=>wzProd(o)?'bal':o.mwh>=10?'match':'bal'; /* odporúčanie podľa profilu miesta */
-const wzPrice=(o,k=o.strat||wzRec(o))=>WZ_STRAT[k][wzProd(o)?'sell':'buy'];
-const wzPriceLbl=o=>wzProd(o)?'Ponuková cena':'Max. nákupná cena';
-const wzTags=o=>`<span class="wz-tags">${wzProd(o)?'<span class="pill y">Výroba</span>':''}<span class="pill b">Spotreba</span></span>`;
-const WZ_ICONS=[['home','Dom'],['city','Byt'],['console','Prevádzka'],['leaf','Chata'],['car','Garáž'],['bolt','Iné']];
+const wzPrice=(o,k=o.strat||wzRec(o))=>k==='own'?o.own:WZ_STRAT[k][wzProd(o)?'sell':'buy'];
+const wzStratName=k=>k==='own'?'Vlastná cena':WZ_STRAT[k].t;
+/* upozornenie pri vlastnej cene mimo cenového okna výkup – dodávka (cenníky bez DPH); cenu neblokuje */
+const wzOwnWarn=(o,p)=>!(p>0)?'Zadajte cenu v €/kWh.':wzProd(o)?(p<=S.p.feedin?`Nižšia ako výkup ${fpr(S.p.feedin)} €/kWh – do výkupu by ste predali výhodnejšie.`:p>=WZ_SUP[1]?'Vyššia ako dodávková cena susedov – ponuku pravdepodobne nikto neprijme.':''):(p>=WZ_SUP[1]?'Vyššia ako dodávková cena – na zdieľaní neušetríte.':p<=S.p.feedin?'Nižšia ako výkup – za túto cenu výrobcovia pravdepodobne nepredajú.':'');
+const wzPriceLbl=o=>wzProd(o)?'Predáte za':'Zaplatíte najviac';
+/* kontext ceny podľa doc/cenniky.md (bez DPH): výrobca vs. výkup, odberateľ vs. dodávka domácností DD1–DD6 */
+const WZ_SUP=[0.1137,0.1533];
+const wzCtx=(o,p=wzPrice(o))=>wzProd(o)?(p>S.p.feedin?`${fm(p/S.p.feedin,1)}× viac ako výkup ${fpr(S.p.feedin)} €/kWh`:`výkup ${fpr(S.p.feedin)} €/kWh`):`dodávka ${fpr(WZ_SUP[0])} – ${fpr(WZ_SUP[1])} €/kWh`;
+/* stav miesta bez inteligentného merania – zapojí sa až po inštalácii; po žiadosti o IMS to ukáže všade */
+const wzNoIms=o=>o.imsReq?'<span class="pill y" title="Žiadosť o inteligentný elektromer (IMS) je podaná">Čaká na IMS · žiadosť podaná</span>':'<span class="pill y" title="Čaká na inteligentný elektromer (IMS)">Čaká na IMS</span>';
+const wzImsReq=o=>o.imsReq?'<span class="pill g">Žiadosť o IMS podaná</span>':`<button class="link" data-act="wzims:${S.wz.oms.indexOf(o)}">Požiadať o inštaláciu</button>`;
+const EIC=`<abbr title="Kód odberného miesta – nájdete ho na faktúre">EIC</abbr>`;
+const wzTags=o=>omTags(wzProd(o));
 const WZ_OPTS={cons:['Využívať zdieľanú elektrinu','Elektrinu od susedov dostanete lacnejšie, keď ju práve spotrebujete.'],
  prod:['Ponúkať prebytky z výroby','Prebytky z fotovoltiky ponúknete susedom za vlastnú alebo odporúčanú cenu.'],
  bat:['Ponúkať energiu z batérie','Večer ponúknete energiu uloženú v batérii, keď už slnko nesvieti.']};
 /* odberné miesta načítané z účtu (demo podľa persony); dostupné možnosti podľa údajov z databázy */
 function wzLoad(per,co){
  const s=SSO[per],isP=per==='anna';
- const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'home':'console',mwh:isP?4.2:18.6,on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
- const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'leaf',mwh:1.1,on:false,ims:false,pv:false,bat:false};
+ const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'om_house':'om_shop',mwh:isP?4.2:18.6,pmwh:isP?6.8:0,on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
+ const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'om_cabin',mwh:1.1,on:true,ims:false,pv:false,bat:false};
  /* príklad miesta s výrobou aj spotrebou (rodinný dom s FVE) – Anna ho má ako hlavné miesto */
- const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'home',mwh:5.4,on:true,ims:true,pv:true,bat:false};
+ const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'om_house',mwh:5.4,pmwh:5.6,on:true,ims:true,pv:true,bat:false};
  const oms=isP?[main,cot]:[main,home,cot];
  /* batéria: jedna otázka Áno / Nie pri mieste s výrobou (null = neodpovedané); Áno otvorí okno s výhodami a žiadosťou o kontakt */
- oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.batAns=null});
+ oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.own=null;o.batAns=null;o.imsReq=false});
  /* elektromobil: jedna otázka za zákazníka, nie za odberné miesto */
- S.wz={step:1,oms,ev:null,ok3:false,sent:false,err:'',edit:-1,pick:null};
+ S.wz={step:1,oms,ev:null,sent:false,err:'',edit:-1,pick:null,own:null};
 }
+/* kroky registrácie – rovnaké na výbere spôsobu (n=1) aj v sprievodcovi (n=2–4) */
+const REG_STEPS=['Prihlásenie',...WZ_STEPS];
 function wzBar(n){
- return `<ol class="wz-steps" aria-label="Kroky sprievodcu">${WZ_STEPS.map((t,i)=>{const k=i+1,c=k<n?'done':k===n?'cur':'';return `<li class="${c}" ${k===n?'aria-current="step"':''}><span class="n">${k<n?'✓':k}</span><span class="t">${t}</span></li>`}).join('')}</ol>`;
+ return `<ol class="wz-steps" aria-label="Kroky registrácie">${REG_STEPS.map((t,i)=>{const k=i+1,c=k<n?'done':k===n?'cur':'';return `<li class="${c}" ${k===n?'aria-current="step"':''}><span class="n">${k<n?'✓':k}</span><span class="t">${t}</span></li>`}).join('')}</ol>`;
 }
-function wzNav(back,next,nextLbl='Ďalej',dis=false){
- return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn pri lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
+/* cls: 'pri' (zelené Ďalej) alebo 'dark' – podpisové tlačidlo značky (čierne, biely text, červená bodka) */
+function wzNav(back,next,nextLbl='Ďalej',dis=false,cls='pri'){
+ return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn ${cls} lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
 }
-const wzHead=(o)=>`<div class="wz-om-head"><span class="wz-ic">${icon(o.icon)}</span><div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.addr)} · EIC ${esc(o.eic)}</span></div></div>`;
+const wzHead=(o)=>`<div class="wz-om-head">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="wz-om-meta"><span class="xs mut">${esc(o.addr)} · ${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>`;
 /* okno po „Áno“ pri batérii: výhody, čo je potrebné, žiadosť o kontakt */
 function battModal(i){
  const o=S.wz&&S.wz.oms[i];if(!o)return '';
  return `<div class="modal-bg" data-act="closemodal"><div class="modal wz-bm" role="dialog" aria-modal="true" aria-labelledby="bm-h">
-  <div class="row between"><span class="wz-ic">${icon('bolt')}</span><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
+  <div class="row between">${omIc(o.icon)}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
   <h2 id="bm-h" style="margin-top:14px">Zdieľanie energie z batérie</h2>
   <p class="mut">${esc(o.name||o.addr)} · ${esc(o.addr)}</p>
   <ul class="wz-bm-list">
@@ -2841,60 +3033,108 @@ function battModal(i){
 }
 function vWizard(){
  const W=S.wz,n=W.step,sel=W.oms.filter(o=>o.on);
- const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n} z ${WZ_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
+ const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n+1} z ${REG_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n+1)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
  const end='</div></section></div>';
  const err=W.err?`<p class="supply-err" role="alert">${esc(W.err)}</p>`:'';
- if(W.sent)return top+`<div class="wz-card wz-done"><span class="supply-ok" aria-hidden="true">✓</span><div><h2>Ďakujeme, žiadosť je odoslaná</h2><p class="mut">Odoslanie žiadosti ešte neznamená aktiváciu zdieľania. Distribútor overí odberné miesta a o výsledku vás budeme informovať e-mailom aj v aplikácii.</p></div></div>
-  <h2 class="wz-h">Stav odberných miest</h2><div class="wz-list">${W.oms.map(o=>{const st=!o.on?['n','Nezapojené']:!o.ims?['y','Čaká na inteligentné meranie']:['b','Čaká na kontrolu distribútora'];return `<div class="wz-card">${wzHead(o)}<span class="pill ${st[0]}">${st[1]}</span></div>`}).join('')}</div>
-  <div class="wz-nav"><span></span><button class="btn pri lg" data-act="view:landing">Hotovo <span aria-hidden="true">→</span></button></div>`+end;
+ const isP=(S.persona==='admin'?'peter':S.persona)==='anna';
+ if(W.sent){const g=GROUPS.find(x=>x.id===S.group)||GROUPS[0];
+  return top+`<div class="wz-card wz-done"><span class="supply-ok" aria-hidden="true">✓</span><div><h2>Ďakujeme, žiadosť je odoslaná</h2><p class="mut">Odoslanie žiadosti ešte neznamená aktiváciu zdieľania. Distribútor overí odberné miesta a o výsledku vás budeme informovať e-mailom aj v aplikácii.</p></div></div>
+  <h2 class="wz-h">Stav odberných miest</h2><div class="wz-list">${W.oms.map(o=>{const st=!o.on?['n','Nezapojené']:!o.ims?(o.imsReq?['y','Čaká na IMS · žiadosť podaná']:['y','Čaká na IMS']):['b','Čaká na kontrolu distribútora'];return `<div class="wz-card">${wzHead(o)}<span class="pill ${st[0]}">${st[1]}</span></div>`}).join('')}</div>
+  <h2 class="wz-h">Od žiadosti po prvé vyúčtovanie</h2><div class="wz-card">${regTimeline(isP,'PENDING',g)}</div>
+  <div class="wz-card wz-club"><span class="wz-ic">${icon('star')}</span><div><b>Slnečný klub</b><p class="sm mut">Slnečné body začnete zbierať od prvého dňa zdieľania – za každú kWh, ktorú presuniete do času, keď svieti slnko.</p></div><button class="link" data-act="view:rewards">Pozrieť odmeny →</button></div>
+  <div class="wz-nav"><span></span><button class="btn pri lg" data-act="view:landing">Hotovo <span aria-hidden="true">→</span></button></div>`+end;}
  /* otázka Áno / Nie pri odbernom mieste */
  const yn=(id,v,act,q)=>`<div class="wz-q"><span id="wzq-${id}">${q}</span><span class="seg" role="group" aria-labelledby="wzq-${id}">${[[1,'Áno'],[0,'Nie']].map(([b,l])=>`<button type="button" aria-pressed="${v===!!b}" data-act="${act}:${b}">${l}</button>`).join('')}</span></div>`;
  /* možnosti zdieľania jedného odberného miesta – dostupné podľa údajov z databázy */
  const opts=(o,i)=>`<div class="wz-opts"><span class="wz-opts-h">Možnosti zdieľania</span>${Object.entries(WZ_OPTS).map(([k,[t,d]])=>{
     if(k==='bat')return '';   /* batéria má vlastné otázky nižšie */
     const avail=k==='cons'?o.ims:o.ims&&o.pv;
-    if(!avail)return (k==='cons'&&!o.ims)?`<div class="wz-opt miss"><b>${t}</b><span class="xs">Chýbajú údaje na overenie: odberné miesto nemá inteligentné meranie (IMS). <button class="link" data-act="imsreq">Požiadať o inštaláciu</button></span></div>`:'';
+    if(!avail)return (k==='cons'&&!o.ims)?`<div class="wz-opt miss"><b>${t}</b><span class="xs">Chýbajú údaje na overenie: odberné miesto nemá inteligentný elektromer (IMS). ${wzImsReq(o)}</span></div>`:'';
     return `<label class="wz-opt"><input type="checkbox" data-k="wz.oms.${i}.opts.${k}" data-t="c" ${o.opts[k]?'checked':''}><span><b>${t}</b><span class="xs mut">${d}</span></span></label>`}).join('')}
    ${o.pv?yn('bat-'+i,o.batAns,'wzbat:'+i,'Máte na tomto mieste batériu a chcete z nej zdieľať energiu vo vybraných časoch?'):''}
    ${o.pv&&o.batAns?`<p class="wz-info sm">✓ Zákaznícke centrum vás bude kontaktovať a spoločne overíme možnosti zapojenia batérie.</p>`:''}</div>`;
  if(n===1)return top+`<p class="lead wz-lead">Načítali sme odberné miesta z vášho účtu. Označte, ktoré chcete zapojiť, pomenujte ich a rovno vyberte, ako budú zdieľať. Dostupné možnosti sú predvolene zapnuté – zrušte tie, o ktoré nemáte záujem.</p>
-  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div><b class="wz-addr">${esc(o.addr)}</b><span class="xs mut">EIC ${esc(o.eic)}</span>${wzTags(o)}</div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
-   <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}<div class="f"><span>Ikona</span><div class="wz-icons" role="radiogroup" aria-label="Ikona objektu">${WZ_ICONS.map(([k,l])=>`<button type="button" role="radio" aria-checked="${o.icon===k}" aria-label="${l}" title="${l}" class="${o.icon===k?'on':''}" data-act="wzicon:${i}:${k}">${icon(k)}</button>`).join('')}</div></div></div>
+  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div class="wz-om-id">${omIc(o.icon)}<div><b class="wz-addr">${esc(o.addr)}</b><span class="wz-om-meta"><span class="xs mut">${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
+   <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}${omTypeField('wz.oms.'+i+'.icon',o.icon)}</div>
    ${o.on?opts(o,i):''}</div>`).join('')}</div>
-  <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil?')}</div>
+  <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil? <span class="xs mut">Nepovinné</span>')}</div>
   ${err}
   ${wzNav(0,'wznext')}`+end;
  if(n===2){
   const strat=(o,k)=>{const x=WZ_STRAT[k],rec=k===wzRec(o),on=W.pick===k,vol=Math.round(o.mwh*1000/12*x.sh/100);
    return `<label class="wz-st ${rec?'rec':''} ${on?'on':''}"><input type="radio" name="wz-st" data-act="wzpick:${k}" ${on?'checked':''}>
     <span class="wz-st-h"><b>${x.t}</b>${rec?'<span class="pill g">Odporúčame pre vás</span>':''}</span><span class="xs mut">${x.d}</span>
-    <span class="wz-st-p"><b>${fpr(wzPrice(o,k))}</b> €/kWh</span>
+    <span class="wz-st-p"><b>${fpr(wzPrice(o,k))}</b> €/kWh</span><span class="xs mut">${wzCtx(o,wzPrice(o,k))}</span>
     <span class="wz-st-ch"><b>${x.ch} %</b><span class="xs mut">modelová šanca spárovania*</span></span><span class="bar" aria-hidden="true"><i style="width:${x.ch}%"></i></span>
     <span class="xs mut">Odhad spárovaného objemu</span><b>${vol} kWh / modelový mesiac</b>
     <span class="xs mut">Priemerný spárovaný podiel</span><b>${x.sh} %</b></label>`};
-  return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť.</p>
+  return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť. Ceny sú bez DPH.</p>
   <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,k=o.strat||wzRec(o);
    return `<div class="wz-card wz-pr ${ed?'on':''}"><div class="wz-pr-row">
-    <div class="wz-pr-name"><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">EIC ${esc(o.eic)}</span></div>${wzTags(o)}
-    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b></div>
-    <div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':WZ_STRAT[k].t}</span></div>
-    ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}</div>
+    <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
+    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${fm(o.pmwh,1)} MWh</b>`:''}</div>
+    ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs mut">${wzCtx(o)}</span><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':wzStratName(k)}</span></div>
+    ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}`}</div>
     ${ed?`<fieldset class="wz-strats"><legend>Cenová stratégia – ${esc(o.name)}</legend>${['match','bal','price'].map(k=>strat(o,k)).join('')}</fieldset>
+    <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(o)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
+     ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(o),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(o,W.own)}</span>${wzOwnWarn(o,W.own)?`<p class="wz-warn">${wzOwnWarn(o,W.own)}</p>`:''}</div></div>`:''}</div>
     <p class="xs mut">* Modelový odhad podľa profilu miesta a ponúk v skupine, nie záväzný prísľub.</p>
     <div class="wz-pr-act"><button class="btn" data-act="wzedit:-1">Zrušiť</button><button class="btn pri" data-act="wzprice:${i}">Potvrdiť výber</button></div>`:''}</div>`}).join('')}</div>${err}
   ${wzNav(1,'wznext')}`+end;}
  const yn3=v=>v===true?'Áno':v===false?'Nie':'Neuvedené';
  const batTxt=o=>o.batAns?'Áno – zákaznícke centrum vás bude kontaktovať':o.batAns===false?'Nie':'Neuvedené';
  const optTxt=o=>{const L=Object.entries(o.opts).filter(([,v])=>v).map(([k])=>WZ_OPTS[k][0]);return L.length?L.join(' · '):(o.ims?'Žiadna možnosť nevybraná':'Čaká na inteligentné meranie')};
- return top+`<p class="lead wz-lead">Skontrolujte údaje pred odoslaním žiadosti. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
-  <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum">${wzHead(o)}
-   <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>
+ /* odhad prínosu pred odoslaním – z enginu pre odporúčanú skupinu, s rozptylom podľa istoty predikcie */
+ const best=grpBest(isP),y=grpEst(best,isP).m*12,u=UNC[S.p.conf]||.2;
+ return top+`<p class="lead wz-lead">Skontrolujte údaje a vstúpte do Zdieľne. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
+  <div class="wz-card wz-est"><span class="xs mut">${isP?'Odhad zárobku navyše oproti výkupu':'Odhad úspory na cene elektriny'}</span><b class="wz-est-n">${eur0(y)} <small>ročne</small></b><span class="xs mut">rozpätie ${eur0(y*(1-u))} – ${eur0(y*(1+u))} · modelový odhad pri odporúčaných cenách, nie garancia</span></div>
+  <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum"><div class="wz-sum-top">${wzHead(o)}${o.ims?'':wzNoIms(o)}</div>
+   <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${!o.ims?`
+   <div class="wz-sum-row"><span class="xs mut">Stav</span><span>${o.imsReq?'Žiadosť o inteligentný elektromer je podaná. Miesto zapojíme hneď po jeho inštalácii.':'Zapojíme ho hneď po inštalácii inteligentného elektromera.'}</span>${o.imsReq?'':wzImsReq(o)}</div>`:`
    <div class="wz-sum-row"><span class="xs mut">Možnosti zdieľania</span><span>${optTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${o.pv?`
    <div class="wz-sum-row"><span class="xs mut">Zdieľanie z batérie</span><span>${batTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>`:''}
-   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${wzPriceLbl(o)} ${fpr(wzPrice(o))} €/kWh · ${(o.strat&&o.strat!==wzRec(o))?WZ_STRAT[o.strat].t:'odporúčaná cena'}</span><button class="link" data-act="wzgo:2">Upraviť</button></div></div>`).join('')}</div>
+   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${wzPriceLbl(o)} ${fpr(wzPrice(o))} €/kWh · ${(o.strat&&o.strat!==wzRec(o))?wzStratName(o.strat):'odporúčaná cena'}</span><button class="link" data-act="wzgo:2">Upraviť</button></div>`}</div>`).join('')}</div>
   <div class="wz-card wz-sum wz-extra"><div class="wz-sum-row"><span class="xs mut">Elektromobil</span><span>${yn3(W.ev)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div></div>
-  <div class="wz-confirm">${F('Potvrdzujem správnosť údajov a vybraných nastavení.','wz.ok3',{t:'c'})}</div>${err}
-  ${wzNav(2,'wzsubmit','Potvrdiť a odoslať žiadosť')}`+end;
+  ${err}
+  ${wzNav(2,'wzsubmit','Vstúpiť do Zdieľne<span class="sig">.</span>',false,'dark sig-btn')}`+end;
+}
+/* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
+const REG_LOCKED={group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
+ reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
+ rewards:['Odmeny','Začnete zbierať slnečné body a odznaky v Slnečnom klube.']};
+const regPer=()=>S.persona==='admin'?'peter':S.persona;
+const regPending=()=>!!(S.wz&&S.wz.sent)&&S.mem[regPer()]==='PENDING';
+/* kroky žiadosti – rovnaké ako v časovej osi regTimeline */
+function regSteps4(){
+ const now=new Date(),act=new Date(now.getFullYear(),now.getMonth()+1,1),inv=new Date(act.getFullYear(),act.getMonth()+1,10);
+ const D=x=>x.toLocaleDateString('sk-SK',{day:'numeric',month:'numeric',year:'numeric'});
+ return [['Žiadosť odoslaná','dnes','done'],['Kontrola distribútora','do 5 pracovných dní','cur'],['Začína zdieľanie',D(act),''],['Prvé vyúčtovanie','do '+D(inv),'']];
+}
+/* stavový riadok – na každej obrazovke portálu, kým žiadosť nie je schválená */
+function pendingBar(){
+ const L=regSteps4();
+ return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Skupina zdieľania, Prehľady a Odmeny sú zamknuté.</span></div>
+  ${S.jury?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
+  <ol class="pend-steps">${L.map(([t,w,c],i)=>`<li class="${c}" ${c==='cur'?'aria-current="step"':''}><span class="n">${c==='done'?'✓':i+1}</span><span><b>${t}</b><span class="xs mut">${w}</span></span></li>`).join('')}</ol></section>`;
+}
+/* Domov počas čakania: stav žiadosti, odberné miesta, odhad a čo sa odomkne */
+function vHomePending(){
+ const per=regPer(),isP=per==='anna',W=S.wz,g=GROUPS.find(x=>x.id===S.group)||GROUPS[0],best=grpBest(isP),y=grpEst(best,isP).m*12;
+ const st=o=>!o.on?['n','Nezapojené']:!o.ims?['y',o.imsReq?'Čaká na IMS · žiadosť podaná':'Čaká na IMS']:['b','Čaká na kontrolu distribútora'];
+ return `<div class="gap">${hero({kicker:'Vitajte v Zdieľni',title:`${esc(SSO[per].name.split(' ')[0])}, <em>vaša žiadosť je na ceste.</em>`,
+   lead:'Distribútor overí vaše odberné miesta do 5 pracovných dní. Hneď po schválení sa odomkne celá Zdieľňa a začnete zdieľať.',
+   acts:S.jury?'<button class="btn" data-act="regapprove">🎬 Simulovať schválenie</button>':'',
+   aside:hstat(isP?'Odhad zárobku navyše':'Odhad úspory',eur0(y)+' ročne','modelový odhad, nie garancia')})}
+  ${pendingBar()}
+  <div class="card"><span class="kicker">Vaše odberné miesta</span><h3>Stav zapojenia</h3><div class="pend-oms">${(W.oms||[]).map(o=>{const s=st(o);return `<div class="pend-om">${wzHead(o)}<span class="pill ${s[0]}">${s[1]}</span></div>`}).join('')}</div></div>
+  <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
+  <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
+   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button>, <button class="link" data-act="view:ideas">nápady</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
+}
+/* zamknutá obrazovka počas čakania na schválenie */
+function vLocked(v){
+ const [t,d]=REG_LOCKED[v];
+ return `<div class="gap"><div class="card pend-locked"><span class="pend-ic lg">${icon('lock')}</span><h2>${t} sprístupníme po schválení<span class="sig">.</span></h2><p class="mut">${d} Sprístupní sa hneď, ako distribútor schváli vašu žiadosť – dáme vám vedieť e-mailom aj v aplikácii.</p><button class="btn pri" data-act="view:home">Späť na Domov</button></div></div>`;
 }
 function vRegister(){
   const R=S.reg,per=S.persona==='admin'?'peter':S.persona,sso=SSO[per],co=R.company,coN=SKN[co];
@@ -2906,7 +3146,7 @@ function vRegister(){
   if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="reg-heading"><div class="lp-wrap">
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
-   <div class="lp-reg-grid"><div><p class="lp-intro">Vyberte spôsob registrácie nižšie.</p></div><ol class="lp-steps" aria-label="Kroky registrácie">${['Spôsob prihlásenia','Overenie údajov','Výber skupiny'].map((t,k)=>`<li class="${k===0?'cur':''}" ${k===0?'aria-current="step"':''}><span class="n">${k+1}</span><span class="t">${t}</span></li>`).join('')}</ol></div>
+   <div class="lp-reg-grid"><div><p class="lp-intro">Vyberte spôsob registrácie nižšie.</p></div><ol class="lp-steps" aria-label="Kroky registrácie">${REG_STEPS.map((t,k)=>`<li class="${k===0?'cur':''}" ${k===0?'aria-current="step"':''}><span class="n">${k+1}</span><span class="t">${t}</span></li>`).join('')}</ol></div>
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE alebo VSE</h3><p>Prihláste sa svojím zákazníckym účtom – spoločnosť rozpoznáme sami a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme za vás.</p>
@@ -2914,14 +3154,16 @@ function vRegister(){
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
     <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše. <button class="link" data-act="supply">Pozrieť ponuku dodávky →</button></p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;
-  if(R.step==='load')return `<div class="gap"><div class="card" style="max-width:560px;margin:0 auto">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><h2>Načítavam váš účet…</h2></div><div class="chk-list" style="margin-top:12px">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div>`;
+  /* načítanie účtu – v rovnakom dizajne ako sprievodca */
+  if(R.step==='load')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="load-heading"><div class="lp-wrap"><span class="kicker">Registrácia · krok 1 z ${REG_STEPS.length}</span><h1 id="load-heading">Načítavam váš účet<span class="sig">.</span></h1>${wzBar(1)}</div></section>
+   <section class="lp-section wz"><div class="lp-wrap"><div class="wz-card wz-load">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><b>Účet ${coN}</b></div><div class="chk-list" role="status" aria-live="polite">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div></section></div>`;
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';
   const sent=!!R.sent,g=GROUPS.find(x=>x.id===(sent?R.group:S.ob.group))||GROUPS[0];
   const reg=regionOf(geo(om.addr).ll),best=sent?g:grpBest(isP),bm=grpEst(best,isP).m*12;
   const ok=(t,sub,c='ok')=>`<div class="vf ${c}"><span class="vf-i" aria-hidden="true">${c==='ok'?'✓':c==='no'?'✕':'!'}</span><div><b>${t}</b>${sub?`<div class="xs mut">${sub}</div>`:''}</div></div>`;
   const rows=[
    ok(`Zákaznícky účet ${coN} overený`,`${sso.name} · č. ${co==='zse'?'4100':'7300'}${isP?'2187':'5530'} (ilustračné) · bez zadávania hesla`),
-   ok(`${esc(om.id)} – ${ims?'môže zdieľať':'zatiaľ nemôže zdieľať'}`,`${esc(om.addr)} · ${esc(om.type)} · ${ims?'inteligentné meranie (IMS) s 15-min údajmi ✓':'chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>'}`,ims?'ok':'no'),
+   ok(`${esc(om.id)} – ${ims?'môže zdieľať':'zatiaľ nemôže zdieľať'}`,`${esc(om.addr)} · ${omLabel(om.type)} · ${ims?'inteligentné meranie (IMS) s 15-min údajmi ✓':'chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>'}`,ims?'ok':'no'),
    ok('SK-OM-0002 – zatiaľ nemôže zdieľať','Záhradná 3, Piešťany · chata · chýba inteligentné meranie <button class="link" data-act="imsreq">Požiadať o IMS</button>','no'),
    ok(isP?`Rola: výrobca – fotovoltika ${fm(om.kwp||6.5,1)} kWp${S.bat.on?` + batéria ${fm(S.bat.cap,0)} kWh`:''}`:'Rola: odberateľ – bez vlastných panelov',isP?'Prebytky ponúknete susedom, zvyšok ide ako doteraz výkupcovi.':'Budete dostávať slnečnú elektrinu zo striech susedov.'),
    ok(`Zmluvy ostávajú: dodávka ${coN}${isP?' aj výkup prebytkov':''}`,'Dodávateľa ani elektromer meniť nemusíte.'),
@@ -2938,7 +3180,7 @@ function vRegister(){
    ${sent?'':`<div class="card"><h3>Potvrďte súhlas a odošlite žiadosť</h3><div style="margin-top:8px">${F('Súhlasím s použitím 15-minútových dát z inteligentného merania','ob.consent',{t:'c'})}</div>${condList()}
     <div class="row" style="margin-top:14px"><button class="btn pri lg" data-act="ssosubmit" ${S.ob.consent?'':'disabled'}>Odoslať žiadosť do skupiny ${g.name} →</button><button class="btn" data-act="regback">Zmeniť spôsob</button></div>${S.ob.consent?'':'<p class="xs mut" style="margin-top:6px">Tlačidlo sa odomkne po zaškrtnutí súhlasu.</p>'}</div>`}
    <div class="card"><span class="kicker">${sent?'Čo bude ďalej':'Čo sa stane po odoslaní'}</span><h3>Od žiadosti po prvé vyúčtovanie</h3>${regTimeline(isP,sent?'PENDING':'NONE',g)}
-    ${sent?`<div class="row" style="margin-top:16px"><button class="btn pri" data-act="view:group">Moja skupina →</button><button class="btn" data-act="view:home">Pozrieť, ako bude vyzerať Domov</button></div>`:''}</div></div>`;
+    ${sent?`<div class="row" style="margin-top:16px"><button class="btn pri" data-act="view:group">Skupina zdieľania →</button><button class="btn" data-act="view:home">Pozrieť, ako bude vyzerať Domov</button></div>`:''}</div></div>`;
 }
 
 
@@ -2960,7 +3202,7 @@ function mapMembers(){
    {id:'C',addr:'Hlohovec',role:'Odberateľ',label:'',ims:true,grp:gname(S.group)},
    {id:'D',addr:'Bratislava',role:'Odberateľ (EV)',label:'',ims:true,grp:gname(S.group)},
    {id:'V1',addr:'Prešov',pv:true,bat:true,role:'Výrobca s batériou',ims:true,grp:'Poludnie 9'},{id:'V2',addr:'Košice',bistro:true,role:'Odberateľ (reštaurácia)',ims:true,grp:'Poludnie 9'},{id:'V3',addr:'Košice',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V4',addr:'Michalovce',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V5',addr:'Poprad',pv:true,role:'Výrobca',ims:true,grp:'Poludnie 9'}];
-  if(S.don.on||S.agent.on&&agentPlan().donPct>0){const r=RCP[S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Solidárneho slnka',label:r.ic,ims:true,grp:'Solidárne slnko',rcp:true})}
+  if(S.don.on){const r=RCP[S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Solidárneho slnka',label:r.ic,ims:true,grp:'Solidárne slnko',rcp:true})}
   for(const g of S.gifts){const c=CONTACTS[g.to];if(c&&!L.find(x=>x.id==='k_'+g.to))L.push({id:'k_'+g.to,addr:c.town,role:'Príjemca darčeka – '+c.name,label:'🎁',ims:true,grp:'Pošli slnko'})}
   const placed=[];
   for(const m of L){const g=geo(m.addr);let [x,y]=prj(g.ll);for(let k=0;k<10&&placed.some(p=>Math.hypot(p[0]-x,p[1]-y)<36);k++){x+=k%2?-34:30;y+=k%2?16:10}placed.push([x,y]);m.x=x;m.y=y;m.reg=regionOf(g.ll);m.town=g.town}
@@ -2968,7 +3210,7 @@ function mapMembers(){
   return L.filter(m=>m.reg!=='sse'||m.own);
 }
 /* legenda = prepínače zvýraznenia (S.mapHi) */
-const MAP_KEYS=[['zse','var(--map-zse-roof)','oblasť ZSE'],['sse','var(--map-sse-ink)','oblasť SSE – mimo služby'],['vse','var(--map-vse-roof)','oblasť VSE'],['flow','var(--map-flow)','tok cez deň'],['bat','var(--map-bat)','z batérie'],['gift','var(--map-gift)','dar / darček'],['noims','','OM bez IMS']];
+const MAP_KEYS=[['zse','var(--map-zse-roof)','oblasť ZSE'],['sse','var(--map-sse-ink)','oblasť SSE – mimo služby'],['vse','var(--map-vse-roof)','oblasť VSE'],['flow','var(--map-flow)','tok cez deň'],['bat','var(--map-bat)','z batérie'],['gift','var(--map-gift)','dar (Solidárne slnko)'],['noims','','OM bez IMS']];
 function mapLegend(){
   return `<div class="map-legend" role="group" aria-label="Zvýrazniť na mape">${MAP_KEYS.map(([k,c,l])=>`<button class="${k==='noims'?'dash':''}" data-act="maphi:${k}" aria-pressed="${S.mapHi===k}">${c?`<i style="background:${c}"></i>`:''}${l}</button>`).join('')}</div>`;
 }
@@ -2978,8 +3220,8 @@ function mapNote(M,F_){
   if(hi==='sse')return 'Stredné Slovensko (SSE) je zatiaľ mimo služby – žiadne odberné miesta.';
   if(hi==='zse'||hi==='vse'){const L=M.filter(m=>m.reg===hi),pv=L.filter(m=>m.pv).length;return `Oblasť ${hi.toUpperCase()} – ${L.length} odberných miest, z toho ${pv} ${pv===1?'výrobca':pv<5?'výrobcovia':'výrobcov'}.`}
   if(hi==='noims'){const n=M.filter(m=>!m.ims).length;return n?`Bez inteligentného merania: ${n} ${n===1?'odberné miesto':'odberné miesta'} – zatiaľ nemôžu aktívne zdieľať.`:'Všetky odberné miesta majú IMS.'}
-  const L=F_.filter(f=>f.t===hi),k=sum(L.map(f=>f.k)),lab={flow:'Toky cez deň',bat:'Toky z batérie',gift:'Dary a darčeky'}[hi];
-  if(!L.length)return hi==='gift'?'Zatiaľ žiadne dary – zapnite Solidárne slnko alebo pošlite slnko.':lab+': práve teraz žiadne.';
+  const L=F_.filter(f=>f.t===hi),k=sum(L.map(f=>f.k)),lab={flow:'Toky cez deň',bat:'Toky z batérie',gift:'Dary (Solidárne slnko)'}[hi];
+  if(!L.length)return hi==='gift'?'Zatiaľ žiadne dary – zapnite Solidárne slnko.':lab+': práve teraz žiadne.';
   return `${lab}: ${L.length} ${L.length===1?'spojenie':L.length<5?'spojenia':'spojení'}, práve teraz ${fm(k,2)} kWh za 15 minút.`;
 }
 function vMap(){
@@ -3017,7 +3259,7 @@ function vMap(){
     if(sel.id==='anna')det=`<tr><td>Dnes predané (deň + večer)</td><td class="n">${fm(outRes.anna.shared+outRes.anna.batSold,2)} kWh</td></tr><tr><td>Čistý príjem dnes</td><td class="n">${eur(outRes.anna.net)}</td></tr><tr><td>Batéria teraz</td><td class="n">${S.bat.on?fm(res.R.soc[cur],1)+' / '+fm(S.bat.cap,0)+' kWh':'—'}</td></tr>`;
     else if(sel.id==='peter')det=`<tr><td>Dnes prijaté</td><td class="n">${fm(outRes.peter.recv,2)} kWh</td></tr><tr><td>Zaplatené dnes</td><td class="n">${eur(outRes.peter.paid)}</td></tr><tr><td>Úspora dnes</td><td class="n">${eur(outRes.peter.saved)}</td></tr>`;
     else det=`<tr><td colspan="2" class="mut">Anonymizovaný člen – toky sú ilustračné, odvodené z rovnakého profilu výroby.</td></tr>`;
-    card=`<div class="card" style="border-left:5px solid ${sel.reg==='vse'?'var(--map-vse-roof)':'var(--map-zse-roof)'}"><div class="row between"><div><span class="kicker" style="margin-bottom:4px">${REG[sel.reg].name} · ${REG[sel.reg].co}</span><h3>${sel.own?'🏠 Vaše odberné miesto':esc(sel.role)}</h3></div><button class="btn sm" data-act="mapsel:" aria-label="Zavrieť kartu">✕</button></div><table style="margin-top:8px"><tbody><tr><td>Rola</td><td class="n">${esc(sel.role)}</td></tr><tr><td>Lokalita (približne)</td><td class="n">${esc(sel.own?sel.addr:sel.town.replace(/\b\w/g,c=>c.toUpperCase()))}</td></tr><tr><td>IMS</td><td class="n">${sel.ims?'✓ áno':'✕ chýba'}</td></tr><tr><td>Skupina</td><td class="n">${esc(sel.grp||'—')}</td></tr>${det}</tbody></table></div>`;
+    card=`<div class="card" style="border-left:5px solid ${sel.reg==='vse'?'var(--map-vse-roof)':'var(--map-zse-roof)'}"><div class="row between"><div><span class="kicker" style="margin-bottom:4px">${REG[sel.reg].name} · ${REG[sel.reg].co}</span><h3 class="om-row">${sel.own?`${omIc(S.om[sel.id]?S.om[sel.id].type:'')}Vaše odberné miesto`:esc(sel.role)}</h3></div><button class="btn sm" data-act="mapsel:" aria-label="Zavrieť kartu">✕</button></div><table style="margin-top:8px"><tbody><tr><td>Rola</td><td class="n">${esc(sel.role)}</td></tr><tr><td>Lokalita (približne)</td><td class="n">${esc(sel.own?sel.addr:sel.town.replace(/\b\w/g,c=>c.toUpperCase()))}</td></tr><tr><td>IMS</td><td class="n">${sel.ims?'✓ áno':'✕ chýba'}</td></tr><tr><td>Skupina</td><td class="n">${esc(sel.grp||'—')}</td></tr>${det}</tbody></table></div>`;
   }
   return `<div class="gap"><section class="card hero map-hero">
     <div class="map-head"><div><span class="kicker">Mapa odberných miest · ${I2T(cur)}</span><h1>Slnko práve <em>spája susedov.</em></h1><p class="lead">Vaše OM aj ostatní členovia (anonymizovane), umiestnení približne podľa adresy. Bodky ukazujú, kade práve tečie elektrina.</p></div>
@@ -3036,25 +3278,19 @@ function vMap(){
 /* js/views-ideas.js */
 'use strict';
 /* ---------- nápady ---------- */
-/* stav podľa pripomienok (obr. 8): ok = ponechať, q = na zváženie */
+/* stav: ok = rozvíjame (dá sa otvoriť), soon = pripravujeme (sivá karta, neotvára sa) */
 const IDEAS=[
  ['i_badge','award','Varíme zo slnka od suseda','Značka a certifikát pre malé podniky, ktoré varia z lokálneho slnka.','ok'],
  ['i_sol','heart','Solidárne slnko','Darujte časť prebytku tým, ktorí to potrebujú – bez provízie a poplatkov.','ok'],
- ['i_agent','bot','AI správca','Agenti vyjednávajú ceny a spravujú vašu energiu každých 15 minút.','ok'],
- ['i_send','gift','Pošli slnko','Pošlite kWh babke do Košíc ako darček.','ok'],
- ['i_ev','car','Elektromobil ako batéria ulice','Auto sa cez deň nabije zo striech a večer pomôže bistru.','ok'],
- ['i_bank','bank','Slnečná banka','Uložte si júlové slnko na Vianoce a plaťte ním v bistre.','q'],
- ['i_twin','city','Živé dvojča mesta','Potiahnite slnko a oblak – celé mestečko sa prepočíta naživo.','q']];
-const ideaCard=([id,ic,t,d,st])=>`<button class="idea ${st==='q'?'q':''}" data-act="view:${id}"><span class="row between" style="width:100%"><span class="ico">${icon(ic)}</span>${st==='q'?pill('o','? na zváženie'):''}</span><b style="font-size:18px;letter-spacing:-.02em">${t}</b><span class="sm mut">${d}</span><span class="b go">Otvoriť →</span></button>`;
+ ['i_ev','car','Elektromobil ako batéria ulice','Auto sa cez deň nabije zo striech a večer pomôže bistru.','soon']];
+const ideaCard=([id,ic,t,d,st])=>st==='soon'?`<div class="idea soon" aria-disabled="true"><span class="idea-soon">Pripravujeme…</span><span class="ico">${icon(ic)}</span><b style="font-size:18px;letter-spacing:-.02em">${t}</b><span class="sm mut">${d}</span></div>`:`<button class="idea ${st==='q'?'q':''}" data-act="view:${id}"><span class="row between" style="width:100%"><span class="ico">${icon(ic)}</span>${st==='q'?pill('o','? na zváženie'):''}</span><b style="font-size:18px;letter-spacing:-.02em">${t}</b><span class="sm mut">${d}</span><span class="b go">Otvoriť →</span></button>`;
 function vIdeas(){
-  const ok=IDEAS.filter(x=>x[4]==='ok'),q=IDEAS.filter(x=>x[4]==='q');
-  return `<div class="gap">${hero({kicker:'Vízie',title:'Kam môže Zdieľňa <em>rásť.</em>',lead:'Sedem vízií s vlastnou interaktívnou ukážkou – všetky počítajú tým istým enginom ako celá aplikácia. Ide o koncepty, nie existujúce produkty.',aside:hstat('Ponechávame',String(ok.length),'nápadov')+hstat('Na zváženie',String(q.length),'Slnečná banka, Živé dvojča')})}
-  ${secHead('Ponechávame','Nápady, ktoré rozvíjame.')}<div class="ideas">${ok.map(ideaCard).join('')}</div>
-  ${secHead('Otvorená otázka','Na zváženie.','Tieto vízie zatiaľ nie sú rozhodnuté – ponechať, alebo odstrániť?')}<div class="ideas">${q.map(ideaCard).join('')}</div></div>`;
+  return `<div class="gap">${hero({kicker:'Vízie',title:'Kam môže Zdieľňa <em>rásť.</em>',lead:'Vízie s vlastnou interaktívnou ukážkou – počítajú tým istým enginom ako celá aplikácia. Ide o koncepty, nie existujúce produkty.',aside:hstat('Rozvíjame',String(IDEAS.filter(x=>x[4]!=='soon').length),'nápady s ukážkou')+hstat('Pripravujeme',String(IDEAS.filter(x=>x[4]==='soon').length),IDEAS.filter(x=>x[4]==='soon').map(x=>x[2]).join(', '))})}
+  ${secHead('Rozvíjame','Nápady, ktoré rozvíjame.')}<div class="ideas">${IDEAS.map(ideaCard).join('')}</div></div>`;
 }
 function ideaHead(id,story){
-  const k=IDEAS.findIndex(x=>x[0]===id),[,ic,t,,st]=IDEAS[k],prev=IDEAS[(k+IDEAS.length-1)%IDEAS.length],next=IDEAS[(k+1)%IDEAS.length];
-  return hero({cls:'ihero compact',top:`<button class="btn ghost sm" data-act="view:ideas">← Všetky nápady</button><span class="pill n">Nápad ${k+1} / ${IDEAS.length}</span><span class="pill n">Vízia / koncept</span>${st==='q'?pill('o','? na zváženie'):''}`,
+  const L=IDEAS.filter(x=>x[4]!=='soon'||x[0]===id),k=L.findIndex(x=>x[0]===id),[,ic,t,,st]=L[k],prev=L[(k+L.length-1)%L.length],next=L[(k+1)%L.length];
+  return hero({cls:'ihero compact',top:`<button class="btn ghost sm" data-act="view:ideas">← Všetky nápady</button><span class="pill n">Nápad ${k+1} / ${L.length}</span><span class="pill n">Vízia / koncept</span>${st==='q'?pill('o','? na zváženie'):''}`,
     kicker:'Nápad',title:t,lead:story,
     foot:`<button class="btn ghost sm" data-act="view:${prev[0]}">← ${prev[2]}</button><button class="btn ghost sm" data-act="view:${next[0]}">${next[2]} →</button>`});
 }
@@ -3092,150 +3328,13 @@ function vIdeaSol(){
   const ok=Math.abs(a.debT-a.netT-a.comT)<1e-9;
   return `<div class="gap">${ideaHead('i_sol','Anna má cez víkend viac slnka, než susedia minú. Časť zvyšku, ktorý by inak išiel výkupcovi za pár centov, daruje rodine v núdzi alebo škole. Energiu doručí obec – bez provízie a bez poplatkov.')}
   <div class="grid g2"><div class="card"><h3>Nastavenie daru</h3><div class="fields one" style="margin-top:8px">${F('Zapojiť Solidárne slnko do výpočtu','don.on',{t:'c'})}${F('Darovať zo zvyšku prebytku (po skupine a batérii)','don.pct',{t:'r',u:' %'})}${F('Príjemca','don.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])})}${F('Mesačná podpora na domácnosť','don.need',{step:5,min:1,u:'kWh'})}</div>
-    ${on?'':`<p class="sm" style="margin-top:8px;color:var(--orange)">Náhľad – darovanie zatiaľ nie je zapnuté v enginu. Po zapnutí sa premietne do ledgera, auditu aj mapy.</p>`}${A.don<1e-6&&res.cfg.bankPct>=100?`<p class="sm" style="margin-top:8px;color:var(--orange)">Slnečná banka teraz ukladá celý zvyšok – kaskáda ide skupina → batéria → banka → dar. Znížte podiel banky, aby zostalo aj na dar.</p>`:''}</div>
+    ${on?'':`<p class="sm" style="margin-top:8px;color:var(--orange)">Náhľad – darovanie zatiaľ nie je zapnuté v enginu. Po zapnutí sa premietne do ledgera, auditu aj mapy.</p>`}</div>
    <div class="card" style="border-left:5px solid #f5b400"><h3>${r.ic} ${r.name}</h3><div class="xs mut">${r.via}</div>
     <div class="grid g2" style="margin-top:10px;gap:8px">${kpi('Darované dnes',fm(A.don,2)+' kWh')}${kpi('Darované mesačne',fm(mon,0)+' kWh')}${kpi('Hodnota pre príjemcu',eur(val),'pri cene '+fpr(S.c.ref)+' €/kWh')}${kpi('Podporené domácnosti',String(hh),'pri '+fm(S.don.need,0)+' kWh/mesiac')}</div>
     <p class="sm mut" style="margin-top:8px">Vy sa vzdávate výkupu ${eur(lost)} mesačne – príjemca ušetrí ${eur(val)}. Každé darované euro výkupu má pre príjemcu ${fm(S.c.ref/Math.max(.001,S.p.feedin),1)}× vyššiu hodnotu.</p></div></div>
   <div class="grid g2"><div class="card"><h3>Bez poplatkov – overené v zúčtovaní</h3><table style="margin-top:6px"><tbody><tr><td>Platba príjemcu</td><td class="n"><b>0,00 €</b></td></tr><tr><td>Provízia ${BR()} z darovanej energie</td><td class="n"><b>0,00 €</b></td></tr><tr><td>Poplatky výrobcovi</td><td class="n"><b>0,00 €</b></td></tr><tr><td>Provízia z predanej energie (bez zmeny)</td><td class="n">${fm(a.comT,3)} €</td></tr></tbody></table><div class="pill ${ok?'g':'r'}" style="margin-top:8px">${ok?'✓':'✕'} Audit: platby odberateľov ${fm(a.debT,3)} € = výplata ${fm(a.netT,3)} € + provízia ${fm(a.comT,3)} €</div><p class="xs mut" style="margin-top:6px">Darované kWh majú v ledgeri typ „dar“, cenu 0 € a províziu 0 €.</p></div>
    <div class="card" style="background:var(--yellow-t)"><h3>💌 Poďakovanie od príjemcu</h3><p style="margin-top:8px;font-style:italic">„Ďakujeme! Vďaka vášmu slnku sme tento mesiac ušetrili ${eur(val)} na elektrine. ${S.don.rcp==='r2'?'Deti mali teplú vodu v telocvični aj počas sychravých dní.':'Je to pre nás veľká pomoc.'}“</p><p class="xs mut" style="margin-top:8px">— ${r.name} (ilustračné)</p></div></div>
   ${gains(['Zmysel: zvyšok, ktorý by išiel výkupcovi za pár centov, pomôže susedom.','Žiadne poplatky ani provízia – celá hodnota ide príjemcovi.','Prehľad dopadu: kWh, eurá, počet domácností.'],['Silný príbeh komunitnej energetiky a spoločenskej zodpovednosti.','Spolupráca so samosprávami a sociálnymi službami.','Lojalita výrobcov – zapojenie nad rámec zisku.'])}</div>`;
-}
-function vIdeaBank(){
-  const on=S.bank.on,res=on?dayRun():runDay(S.c.appTime,{cfg:{...manualCfg(),bankPct:S.bank.pct}}),A=agg(res).anna,dep=A.bank,bp=bankProj(dep),m=clamp(S.bank.month,0,5),B=S.bank;
-  let cum=0;const upto=bp.rows.map(r=>(cum+=r.dep));const maxB=Math.max(1,bp.depT),fill=m<5?upto[m]/maxB:0,lit=m===5;
-  const coins=Math.round(fill*14),coinV=coinEur(),bal=B.bal+(on?dep:0);
-  const items=[['Obed dňa',8.9],['Polievka',3.5],['Káva',2.4]];
-  let jar=`<svg viewBox="0 0 520 240" width="100%" role="img" aria-label="Pohár slnečných mincí a vianočný stromček – mesiac ${MONTHS[m]}"><g transform="translate(40,20)"><path d="M10,30 Q0,30 0,44 L6,196 Q8,210 24,210 L136,210 Q152,210 154,196 L160,44 Q160,30 150,30Z" fill="var(--blue-t)" stroke="var(--mut)" stroke-width="2"/><rect x="18" y="14" width="124" height="18" rx="6" fill="var(--line)"/>
-   <rect x="8" y="${208-178*fill}" width="144" height="${178*fill}" rx="10" fill="#ffd23f" opacity=".35"/>`;
-  for(let k=0;k<coins;k++){const cx=30+(k%5)*25+(Math.floor(k/5)%2)*12,cy=196-Math.floor(k/5)*18;jar+=`<g class="coin" style="animation-delay:${(k*.05).toFixed(2)}s"><circle cx="${cx}" cy="${cy}" r="11" fill="#f5b400" stroke="#b8860b" stroke-width="2"/><text x="${cx}" y="${cy+4}" font-size="11" text-anchor="middle">☀</text></g>`}
-  jar+=`<text x="80" y="232" font-size="12" font-weight="700" fill="var(--ink)" text-anchor="middle">Slnečný účet</text></g>`;
-  jar+=`<g transform="translate(330,10)"><polygon points="80,10 20,90 50,90 0,160 40,160 -10,215 170,215 120,160 160,160 110,90 140,90" fill="#1f7a3a"/><rect x="68" y="215" width="24" height="18" fill="#7a4a1f"/><text x="80" y="18" font-size="26" text-anchor="middle">⭐</text>`;
-  [[60,70],[95,82],[45,125],[80,135],[115,120],[30,180],[70,190],[110,178],[140,195],[15,200]].forEach(([x,y],k)=>{jar+=`<circle class="${lit?'lit':''}" cx="${x}" cy="${y}" r="6" fill="${lit?['#ffd23f','#ff6a3d','#6aa2ff','#fff'][k%4]:'#3d5a45'}" style="animation-delay:${(k*.15).toFixed(2)}s"/>`});
-  if(m>=4)[[55,100],[105,112],[38,172],[88,160],[128,182]].forEach(([x,y],k)=>{jar+=`<g class="fly" style="animation-delay:${(k*.12).toFixed(2)}s"><circle cx="${x}" cy="${y}" r="9" fill="#f5b400" stroke="#b8860b" stroke-width="2"/><text x="${x}" y="${y+4}" font-size="9" text-anchor="middle">☀</text></g>`});
-  jar+=`</g></svg>`;
-  return `<div class="gap">${ideaHead('i_bank','V júli má Anna slnka nazvyš a výkupca za neho dá pár centov. Namiesto toho si ho uloží na Slnečný účet ako slnečné mince. V decembri, keď je elektrina drahá, si ich vyberie – a rozsvieti si stromček júlovým slnkom. Mincami môže zaplatiť aj obed v bistre suseda.')}
-  <div class="grid g2"><div class="card"><div class="row between"><h3>Júl → december</h3><button class="btn sm pri" data-act="bankplay">${B.playing?'⏸ Pauza':'▶ Prehrať'}</button></div>
-    <input type="range" min="0" max="5" step="1" value="${m}" data-k="bank.month" data-t="n" aria-label="Mesiac" style="margin-top:8px"><div class="row between xs mut">${MONTHS.map((x,i)=>`<span style="${i===m?'color:var(--ink);font-weight:800':''}">${x.slice(0,3)}</span>`).join('')}</div>
-    <div style="margin-top:8px">${jar}</div>
-    <p class="sm" style="margin-top:6px">${m<5?`<b>${MONTHS[m]}:</b> na účte ${fm(upto[m],0)} slnečných mincí (kWh).`:`<b>December:</b> vyberiete <b>${fm(bp.winterKwh,0)} kWh</b> (kurz ${fm(B.rate,0)} %) v hodnote <b>${eur(bp.winterEur)}</b> pri zimnej cene ${fpr(B.winter)} €/kWh. V lete by ste od výkupcu dostali ${eur(bp.summerEur)} → <b style="color:var(--green)">+${eur(bp.gain)}</b>.`}</p></div>
-   <div class="card"><h3>Nastavenie banky</h3><div class="fields" style="margin-top:8px">${F('Zapojiť banku do výpočtu','bank.on',{t:'c'})}${F('Ukladať zo zvyšku (po batérii)','bank.pct',{step:5,max:100,u:'%'})}${F('Kurz leto → zima','bank.rate',{step:5,min:10,max:150,u:'%'})}${F('Poplatok banky','bank.fee',{step:1,max:50,u:'%'})}${F('Zimná cena elektriny','bank.winter',{step:.005,u:'€/kWh'})}${F('Zostatok na účte dnes','bank.bal',{step:5,u:'kWh'})}</div>
-    <table style="margin-top:10px"><thead><tr><th>Mesiac</th><th class="n">Vklad</th><th class="n">Výber</th><th class="n">Zostatok</th></tr></thead><tbody>${bp.rows.map(r=>`<tr><td>${r.m}</td><td class="n">${fm(r.dep,0)} kWh</td><td class="n">${r.wd?fm(r.wd,0)+' kWh':'—'}</td><td class="n">${fm(r.bal,0)} kWh</td></tr>`).join('')}</tbody></table>
-    <p class="xs mut" style="margin-top:6px">Dnešný vklad z enginu: ${fm(dep,2)} kWh/deň${on?'':' (náhľad)'}; mesiace sú škálované sezónou (júl 140 % … október 70 %), po odpočítaní poplatku banky. Ide o finančný kredit, nie fyzické uskladnenie.</p></div></div>
-  <div class="grid g2"><div class="card"><h3>☀ Zaplatiť slnkom – ${esc(S.badge.name)}</h3><p class="sm mut" style="margin-top:4px">1 slnečná minca = ${fpr(coinV)} € (kurz × zimná cena). Zostatok: <b>${fm(bal,1)} mincí</b> (≈ ${eur(bal*coinV)}).</p>
-    <div class="row" style="margin-top:10px">${items.map(([n,p],k)=>`<button class="btn sm" data-act="paysun:${k}">${n} ${eur(p)} = ${fm(p/coinV,1)} ☀</button>`).join('')}</div>
-    ${B.pays.length?`<div class="row" style="margin-top:12px;align-items:flex-start;flex-wrap:nowrap"><div class="qrbox" style="flex:none">${qrSvg(`Platba slnkom | ${S.badge.name.slice(0,20)} | ${B.pays[0].item} | ${fm(B.pays[0].coins,1)} mincí (demo)`)}</div><div><b>✓ Zaplatené: ${esc(B.pays[0].item)}</b><p class="sm" style="margin-top:4px">„Anna zaplatila obed slnkom, na ktorom jej ho Peter uvaril.“</p><table style="margin-top:6px"><tbody>${B.pays.slice(0,4).map(p=>`<tr><td>${p.t}</td><td>${esc(p.item)}</td><td class="n">−${fm(p.coins,1)} ☀</td></tr>`).join('')}</tbody></table></div></div>`:''}</div>
-   <div class="card" style="border-left:5px solid var(--purple)"><h3>🤖 Spravuje AI správca</h3>${S.agent.on?`<p class="sm" style="margin-top:6px">${esc(agentPlan().why.bank||'')}</p><p class="xs mut" style="margin-top:6px">Cieľ: ${fm(S.agent.goal,0)} kWh do Vianoc (${daysToXmas()} dní). Správca dnes ukladá ${agentPlan().bankPct} % zvyšku po batérii.</p>`:`<p class="sm mut" style="margin-top:6px">Zapnite AI správcu – nastaví si cieľ (napr. ${fm(S.agent.goal,0)} kWh do Vianoc) a sám rozhodne, koľko ukladať do batérie a koľko do Slnečnej banky.</p>`}<div class="row" style="margin-top:10px">${S.agent.on?'':`<button class="btn pri sm" data-act="agenton">Zapnúť AI správcu</button>`}<button class="btn sm" data-act="view:i_agent">Otvoriť AI správcu →</button></div></div></div>
-  ${gains(['Leto sa premení na zimnú úsporu – lepší kurz než výkup.','Platba slnkom v lokálnych podnikoch – zážitok, ktorý si zapamätáte.','Cieľ „Vianoce zo slnka“ spravuje AI správca za vás.'],['Zákazník s nasporeným letom v zime nemení dodávateľa – silná retencia.','ZSE/VSE ako „banka energie“: kurz, zostatky, sieť podnikov.','Marketing, ktorý sa vysvetlí sám: „Uložte si leto.“'])}</div>`;
-}
-/* AI správca – záznam vyjednávania odvodený z alokácií enginu */
-function agentLog(){
-  const was=S.agent.on;if(!was)S.agent.on=true;
-  let res,plan,base,withA;
-  try{plan=agentPlan();res=dayRun();withA=agg(res)}finally{S.agent.on=was}
-  /* ručný režim = bez správcu a bez spotrebičov, ktoré naplánoval správca */
-  const saved=(S.agent.done||[]).map(([ow,k])=>{const o=A_(ow,k);return [o,o.time,o.accepted]});
-  S.agent.on=false;saved.forEach(([o])=>{o.time=o.orig;o.accepted=false});
-  try{base=agg(dayRun())}finally{S.agent.on=was;saved.forEach(([o,t,ac])=>{o.time=t;o.accepted=ac})}
-  const msgs=[],cx=S.agent.cancel,first=f=>{for(let i=0;i<96;i++)if(f(i))return i;return -1};
-  const bid=Math.min(S.agent.maxP,S.c.max);
-  msgs.push({i:0,who:'sys',txt:`Správcovia sa pripojili. Pravidlá Anny: min. ${fpr(S.agent.minA)} €/kWh, priorita „${S.agent.prio}“, cieľ ${fm(S.agent.goal,0)} kWh v Slnečnej banke do Vianoc. Pravidlá Petra: max. ${fpr(bid)} €/kWh.`});
-  const iD=first(i=>res.recs.some(r=>r.i===i&&r.from==='anna'&&r.to==='peter'&&!r.src&&!r.kind));
-  if(iD>=0){const k=sum(res.recs.filter(r=>r.from==='anna'&&r.to==='peter'&&!r.src&&!r.kind).map(r=>r.kwh));
-    msgs.push({i:Math.max(0,iD-1),who:'a',txt:`Od ${I2T(iD)} mám prebytok. Ponúkam ${fpr(Math.max(S.agent.minA,S.p.price))} €/kWh.`});
-    if(plan.deal){msgs.push({i:Math.max(0,iD-1),who:'p',txt:`Dám najviac ${fpr(bid)} €. Navrhujem ${fpr(plan.deal)} €/kWh, ak mi pošleš aj ${fm(res.R.offer[iD+2]||0.3,1)} kWh o ${I2T(iD+2)}.`});
-      msgs.push({i:iD,who:'a',key:'deal',txt:`Dohoda: ${fpr(plan.deal)} €/kWh, dnes približne ${fm(k,1)} kWh.`,why:plan.why.deal})}
-    else msgs.push({i:iD,who:'p',key:'deal',txt:cx.deal?'Dohoda zrušená – platí verejná cena ponuky.':'Za túto cenu nekúpim – platí verejná ponuka.',why:plan.why.deal||'Používateľ zrušil dohodu.'});}
-  const iC=first(i=>res.R.ch[i]>1e-6);if(iC>=0)msgs.push({i:iC,who:'a',key:'bat',txt:`Zvyšok ukladám do batérie (${fm(sum(res.R.ch),1)} kWh dnes) – večer predám za ${fpr(S.bat.price)} €/kWh.`,why:plan.why.bat});
-  const iB=first(i=>res.R.bank[i]>1e-6);if(iB>=0||plan.why.bank)msgs.push({i:iB>=0?iB:Math.max(0,iC),who:'a',key:'bank',txt:iB>=0?`Do Slnečnej banky ukladám ${fm(sum(res.R.bank),2)} kWh (${plan.bankPct} % zvyšku po batérii).`:'Do Slnečnej banky dnes neukladám.',why:plan.why.bank});
-  const iDo=first(i=>res.recs.some(r=>r.i===i&&r.kind==='don'));if(iDo>=0)msgs.push({i:iDo,who:'a',key:'don',txt:`Posielam ${fm(withA.anna.don,2)} kWh cez Solidárne slnko – bez provízie.`,why:plan.why.don});
-  for(const [ow,k,w] of [['c','wash','p'],['c','ev','p'],['p','pw','a'],['p','pb','a']]){const o=A_(ow,k);if(o.accepted)msgs.push({i:Math.max(0,T2I(o.time)-1),who:w,txt:`Spúšťam ${o.label} o ${o.time} (pôvodne ${o.orig}).`,why:ow==='c'?'V tomto čase je v skupine najviac prebytku – energia je lacnejšia.':'Mimo slnečného okna – uvoľní sa viac prebytku na predaj.'})}
-  const iE=first(i=>res.R.dis[i]>1e-6);if(iE>=0){msgs.push({i:iE,who:'a',txt:`Je ${I2T(iE)}. Ponúkam z batérie ${fpr(S.bat.price)} €/kWh.`});msgs.push({i:iE,who:'p',txt:`Beriem ${fm(withA.peter.recvBat,1)} kWh – zo siete by to stálo ${fpr(S.c.ref)} €. Úspora ${eur(withA.peter.recvBat*(S.c.ref-S.bat.price))}.`})}
-  const valA=annaValue;
-  const dA=valA(withA)-valA(base),dP=withA.peter.saved-base.peter.saved;
-  msgs.push({i:95,who:'sys',txt:`Koniec dňa: Annin správca ${dA>=0?'získal':'stratil'} ${eur(Math.abs(dA))} oproti ručnému režimu (vrátane hodnoty v banke), Petrov ${dP>=0?'ušetril navyše':'ušetril o'} ${eur(Math.abs(dP))}${dP<0?' menej (vyššia dohodnutá cena)':''}.`});
-  msgs.sort((x,y)=>x.i-y.i);
-  return {msgs,plan,dA,dP,withA,base};
-}
-function vIdeaAgent(){
-  const L=agentLog(),on=S.agent.on,shown=L.msgs.filter(m=>m.i<=S.sim.idx||m.i===0),cx=S.agent.cancel,d=S.sim.days;
-  const av={a:['A','var(--orange)','Annin agent'],p:['P','var(--blue)','Petrov agent'],sys:['🤖','var(--purple)','Zdieľňa']};
-  return `<div class="gap">${ideaHead('i_agent','Anna ani Peter nemusia nič sledovať. Ich AI správcovia sa každých 15 minút dohodnú na cene, rozhodnú, koľko uložiť do batérie a do Slnečnej banky, a naplánujú spotrebiče. Každé rozhodnutie vysvetlia jednou vetou a dá sa zrušiť.')}
-  <div class="grid g2"><div class="card"><div class="row between"><h3>Pravidlá</h3>${on?pill('g','● zapnutý'):pill('n','vypnutý – náhľad')}</div><div class="fields" style="margin-top:8px">${F('AI správca zapnutý (dohody idú do ledgera)','agent.on',{t:'c'})}${F('Priorita Anny','agent.prio',{t:'s',opts:PRIO})}${F('Anna: minimálna cena','agent.minA',{step:.005,u:'€/kWh'})}${F('Peter: maximálna cena','agent.maxP',{step:.005,u:'€/kWh'})}${F('Cieľ v Slnečnej banke do Vianoc','agent.goal',{step:10,u:'kWh'})}</div>
-    <h3 style="margin-top:12px">Povolené spotrebiče</h3><div class="fields" style="margin-top:6px">${F('Anna: pračka','agent.appl.pw',{t:'c'})}${F('Anna: bojler','agent.appl.pb',{t:'c'})}${F('Peter: umývačka','agent.appl.wash',{t:'c'})}${F('Peter: nabíjanie vozidla','agent.appl.ev',{t:'c'})}</div>
-    <div class="row" style="margin-top:10px"><button class="btn pri sm" data-act="agentappl">Nechať správcu naplánovať spotrebiče</button>${Object.keys(cx).some(k=>cx[k])?`<button class="btn sm" data-act="agentreset">Obnoviť zrušené rozhodnutia</button>`:''}</div></div>
-   <div class="card"><h3>Výsledok oproti ručnému režimu</h3><div class="grid g2" style="margin-top:8px;gap:8px">${kpi('Anna dnes',(L.dA>=0?'+':'')+eur(L.dA),'výplata + výkup + batéria + banka')}${kpi('Anna mesačne',(L.dA>=0?'+':'')+eur(L.dA*d))}${kpi('Peter dnes',(L.dP>=0?'+':'')+eur(L.dP),'úspora komodity')}${kpi('Dohodnutá cena',L.plan.deal?fpr(L.plan.deal)+' €':'—','cez deň Anna → Peter')}</div>
-    <table style="margin-top:10px"><tbody><tr><td>Do batérie zo zvyšku</td><td class="n">${L.plan.batPct} %</td></tr><tr><td>Do Slnečnej banky (po batérii)</td><td class="n">${L.plan.bankPct} %</td></tr><tr><td>Solidárne slnko</td><td class="n">${L.plan.donPct} %</td></tr><tr><td>Batéria najprv pre vlastnú spotrebu</td><td class="n">${L.plan.ownFirst?'áno':'nie'}</td></tr></tbody></table>
-    <p class="xs mut" style="margin-top:6px">Rovnaký engine: ${on?'dohody sa už premietajú do alokácie, ledgera („🤖 dohoda“) aj auditu.':'zapnite správcu, aby sa dohody premietli do ledgera.'}</p></div></div>
-  ${simBar()}
-  <div class="card"><div class="row between"><h3>💬 Vyjednávanie agentov – ${I2T(S.sim.idx)}</h3><span class="xs mut">správy pribúdajú počas dňa</span></div><div class="chatlog" style="margin-top:10px" aria-live="polite">${shown.map(m=>{const[ch,c,n]=av[m.who],x=m.key&&cx[m.key];return `<div class="ag ${x?'cx':''}"><span class="who" style="background:${c}" aria-hidden="true">${ch}</span><div class="bub"><div class="row between"><b class="sm">${n}</b><span class="xs mut">${I2T(m.i)}</span></div><div class="sm" style="margin-top:2px">${esc(m.txt)}</div>${m.why?`<div class="xs mut" style="margin-top:4px">Prečo: ${esc(m.why)}</div>`:''}${m.key?`<button class="btn sm" style="margin-top:6px" data-act="agcx:${m.key}">${x?'↺ Obnoviť':'✕ Zrušiť rozhodnutie'}</button>`:''}</div></div>`}).join('')}</div></div>
-  ${gains(['Nemusíte nič sledovať – správca obchoduje a plánuje za vás.','Každé rozhodnutie je vysvetlené jednou vetou a dá sa zrušiť.','Viac peňazí: lepšie ceny, batéria aj banka v jednom.'],['Trhovisko agentov ako platforma – vyššie objemy aj provízie.','Predvídateľné správanie skupín, lepšie plánovanie odchýlok.','Technologický náskok a príbeh, ktorý zaujme.'])}</div>`;
-}
-const TWH=[{id:'anna',x:130,y:330,pv:true,bat:true,n:'Anna'},{id:'B',x:270,y:390,pv:true,n:'Výrobca B'},{id:'SK',x:300,y:250,n:'Škola',w:96},{id:'peter',x:450,y:320,n:'Bistro Peter',bistro:true,w:84},{id:'NB',x:560,y:240,n:'Nabíjačka',ch:true},{id:'C',x:590,y:390,n:'Odberateľ C'},{id:'D',x:690,y:310,n:'Odberateľ D'}];
-function isoHouse(h,o){
-  const w=h.w||64,dp=34,ht=h.ch?0:46,off=o.off,roof=S.skin==='vse'?'var(--vse)':'var(--zse)',g=clamp(o.glow||0,0,1);
-  const x=h.x-w/2,y=h.y;
-  if(h.ch)return `<g class="house ${off?'':''}" data-act="twoff:${h.id}" tabindex="0" role="button" aria-label="${h.n}: ${off?'vypnutá – zapnúť':'zapnutá – vypnúť'}" opacity="${off?.35:1}"><rect x="${h.x-14}" y="${y-56}" width="28" height="56" rx="6" fill="var(--card)" stroke="var(--mut)" stroke-width="2"/><rect x="${h.x-8}" y="${y-48}" width="16" height="14" rx="2" fill="${o.dem>0?'#2fd36b':'var(--line)'}"/><text x="${h.x}" y="${y-18}" font-size="18" text-anchor="middle">🔌</text><text x="${h.x}" y="${y+16}" font-size="11" font-weight="700" fill="var(--ink)" text-anchor="middle">${h.n}${off?' (vyp.)':''}</text></g>`;
-  return `<g class="house" data-act="twoff:${h.id}" tabindex="0" role="button" aria-label="${h.n}: ${off?'vypnutý – zapnúť':'zapnutý – vypnúť'}" opacity="${off?.35:1}">
-   <polygon points="${x},${y} ${x+w},${y} ${x+w+dp*.6},${y-dp*.5} ${x+dp*.6},${y-dp*.5}" fill="#000" opacity=".08"/>
-   <rect x="${x}" y="${y-ht}" width="${w}" height="${ht}" fill="#f6efe4" stroke="#8a7f70"/>
-   <polygon points="${x+w},${y} ${x+w+dp*.6},${y-dp*.5} ${x+w+dp*.6},${y-ht-dp*.5} ${x+w},${y-ht}" fill="#e2d6c3" stroke="#8a7f70"/>
-   <polygon points="${x-4},${y-ht} ${x+w/2},${y-ht-30} ${x+w+4},${y-ht}" fill="${roof}" stroke="#fff"/>
-   <polygon points="${x+w/2},${y-ht-30} ${x+w/2+dp*.6},${y-ht-30-dp*.5} ${x+w+4+dp*.6},${y-ht-dp*.5} ${x+w+4},${y-ht}" fill="${roof}" opacity=".78" stroke="#fff"/>
-   ${h.pv?`<polygon points="${x+w/2+6},${y-ht-27} ${x+w/2+dp*.5+2},${y-ht-27-dp*.42} ${x+w+dp*.5-2},${y-ht-6-dp*.42} ${x+w-2},${y-ht-6}" fill="#1b2f5e" stroke="#fff" stroke-width=".8"/><polygon points="${x+w/2+6},${y-ht-27} ${x+w/2+dp*.5+2},${y-ht-27-dp*.42} ${x+w+dp*.5-2},${y-ht-6-dp*.42} ${x+w-2},${y-ht-6}" fill="#ffd23f" opacity="${(g*.9).toFixed(2)}"/>`:''}
-   <rect x="${x+w/2-7}" y="${y-22}" width="14" height="22" fill="#8a7f70"/><rect x="${x+8}" y="${y-ht+10}" width="12" height="10" fill="${o.dem>0.05?'#ffe58a':'#cfd8e6'}"/><rect x="${x+w-20}" y="${y-ht+10}" width="12" height="10" fill="${o.dem>0.05?'#ffe58a':'#cfd8e6'}"/>
-   ${h.bat?`<g transform="translate(${x-16},${y-30})"><rect width="12" height="28" rx="3" fill="var(--purple)"/><rect x="2" y="${2+24*(1-clamp(o.soc||0,0,1))}" width="8" height="${24*clamp(o.soc||0,0,1)}" fill="#b9f5c9"/></g>`:''}
-   ${h.bistro?`<text x="${x+w/2}" y="${y-ht-6}" font-size="13" text-anchor="middle">🍽</text>`:''}${h.id==='SK'?`<text x="${x+w/2}" y="${y-ht-6}" font-size="13" text-anchor="middle">🏫</text>`:''}
-   <text x="${x+w/2}" y="${y+16}" font-size="11" font-weight="700" fill="var(--ink)" text-anchor="middle">${h.n}${off?' (vyp.)':''}</text></g>`;
-}
-function twinRun(){
-  const cl=S.twin.cloud,cov=hx=>{const dx=Math.abs(cl-hx);return dx<95?0.75*(1-dx/95):0};
-  const mulA=1-cov(TWH[0].x),mulB=1-cov(TWH[1].x);
-  return {res:runDay(S.c.appTime,{twin:true,potential:true,off:S.twin.off,mul:mulA,mulB}),mulA,mulB};
-}
-function vIdeaTwin(){
-  const {res,mulA,mulB}=twinRun(),cur=Math.min(95,S.sim.idx),a=agg(res),P=res.P,pos=Object.fromEntries(TWH.map(h=>[h.id,h]));
-  const t=clamp((cur-24)/56,0,1),sx=40+t*680,sy=150-Math.sin(t*Math.PI)*120,night=cur<24||cur>=80;
-  const maxP=Math.max(.2,...P.fpFull);
-  const prodNow={anna:res.A.a[cur]*res.share,B:P.fpFull[cur]*.6*mulB};
-  const dem={};for(const r of res.recs)if(r.i===cur&&!r.kind)dem[r.to]=(dem[r.to]||0)+r.kwh;
-  const loc=sum(res.recs.filter(r=>!r.kind).map(r=>r.kwh)),sav=sum(res.recs.filter(r=>!r.kind).map(r=>r.kwh*(S.c.ref-r.price))),ms=matchScore(profiles(S.c.appTime,mulA).fp,S.p.price,P.fc,S.c.max,S.c.ref,S.p.conf);
-  let s=`<svg id="twinsvg" viewBox="0 0 760 460" role="img" aria-label="Živé dvojča mesta – ${I2T(cur)}">${arrowDefs()}
-   <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night?'#1b2440':'#9fd0ff'}"/><stop offset="1" stop-color="${night?'#2f3a5c':'#e9f5ff'}"/></linearGradient><radialGradient id="sunG"><stop offset="0" stop-color="#fff6c2"/><stop offset=".5" stop-color="#ffd23f"/><stop offset="1" stop-color="#ffb300" stop-opacity="0"/></radialGradient></defs>
-   <rect width="760" height="460" fill="url(#sky)"/><path d="M0,250 Q380,200 760,250 L760,460 L0,460Z" fill="${night?'#2a3b2e':'#cfe8c4'}"/><path d="M60,420 L700,420 L760,360 L120,360Z" fill="#000" opacity=".04"/>
-   <path d="M40,150 Q380,${150-240} 720,150" fill="none" stroke="#fff" stroke-dasharray="3 7" opacity=".6"/>`;
-  s+=`<g class="drag" data-drag="sun" tabindex="0" role="slider" aria-label="Slnko – čas dňa" aria-valuemin="6" aria-valuemax="20" aria-valuenow="${(cur/4).toFixed(2)}" aria-valuetext="${I2T(cur)}" transform="translate(${sx.toFixed(1)},${sy.toFixed(1)})"><circle r="44" fill="url(#sunG)"/><circle r="20" fill="${night?'#e6e9f2':'#ffd23f'}" stroke="#fff" stroke-width="2"/><text y="5" font-size="13" font-weight="800" text-anchor="middle" fill="#5a4300">${night?'🌙':''}</text><text y="40" font-size="11" font-weight="800" text-anchor="middle" fill="${night?'#fff':'#5a4300'}">${I2T(cur)}</text></g>`;
-    const flows=[];for(const r of res.recs)if(r.i===cur&&!r.kind&&pos[r.from]&&pos[r.to]){const k=r.from+(r.src||'')+'_'+r.to,f=flows.find(z=>z.k===k);if(f)f.v+=r.kwh;else flows.push({k,from:r.from,to:r.to,bat:r.src==='bat',v:r.kwh})}
-  for(const f of flows){const A=pos[f.from],B=pos[f.to];s+=flowSvg('tw_'+f.k,[A.x+(f.bat?-10:10),A.y-(f.bat?20:70)],[B.x,B.y-60],f.v,f.bat?'var(--purple)':'var(--green)',{mk:f.bat?'p':'g',bend:.25,scale:14,n:4})}
-  for(const h of TWH){const off=!!S.twin.off[h.id];s+=isoHouse(h,{off,glow:h.pv?(prodNow[h.id]||0)/maxP:0,soc:h.bat?res.R.soc[cur]/Math.max(.1,S.bat.cap):0,dem:dem[h.id]||0})}
-  s+=`<g class="drag" data-drag="cloud" tabindex="0" role="slider" aria-label="Oblak – posun nad mestom" aria-valuemin="40" aria-valuemax="720" aria-valuenow="${Math.round(S.twin.cloud)}" transform="translate(${S.twin.cloud.toFixed(1)},95)"><ellipse rx="70" ry="26" fill="#fff" opacity=".95" stroke="#cfd8e6"/><ellipse cx="-34" cy="8" rx="38" ry="20" fill="#fff"/><ellipse cx="36" cy="10" rx="40" ry="20" fill="#fff"/><ellipse cx="0" cy="-14" rx="34" ry="22" fill="#fff"/><text y="6" font-size="11" font-weight="800" text-anchor="middle" fill="#5d6675">☁ potiahni ma</text></g>`;
-  s+=`</svg>`;
-  return `<div class="gap">${ideaHead('i_twin','Celé mestečko na jednej obrazovke: strechy svietia podľa výroby a energia tečie medzi domami. Potiahnite slnko a zmeníte čas dňa, potiahnite oblak nad strechu a výroba klesne – všetko sa prepočíta tým istým enginom.')}
-  <div class="card twin" style="padding:10px"><div class="mapwrap">${s}</div><p class="xs mut" style="margin-top:6px">Ťahajte myšou alebo prstom; s klávesnicou: Tab na slnko alebo oblak a šípky ←/→. Kliknutím na dom ho vypnete/zapnete.</p></div>
-  ${simBar()}
-  <div class="grid g4">${kpi('Lokálne spotrebované dnes',fm(loc,1)+' kWh','všetci členovia mestečka')}${kpi('Úspora odberateľov',eur(sav),'oproti cene zo siete')}${kpi('CO₂ ušetrené',fm(loc*S.twin.co2,1)+' kg','pri '+fpr(S.twin.co2)+' kg/kWh (ilustračne)')}${kpi('Provízia '+BR(),eur(a.comT),'zhoda Anna ↔ Peter '+pct(ms.total))}</div>
-  <div class="card"><div class="row between"><h3>Stav mestečka</h3><span class="xs mut">oblak: Anna ${pct(1-mulA)} tieň · B ${pct(1-mulB)} tieň</span></div><div class="fields three" style="margin-top:8px">${F('Faktor CO₂','twin.co2',{step:.01,u:'kg/kWh'})}${F('Cena Anny','p.price',{step:.005,u:'€/kWh'})}${F('Prebytok Anny / deň','p.surplus',{step:.5,u:'kWh'})}</div></div>
-  ${gains(['Pochopí systém za 10 sekúnd – vidí, odkiaľ jeho energia ide.','Hravé „čo ak“: oblak, čas, vypnutý dom.','Dôvera: čísla počíta ten istý engine ako vyúčtovanie.'],['Nástroj pre obce a developerov na plánovanie energetických komunít.','Wau efekt na veľtrhoch, v pobočkách aj v kampani.','Vizualizácia, ktorá predáva fotovoltiku a batérie.'])}</div>`;
-}
-function vIdeaSend(){
-  const s=S.send,c=CONTACTS[s.to],bal=S.bank.bal,res=dayRun(),last=S.gifts.find(g=>g.id===s.last);
-  const from=prj(geo(S.om.anna.addr).ll),toLL=c?geo(c.town).ll:TOWNS.kosice,to=prj(toLL);
-  const mx=(from[0]+to[0])/2,my=Math.min(from[1],to[1])-90;
-  let svg=`<svg viewBox="0 28 ${MAPW} 392" role="img" aria-label="Mapa doručenia darčeka">${arrowDefs()}${mapBase(420)}
-   <path id="sendPath" d="M${from[0].toFixed(1)},${(from[1]-12).toFixed(1)}Q${mx.toFixed(1)},${my.toFixed(1)} ${to[0].toFixed(1)},${(to[1]-12).toFixed(1)}" fill="none" stroke="var(--map-gift)" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 8"/>`;
-  svg+=mapHouse(from[0],from[1],{roof:regionOf(geo(S.om.anna.addr).ll),pv:true,bat:S.bat.on,soc:.7,glow:.8,own:true,big:true,label:'Anna'});
-  for(const [k,v] of Object.entries(CONTACTS)){const p=prj(geo(v.town).ll);svg+=mapHouse(p[0],p[1],{roof:regionOf(geo(v.town).ll),label:k===s.to?v.name:'',sel:k===s.to,act:'sendto:'+k,aria:v.name+', '+v.town})}
-  const done=!s.anim&&last;
-  svg+=`<g id="sendSun" transform="translate(${(s.anim?from[0]:done?to[0]:from[0]).toFixed(1)},${((s.anim||!done?from[1]:to[1])-26).toFixed(1)})"><circle r="15" fill="#ffd23f" stroke="#fff" stroke-width="2"/><text y="5" font-size="15" text-anchor="middle">☀</text></g></svg>`;
-  const delivered=last&&last.src==='today'?sum(res.recs.filter(r=>r.gid===last.id).map(r=>r.kwh)):last?last.kwh:0;
-  const inbox=S.gifts.filter(g=>g.to===s.to);
-  return `<div class="gap">${ideaHead('i_send','Babka Mária býva v Košiciach a na fotovoltiku nemá. Anna jej na narodeniny pošle 3 kWh slnka z Piešťan – ako keď posielate peniaze kamarátovi. Na mape preletí slniečko zo západu na východ.')}
-  <div class="grid g2" style="align-items:start"><div class="card"><h3>Poslať slnko</h3><div class="fields" style="margin-top:8px">${F('Komu','send.to',{t:'s',opts:Object.entries(CONTACTS).map(([k,v])=>[k,v.name+' – '+v.town])})}${F('Množstvo','send.kwh',{step:.5,min:.5,u:'kWh'})}${F('Príležitosť','send.occ',{t:'s',opts:['Narodeniny','Vianoce','Deň matiek','Len tak','Poďakovanie']})}${F('Zdroj','send.src',{t:'s',opts:[['bank',`Zo Slnečnej banky (zostatok ${fm(bal,1)} kWh)`],['today','Z dnešného prebytku (po skupine a batérii)']]})}${F('Provízia za doručenie','send.fee',{step:.005,u:'€/kWh'})}</div>
-    <div class="fields one" style="margin-top:10px">${F('Odkaz','send.msg',{t:'x'})}</div>
-    <p class="xs mut" style="margin-top:6px">OM príjemcu: ${c?c.om:'—'} · oblasť ${REG[regionOf(toLL)].co}. Príjemca neplatí nič. Vy prichádzate o predaj ${fm(s.kwh,1)} kWh (≈ ${eur(s.kwh*S.p.feedin)} pri výkupe)${s.fee>0?` + ${eur(s.kwh*s.fee)} za doručenie`:''}.</p>
-    <button class="btn pri lg" style="margin-top:12px" data-act="sendsun" ${s.anim?'disabled':''}>Poslať slnko ☀</button></div>
-   <div class="card map-hero hero" style="padding:16px"><div class="map-svg" style="margin:0">${svg}</div>${last?`<div class="hstat" style="margin-top:12px;max-width:none;transform:none"><b>${s.anim?'☀ Slnko letí…':'✓ Doručené'}: ${esc(CONTACTS[last.to].name)}</b><p class="sm" style="margin-top:4px">${fm(last.kwh,1)} kWh · ${esc(last.occ)}${last.src==='today'?` · dnes doručené ${fm(delivered,2)} z ${fm(last.kwh,1)} kWh po 15-minútových intervaloch${delivered<last.kwh-1e-6?' (zvyšok zajtra)':''}`:' · zo Slnečnej banky'}</p></div>`:''}</div></div>
-  <div class="card"><h3>📬 Schránka príjemcu – ${esc(c?c.name:'')}</h3>${inbox.length?`<div class="gap" style="margin-top:8px">${inbox.map(g=>`<div class="ag"><span class="who" style="background:#f5b400" aria-hidden="true">🎁</span><div class="bub"><div class="row between"><b class="sm">Od Anny · ${esc(g.occ)}</b><span class="xs mut">${g.t}</span></div><div class="sm" style="margin-top:2px">„${esc(g.msg)}“</div><div class="xs mut" style="margin-top:4px">${fm(g.kwh,1)} kWh → ušetrí ${eur(g.kwh*S.c.ref)} na elektrine</div></div></div>`).join('')}</div>`:`<p class="sm mut" style="margin-top:6px">Zatiaľ žiadne darčeky.</p>`}</div>
-  ${gains(['Darček, ktorý má hodnotu aj príbeh – a doručí sa za sekundu.','Aj kto nemá strechu, môže dostať slnko od rodiny.','Využitie prebytku namiesto predaja za pár centov.'],['Virálny moment: ľudia posielajú slnko ako peniaze – noví zákazníci.','Prepojenie rodín naprieč oblasťami ZSE a VSE.','Sezónne kampane: Vianoce, Deň matiek, narodeniny.'])}</div>`;
 }
 function vIdeaEv(){
   const E=S.ev,res=dayRun(),v=evSim(res),w=[];
@@ -3254,7 +3353,7 @@ function vIdeaEv(){
   ${gains(['Majiteľ auta zarába, kým auto stojí.','Bistro má lacnejší večer bez vlastnej batérie.','Strechy predajú viac prebytku než výkupcovi.'],['Flexibilita v sieti – autá ako rozptýlená batéria ulice.','Nové služby: wallboxy s V2G, tarify pre elektromobily.','Menej večerných špičiek v oblasti ZSE/VSE.'])}</div>`;
 }
 function moreSheet(){
-  const L=[NAV[2],NAV[3],NAV[4],['profile','Profil','user'],...NAV_PUB];
+  const L=[['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['profile','Nastavenia','user']];
   return `<div class="modal-bg" data-act="closemodal" style="align-items:flex-end;padding:0"><div class="more" role="dialog" aria-modal="true" aria-label="Viac"><div class="row between"><h2>Viac</h2><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div><div class="gridm">${L.map(([k,l,i])=>`<button data-act="view:${k}">${icon(i)}${l}</button>`).join('')}</div><button class="btn sm jury-btn" style="width:100%;margin-top:14px" data-act="jury" aria-pressed="${!!S.jury}">🎬 ${S.jury?'Vypnúť režim poroty':'Režim poroty'}</button></div></div>`;
 }
 
@@ -3274,7 +3373,7 @@ const BCAT={
   rytmus:{name:'Slnečný rytmus',shape:'circle',sub:'Presun spotreby do slnečného okna'},
   strecha:{name:'Strecha, ktorá zdieľa',shape:'roof',sub:'Výroba a predaj prebytkov'},
   komunita:{name:'Komunita',shape:'hex',sub:'Spoločné ciele – bez rebríčka jednotlivcov'},
-  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie a darčeky'},
+  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie'},
   sezona:{name:'Sezónne',shape:'star',sub:'Iba v určitom období roka'}
 };
 /* kind: once = raz · rep = opakovateľný (×N) · tier = úrovne podľa hodnoty */
@@ -3294,19 +3393,15 @@ const BADGES=[
  {id:'better',cat:'strecha',who:'anna',kind:'tier',tiers:[10,100,500],unit:'€',icon:'coins',col:'--c-prod',name:'Lepšie než výkup',how:'Zárobok navyše oproti tomu, keby ste všetko predali výkupcovi.',live:c=>Math.max(0,c.annaVs)},
 
  {id:'goal',cat:'komunita',who:'both',kind:'rep',metal:'gold',icon:'group',col:'--c-shared',name:'Cieľ skupiny',how:'Skupina využila aspoň 80 % prebytkov dňa. Spoločný úspech, bez rebríčka. Vyhodnocuje sa o 24:00.',live:c=>c.eod&&c.annaSucc>=.8},
- {id:'connector',cat:'komunita',who:'anna',kind:'once',metal:'silver',icon:'market',col:'--brand',name:'Prepájač',how:'Nový sused sa pripojil cez váš prepájací kód.',live:()=>S.codeOk},
  {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Slnečný kruh 17.'},
  {id:'morning',cat:'komunita',who:'both',kind:'tier',tiers:[3,7,30],unit:'dní',icon:'sunrise',col:'--c-prod',name:'Ranné slniečko',how:'Dni, keď ste sa pozreli do Zdieľne. Každý deň dostanete na štart slnečné body – a za sériu viac.',live:c=>c.visits},
- {id:'eastwest',cat:'komunita',who:'both',kind:'once',metal:'silver',icon:'map',col:'--c-cons',name:'Západ – východ',how:'Vaša elektrina putovala medzi oblasťami ZSE a VSE, napríklad cez Pošli slnko.',live:c=>c.eastWest},
 
- {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko alebo Pošli slnko.',live:c=>c.don>0.001||c.gifts>0},
+ {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko.',live:c=>c.don>0.001},
  {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Solidárne slnko – bez provízie a bez poplatkov.',live:c=>c.don},
- {id:'sent',cat:'srdce',who:'anna',kind:'rep',metal:'silver',icon:'gift',col:'--c-prod',name:'Poslané slnko',how:'Darček cez Pošli slnko bol odoslaný blízkemu človeku.',count:c=>c.gifts},
 
  {id:'longest',cat:'sezona',who:'both',kind:'once',metal:'slnko',icon:'sun',col:'--c-prod',name:'Najdlhší deň',how:'Zdieľali ste 21. júna, v deň letného slnovratu.'},
  {id:'spring',cat:'sezona',who:'both',kind:'once',metal:'silver',icon:'leaf',col:'--c-shared',name:'Prvý jarný lúč',how:'Prvé zdieľanie po zime.'},
  {id:'autumn',cat:'sezona',who:'both',kind:'tier',tiers:[10],unit:'dní',icon:'leaf',col:'--c-grid',name:'Jesenný lovec',how:'10 zamračených októbrových dní (výroba pod 70 %), keď ste aj tak zdieľali.',live:c=>c.cloudy?1:0},
- {id:'xmas',cat:'sezona',who:'anna',kind:'once',metal:'slnko',secret:true,icon:'gift',col:'--brand',name:'Vianoce zo slnka',how:'Do 24. decembra máte v Slnečnej banke cieľ, ktorý si nastavil AI správca.',live:()=>S.bank.bal>=S.agent.goal,prog:()=>[S.bank.bal,S.agent.goal,'kWh']}
 ];
 /* ilustračná história (dátumy ISO) – nastavená tak, aby sa v deme dali odznaky odomknúť */
 const BDG_BASE={
@@ -3314,7 +3409,7 @@ const BDG_BASE={
  streak:{val:5},shifted:{val:98.2,dates:{10:'2026-06-03'}},saved:{val:61.3,dates:{10:'2026-06-20'}},
  first_share:{date:'2026-04-03'},shared:{val:993,dates:{100:'2026-04-29'}},nowaste:{count:23,date:'2026-10-11'},
  forecast:{count:11,date:'2026-10-09'},evening:{count:41,date:'2026-10-17'},better:{val:72.4,dates:{10:'2026-05-18'}},
- goal:{count:3,date:'2026-09-30'},morning:{val:1},connector:{date:'2026-06-02'},founder:{date:'2026-03-20'},
+ goal:{count:3,date:'2026-09-30'},morning:{val:1},founder:{date:'2026-03-20'},
  longest:{date:'2026-06-21'},spring:{date:'2026-03-08'},autumn:{val:6}
 };
 const BDG=()=>S.bdg||(S.bdg={base:JSON.parse(JSON.stringify(BDG_BASE)),seen:{},cnt:{},sel:{},fresh:{}});
@@ -3449,7 +3544,7 @@ function bdgModal(id,isNew){
     <h2>${esc(st.secret?'Tajný odznak':b.name)}${b.kind==='rep'&&st.earned?` <span class="bdg-x">×${st.count}</span>`:''}</h2>
     <p>${st.earned?'Získané '+fdate(st.date):st.secret?'Odhalí sa, keď ho získate.':'Zatiaľ nezískaný'}</p></div>
    <div style="padding:18px 20px 20px">
-    <p>${esc(st.secret?'Tento odznak je prekvapenie. Patrí k Slnečnej banke a AI správcovi.':b.how)}</p>
+    <p>${esc(st.secret?'Tento odznak je prekvapenie.':b.how)}</p>
     ${!st.secret&&(st.prog)?`<div style="margin-top:12px">${bdgBar(st.prog)}</div>`:''}
     ${b.kind!=='once'?`<p class="sm mut" style="margin-top:10px">${esc(bdgLine(st))}</p>`:''}
     ${tiers}
@@ -3510,7 +3605,7 @@ function bdgShare(id){
 const welcomePts=streak=>Math.min(30,5+5*streak);
 function checkWelcome(){
   const per=S.persona;if(per!=='anna'&&per!=='peter')return;
-  if(S.tourOn||S.modal||PUB.includes(curView()))return;
+  if(S.tourOn||S.modal||PUB.includes(curView())||regPending())return;   /* body až po schválení registrácie */
   const v=S.visit[per]||(S.visit[per]={day:0,streak:0});if(v.day===S.day)return;
   const streak=v.day===S.day-1?v.streak+1:1,pts=welcomePts(streak);
   v.day=S.day;v.streak=streak;
@@ -3579,7 +3674,7 @@ function bellPanel(){
   return `<div class="modal-bg bell-bg" data-act="closemodal"><div class="bellpanel" role="dialog" aria-modal="true" aria-label="Notifikácie">
    <div class="row between"><div><span class="kicker" style="margin-bottom:2px">Notifikácie</span><b>${un?un+' neprečítané':'Všetko prečítané'}</b></div><div class="row">${un?`<button class="link" data-act="notesread">Označiť všetko</button>`:''}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div></div>
    <div class="notes">${L.length?L.map(n=>`<button class="note ${n.read?'':'unread'}" data-act="note:${n.id}"><span class="note-ic">${icon(NOTE_IC[n.kind]||'info')}</span><span class="note-b"><b>${esc(n.title)}</b><span>${esc(n.text)}</span><span class="note-t">${n.day?'Deň '+n.day+' · ':''}${n.t}</span></span>${n.read?'':'<i class="note-dot" aria-label="neprečítané"></i>'}</button>`).join(''):`<p class="sm mut" style="padding:20px 4px">Zatiaľ nič nové. Ozveme sa pred slnečným oknom.</p>`}</div>
-   <p class="xs mut" style="margin-top:8px">Čo vám posielame, nastavíte v <button class="link" data-act="view:profile">Profile</button>.</p></div></div>`;
+   <p class="xs mut" style="margin-top:8px">Čo vám posielame, nastavíte v <button class="link" data-act="view:profile">Nastaveniach</button>.</p></div></div>`;
 }
 
 </script>
@@ -3587,19 +3682,15 @@ function bellPanel(){
 /* js/chat.js */
 'use strict';
 /* ---------- AI asistent (demo): znalostná báza + rozpoznávanie zámeru, čísla zo živého stavu ---------- */
-const CHIPS=['Koľko zarobím?','Koľko ušetrím?','Kedy zapnúť pračku?','Koľko zarobí batéria?','Aká je provízia?','Ako sa zaregistrujem?','Čo je Slnečná banka?','Čo robí AI správca?'];
+const CHIPS=['Koľko zarobím?','Koľko ušetrím?','Kedy zapnúť pračku?','Koľko zarobí batéria?','Aká je provízia?','Ako sa zaregistrujem?','Čo je Solidárne slnko?'];
 function botAnswer(q){
   const n=' '+norm(q)+' ',has=(...w)=>w.some(x=>n.includes(x));
   const d=S.sim.days,pa=agg(potRun()),b=benefitNums(),P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i]))),wt=win?I2T(win.a)+' – '+I2T(win.b):'—';
   const A=(t,acts=[])=>({html:t,acts});
   if(/^\s*(ahoj|dobry|cau|zdravim|servus|hello|hi|dobre rano)\b/.test(n))return A(`Ahoj! Som AI asistent Zdieľne (demo). Spýtajte sa ma na zárobok, úsporu, batériu, províziu, registráciu alebo ktorýkoľvek z nápadov – odpovedám z aktuálnych čísel aplikácie.`);
   if(has('bateri','vecer','vecerna','vecerny'))return A(`🔋 S batériou ${fm(S.bat.cap,0)} kWh Anna cez deň uloží ${fm(pa.anna.batCh,1)} kWh zvyšku a večer (${S.bat.eStart}–${S.bat.eEnd}) predá ${fm(pa.anna.batSold,1)} kWh za <b>${fpr(S.bat.price)} €/kWh</b> – viac ako obedných ${fpr(S.p.price)} €, menej ako ${fpr(S.c.ref)} € zo siete. Zisk z batérie je približne <b>${eur(pa.anna.batGain)} denne</b>, t. j. ${eur0(pa.anna.batGain*d*12)} ročne (odhad, po provízii a stratách ${fm(100-S.bat.eff,0)} %).${batWarn().length?' ⚠ '+batWarn()[0][1]+'.':''}`,[['Nastaviť batériu','view:group']]);
-  if(has('banka','banke','vianoc','minc','uloz','leto'))return A(`🏦 Slnečná banka je vízia: nenasdieľané kWh si v lete uložíte ako slnečné mince a v zime ich vyberiete (kurz ${fm(S.bank.rate,0)} %, zimná cena ${fpr(S.bank.winter)} €/kWh). Jedna minca má teraz hodnotu ${fpr(coinEur())} € a mincami sa dá platiť aj v ${esc(S.badge.name)}. Zostatok: ${fm(S.bank.bal,0)} mincí.`,[['Otvoriť Slnečnú banku','view:i_bank']]);
   if(has('solidar','daro','daruj','charit','v nudzi','pomoct'))return A(`🤝 Solidárne slnko: časť zvyšku prebytku darujete domácnosti v núdzi, škole alebo charite cez obec. <b>Bez provízie a bez poplatkov</b> – príjemca platí 0 €. ${S.don.on?`Dnes sa daruje ${fm(agg(dayRun()).anna.don,2)} kWh.`:'Momentálne je vypnuté.'}`,[['Otvoriť Solidárne slnko','view:i_sol']]);
-  if(has('posl','darcek','babk','posielat'))return A(`🎁 Pošli slnko: pošlete kWh komukoľvek (kód OM alebo kontakt) – napríklad babke do Košíc. Príjemca neplatí nič, vy prichádzate o predaj týchto kWh (≈ ${fpr(S.p.feedin)} €/kWh pri výkupe). Zatiaľ odoslaných darčekov: ${S.gifts.length}.`,[['Poslať slnko','view:i_send']]);
-  if(has('agent','spravca','spravcu','vyjednav'))return A(`🤖 AI správca každých 15 minút vyjednáva cenu s agentmi susedov a rozhoduje, kam ide zvyšok prebytku: batéria → Slnečná banka → Solidárne slnko → výkup. ${S.agent.on?`Teraz je zapnutý; dohodnutá cena ${agentPlan().deal?fpr(agentPlan().deal)+' €/kWh':'zatiaľ žiadna'}.`:'Teraz je vypnutý.'} Každé rozhodnutie vysvetlí jednou vetou a dá sa zrušiť.`,[['Otvoriť AI správcu','view:i_agent']]);
-  if(has('dvojca','mestecko',' mesto'))return A(`🏙 Živé dvojča mesta: potiahnete slnko (čas) alebo oblak nad strechu a celé mestečko sa prepočíta tým istým enginom – toky, úspory, CO₂ aj províziu.`,[['Otvoriť dvojča','view:i_twin']]);
-  if(has('elektromobil','v2g',' auto ',' auta ',' aute '))return A(`🚗 Elektromobil ako batéria ulice (vízia): auto sa cez deň nabije z ${S.ev.roofs} striech a večer vráti ${fm(evSim(dayRun()).disT,1)} kWh bistru. Nikdy neklesne pod ${fm(S.ev.minSoc,0)} % potrebných na ranný odchod.`,[['Otvoriť V2G','view:i_ev']]);
+  if(has('elektromobil','v2g',' auto ',' auta ',' aute '))return A(`🚗 Elektromobil ako batéria ulice (pripravujeme): auto sa cez deň nabije z ${S.ev.roofs} striech a večer vráti ${fm(evSim(dayRun()).disT,1)} kWh bistru. Nikdy neklesne pod ${fm(S.ev.minSoc,0)} % potrebných na ranný odchod.`);
   if(has('certifik','nalepk','znack','varime','podnik'))return A(`🍽 „Varíme zo slnka od suseda“: ${esc(S.badge.name)} má dnes <b>${pct(badgeShare().sh)}</b> elektriny zo susedných striech${badgeShare().lv?' – úroveň '+badgeShare().lv:''}. Dostane certifikát a nálepku so skutočným QR kódom.`,[['Otvoriť značku','view:i_badge']]);
   if(has('mapa','mape','domcek','kde su'))return A(`🗺 Na mape vidíte svoje OM aj ostatných členov (anonymizovane) – domčeky v oblasti ZSE majú červenú strechu, vo VSE modrú. Svetielka ukazujú tok elektriny v aktuálnom 15-min intervale.`,[['Otvoriť mapu','view:map']]);
   if(has('zacne','zacina','spusti sa','aktivac','aktivuje'))return A(`Zdieľanie začne po aktivácii žiadosti: operátor ${BR()} ju potvrdí po kontrole distribútora a spustí sa <b>k 1. dňu nasledujúceho mesiaca</b>. Vstup ani výstup nie sú okamžité.`,[['Moja skupina','view:group']]);
@@ -3615,7 +3706,7 @@ function botAnswer(q){
   if(has('vyuctov','faktur','inkas','plati','platba'))return A(`Vyúčtovanie je mesačné: do 5. dňa návrh, do 10. dňa vyúčtovanie (odberateľ platí inkasom), do 20. dňa výplata výrobcovi po odpočítaní provízie.`,[['Prehľady','view:reports']]);
   if(has('odmen','body','vyzv','podvod'))return A(`Za presun spotreby do slnečného okna získate body (denný limit ${S.pts.cap}). Body sa pripíšu až po overení podľa IMS – v novom čase musí spotreba vzrásť a v pôvodnom klesnúť (prah 60 %). „Test podvodu“ overenie neprejde.`,[['Odmeny','view:rewards']]);
   if(has('registr','prihlas','ucet','spp','zakaznik'))return A(`Registrácia má dve cesty: <b>zákazník ZSE alebo VSE</b> sa prihlási automaticky (údaje o OM, IMS a zmluvách doplníme), <b>zákazník SPP alebo inej spoločnosti</b> prejde krátkou registráciou v 7 krokoch. Dodávateľa meniť netreba.`,[['Zaregistrovať sa','view:register']]);
-  if(has('zhoda','smart','match','skupin','ponuk'))return A(`Zhoda = 50 % časový prekryv + 25 % cena + 15 % spoľahlivosť predikcie + 10 % rovnováha. Anna ↔ Peter majú dnes ${pct(matchScore(P.fp,S.p.price,P.fc,S.c.max,S.c.ref,S.p.conf).total)}. V trhovisku tlačidlo „Nájsť najlepšie spojenie“ vyberie najlepšiu ponuku.`,[['Trhovisko','view:market']]);
+  if(has('zhoda','smart','match','skupin','ponuk'))return A(`Zhoda = 50 % časový prekryv + 25 % cena + 15 % spoľahlivosť predikcie + 10 % rovnováha. Anna ↔ Peter majú dnes ${pct(matchScore(P.fp,S.p.price,P.fc,S.c.max,S.c.ref,S.p.conf).total)}. Skupinu vám odporučíme pri registrácii – vidíte pri nej, koľko v ktorej ušetríte.`,[['Moja skupina','view:group']]);
   if(has('kontakt','clovek','operator','podpor','zavolat'))return A(`Rád vás prepojím s človekom (v deme ilustračne): zákaznícka linka ${BR()} alebo e-mail cez formulár v aplikácii ${BR()}. Medzitým sa pokojne pýtajte ďalej.`);
   return A(`Na toto zatiaľ nepoznám presnú odpoveď. Skúste sa opýtať napríklad na zárobok, batériu, províziu, registráciu, výstup zo skupiny alebo na niektorý z nápadov. Ak chcete, prepojím vás s človekom.`,[['Kontakt na človeka','ask:Chcem kontakt na človeka']]);
 }
@@ -3648,12 +3739,12 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['market','Trhovisko','market'],['group','Moja skupina','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
-const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(!isOn(v))v='landing';return v};
+const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(v==='market')v='group';if(!isOn(v))v='landing';return v};
 /* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
 const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
   landingfeature:a=>({battery:'home',solidarity:'i_sol',reports:'reports'}[a]||'rewards')};
@@ -3669,7 +3760,7 @@ function customerSkin(){
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&S.reg.step==='wiz'));document.body.classList.toggle('jury',J);
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&['wiz','load'].includes(S.reg.step)));document.body.classList.toggle('jury',J);
   const brandSeg=J&&!isNeutral(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
@@ -3679,19 +3770,20 @@ function renderShell(){
   $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
    :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
-   :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;
+   :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k));
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
-  const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span></button>`;
-  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
-  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.filter(([k])=>isOn(k)).map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
+  const lk=k=>regPending()&&REG_LOCKED[k]?`<span class="nav-lock" title="Po schválení žiadosti">${icon('lock')}</span>`:'';
+  const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span>${lk(k)}</button>`;
+  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>st==='soon'?`<button class="sub soon" disabled aria-disabled="true" title="Pripravujeme"><span class="ic">${icon(i)}</span><span>${l}<small>Pripravujeme…</small></span></button>`:`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
+  $('#side').innerHTML=`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
     +`<div class="side-foot"><button class="jury-btn" data-act="jury" aria-pressed="${J}">🎬 ${J?'Vypnúť režim poroty':'Režim poroty'}</button></div>`;
-  const bn=(p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]]).filter(([k])=>isOn(k));
+  const bn=(p==='admin'?NAV_ADMIN:NAV.filter(([k])=>['home','group','map','ideas'].includes(k))).filter(([k])=>isOn(k));
   $('#bnav').innerHTML=bn.map(btn).join('')+`<button data-act="more"><span class="ic">${icon('menu')}</span><span>Viac</span></button>`;
   gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
-const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
+const VIEWS={home:vHome,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_ev:vIdeaEv};
 function modalHtml(){
   const m=S.modal;if(!m)return '';
   if(m==='welcome')return welcomeModal();
@@ -3716,7 +3808,9 @@ function renderMain(){
   let sel=null;try{if(fk&&act.type==='text')sel=[act.selectionStart,act.selectionEnd]}catch(e){}
   const v=curView();
   checkWelcome();
-  $('#main').innerHTML=(VIEWS[v]||vHome)();
+  /* po registrácii: kým žiadosť nie je schválená, Domov ukáže stav a časť portálu je zamknutá */
+  const pend=regPending()&&!PUB.includes(v);
+  $('#main').innerHTML=!pend?(VIEWS[v]||vHome)():REG_LOCKED[v]?pendingBar()+vLocked(v):v==='home'?vHomePending():pendingBar()+(VIEWS[v]||vHome)();
   $('#modal').innerHTML=modalHtml();
   gateActs($('#main'));gateActs($('#modal'));
   const root=inModal?$('#modal'):$('#main');
@@ -3735,11 +3829,11 @@ function drawerHtml(){
   <h3>Anna – vlastné spotrebiče (výzvy výrobcu)</h3><div class="fields">${F('Pračka – spotreba','p.pw.kwh',{step:.1,u:'kWh'})}${F('Pračka – pôvodný čas','p.pw.orig',{t:'t'})}${F('Bojler – spotreba','p.pb.kwh',{step:.1,u:'kWh'})}${F('Bojler – pôvodný čas','p.pb.orig',{t:'t'})}${F('Elektromobil – spotreba','p.pev.kwh',{step:.1,u:'kWh'})}${F('Elektromobil – pôvodný čas','p.pev.orig',{t:'t'})}</div>
   <h3>Test podvodu (skutočné meranie IMS)</h3><p class="xs mut">Zapnutím simulujete, že spotrebič v skutočnosti stále beží v pôvodnom čase, hoci výzva bola prijatá.</p><div class="fields one">${F('Peter: umývačka nebola presunutá','c.washCheat',{t:'c'})}${F('Peter: nabíjanie vozidla nebolo presunuté','c.ev.cheat',{t:'c'})}${F('Peter: ohrev vody nebol presunutý','c.wh.cheat',{t:'c'})}${F('Peter: výrobník ľadu nebol presunutý','c.ice.cheat',{t:'c'})}${F('Anna: pračka nebola presunutá','p.pw.cheat',{t:'c'})}${F('Anna: bojler nebol presunutý','p.pb.cheat',{t:'c'})}${F('Anna: elektromobil nebol presunutý','p.pev.cheat',{t:'c'})}</div>
   <h3>Skutočné meranie (demo interval)</h3><div class="fields">${F('Interval','meter.idx',{t:'i'})}${F('Skutočný prebytok Anny','meter.anna',{step:.05,u:'kWh'})}${F('Skutočná spotreba Petra','meter.peter',{step:.05,u:'kWh'})}</div>
-  <h3>Nápady (vízie)</h3><div class="fields">${F('Solidárne slnko zapnuté','don.on',{t:'c'})}${F('Darovať zo zvyšku','don.pct',{step:5,max:100,u:'%'})}${F('Slnečná banka zapnutá','bank.on',{t:'c'})}${F('Do banky zo zvyšku','bank.pct',{step:5,max:100,u:'%'})}${F('Kurz leto → zima','bank.rate',{step:5,min:10,max:150,u:'%'})}${F('Zimná cena','bank.winter',{step:.005,u:'€/kWh'})}${F('AI správca zapnutý','agent.on',{t:'c'})}${F('Priorita AI správcu','agent.prio',{t:'s',opts:PRIO})}${F('Provízia za Pošli slnko','send.fee',{step:.005,u:'€/kWh'})}${F('Faktor CO₂','twin.co2',{step:.01,u:'kg/kWh'})}</div>
+  <h3>Nápady (vízie)</h3><div class="fields">${F('Solidárne slnko zapnuté','don.on',{t:'c'})}${F('Darovať zo zvyšku','don.pct',{step:5,max:100,u:'%'})}</div>
   <h3>Simulácia a report</h3><div class="fields">${F('Pracovných dní v mesiaci','sim.days',{step:1,min:1,max:31})}${F('Odchýlka skutočnosti od odhadu','sim.dev',{step:1,max:50,u:'%'})}${F('Dĺžka najlepšieho okna','sim.win',{step:.25,min:.25,max:8,u:'h'})}${F('Denný limit bodov','pts.cap',{step:5,u:'b'})}${F('Zahrnúť ďalších členov skupiny','sim.others',{t:'c'})}</div>
   <h3>Ďalší členovia skupiny</h3><div class="fields">${F('Výrobca B – cena','o.bPrice',{step:.005,u:'€/kWh'})}${F('Odberateľ C – max. cena','o.cMax',{step:.005,u:'€/kWh'})}${F('Odberateľ D – max. cena','o.dMax',{step:.005,u:'€/kWh'})}</div>
   <div class="row" style="margin-top:18px"><button class="btn" data-act="resetall">↺ Obnoviť demo dáta</button><button class="btn pri" data-act="drawer">Hotovo</button></div>
-  <p class="xs mut" style="margin-top:12px">Prepínač značky (ZSE / VSE) mení logo a farebnú tému. Časy sa zaokrúhľujú na 15 minút. Ponuka sa prideľuje: nižšia cena najprv, pri nedostatku pomerne; zvyšok prebytku ide do batérie, banky, daru, darčekov a nakoniec výkupcovi.</p>`;
+  <p class="xs mut" style="margin-top:12px">Značka (ZSE / VSE) a farebná téma sa určia podľa adresy odberného miesta. Časy sa zaokrúhľujú na 15 minút. Ponuka sa prideľuje: nižšia cena najprv, pri nedostatku pomerne; zvyšok prebytku ide do batérie, daru (Solidárne slnko) a nakoniec výkupcovi.</p>`;
 }
 function syncInputs(){
   document.querySelectorAll('[data-k]').forEach(el=>{if(el===document.activeElement)return;const v=getPath(el.dataset.k);if(v===undefined)return;if(el.type==='checkbox')el.checked=!!v;else if(String(el.value)!==String(v))el.value=v});
@@ -3767,6 +3861,13 @@ document.addEventListener('input',e=>{
   render(false);syncInputs();
 });
 document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.k&&(el.dataset.t==='c'||el.dataset.t==='s'))render(true)});
+/* poradie energetických miest – presun myšou (drag & drop); klávesnicou tlačidlami ▲ ▼ */
+let dragPk=null;
+const placeOf=e=>e.target&&e.target.closest?e.target.closest('.place[data-pk]'):null;
+document.addEventListener('dragstart',e=>{const a=placeOf(e);if(!a)return;dragPk=a.dataset.pk;a.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dragPk)}catch(_){}});
+document.addEventListener('dragover',e=>{const a=placeOf(e);if(!a||!dragPk)return;e.preventDefault();document.querySelectorAll('.place.drop').forEach(x=>x!==a&&x.classList.remove('drop'));if(a.dataset.pk!==dragPk)a.classList.add('drop')});
+document.addEventListener('dragend',()=>{dragPk=null;document.querySelectorAll('.place.dragging,.place.drop').forEach(x=>x.classList.remove('dragging','drop'))});
+document.addEventListener('drop',e=>{const a=placeOf(e);if(!a||!dragPk)return;e.preventDefault();const L=placeOrder(regPer()),i=L.indexOf(dragPk),j=L.indexOf(a.dataset.pk);dragPk=null;if(i<0||j<0||i===j)return render(false);L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)});
 let timer=null,bankT=null,plT=null;
 function stopTimer(){clearInterval(timer);timer=null}
 function startTimer(){stopTimer();timer=setInterval(()=>{
@@ -3815,14 +3916,14 @@ const ACT={
   /* mapa: klikateľná legenda */
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
-  landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('market')},
+  landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
   landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('i_sol')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
   rtab:a=>{S.rtab=a;render(false)},
   mtab:a=>{S.mtab=a;render(false)},
-  mtabgo:a=>{S.mtab=a;pubGo('market')},
-  /* výber skupiny priamo z trhoviska */
+  mtabgo:a=>{S.mtab=a;pubGo('group')},
+  /* výber skupiny z kariet skupín */
   grpsel:a=>{const p=S.persona==='admin'?'peter':S.persona,g=GROUPS.find(x=>x.id===a);if(!g)return;S.group=a;S.ob.group=a;S.mem[p]='READY';logEv(`${nm(p)}: vybraná skupina ${g.name} (z trhoviska)`);toast('Skupina '+g.name+' vybraná – odošlite žiadosť');notify('state',p,'Vybraná skupina '+g.name,'Žiadosť je pripravená – odošlite ju.','group');pubGo('group')},
   /* prestup = výstup z terajšej skupiny + rezervácia vybranej */
   grpres:a=>{const p=S.persona==='admin'?'peter':S.persona;if(S.mem[p]==='ENDING'){S.reserve[p]=gname(a)+' (rezervácia po skončení členstva)';toast('Rezervácia uložená: '+gname(a));render(true);return}S.exitSel=a;S.modal='exit';render(false)},
@@ -3839,6 +3940,7 @@ const ACT={
   sort:a=>{S.match.sort=a;render(false)},
   smart:()=>{S.match.loading=true;S.match.done=false;render(false);setTimeout(()=>{S.match.loading=false;S.match.done=true;S.match.sort='match';render(false);toast('Najlepšie spojenie nájdené')},650)},
   skin:a=>{S.skinPick=a;render(true)},
+  editprice:()=>{if(curView()!=='profile'){pubGo('profile');setTimeout(()=>ACT.editprice(),60);return}const c=document.getElementById('price-card');if(!c)return;c.scrollIntoView({behavior:RM()?'auto':'smooth',block:'start'});c.classList.add('flash');setTimeout(()=>{c.classList.remove('flash');const i=c.querySelector('input');i&&i.focus({preventScroll:true})},700)},
   addom:()=>{S.ob.step=2;S.reg.step='full';S.view='register';render(true)},
   cmp:a=>{const i=S.cmp.indexOf(a);if(i>=0)S.cmp.splice(i,1);else if(S.cmp.length>=3){toast('Porovnať môžete najviac 3 ponuky');return}else S.cmp.push(a);render(false)},
   cmpshow:()=>{if(S.cmp.length<2){toast('Vyberte aspoň 2 ponuky');return}S.modal='cmp';render(false)},
@@ -3868,7 +3970,7 @@ const ACT={
     S.mem[a]='ACTIVE';logEv(`${nm(a)}: členstvo aktivované`);toast('Členstvo aktivované');notify('state',a,'Členstvo je aktívne 🎉',`Vitajte v skupine ${gname(S.group)} – zdieľanie začína k 1. dňu mesiaca.`,'group');render(true)},
   exit:()=>{S.exitSel='';S.modal='exit';render(false)},
   exitok:()=>{const p=S.persona,r=(($('input[name=exitRes]:checked')||{}).value)||'';S.modal=null;S.mem[p]='ENDING';if(r)S.reserve[p]=gname(r)+' (rezervácia po skončení členstva)';logEv(`${nm(p)}: žiadosť o výstup${r?' + rezervácia '+gname(r):''}`);toast('Výstup nie je okamžitý – členstvo skončí ku koncu nasledujúceho mesiaca');notify('state',p,'Žiadosť o vystúpenie prijatá',`Zdieľanie pokračuje do konca nasledujúceho mesiaca.${r?' Rezervácia: '+gname(r)+'.':''}`,'group');render(true)},
-  endmem:a=>{S.mem[a]='NONE';logEv(`${nm(a)}: členstvo ukončené`);toast('Členstvo ukončené');notify('state',a,'Členstvo ukončené','Novú skupinu si môžete vybrať v Trhovisku.','market:grp');render(true)},
+  endmem:a=>{S.mem[a]='NONE';logEv(`${nm(a)}: členstvo ukončené`);toast('Členstvo ukončené');notify('state',a,'Členstvo ukončené','Novú skupinu si môžete vybrať v Mojej skupine.','group');render(true)},
   accept:()=>{S.c.appTime=recAppTime();S.c.accepted=true;logEv('Peter prijal výzvu: presun umývačky na '+S.c.appTime);toast('Výzva prijatá – umývačka presunutá na '+S.c.appTime);render(true);syncInputs()},
   acceptx:a=>{const [ow,k]=a.split('.'),o=A_(ow,k),who=ow==='p'?'Anna':'Peter';o.time=recKey(ow,k);o.accepted=true;logEv(who+' prijal(a) výzvu: '+o.label+' presunutý na '+o.time);toast(who+': '+o.label+' presunutý na '+o.time);render(true);syncInputs()},
   ver:a=>{S.modal='ver:'+a;render(false)},
@@ -3893,26 +3995,28 @@ const ACT={
     notify('chal','both','Nové výzvy na deň '+S.day,'Presuňte spotrebu do slnečného okna a získajte body.','rewards');
     if(!S.notes.some(n=>n.kind==='month'&&n.day>0))notify('month','both','Vyúčtovanie za október je pripravené','Ukážka mesačného vyúčtovania – stiahnete ju ako PDF.','reports:inv');
     logEv('Polnoc – začal sa deň '+S.day+'; odomknuté nové výzvy'+(S.bat.on?`, v batérii zostáva ${fm(S.bat.carry,1)} kWh nad minimom`:''));toast('🌙 Deň '+S.day+' – odomknuté výzvy sú dostupné');render(true);syncInputs()},
-  imsreq:()=>{logEv('Žiadosť o inštaláciu IMS odoslaná');toast('Žiadosť o IMS odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.')},
+  imsreq:a=>{if(a)(S.imsReqd||(S.imsReqd={}))[a]=true;logEv('Žiadosť o inštaláciu IMS odoslaná');toast('Žiadosť o IMS odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.');render(false)},
+  plmove:a=>{const [k,d]=a.split(':');const L=placeOrder(regPer()),i=L.indexOf(k),j=i+(+d);if(i<0||j<0||j>=L.length)return;L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)},
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
-  wzedit:a=>{const W=S.wz,i=+a;W.edit=i;W.pick=i<0?null:(W.oms[i].strat||wzRec(W.oms[i]));render(false)},
+  wzedit:a=>{const W=S.wz,i=+a;W.edit=i;W.pick=i<0?null:(W.oms[i].strat||wzRec(W.oms[i]));W.own=i<0?null:(W.oms[i].own??wzPrice(W.oms[i]));render(false)},
   wzbat:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];if(b==='1'){S.modal='batt:'+i;render(false);return}o.batAns=false;o.opts.bat=false;render(false)},
   wzbatok:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];o.batAns=b==='1';o.opts.bat=o.batAns;S.modal=null;
     if(o.batAns){logEv(`${o.name}: záujem o zdieľanie z batérie – žiadosť o kontakt`);toast('Ďakujeme, zákaznícke centrum vás bude kontaktovať')}render(true)},
+  wzims:a=>{const o=S.wz.oms[+a];o.imsReq=true;(S.imsReqd||(S.imsReqd={}))[o.id==='om2'?'chata':'main']=true;logEv(`${o.name}: žiadosť o inštaláciu IMS odoslaná`);toast('Žiadosť o inteligentný elektromer odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.');render(false)},
   wzev:a=>{S.wz.ev=a==='1';render(false)},
   wzpick:a=>{S.wz.pick=a;render(false)},
-  wzprice:a=>{const W=S.wz,o=W.oms[+a];o.strat=W.pick;W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(wzPrice(o))} €/kWh`);render(false)},
-  wzicon:a=>{const [i,k]=a.split(':');S.wz.oms[+i].icon=k;render(false)},
+  wzprice:a=>{const W=S.wz,o=W.oms[+a];if(W.pick==='own'){if(!(W.own>0)){toast('Zadajte vlastnú cenu v €/kWh');return}o.own=W.own}o.strat=W.pick;W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(wzPrice(o))} €/kWh`);render(false)},
   wznext:()=>{const W=S.wz;W.err='';
-    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
+    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(W.oms.some(o=>o.on&&o.ims)&&!W.oms.some(o=>o.on&&o.ims&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
     if(W.step===2&&W.edit>=0)W.err='Potvrďte alebo zrušte úpravu ceny.';if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
   wzsubmit:()=>{const W=S.wz,per=S.persona==='admin'?'peter':S.persona;W.err='';
-    if(!W.ok3){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
-    W.sent=true;S.reg.sent=true;S.group=S.ob.group;if(['NONE','MATCH','READY'].includes(S.mem[per]))S.mem[per]='PENDING';
-    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');window.scrollTo(0,0);render(false)},
+    W.sent=true;S.reg.sent=true;S.group=S.ob.group;S.mem[per]='PENDING';S.view='home';  /* vstup do portálu – čaká na schválenie */
+    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');toast('Vitajte v Zdieľni – žiadosť čaká na schválenie');window.scrollTo(0,0);render(true)},
+  regapprove:()=>{const per=regPer();S.mem[per]='ACTIVE';if(per==='anna')S.pts.baseA+=50;else S.pts.base+=50;
+    logEv(`${nm(per)}: žiadosť schválená distribútorom – +50 bodov za registráciu`);notify('state',per,'Žiadosť schválená','Zdieľanie je aktívne. Za registráciu máte +50 slnečných bodov.','home');toast('Žiadosť schválená · +50 slnečných bodov za registráciu');render(true)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
   sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
     const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
@@ -3988,21 +4092,18 @@ async function runTour(){
   clearInterval(plT);const ch=S.chat;S=defaults();S.chat=ch;S.tourOn=true;S.jury=true;S.mem={anna:'NONE',peter:'NONE'};S.persona='anna';S.view='landing';S.sim.idx=0;render(true);window.scrollTo(0,0);
   const step=async(msg,fn,ms=2600)=>{if(!S.tourOn)return false;caption(msg);if(fn){fn();window.scrollTo(0,0)}await sleep(ms);return S.tourOn};
   try{
-  if(!await step('<b>1/10</b> Úvod: jeden vstup cez EIC pre výrobcu aj odberateľa.',null,2400))return;
-  if(!await step('<b>2/10</b> Ukážkový EIC → rovno do registrácie.',()=>{S.landing={eic:EIC_SAMPLE,error:'',checked:true};S.reg.step='choose';pubGo('register')},2600))return;
-  if(!await step('<b>3/10</b> Anna je zákazníčka ZSE – stačí kliknúť a prihlási sa automaticky.',null,2200))return;
+  if(!await step('<b>1/8</b> Úvod: jeden vstup cez EIC pre výrobcu aj odberateľa.',null,2400))return;
+  if(!await step('<b>2/8</b> Ukážkový EIC → rovno do registrácie.',()=>{S.landing={eic:EIC_SAMPLE,error:'',checked:true};S.reg.step='choose';pubGo('register')},2600))return;
+  if(!await step('<b>3/8</b> Anna je zákazníčka ZSE – stačí kliknúť a prihlási sa automaticky.',null,2200))return;
   if(!await step('Načítavame odberné miesto, IMS aj zmluvy z účtu ZSE…',()=>ACT.sso('zse'),2600))return;
   if(!await step('Súhlas, výber skupiny a žiadosť je odoslaná. Peter sa pridal tiež.',()=>{S.ob.consent=true;ACT.ssosubmit();S.mem.peter='PENDING'},2400))return;
-  if(!await step('<b>4/10</b> Operátor ZSE skontroluje distribútora a aktivuje členstvá.',()=>{S.persona='admin';pubGo('admin')},2200))return;
+  if(!await step('<b>4/8</b> Operátor ZSE skontroluje distribútora a aktivuje členstvá.',()=>{S.persona='admin';pubGo('admin')},2200))return;
   if(!await step('Členstvá sú aktívne.',()=>{S.mem.anna='ACTIVE';S.mem.peter='ACTIVE';logEv('Operátor aktivoval členstvá');render(true)},1500))return;
-  if(!await step('<b>5/10</b> Peter v trhovisku: Smart Match nájde najlepšie spojenie – aj večernú ponuku z batérie.',()=>{S.persona='peter';pubGo('market');ACT.smart()},3200))return;
-  if(!await step('<b>6/10</b> Mapa: domčeky ZSE (červené) a VSE (modré), elektrina tečie virtuálnou sieťou.',()=>{S.sim.idx=44;S.sim.speed=10;pubGo('map');S.sim.playing=true;startTimer();render(false)},4400))return;
-  if(!await step('<b>7/10</b> Večer predáva Annina batéria – drahšie ako na obed, lacnejšie ako zo siete.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=78;S.persona='anna';pubGo('map')},2800))return;
+  if(!await step('<b>5/8</b> Mapa: domčeky ZSE (červené) a VSE (modré), elektrina tečie virtuálnou sieťou.',()=>{S.sim.idx=44;S.sim.speed=10;pubGo('map');S.sim.playing=true;startTimer();render(false)},4400))return;
+  if(!await step('<b>6/8</b> Večer predáva Annina batéria – drahšie ako na obed, lacnejšie ako zo siete.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=78;S.persona='anna';pubGo('map')},2800))return;
   if(!await step('Anna vidí stav batérie a zisk z nej.',()=>{S.sim.idx=96;pubGo('home');setTimeout(()=>{const c=[...document.querySelectorAll('#main h3')].find(h=>h.textContent.includes('Večerná ponuka'));c&&c.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'})},200)},3200))return;
-  if(!await step('<b>8/10</b> Slnečná banka: uložte si júlové slnko na Vianoce.',()=>{S.bank.on=true;S.bank.month=0;pubGo('i_bank');ACT.bankplay()},4800))return;
-  if(!await step('…a AI správca vyjedná cenu a rozhodne, koľko uložiť do batérie a banky.',()=>{S.bank.playing=false;clearInterval(bankT);S.agent.on=true;S.sim.idx=0;S.sim.speed=60;pubGo('i_agent');S.sim.playing=true;startTimer()},4400))return;
-  if(!await step('<b>9/10</b> Mesačný report: deň, batéria, banka – všetko z jedného enginu.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=96;S.rtab='rep';pubGo('reports')},3200))return;
-  if(!await step('<b>10/10</b> Operátor vidí províziu iba od výrobcu, bilanciu každej kWh a audit súčtov.',()=>{S.persona='admin';pubGo('admin');setTimeout(()=>window.scrollTo({top:900,behavior:RM()?'auto':'smooth'}),200)},4200))return;
+  if(!await step('<b>7/8</b> Mesačný report: deň, batéria aj vyúčtovanie – všetko z jedného enginu.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=96;S.rtab='rep';pubGo('reports')},3200))return;
+  if(!await step('<b>8/8</b> Operátor vidí províziu iba od výrobcu, bilanciu každej kWh a audit súčtov.',()=>{S.persona='admin';pubGo('admin');setTimeout(()=>window.scrollTo({top:900,behavior:RM()?'auto':'smooth'}),200)},4200))return;
   }finally{S.tourOn=false;caption('')}
 }
 

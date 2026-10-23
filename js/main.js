@@ -4,12 +4,12 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['market','Trhovisko','market'],['group','Moja skupina','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
-const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(!isOn(v))v='landing';return v};
+const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(v==='market')v='group';if(!isOn(v))v='landing';return v};
 /* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
 const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
   landingfeature:a=>({battery:'home',solidarity:'i_sol',reports:'reports'}[a]||'rewards')};
@@ -25,7 +25,7 @@ function customerSkin(){
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&S.reg.step==='wiz'));document.body.classList.toggle('jury',J);
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&['wiz','load'].includes(S.reg.step)));document.body.classList.toggle('jury',J);
   const brandSeg=J&&!isNeutral(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
@@ -35,19 +35,20 @@ function renderShell(){
   $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
    :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
-   :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;
+   :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k));
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
-  const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span></button>`;
-  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
-  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.filter(([k])=>isOn(k)).map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
+  const lk=k=>regPending()&&REG_LOCKED[k]?`<span class="nav-lock" title="Po schválení žiadosti">${icon('lock')}</span>`:'';
+  const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span>${lk(k)}</button>`;
+  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>st==='soon'?`<button class="sub soon" disabled aria-disabled="true" title="Pripravujeme"><span class="ic">${icon(i)}</span><span>${l}<small>Pripravujeme…</small></span></button>`:`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
+  $('#side').innerHTML=`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
     +`<div class="side-foot"><button class="jury-btn" data-act="jury" aria-pressed="${J}">🎬 ${J?'Vypnúť režim poroty':'Režim poroty'}</button></div>`;
-  const bn=(p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]]).filter(([k])=>isOn(k));
+  const bn=(p==='admin'?NAV_ADMIN:NAV.filter(([k])=>['home','group','map','ideas'].includes(k))).filter(([k])=>isOn(k));
   $('#bnav').innerHTML=bn.map(btn).join('')+`<button data-act="more"><span class="ic">${icon('menu')}</span><span>Viac</span></button>`;
   gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
-const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
+const VIEWS={home:vHome,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_ev:vIdeaEv};
 function modalHtml(){
   const m=S.modal;if(!m)return '';
   if(m==='welcome')return welcomeModal();
@@ -72,7 +73,9 @@ function renderMain(){
   let sel=null;try{if(fk&&act.type==='text')sel=[act.selectionStart,act.selectionEnd]}catch(e){}
   const v=curView();
   checkWelcome();
-  $('#main').innerHTML=(VIEWS[v]||vHome)();
+  /* po registrácii: kým žiadosť nie je schválená, Domov ukáže stav a časť portálu je zamknutá */
+  const pend=regPending()&&!PUB.includes(v);
+  $('#main').innerHTML=!pend?(VIEWS[v]||vHome)():REG_LOCKED[v]?pendingBar()+vLocked(v):v==='home'?vHomePending():pendingBar()+(VIEWS[v]||vHome)();
   $('#modal').innerHTML=modalHtml();
   gateActs($('#main'));gateActs($('#modal'));
   const root=inModal?$('#modal'):$('#main');
@@ -91,11 +94,11 @@ function drawerHtml(){
   <h3>Anna – vlastné spotrebiče (výzvy výrobcu)</h3><div class="fields">${F('Pračka – spotreba','p.pw.kwh',{step:.1,u:'kWh'})}${F('Pračka – pôvodný čas','p.pw.orig',{t:'t'})}${F('Bojler – spotreba','p.pb.kwh',{step:.1,u:'kWh'})}${F('Bojler – pôvodný čas','p.pb.orig',{t:'t'})}${F('Elektromobil – spotreba','p.pev.kwh',{step:.1,u:'kWh'})}${F('Elektromobil – pôvodný čas','p.pev.orig',{t:'t'})}</div>
   <h3>Test podvodu (skutočné meranie IMS)</h3><p class="xs mut">Zapnutím simulujete, že spotrebič v skutočnosti stále beží v pôvodnom čase, hoci výzva bola prijatá.</p><div class="fields one">${F('Peter: umývačka nebola presunutá','c.washCheat',{t:'c'})}${F('Peter: nabíjanie vozidla nebolo presunuté','c.ev.cheat',{t:'c'})}${F('Peter: ohrev vody nebol presunutý','c.wh.cheat',{t:'c'})}${F('Peter: výrobník ľadu nebol presunutý','c.ice.cheat',{t:'c'})}${F('Anna: pračka nebola presunutá','p.pw.cheat',{t:'c'})}${F('Anna: bojler nebol presunutý','p.pb.cheat',{t:'c'})}${F('Anna: elektromobil nebol presunutý','p.pev.cheat',{t:'c'})}</div>
   <h3>Skutočné meranie (demo interval)</h3><div class="fields">${F('Interval','meter.idx',{t:'i'})}${F('Skutočný prebytok Anny','meter.anna',{step:.05,u:'kWh'})}${F('Skutočná spotreba Petra','meter.peter',{step:.05,u:'kWh'})}</div>
-  <h3>Nápady (vízie)</h3><div class="fields">${F('Solidárne slnko zapnuté','don.on',{t:'c'})}${F('Darovať zo zvyšku','don.pct',{step:5,max:100,u:'%'})}${F('Slnečná banka zapnutá','bank.on',{t:'c'})}${F('Do banky zo zvyšku','bank.pct',{step:5,max:100,u:'%'})}${F('Kurz leto → zima','bank.rate',{step:5,min:10,max:150,u:'%'})}${F('Zimná cena','bank.winter',{step:.005,u:'€/kWh'})}${F('AI správca zapnutý','agent.on',{t:'c'})}${F('Priorita AI správcu','agent.prio',{t:'s',opts:PRIO})}${F('Provízia za Pošli slnko','send.fee',{step:.005,u:'€/kWh'})}${F('Faktor CO₂','twin.co2',{step:.01,u:'kg/kWh'})}</div>
+  <h3>Nápady (vízie)</h3><div class="fields">${F('Solidárne slnko zapnuté','don.on',{t:'c'})}${F('Darovať zo zvyšku','don.pct',{step:5,max:100,u:'%'})}</div>
   <h3>Simulácia a report</h3><div class="fields">${F('Pracovných dní v mesiaci','sim.days',{step:1,min:1,max:31})}${F('Odchýlka skutočnosti od odhadu','sim.dev',{step:1,max:50,u:'%'})}${F('Dĺžka najlepšieho okna','sim.win',{step:.25,min:.25,max:8,u:'h'})}${F('Denný limit bodov','pts.cap',{step:5,u:'b'})}${F('Zahrnúť ďalších členov skupiny','sim.others',{t:'c'})}</div>
   <h3>Ďalší členovia skupiny</h3><div class="fields">${F('Výrobca B – cena','o.bPrice',{step:.005,u:'€/kWh'})}${F('Odberateľ C – max. cena','o.cMax',{step:.005,u:'€/kWh'})}${F('Odberateľ D – max. cena','o.dMax',{step:.005,u:'€/kWh'})}</div>
   <div class="row" style="margin-top:18px"><button class="btn" data-act="resetall">↺ Obnoviť demo dáta</button><button class="btn pri" data-act="drawer">Hotovo</button></div>
-  <p class="xs mut" style="margin-top:12px">Prepínač značky (ZSE / VSE) mení logo a farebnú tému. Časy sa zaokrúhľujú na 15 minút. Ponuka sa prideľuje: nižšia cena najprv, pri nedostatku pomerne; zvyšok prebytku ide do batérie, banky, daru, darčekov a nakoniec výkupcovi.</p>`;
+  <p class="xs mut" style="margin-top:12px">Značka (ZSE / VSE) a farebná téma sa určia podľa adresy odberného miesta. Časy sa zaokrúhľujú na 15 minút. Ponuka sa prideľuje: nižšia cena najprv, pri nedostatku pomerne; zvyšok prebytku ide do batérie, daru (Solidárne slnko) a nakoniec výkupcovi.</p>`;
 }
 function syncInputs(){
   document.querySelectorAll('[data-k]').forEach(el=>{if(el===document.activeElement)return;const v=getPath(el.dataset.k);if(v===undefined)return;if(el.type==='checkbox')el.checked=!!v;else if(String(el.value)!==String(v))el.value=v});
@@ -123,6 +126,13 @@ document.addEventListener('input',e=>{
   render(false);syncInputs();
 });
 document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.k&&(el.dataset.t==='c'||el.dataset.t==='s'))render(true)});
+/* poradie energetických miest – presun myšou (drag & drop); klávesnicou tlačidlami ▲ ▼ */
+let dragPk=null;
+const placeOf=e=>e.target&&e.target.closest?e.target.closest('.place[data-pk]'):null;
+document.addEventListener('dragstart',e=>{const a=placeOf(e);if(!a)return;dragPk=a.dataset.pk;a.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',dragPk)}catch(_){}});
+document.addEventListener('dragover',e=>{const a=placeOf(e);if(!a||!dragPk)return;e.preventDefault();document.querySelectorAll('.place.drop').forEach(x=>x!==a&&x.classList.remove('drop'));if(a.dataset.pk!==dragPk)a.classList.add('drop')});
+document.addEventListener('dragend',()=>{dragPk=null;document.querySelectorAll('.place.dragging,.place.drop').forEach(x=>x.classList.remove('dragging','drop'))});
+document.addEventListener('drop',e=>{const a=placeOf(e);if(!a||!dragPk)return;e.preventDefault();const L=placeOrder(regPer()),i=L.indexOf(dragPk),j=L.indexOf(a.dataset.pk);dragPk=null;if(i<0||j<0||i===j)return render(false);L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)});
 let timer=null,bankT=null,plT=null;
 function stopTimer(){clearInterval(timer);timer=null}
 function startTimer(){stopTimer();timer=setInterval(()=>{
@@ -171,14 +181,14 @@ const ACT={
   /* mapa: klikateľná legenda */
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
-  landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('market')},
+  landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
   landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('i_sol')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
   rtab:a=>{S.rtab=a;render(false)},
   mtab:a=>{S.mtab=a;render(false)},
-  mtabgo:a=>{S.mtab=a;pubGo('market')},
-  /* výber skupiny priamo z trhoviska */
+  mtabgo:a=>{S.mtab=a;pubGo('group')},
+  /* výber skupiny z kariet skupín */
   grpsel:a=>{const p=S.persona==='admin'?'peter':S.persona,g=GROUPS.find(x=>x.id===a);if(!g)return;S.group=a;S.ob.group=a;S.mem[p]='READY';logEv(`${nm(p)}: vybraná skupina ${g.name} (z trhoviska)`);toast('Skupina '+g.name+' vybraná – odošlite žiadosť');notify('state',p,'Vybraná skupina '+g.name,'Žiadosť je pripravená – odošlite ju.','group');pubGo('group')},
   /* prestup = výstup z terajšej skupiny + rezervácia vybranej */
   grpres:a=>{const p=S.persona==='admin'?'peter':S.persona;if(S.mem[p]==='ENDING'){S.reserve[p]=gname(a)+' (rezervácia po skončení členstva)';toast('Rezervácia uložená: '+gname(a));render(true);return}S.exitSel=a;S.modal='exit';render(false)},
@@ -195,6 +205,7 @@ const ACT={
   sort:a=>{S.match.sort=a;render(false)},
   smart:()=>{S.match.loading=true;S.match.done=false;render(false);setTimeout(()=>{S.match.loading=false;S.match.done=true;S.match.sort='match';render(false);toast('Najlepšie spojenie nájdené')},650)},
   skin:a=>{S.skinPick=a;render(true)},
+  editprice:()=>{if(curView()!=='profile'){pubGo('profile');setTimeout(()=>ACT.editprice(),60);return}const c=document.getElementById('price-card');if(!c)return;c.scrollIntoView({behavior:RM()?'auto':'smooth',block:'start'});c.classList.add('flash');setTimeout(()=>{c.classList.remove('flash');const i=c.querySelector('input');i&&i.focus({preventScroll:true})},700)},
   addom:()=>{S.ob.step=2;S.reg.step='full';S.view='register';render(true)},
   cmp:a=>{const i=S.cmp.indexOf(a);if(i>=0)S.cmp.splice(i,1);else if(S.cmp.length>=3){toast('Porovnať môžete najviac 3 ponuky');return}else S.cmp.push(a);render(false)},
   cmpshow:()=>{if(S.cmp.length<2){toast('Vyberte aspoň 2 ponuky');return}S.modal='cmp';render(false)},
@@ -224,7 +235,7 @@ const ACT={
     S.mem[a]='ACTIVE';logEv(`${nm(a)}: členstvo aktivované`);toast('Členstvo aktivované');notify('state',a,'Členstvo je aktívne 🎉',`Vitajte v skupine ${gname(S.group)} – zdieľanie začína k 1. dňu mesiaca.`,'group');render(true)},
   exit:()=>{S.exitSel='';S.modal='exit';render(false)},
   exitok:()=>{const p=S.persona,r=(($('input[name=exitRes]:checked')||{}).value)||'';S.modal=null;S.mem[p]='ENDING';if(r)S.reserve[p]=gname(r)+' (rezervácia po skončení členstva)';logEv(`${nm(p)}: žiadosť o výstup${r?' + rezervácia '+gname(r):''}`);toast('Výstup nie je okamžitý – členstvo skončí ku koncu nasledujúceho mesiaca');notify('state',p,'Žiadosť o vystúpenie prijatá',`Zdieľanie pokračuje do konca nasledujúceho mesiaca.${r?' Rezervácia: '+gname(r)+'.':''}`,'group');render(true)},
-  endmem:a=>{S.mem[a]='NONE';logEv(`${nm(a)}: členstvo ukončené`);toast('Členstvo ukončené');notify('state',a,'Členstvo ukončené','Novú skupinu si môžete vybrať v Trhovisku.','market:grp');render(true)},
+  endmem:a=>{S.mem[a]='NONE';logEv(`${nm(a)}: členstvo ukončené`);toast('Členstvo ukončené');notify('state',a,'Členstvo ukončené','Novú skupinu si môžete vybrať v Mojej skupine.','group');render(true)},
   accept:()=>{S.c.appTime=recAppTime();S.c.accepted=true;logEv('Peter prijal výzvu: presun umývačky na '+S.c.appTime);toast('Výzva prijatá – umývačka presunutá na '+S.c.appTime);render(true);syncInputs()},
   acceptx:a=>{const [ow,k]=a.split('.'),o=A_(ow,k),who=ow==='p'?'Anna':'Peter';o.time=recKey(ow,k);o.accepted=true;logEv(who+' prijal(a) výzvu: '+o.label+' presunutý na '+o.time);toast(who+': '+o.label+' presunutý na '+o.time);render(true);syncInputs()},
   ver:a=>{S.modal='ver:'+a;render(false)},
@@ -249,26 +260,28 @@ const ACT={
     notify('chal','both','Nové výzvy na deň '+S.day,'Presuňte spotrebu do slnečného okna a získajte body.','rewards');
     if(!S.notes.some(n=>n.kind==='month'&&n.day>0))notify('month','both','Vyúčtovanie za október je pripravené','Ukážka mesačného vyúčtovania – stiahnete ju ako PDF.','reports:inv');
     logEv('Polnoc – začal sa deň '+S.day+'; odomknuté nové výzvy'+(S.bat.on?`, v batérii zostáva ${fm(S.bat.carry,1)} kWh nad minimom`:''));toast('🌙 Deň '+S.day+' – odomknuté výzvy sú dostupné');render(true);syncInputs()},
-  imsreq:()=>{logEv('Žiadosť o inštaláciu IMS odoslaná');toast('Žiadosť o IMS odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.')},
+  imsreq:a=>{if(a)(S.imsReqd||(S.imsReqd={}))[a]=true;logEv('Žiadosť o inštaláciu IMS odoslaná');toast('Žiadosť o IMS odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.');render(false)},
+  plmove:a=>{const [k,d]=a.split(':');const L=placeOrder(regPer()),i=L.indexOf(k),j=i+(+d);if(i<0||j<0||j>=L.length)return;L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)},
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
-  wzedit:a=>{const W=S.wz,i=+a;W.edit=i;W.pick=i<0?null:(W.oms[i].strat||wzRec(W.oms[i]));render(false)},
+  wzedit:a=>{const W=S.wz,i=+a;W.edit=i;W.pick=i<0?null:(W.oms[i].strat||wzRec(W.oms[i]));W.own=i<0?null:(W.oms[i].own??wzPrice(W.oms[i]));render(false)},
   wzbat:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];if(b==='1'){S.modal='batt:'+i;render(false);return}o.batAns=false;o.opts.bat=false;render(false)},
   wzbatok:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];o.batAns=b==='1';o.opts.bat=o.batAns;S.modal=null;
     if(o.batAns){logEv(`${o.name}: záujem o zdieľanie z batérie – žiadosť o kontakt`);toast('Ďakujeme, zákaznícke centrum vás bude kontaktovať')}render(true)},
+  wzims:a=>{const o=S.wz.oms[+a];o.imsReq=true;(S.imsReqd||(S.imsReqd={}))[o.id==='om2'?'chata':'main']=true;logEv(`${o.name}: žiadosť o inštaláciu IMS odoslaná`);toast('Žiadosť o inteligentný elektromer odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.');render(false)},
   wzev:a=>{S.wz.ev=a==='1';render(false)},
   wzpick:a=>{S.wz.pick=a;render(false)},
-  wzprice:a=>{const W=S.wz,o=W.oms[+a];o.strat=W.pick;W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(wzPrice(o))} €/kWh`);render(false)},
-  wzicon:a=>{const [i,k]=a.split(':');S.wz.oms[+i].icon=k;render(false)},
+  wzprice:a=>{const W=S.wz,o=W.oms[+a];if(W.pick==='own'){if(!(W.own>0)){toast('Zadajte vlastnú cenu v €/kWh');return}o.own=W.own}o.strat=W.pick;W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(wzPrice(o))} €/kWh`);render(false)},
   wznext:()=>{const W=S.wz;W.err='';
-    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
+    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(W.oms.some(o=>o.on&&o.ims)&&!W.oms.some(o=>o.on&&o.ims&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
     if(W.step===2&&W.edit>=0)W.err='Potvrďte alebo zrušte úpravu ceny.';if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
   wzsubmit:()=>{const W=S.wz,per=S.persona==='admin'?'peter':S.persona;W.err='';
-    if(!W.ok3){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
-    W.sent=true;S.reg.sent=true;S.group=S.ob.group;if(['NONE','MATCH','READY'].includes(S.mem[per]))S.mem[per]='PENDING';
-    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');window.scrollTo(0,0);render(false)},
+    W.sent=true;S.reg.sent=true;S.group=S.ob.group;S.mem[per]='PENDING';S.view='home';  /* vstup do portálu – čaká na schválenie */
+    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');toast('Vitajte v Zdieľni – žiadosť čaká na schválenie');window.scrollTo(0,0);render(true)},
+  regapprove:()=>{const per=regPer();S.mem[per]='ACTIVE';if(per==='anna')S.pts.baseA+=50;else S.pts.base+=50;
+    logEv(`${nm(per)}: žiadosť schválená distribútorom – +50 bodov za registráciu`);notify('state',per,'Žiadosť schválená','Zdieľanie je aktívne. Za registráciu máte +50 slnečných bodov.','home');toast('Žiadosť schválená · +50 slnečných bodov za registráciu');render(true)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
   sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
     const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
@@ -344,21 +357,18 @@ async function runTour(){
   clearInterval(plT);const ch=S.chat;S=defaults();S.chat=ch;S.tourOn=true;S.jury=true;S.mem={anna:'NONE',peter:'NONE'};S.persona='anna';S.view='landing';S.sim.idx=0;render(true);window.scrollTo(0,0);
   const step=async(msg,fn,ms=2600)=>{if(!S.tourOn)return false;caption(msg);if(fn){fn();window.scrollTo(0,0)}await sleep(ms);return S.tourOn};
   try{
-  if(!await step('<b>1/10</b> Úvod: jeden vstup cez EIC pre výrobcu aj odberateľa.',null,2400))return;
-  if(!await step('<b>2/10</b> Ukážkový EIC → rovno do registrácie.',()=>{S.landing={eic:EIC_SAMPLE,error:'',checked:true};S.reg.step='choose';pubGo('register')},2600))return;
-  if(!await step('<b>3/10</b> Anna je zákazníčka ZSE – stačí kliknúť a prihlási sa automaticky.',null,2200))return;
+  if(!await step('<b>1/8</b> Úvod: jeden vstup cez EIC pre výrobcu aj odberateľa.',null,2400))return;
+  if(!await step('<b>2/8</b> Ukážkový EIC → rovno do registrácie.',()=>{S.landing={eic:EIC_SAMPLE,error:'',checked:true};S.reg.step='choose';pubGo('register')},2600))return;
+  if(!await step('<b>3/8</b> Anna je zákazníčka ZSE – stačí kliknúť a prihlási sa automaticky.',null,2200))return;
   if(!await step('Načítavame odberné miesto, IMS aj zmluvy z účtu ZSE…',()=>ACT.sso('zse'),2600))return;
   if(!await step('Súhlas, výber skupiny a žiadosť je odoslaná. Peter sa pridal tiež.',()=>{S.ob.consent=true;ACT.ssosubmit();S.mem.peter='PENDING'},2400))return;
-  if(!await step('<b>4/10</b> Operátor ZSE skontroluje distribútora a aktivuje členstvá.',()=>{S.persona='admin';pubGo('admin')},2200))return;
+  if(!await step('<b>4/8</b> Operátor ZSE skontroluje distribútora a aktivuje členstvá.',()=>{S.persona='admin';pubGo('admin')},2200))return;
   if(!await step('Členstvá sú aktívne.',()=>{S.mem.anna='ACTIVE';S.mem.peter='ACTIVE';logEv('Operátor aktivoval členstvá');render(true)},1500))return;
-  if(!await step('<b>5/10</b> Peter v trhovisku: Smart Match nájde najlepšie spojenie – aj večernú ponuku z batérie.',()=>{S.persona='peter';pubGo('market');ACT.smart()},3200))return;
-  if(!await step('<b>6/10</b> Mapa: domčeky ZSE (červené) a VSE (modré), elektrina tečie virtuálnou sieťou.',()=>{S.sim.idx=44;S.sim.speed=10;pubGo('map');S.sim.playing=true;startTimer();render(false)},4400))return;
-  if(!await step('<b>7/10</b> Večer predáva Annina batéria – drahšie ako na obed, lacnejšie ako zo siete.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=78;S.persona='anna';pubGo('map')},2800))return;
+  if(!await step('<b>5/8</b> Mapa: domčeky ZSE (červené) a VSE (modré), elektrina tečie virtuálnou sieťou.',()=>{S.sim.idx=44;S.sim.speed=10;pubGo('map');S.sim.playing=true;startTimer();render(false)},4400))return;
+  if(!await step('<b>6/8</b> Večer predáva Annina batéria – drahšie ako na obed, lacnejšie ako zo siete.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=78;S.persona='anna';pubGo('map')},2800))return;
   if(!await step('Anna vidí stav batérie a zisk z nej.',()=>{S.sim.idx=96;pubGo('home');setTimeout(()=>{const c=[...document.querySelectorAll('#main h3')].find(h=>h.textContent.includes('Večerná ponuka'));c&&c.scrollIntoView({behavior:RM()?'auto':'smooth',block:'center'})},200)},3200))return;
-  if(!await step('<b>8/10</b> Slnečná banka: uložte si júlové slnko na Vianoce.',()=>{S.bank.on=true;S.bank.month=0;pubGo('i_bank');ACT.bankplay()},4800))return;
-  if(!await step('…a AI správca vyjedná cenu a rozhodne, koľko uložiť do batérie a banky.',()=>{S.bank.playing=false;clearInterval(bankT);S.agent.on=true;S.sim.idx=0;S.sim.speed=60;pubGo('i_agent');S.sim.playing=true;startTimer()},4400))return;
-  if(!await step('<b>9/10</b> Mesačný report: deň, batéria, banka – všetko z jedného enginu.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=96;S.rtab='rep';pubGo('reports')},3200))return;
-  if(!await step('<b>10/10</b> Operátor vidí províziu iba od výrobcu, bilanciu každej kWh a audit súčtov.',()=>{S.persona='admin';pubGo('admin');setTimeout(()=>window.scrollTo({top:900,behavior:RM()?'auto':'smooth'}),200)},4200))return;
+  if(!await step('<b>7/8</b> Mesačný report: deň, batéria aj vyúčtovanie – všetko z jedného enginu.',()=>{S.sim.playing=false;stopTimer();S.sim.idx=96;S.rtab='rep';pubGo('reports')},3200))return;
+  if(!await step('<b>8/8</b> Operátor vidí províziu iba od výrobcu, bilanciu každej kWh a audit súčtov.',()=>{S.persona='admin';pubGo('admin');setTimeout(()=>window.scrollTo({top:900,behavior:RM()?'auto':'smooth'}),200)},4200))return;
   }finally{S.tourOn=false;caption('')}
 }
 
