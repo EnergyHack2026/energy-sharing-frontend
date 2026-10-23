@@ -1040,6 +1040,14 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-join-faq summary{color:var(--on-dark);font-weight:700;cursor:pointer}
 .lp-join-faq p{margin-top:10px}
 
+/* ---------- registrácia – výber spôsobu (dizajn úvodnej stránky) ---------- */
+.lp-reg{padding:64px 0 56px}
+.lp-reg h1{max-width:none}
+.lp-reg-choose{padding-top:56px}
+.lp-reg-choose .lp-path{min-height:340px}
+.lp-reg-choose .logos{margin-top:24px}
+.lp-reg-demo{margin-top:16px;gap:10px}
+
 </style>
 </head>
 <body>
@@ -1087,7 +1095,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','join']);
+const ON=new Set(['landing','register']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -2347,7 +2355,7 @@ function vLanding(){
  <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <button class="lp-quick" type="button" data-act="view:join"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
+ <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
  <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
@@ -2370,7 +2378,7 @@ function vLanding(){
  <details><summary>Začne sa zdieľanie hneď po zadaní EIC?</summary><p>Nie. Najskôr si pozriete ponuku, potvrdíte potrebné údaje a súhlasy a odošlete žiadosť. Zdieľanie začne až po schválení a aktivácii. Jedno odberné miesto môže byť aktívne len v jednej skupine zdieľania.</p></details>
  <details><summary>Môžem si elektrinu z obeda nechať na večer?</summary><p>Zdieľanie sa vyhodnocuje v rovnakých 15-minútových intervaloch. Presun na večer vyžaduje skutočné uloženie energie, napríklad do fyzickej batérie. Samotné zdieľanie ju neukladá.</p></details>
  </div></div></section>
- <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><button class="btn pri lg" data-act="view:join">Pridať sa →</button></section>
+ <div class="lp-wrap"><section class="lp-final"><span class="kicker">Vaša energia môže viac</span><h2>Začnite jedným kódom. Objavte nové možnosti<span class="sig">.</span></h2><p>Či máte panely alebo ich slnko chcete využiť — svoje miesto si nájdete.</p><button class="btn pri lg" data-act="view:register">Pridať sa →</button></section>
  <footer class="lp-footer"><div><b>Zdieľňa<span class="dot">.</span></b>Slnko od suseda</div><nav class="lp-footer-links" aria-label="Odkazy v pätičke"><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a><a href="#lp-faq">Otázky a odpovede</a></nav></footer><div class="lp-disclaimer">Hackathonový koncept. Nie je to dostupná komerčná služba ani záväzná ponuka. Čísla na tejto stránke počíta model dema z ilustračných dát. Reálne zapojenie vyžaduje overenie zákazníka, oprávnenie na prístup k dátam, vhodné meranie a aktiváciu skupiny.</div></div>
  </div>`;
 }
@@ -2501,13 +2509,20 @@ function vRegister(){
   if(R.step==='full')return vOnb();
   const demo=`<div class="pill vis" style="margin-bottom:10px">🔒 Simulované prihlásenie (demo) – nezadávate meno ani heslo</div>`;
   const L=S.landing||{};
-  if(R.step==='choose')return `<div class="gap">${hero({kicker:L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia',title:'Zaregistrujte sa <em>za minútu.</em>',lead:'Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.',extra:`<div class="hero-checks"><span><i></i> Bez záväzku</span><span><i></i> Výkupná zmluva ostáva</span><span><i></i> Aktivácia k 1. dňu mesiaca</span></div>`})}
-   <div class="grid g2">
-    <div class="choice" style="border-color:var(--brand)">${icon('bolt')}<h2 style="margin-top:10px">Som zákazník ZSE / VSE</h2><p class="sm mut" style="margin-top:6px">Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, IMS a zmluvách doplníme sami.</p>
-     <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGOS.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGOS.vse}" alt="">Zákazník VSE</button></div>
-     <div class="row" style="margin-top:12px"><span class="xs mut">Demo účet:</span><span class="seg" role="group" aria-label="Demo účet">${[['anna','Anna – FVE + batéria'],['peter','Peter – bistro']].map(([k,l])=>`<button data-act="persona:${k}" aria-pressed="${per===k}">${l}</button>`).join('')}</span></div></div>
-    <button class="choice" data-act="regfull">${icon('pen')}<h2 style="margin-top:10px">Som zákazník SPP alebo inej spoločnosti</h2><p class="sm mut" style="margin-top:6px">Spustite registráciu – za pár krokov pridáte odberné miesto, overíme IMS a odporučíme skupinu. Dodávateľa meniť nemusíte.</p><span class="btn pri" style="margin-top:14px">Spustiť registráciu →</span></button>
-   </div></div>`;
+  /* výber spôsobu registrácie – v dizajne úvodnej stránky, bez značky (ZSE/VSE sa zapne až po výbere) */
+  if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="reg-heading"><div class="lp-wrap">
+   <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
+   <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
+   <p class="lp-intro">Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.</p>
+   <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Výkupná zmluva ostáva</span><span><i class="lp-dot"></i> Aktivácia k 1. dňu mesiaca</span></div>
+  </div></section>
+  <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
+   <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>
+    <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGOS.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGOS.vse}" alt="">Zákazník VSE</button></div>
+    <div class="row lp-reg-demo"><span class="xs mut">Demo účet:</span><span class="seg" role="group" aria-label="Demo účet">${[['anna','Anna – FVE + batéria'],['peter','Peter – bistro']].map(([k,l])=>`<button data-act="persona:${k}" aria-pressed="${per===k}">${l}</button>`).join('')}</span></div>${icon('bolt','path-art')}</article>
+   <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
+    <button class="btn dark" data-act="regfull">Spustiť registráciu →</button>${icon('pen','path-art')}</article>
+  </div></div></section></div>`;
   if(R.step==='load')return `<div class="gap"><div class="card" style="max-width:560px;margin:0 auto">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><h2>Načítavam váš účet…</h2></div><div class="chk-list" style="margin-top:12px">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div>`;
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';
   const sent=!!R.sent,g=GROUPS.find(x=>x.id===(sent?R.group:S.ob.group))||GROUPS[0];
@@ -3241,6 +3256,7 @@ function renderChat(){
 const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
+const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
 const NAV=[['home','Domov','home'],['market','Trhovisko','market'],['group','Moja skupina','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','Nápady','bulb']];
 /* cesta zákazníka: začiatok → koniec */
@@ -3256,21 +3272,21 @@ function gateActs(root){
 }
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
-  if(NEUTRAL.includes(curView())){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
+  if(isNeutral(curView())){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
   if(S.jury&&S.skin!=='neutral')return;
   if(!S.jury&&S.persona==='admin')S.persona='peter';
   const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',NEUTRAL.includes(v));document.body.classList.toggle('jury',J);
-  const brandSeg=J&&!NEUTRAL.includes(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v));document.body.classList.toggle('jury',J);
+  const brandSeg=J&&!isNeutral(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
   const gear=J?`<button class="btn sm" data-act="drawer" aria-label="Upraviť čísla a časy">${icon('sliders')}<span class="hide-m">Čísla a časy</span></button>`:'';
-  $('#top').innerHTML=v==='join'?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
+  $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
    :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;

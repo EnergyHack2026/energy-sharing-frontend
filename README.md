@@ -62,7 +62,7 @@ js/core.js          utils + state S
 js/engine.js        model: profiles, allocation, settlement (no DOM)
 js/ui.js            icon set, form helper F(), charts, QR, map pieces
 js/views-app.js     Home, Market, Group, Reports, Rewards, Profile, Admin, Onboarding
-js/views-public.js  Landing („Pridať sa“ → Join), Join (EIC entry; valid EIC → Registration, or Potential while Registration is off), Benefits, Registration, Váš potenciál (deep link only)
+js/views-public.js  Landing („Pridať sa“ → Registration), Join (EIC entry, currently not linked), Registration (choice step in the landing design, brand-neutral), Benefits, Registration, Váš potenciál (deep link only)
 js/views-map.js     Map
 js/views-ideas.js   Ideas (7 visions)
 js/badges.js        Odmeny → Odznaky: badge definitions, SVG badge, stage, unlock, share card, welcome popup

@@ -234,3 +234,11 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-join-faq{margin-top:28px;max-width:560px;color:var(--on-dark-mut);font-size:var(--fs-sm);line-height:1.6;border-top:1px solid var(--line-dark);padding-top:18px}
 .lp-join-faq summary{color:var(--on-dark);font-weight:700;cursor:pointer}
 .lp-join-faq p{margin-top:10px}
+
+/* ---------- registrácia – výber spôsobu (dizajn úvodnej stránky) ---------- */
+.lp-reg{padding:64px 0 56px}
+.lp-reg h1{max-width:none}
+.lp-reg-choose{padding-top:56px}
+.lp-reg-choose .lp-path{min-height:340px}
+.lp-reg-choose .logos{margin-top:24px}
+.lp-reg-demo{margin-top:16px;gap:10px}
