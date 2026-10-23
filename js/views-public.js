@@ -205,7 +205,7 @@ function vRegister(){
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>
-    <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGOS.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGOS.vse}" alt="">Zákazník VSE</button></div>${icon('bolt','path-art')}</article>
+    <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGO_OFF.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGO_OFF.vse}" alt="">Zákazník VSE</button></div>${icon('bolt','path-art')}</article>
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
     <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše. <button class="link" data-act="supply">Pozrieť ponuku dodávky →</button></p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;

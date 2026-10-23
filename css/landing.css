@@ -328,3 +328,4 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
  .lp-section[id]{scroll-margin-top:24px}  /* 56 + 28 − 60 */
  #lp-club{scroll-margin-top:76px}
 }
+.lp-reg-choose .logos img{height:28px;width:auto;border-radius:0}
