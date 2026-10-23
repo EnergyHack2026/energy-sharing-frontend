@@ -281,7 +281,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 @media(prefers-reduced-motion:reduce){.lp-aurora{animation:none}}
 @media(max-width:900px){.lp-aurora{width:100%;opacity:.6}}
 
-/* ---------- hero scéna ako obrázok (assets/hero-scene.png, 829 × 790) ----------
+/* ---------- hero scéna ako obrázok (hero-scene.png v priečinku assets, 829 × 790) ----------
    Živé karty z enginu presne prekrývajú karty nakreslené v obrázku – pozície sú v % obrázka. */
 .lp-scene.photo{container-type:inline-size}
 .lp-scene-img{display:block;width:100%;height:auto;aspect-ratio:829/790;
