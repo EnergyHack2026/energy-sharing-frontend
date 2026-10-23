@@ -9,13 +9,13 @@ const EIC_DEMO={
 const EIC_SAMPLE='24ZZS0000000003C';
 const maskEic=e=>e&&e.length>=10?e.slice(0,5)+'••••••'+e.slice(-5):'ukážkový profil';
 /* ilustrácia domu; farby berie z tokenov, aby sa menila so značkou */
-function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
+function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
 function lpScene(){return `<svg viewBox="0 0 580 500" role="img" aria-label="Dom s fotovoltikou zdieľa elektrinu s ďalšou domácnosťou a elektromobilom">
  <defs><radialGradient id="lpglow"><stop stop-color="var(--accent-dark)" stop-opacity=".2"/><stop offset="1" stop-color="var(--accent-dark)" stop-opacity="0"/></radialGradient><linearGradient id="lpbase" x2="0" y2="1"><stop stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#ffffff" stop-opacity=".04"/></linearGradient></defs>
  <circle cx="300" cy="220" r="225" fill="url(#lpglow)"/><circle cx="316" cy="220" r="176" fill="none" stroke="#ffffff12"/><circle cx="316" cy="220" r="218" fill="none" stroke="#ffffff0b"/>
- <circle cx="190" cy="82" r="33" fill="var(--yellow)"/><g stroke="var(--yellow)" stroke-width="2"><path d="M190 36v-9m0 100v9m-46-54h-9m100 0h9m-87-33-6-6m72 72 6 6m-72-6-6 6m72-72 6-6"/></g>
+ <circle class="lp-sun" cx="190" cy="82" r="33" fill="var(--yellow)"/><g stroke="var(--yellow)" stroke-width="2"><path d="M190 36v-9m0 100v9m-46-54h-9m100 0h9m-87-33-6-6m72 72 6 6m-72-6-6 6m72-72 6-6"/></g>
  <path d="m41 297 269-153 242 140-272 158Z" fill="url(#lpbase)" stroke="#ffffff26"/><path d="M41 297v16l239 145v-16Zm239 145v16l272-158v-16" fill="#00000033"/>
- <path d="m140 293 122 70 193-109" fill="none" stroke="var(--yellow)" stroke-width="4" stroke-dasharray="5 8"/><path d="m263 362 1 38 86-49" fill="none" stroke="var(--yellow)" stroke-width="3" stroke-dasharray="5 8"/>
+ <path class="lp-flow" d="m140 293 122 70 193-109" fill="none" stroke="var(--yellow)" stroke-width="4" stroke-dasharray="5 8"/><path class="lp-flow" d="m263 362 1 38 86-49" fill="none" stroke="var(--yellow)" stroke-width="3" stroke-dasharray="5 8"/>
  <g transform="translate(80 135) scale(1.2)">${lpHouse()}</g><g transform="translate(330 210) scale(.91)">${lpHouse('#a1b5a0','#eee8d9',false)}</g>
  <g transform="translate(327 334)"><path d="m0 8 24-14 46 26-23 15Z" fill="#b8ccb3"/><path d="m9 5 17-21 25 15 7 18Z" fill="#e8e9cf"/><path d="m17 2 11-12 17 10 2 13Z" fill="#514c62"/><path d="M0 8v13l46 27V35Z" fill="#90a992"/><path d="m46 35 24-15v13L46 48Z" fill="#789080"/><ellipse cx="12" cy="28" rx="6" ry="9" fill="#2f293a"/><ellipse cx="58" cy="36" rx="6" ry="9" fill="#2f293a"/></g>
  <g fill="#789b82"><path d="m74 343-14-7v-37l14 7Z"/><ellipse cx="65" cy="290" rx="15" ry="25"/><path d="m488 264-5-2v-40l5 2Z"/><ellipse cx="486" cy="211" rx="14" ry="24"/></g>
@@ -40,7 +40,7 @@ function vLanding(){
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
  <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
- <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
+ <div class="lp-hero-checks"><span><span class="lp-chk-ic">${icon('leaf')}</span>Bez záväzku</span><span><span class="lp-chk-ic">${icon('group')}</span>Bez vlastných panelov</span><span><span class="lp-chk-ic">${icon('chart')}</span>Cena pod kontrolou</span><span><span class="lp-chk-ic">${icon('shield')}</span>Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
  <div class="lp-wrap"><div class="lp-promises">${[['shield','Vy rozhodujete','Cenu poznáte vopred.'],['home','S panelmi aj bez nich','Svoje miesto si nájde každý.'],['clock','Správna energia, správny čas','Spájame výrobu so spotrebou.'],['chart','Žiadne hádanie','kWh aj eurá v jednom prehľade.']].map(([i,h,p])=>`<div class="lp-promise">${icon(i)}<div><b>${h}</b><small>${p}</small></div></div>`).join('')}</div></div>
@@ -198,7 +198,7 @@ function vRegister(){
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
    <p class="lp-intro">Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.</p>
-   <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Výkupná zmluva ostáva</span><span><i class="lp-dot"></i> Aktivácia k 1. dňu mesiaca</span></div>
+   <div class="lp-hero-checks"><span><span class="lp-chk-ic">${icon('leaf')}</span>Bez záväzku</span><span><span class="lp-chk-ic">${icon('coins')}</span>Výkupná zmluva ostáva</span><span><span class="lp-chk-ic">${icon('clock')}</span>Aktivácia k 1. dňu mesiaca</span></div>
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>

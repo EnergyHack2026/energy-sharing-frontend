@@ -84,6 +84,10 @@
   /* červená bodka – podpis značky Zdieľňa (logo, koniec nadpisov); rovnaká vo všetkých skinoch, iba dekoratívna */
   --sig:#E5322D;
 
+  /* nočná scéna úvodu – polárna žiara, sklenené karty, žiariace okná (dekor) */
+  --aurora-1:#2EE6A8; --aurora-2:#7C5CFF; --aurora-3:#22D3EE;
+  --night-glass:rgba(11,20,36,.74); --accent-glow:rgba(94,234,181,.2); --window-glow:#FFD27A;
+
   /* batéria – mimo palety značiek, rovnaká v oboch */
   --purple:#6A35C0; --purple-t:#F0E8FB;
 }
@@ -104,14 +108,14 @@
   --red:#B1190C;    --red-t:#FDE9E6;
 }
 
-/* ---------- Neutrálna (úvodná stránka – bez značky ZSE/VSE) ----------
-   Tmavé plochy ako v pôvodnej verzii (#1E1B22), značková farba slnečná jantárová.
-   Kontrast: text #1E1B22 na #D97706 6 : 1, --brand-ink #8A5800 na bielej 5,9 : 1,
-   ikony #D97706 na bielej 3,2 : 1, akcent #FFC530 na #1E1B22 11 : 1. */
+/* ---------- Neutrálna (úvod a registrácia – bez značky ZSE/VSE) ----------
+   Nočný štýl: tmavomodrá obloha s polárnou žiarou, mätový akcent, žiariace okná.
+   Kontrast: akcent #5EEAB5 na #0B1424 12 : 1, text #0B1424 na #0E9F6E 5,4 : 1,
+   --brand-ink #0B6B4C na bielej 6,5 : 1, ikony #0E9F6E na bielej 3,4 : 1. */
 :root[data-skin="neutral"]{
-  --brand:#D97706; --brand-d:#F59E0B; --brand-ink:#8A5800; --brand-t:#FFF2D6; --on-brand:#1E1B22;
-  --brand2:#0A6E9C;
-  --surface-dark:#1E1B22; --surface-dark-2:#141218; --accent-dark:#FFC530; --on-dark:#ECE9F1; --on-dark-mut:#B9B4C4;
+  --brand:#0E9F6E; --brand-d:#34D399; --brand-ink:#0B6B4C; --brand-t:#E3F7EF; --on-brand:#0B1424;
+  --brand2:#7C5CFF;
+  --surface-dark:#0B1424; --surface-dark-2:#070E1A; --accent-dark:#5EEAB5; --on-dark:#EAF2F8; --on-dark-mut:#A8B6C8;
 
   --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
   --green:#4E7210;  --green-t:#EEF4E0;
@@ -1020,14 +1024,14 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 
 /* ---------- výzva „Pridať sa“ v hero a stránka Pridajte sa (join) ---------- */
 /* rýchla akcia v hero: celý pruh je jedno tlačidlo, jemne žiari, aby si ho zákazník všimol hneď */
-.lp-quick{display:flex;align-items:center;gap:16px;width:100%;max-width:580px;margin-top:6px;padding:9px 9px 9px 26px;background:var(--card);color:var(--ink);border:0;border-radius:var(--r-pill);font:inherit;text-align:left;cursor:pointer;box-shadow:0 0 0 4px var(--sun-glow),var(--sh-lg);transition:transform .18s ease,box-shadow .18s ease;animation:lp-glow 2.8s ease-in-out infinite}
-.lp-quick:hover{transform:translateY(-2px);box-shadow:0 0 0 8px var(--sun-glow),var(--sh-lg)}
+.lp-quick{display:flex;align-items:center;gap:16px;width:100%;max-width:580px;margin-top:6px;padding:9px 9px 9px 26px;background:var(--card);color:var(--ink);border:0;border-radius:var(--r-pill);font:inherit;text-align:left;cursor:pointer;box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg);transition:transform .18s ease,box-shadow .18s ease;animation:lp-glow 2.8s ease-in-out infinite}
+.lp-quick:hover{transform:translateY(-2px);box-shadow:0 0 0 8px var(--accent-glow),var(--sh-lg)}
 .lp-quick:focus-visible{outline:3px solid var(--accent-dark);outline-offset:6px}
 .lp-quick-q{flex:1;font-size:var(--fs-lg);font-weight:800;line-height:1.3;letter-spacing:-.01em}
 .lp-quick-btn{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;background:var(--accent-dark);color:var(--ink);font-weight:800;font-size:var(--fs-lg);padding:16px 30px;border-radius:var(--r-pill)}
 .lp-quick-arr{transition:transform .18s ease}
 .lp-quick:hover .lp-quick-arr,.lp-quick:focus-visible .lp-quick-arr{transform:translateX(5px)}
-@keyframes lp-glow{0%,100%{box-shadow:0 0 0 4px var(--sun-glow),var(--sh-lg)}50%{box-shadow:0 0 0 9px var(--sun-glow),var(--sh-lg)}}
+@keyframes lp-glow{0%,100%{box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg)}50%{box-shadow:0 0 0 9px var(--accent-glow),var(--sh-lg)}}
 .lp-quick+.lp-hero-checks{margin-top:34px}
 @media(prefers-reduced-motion:reduce){.lp-quick{animation:none;transition:none}.lp-quick-arr{transition:none}}
 @media(max-width:620px){.lp-quick{flex-direction:column;align-items:stretch;gap:12px;padding:18px;border-radius:var(--r-lg)}.lp-quick-q{text-align:center}.lp-quick-btn{justify-content:center}}
@@ -1047,6 +1051,41 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-reg-choose .lp-path{min-height:340px}
 .lp-reg-choose .logos{margin-top:24px}
 .lp-reg-demo{margin-top:16px;gap:10px}
+
+/* ---------- nočný štýl úvodu: polárna žiara, hviezdy, sklenené karty, žiariaca scéna ---------- */
+.marketing .top{background:var(--surface-dark);border-color:var(--line-dark)}
+.marketing .brand{color:var(--on-dark)}
+.marketing .market-nav a{color:var(--on-dark-mut)}
+.marketing .market-nav a:hover{color:var(--on-dark)}
+.marketing .top .btn:not(.dark){color:var(--on-dark);border-color:var(--line-dark)}
+.lp-hero:before{width:auto;height:auto;border-radius:0;inset:-25% -10% -5% 30%;
+  background:radial-gradient(26% 72% at 58% 26%,color-mix(in srgb,var(--aurora-1) 62%,transparent),transparent 70%),
+    radial-gradient(20% 80% at 74% 18%,color-mix(in srgb,var(--aurora-1) 48%,transparent),transparent 72%),
+    radial-gradient(28% 75% at 93% 26%,color-mix(in srgb,var(--aurora-2) 66%,transparent),transparent 72%),
+    radial-gradient(22% 46% at 44% 8%,color-mix(in srgb,var(--aurora-3) 42%,transparent),transparent 70%);
+  filter:blur(22px);animation:lp-aurora 16s ease-in-out infinite alternate}
+.lp-hero:after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1.2px 1.2px at 12% 18%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 28% 8%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.4px 1.4px at 46% 22%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 58% 6%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.3px 1.3px at 72% 14%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 84% 30%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 93% 9%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 66% 40%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1px 1px at 38% 4%,var(--on-dark) 50%,transparent 52%),radial-gradient(1.2px 1.2px at 78% 52%,var(--on-dark) 50%,transparent 52%)}
+.lp-hero .lp-wrap{position:relative;z-index:1}
+@keyframes lp-aurora{from{transform:translateX(0) skewX(0deg)}to{transform:translateX(-5%) skewX(-7deg)}}
+.lp-hero .lp-float{background:var(--night-glass);color:var(--on-dark);border:1px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);backdrop-filter:blur(10px);
+  box-shadow:0 0 26px color-mix(in srgb,var(--accent-dark) 22%,transparent),0 14px 50px rgba(0,0,0,.35)}
+.lp-hero .lp-float .tag,.lp-hero .lp-live{color:var(--on-dark-mut)}
+.lp-hero .lp-float .positive{color:var(--accent-dark)}
+.lp-hero .lp-live i{background:var(--accent-dark);box-shadow:0 0 8px var(--accent-dark)}
+.lp-hero .lp-win{fill:var(--window-glow);filter:drop-shadow(0 0 5px var(--window-glow))}
+.lp-hero .lp-win.side{opacity:.8}
+.lp-hero .lp-flow{filter:drop-shadow(0 0 5px var(--window-glow)) drop-shadow(0 0 12px var(--yellow))}
+.lp-hero .lp-sun{filter:drop-shadow(0 0 18px var(--yellow))}
+.lp-hero-checks{gap:14px 26px;font-size:var(--fs-md)}
+.lp-hero-checks>span{gap:10px}
+.lp-chk-ic{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--accent-dark);border:1.5px solid color-mix(in srgb,var(--accent-dark) 70%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 18%,transparent)}
+.lp-chk-ic .icon{width:19px;height:19px}
+@media(prefers-reduced-motion:reduce){.lp-hero:before{animation:none}}
 
 </style>
 </head>
@@ -2325,13 +2364,13 @@ const EIC_DEMO={
 const EIC_SAMPLE='24ZZS0000000003C';
 const maskEic=e=>e&&e.length>=10?e.slice(0,5)+'••••••'+e.slice(-5):'ukážkový profil';
 /* ilustrácia domu; farby berie z tokenov, aby sa menila so značkou */
-function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
+function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
 function lpScene(){return `<svg viewBox="0 0 580 500" role="img" aria-label="Dom s fotovoltikou zdieľa elektrinu s ďalšou domácnosťou a elektromobilom">
  <defs><radialGradient id="lpglow"><stop stop-color="var(--accent-dark)" stop-opacity=".2"/><stop offset="1" stop-color="var(--accent-dark)" stop-opacity="0"/></radialGradient><linearGradient id="lpbase" x2="0" y2="1"><stop stop-color="#ffffff" stop-opacity=".14"/><stop offset="1" stop-color="#ffffff" stop-opacity=".04"/></linearGradient></defs>
  <circle cx="300" cy="220" r="225" fill="url(#lpglow)"/><circle cx="316" cy="220" r="176" fill="none" stroke="#ffffff12"/><circle cx="316" cy="220" r="218" fill="none" stroke="#ffffff0b"/>
- <circle cx="190" cy="82" r="33" fill="var(--yellow)"/><g stroke="var(--yellow)" stroke-width="2"><path d="M190 36v-9m0 100v9m-46-54h-9m100 0h9m-87-33-6-6m72 72 6 6m-72-6-6 6m72-72 6-6"/></g>
+ <circle class="lp-sun" cx="190" cy="82" r="33" fill="var(--yellow)"/><g stroke="var(--yellow)" stroke-width="2"><path d="M190 36v-9m0 100v9m-46-54h-9m100 0h9m-87-33-6-6m72 72 6 6m-72-6-6 6m72-72 6-6"/></g>
  <path d="m41 297 269-153 242 140-272 158Z" fill="url(#lpbase)" stroke="#ffffff26"/><path d="M41 297v16l239 145v-16Zm239 145v16l272-158v-16" fill="#00000033"/>
- <path d="m140 293 122 70 193-109" fill="none" stroke="var(--yellow)" stroke-width="4" stroke-dasharray="5 8"/><path d="m263 362 1 38 86-49" fill="none" stroke="var(--yellow)" stroke-width="3" stroke-dasharray="5 8"/>
+ <path class="lp-flow" d="m140 293 122 70 193-109" fill="none" stroke="var(--yellow)" stroke-width="4" stroke-dasharray="5 8"/><path class="lp-flow" d="m263 362 1 38 86-49" fill="none" stroke="var(--yellow)" stroke-width="3" stroke-dasharray="5 8"/>
  <g transform="translate(80 135) scale(1.2)">${lpHouse()}</g><g transform="translate(330 210) scale(.91)">${lpHouse('#a1b5a0','#eee8d9',false)}</g>
  <g transform="translate(327 334)"><path d="m0 8 24-14 46 26-23 15Z" fill="#b8ccb3"/><path d="m9 5 17-21 25 15 7 18Z" fill="#e8e9cf"/><path d="m17 2 11-12 17 10 2 13Z" fill="#514c62"/><path d="M0 8v13l46 27V35Z" fill="#90a992"/><path d="m46 35 24-15v13L46 48Z" fill="#789080"/><ellipse cx="12" cy="28" rx="6" ry="9" fill="#2f293a"/><ellipse cx="58" cy="36" rx="6" ry="9" fill="#2f293a"/></g>
  <g fill="#789b82"><path d="m74 343-14-7v-37l14 7Z"/><ellipse cx="65" cy="290" rx="15" ry="25"/><path d="m488 264-5-2v-40l5 2Z"/><ellipse cx="486" cy="211" rx="14" ry="24"/></g>
@@ -2356,7 +2395,7 @@ function vLanding(){
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
  <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
- <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
+ <div class="lp-hero-checks"><span><span class="lp-chk-ic">${icon('leaf')}</span>Bez záväzku</span><span><span class="lp-chk-ic">${icon('group')}</span>Bez vlastných panelov</span><span><span class="lp-chk-ic">${icon('chart')}</span>Cena pod kontrolou</span><span><span class="lp-chk-ic">${icon('shield')}</span>Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
  <div class="lp-wrap"><div class="lp-promises">${[['shield','Vy rozhodujete','Cenu poznáte vopred.'],['home','S panelmi aj bez nich','Svoje miesto si nájde každý.'],['clock','Správna energia, správny čas','Spájame výrobu so spotrebou.'],['chart','Žiadne hádanie','kWh aj eurá v jednom prehľade.']].map(([i,h,p])=>`<div class="lp-promise">${icon(i)}<div><b>${h}</b><small>${p}</small></div></div>`).join('')}</div></div>
@@ -2514,7 +2553,7 @@ function vRegister(){
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
    <p class="lp-intro">Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.</p>
-   <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Výkupná zmluva ostáva</span><span><i class="lp-dot"></i> Aktivácia k 1. dňu mesiaca</span></div>
+   <div class="lp-hero-checks"><span><span class="lp-chk-ic">${icon('leaf')}</span>Bez záväzku</span><span><span class="lp-chk-ic">${icon('coins')}</span>Výkupná zmluva ostáva</span><span><span class="lp-chk-ic">${icon('clock')}</span>Aktivácia k 1. dňu mesiaca</span></div>
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>

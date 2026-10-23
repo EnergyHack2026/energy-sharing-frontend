@@ -215,14 +215,14 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 
 /* ---------- výzva „Pridať sa“ v hero a stránka Pridajte sa (join) ---------- */
 /* rýchla akcia v hero: celý pruh je jedno tlačidlo, jemne žiari, aby si ho zákazník všimol hneď */
-.lp-quick{display:flex;align-items:center;gap:16px;width:100%;max-width:580px;margin-top:6px;padding:9px 9px 9px 26px;background:var(--card);color:var(--ink);border:0;border-radius:var(--r-pill);font:inherit;text-align:left;cursor:pointer;box-shadow:0 0 0 4px var(--sun-glow),var(--sh-lg);transition:transform .18s ease,box-shadow .18s ease;animation:lp-glow 2.8s ease-in-out infinite}
-.lp-quick:hover{transform:translateY(-2px);box-shadow:0 0 0 8px var(--sun-glow),var(--sh-lg)}
+.lp-quick{display:flex;align-items:center;gap:16px;width:100%;max-width:580px;margin-top:6px;padding:9px 9px 9px 26px;background:var(--card);color:var(--ink);border:0;border-radius:var(--r-pill);font:inherit;text-align:left;cursor:pointer;box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg);transition:transform .18s ease,box-shadow .18s ease;animation:lp-glow 2.8s ease-in-out infinite}
+.lp-quick:hover{transform:translateY(-2px);box-shadow:0 0 0 8px var(--accent-glow),var(--sh-lg)}
 .lp-quick:focus-visible{outline:3px solid var(--accent-dark);outline-offset:6px}
 .lp-quick-q{flex:1;font-size:var(--fs-lg);font-weight:800;line-height:1.3;letter-spacing:-.01em}
 .lp-quick-btn{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;background:var(--accent-dark);color:var(--ink);font-weight:800;font-size:var(--fs-lg);padding:16px 30px;border-radius:var(--r-pill)}
 .lp-quick-arr{transition:transform .18s ease}
 .lp-quick:hover .lp-quick-arr,.lp-quick:focus-visible .lp-quick-arr{transform:translateX(5px)}
-@keyframes lp-glow{0%,100%{box-shadow:0 0 0 4px var(--sun-glow),var(--sh-lg)}50%{box-shadow:0 0 0 9px var(--sun-glow),var(--sh-lg)}}
+@keyframes lp-glow{0%,100%{box-shadow:0 0 0 4px var(--accent-glow),var(--sh-lg)}50%{box-shadow:0 0 0 9px var(--accent-glow),var(--sh-lg)}}
 .lp-quick+.lp-hero-checks{margin-top:34px}
 @media(prefers-reduced-motion:reduce){.lp-quick{animation:none;transition:none}.lp-quick-arr{transition:none}}
 @media(max-width:620px){.lp-quick{flex-direction:column;align-items:stretch;gap:12px;padding:18px;border-radius:var(--r-lg)}.lp-quick-q{text-align:center}.lp-quick-btn{justify-content:center}}
@@ -242,3 +242,38 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-reg-choose .lp-path{min-height:340px}
 .lp-reg-choose .logos{margin-top:24px}
 .lp-reg-demo{margin-top:16px;gap:10px}
+
+/* ---------- nočný štýl úvodu: polárna žiara, hviezdy, sklenené karty, žiariaca scéna ---------- */
+.marketing .top{background:var(--surface-dark);border-color:var(--line-dark)}
+.marketing .brand{color:var(--on-dark)}
+.marketing .market-nav a{color:var(--on-dark-mut)}
+.marketing .market-nav a:hover{color:var(--on-dark)}
+.marketing .top .btn:not(.dark){color:var(--on-dark);border-color:var(--line-dark)}
+.lp-hero:before{width:auto;height:auto;border-radius:0;inset:-25% -10% -5% 30%;
+  background:radial-gradient(26% 72% at 58% 26%,color-mix(in srgb,var(--aurora-1) 62%,transparent),transparent 70%),
+    radial-gradient(20% 80% at 74% 18%,color-mix(in srgb,var(--aurora-1) 48%,transparent),transparent 72%),
+    radial-gradient(28% 75% at 93% 26%,color-mix(in srgb,var(--aurora-2) 66%,transparent),transparent 72%),
+    radial-gradient(22% 46% at 44% 8%,color-mix(in srgb,var(--aurora-3) 42%,transparent),transparent 70%);
+  filter:blur(22px);animation:lp-aurora 16s ease-in-out infinite alternate}
+.lp-hero:after{content:'';position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:radial-gradient(1.2px 1.2px at 12% 18%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 28% 8%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.4px 1.4px at 46% 22%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 58% 6%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.3px 1.3px at 72% 14%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 84% 30%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1.2px 1.2px at 93% 9%,var(--on-dark) 50%,transparent 52%),radial-gradient(1px 1px at 66% 40%,var(--on-dark) 50%,transparent 52%),
+    radial-gradient(1px 1px at 38% 4%,var(--on-dark) 50%,transparent 52%),radial-gradient(1.2px 1.2px at 78% 52%,var(--on-dark) 50%,transparent 52%)}
+.lp-hero .lp-wrap{position:relative;z-index:1}
+@keyframes lp-aurora{from{transform:translateX(0) skewX(0deg)}to{transform:translateX(-5%) skewX(-7deg)}}
+.lp-hero .lp-float{background:var(--night-glass);color:var(--on-dark);border:1px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);backdrop-filter:blur(10px);
+  box-shadow:0 0 26px color-mix(in srgb,var(--accent-dark) 22%,transparent),0 14px 50px rgba(0,0,0,.35)}
+.lp-hero .lp-float .tag,.lp-hero .lp-live{color:var(--on-dark-mut)}
+.lp-hero .lp-float .positive{color:var(--accent-dark)}
+.lp-hero .lp-live i{background:var(--accent-dark);box-shadow:0 0 8px var(--accent-dark)}
+.lp-hero .lp-win{fill:var(--window-glow);filter:drop-shadow(0 0 5px var(--window-glow))}
+.lp-hero .lp-win.side{opacity:.8}
+.lp-hero .lp-flow{filter:drop-shadow(0 0 5px var(--window-glow)) drop-shadow(0 0 12px var(--yellow))}
+.lp-hero .lp-sun{filter:drop-shadow(0 0 18px var(--yellow))}
+.lp-hero-checks{gap:14px 26px;font-size:var(--fs-md)}
+.lp-hero-checks>span{gap:10px}
+.lp-chk-ic{width:40px;height:40px;flex:none;border-radius:50%;display:grid;place-items:center;color:var(--accent-dark);border:1.5px solid color-mix(in srgb,var(--accent-dark) 70%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 18%,transparent)}
+.lp-chk-ic .icon{width:19px;height:19px}
+@media(prefers-reduced-motion:reduce){.lp-hero:before{animation:none}}

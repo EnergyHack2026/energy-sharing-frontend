@@ -1,6 +1,6 @@
 /* Zdieľňa – service worker (úloha 12): aplikácia funguje aj bez internetu.
    Pri novej verzii zmeňte CACHE – stará cache sa zmaže. Funguje iba cez http(s). */
-const CACHE='zdielna-v5';
+const CACHE='zdielna-v6';
 const ASSETS=['./','./index.html','./manifest.webmanifest',
   './css/tokens.css','./css/app.css','./css/landing.css',
   './js/core.js','./js/engine.js','./js/ui.js','./js/views-app.js','./js/views-public.js','./js/views-map.js','./js/views-ideas.js','./js/badges.js','./js/notify.js','./js/chat.js','./js/main.js',
