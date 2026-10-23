@@ -104,7 +104,8 @@ The landing page is the template for every screen.
     **Never two red dots in a row:** only the last full stop of a heading is red (e.g. „Začnite jedným kódom.
     Objavte nové možnosti" + red dot), no red dot in kickers, `h3` or body text, nor on a line right before a red-dot heading.
 12. **Landing page is brand-neutral** – no ZSE/VSE logo, name or colours (skin `neutral`, dark `#1E1B22` + solar amber).
-    ZSE/VSE branding appears only inside the app.
+    ZSE/VSE branding appears only inside the app. Exception: the registration step text may name
+    „účet ZSE alebo VSE" (text only, no logo or colours).
 
 ## Regions (map)
 

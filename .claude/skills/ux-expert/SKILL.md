@@ -75,7 +75,8 @@ Porota je E.SK – riešenie musí pôsobiť ako niečo, čo by mohli nasadiť p
     ani v texte, ani na riadku tesne pred nadpisom s červenou bodkou,
   - bodka nie je farbou značky ZSE/VSE (`--brand`), ale vždy `--sig`.
 - **Úvodná stránka je firemne neutrálna:** žiadne logo, názov ani farby ZSE/VSE (skin `neutral`). Značka ZSE/VSE
-  sa objaví až v aplikácii. Akýkoľvek výskyt ZSE/VSE na úvode je 🔴 zistenie.
+  sa objaví až v aplikácii. Akékoľvek logo, farba alebo názov ZSE/VSE na úvode je 🔴 zistenie – výnimkou je
+  text kroku „Zaregistrujte sa“ v sekcii „Ako to funguje“, ktorý môže spomenúť účet ZSE alebo VSE (iba text).
 - Žiadny raw hex v `js/` ani mimo `css/tokens.css`; nová farba = nový token.
 - Dátové farby majú pevný význam všade: výroba `--c-prod`, spotreba `--c-cons`, zdieľané `--c-shared`,
   batéria `--c-bat`, sieť/výkup `--c-grid`. Legenda pri každom grafe.
