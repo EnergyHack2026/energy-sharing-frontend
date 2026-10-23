@@ -318,6 +318,13 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .marketing .top{transition:background-color .2s ease,box-shadow .2s ease,border-color .2s ease}
 body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{background:var(--surface-dark);border-color:var(--line-dark);box-shadow:0 6px 24px rgba(0,0,0,.28)}
 @media(prefers-reduced-motion:reduce){.marketing .top{transition:none}}
-/* odkazy v hornej lište: začiatok sekcie sedí presne pod spodnou hranou prilepenej lišty */
+/* odkazy v hornej lište: nadpis sekcie je vždy rovnako ďaleko pod prilepenou lištou.
+   Sekcia má vlastný vnútorný odstup, preto scroll-margin = lišta + vzduch − padding sekcie. */
 .lp [id]{scroll-margin-top:65px}
-@media(max-width:820px){.lp [id]{scroll-margin-top:56px}}
+.lp-section[id]{scroll-margin-top:11px}   /* 65 lišta + 36 vzduch − 90 padding */
+#lp-club{scroll-margin-top:89px}          /* tmavý blok bez vnútorného odstupu: 65 + 24 */
+@media(max-width:820px){
+ .lp [id]{scroll-margin-top:56px}
+ .lp-section[id]{scroll-margin-top:24px}  /* 56 + 28 − 60 */
+ #lp-club{scroll-margin-top:76px}
+}
