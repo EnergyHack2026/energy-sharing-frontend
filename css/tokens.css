@@ -86,6 +86,22 @@
   --red:#B1190C;    --red-t:#FDE9E6;
 }
 
+/* ---------- Neutrálna (úvodná stránka – bez značky ZSE/VSE) ----------
+   Tmavé plochy ako v pôvodnej verzii (#1E1B22), značková farba slnečná jantárová.
+   Kontrast: text #1E1B22 na #D97706 6 : 1, --brand-ink #8A5800 na bielej 5,9 : 1,
+   ikony #D97706 na bielej 3,2 : 1, akcent #FFC530 na #1E1B22 11 : 1. */
+:root[data-skin="neutral"]{
+  --brand:#D97706; --brand-d:#F59E0B; --brand-ink:#8A5800; --brand-t:#FFF2D6; --on-brand:#1E1B22;
+  --brand2:#0A6E9C;
+  --surface-dark:#1E1B22; --surface-dark-2:#141218; --accent-dark:#FFC530; --on-dark:#ECE9F1; --on-dark-mut:#B9B4C4;
+
+  --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
+  --green:#4E7210;  --green-t:#EEF4E0;
+  --blue:#0A6E9C;   --blue-t:#E1F4FD;
+  --orange:#9E4A0A; --orange-t:#FDEBDD;
+  --red:#B1190C;    --red-t:#FDE9E6;
+}
+
 /* ---------- VSE ---------- */
 :root[data-skin="vse"]{
   --brand:#143C8C; --brand-d:#0E2C68; --brand-ink:#143C8C; --brand-t:#E3EAF7; --on-brand:#FFFFFF;

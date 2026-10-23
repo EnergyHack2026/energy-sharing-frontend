@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="sk" data-skin="zse">
+<html lang="sk" data-skin="neutral">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Zdieľňa – trhovisko na zdieľanie elektriny so susedmi. Hackathon 2026, prototyp.">
 <title>Zdieľňa – slnko od suseda</title>
 <link rel="icon" href="assets/zdielna.svg">
-<meta name="theme-color" content="#6E1009">
+<meta name="theme-color" content="#1E1B22">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Zdieľňa">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -98,6 +98,22 @@
   --green:#4E7210;  --green-t:#EEF4E0;                          /* zdieľané / úspech */
   --blue:#0A6E9C;   --blue-t:#E1F4FD;                           /* spotreba / info */
   --orange:#9E4A0A; --orange-t:#FDEBDD;                         /* výkup / upozornenie */
+  --red:#B1190C;    --red-t:#FDE9E6;
+}
+
+/* ---------- Neutrálna (úvodná stránka – bez značky ZSE/VSE) ----------
+   Tmavé plochy ako v pôvodnej verzii (#1E1B22), značková farba slnečná jantárová.
+   Kontrast: text #1E1B22 na #D97706 6 : 1, --brand-ink #8A5800 na bielej 5,9 : 1,
+   ikony #D97706 na bielej 3,2 : 1, akcent #FFC530 na #1E1B22 11 : 1. */
+:root[data-skin="neutral"]{
+  --brand:#D97706; --brand-d:#F59E0B; --brand-ink:#8A5800; --brand-t:#FFF2D6; --on-brand:#1E1B22;
+  --brand2:#0A6E9C;
+  --surface-dark:#1E1B22; --surface-dark-2:#141218; --accent-dark:#FFC530; --on-dark:#ECE9F1; --on-dark-mut:#B9B4C4;
+
+  --yellow:#FFA800; --yellow-ink:#8A5800; --yellow-t:#FFF2D6;
+  --green:#4E7210;  --green-t:#EEF4E0;
+  --blue:#0A6E9C;   --blue-t:#E1F4FD;
+  --orange:#9E4A0A; --orange-t:#FDEBDD;
   --red:#B1190C;    --red-t:#FDE9E6;
 }
 
@@ -3198,14 +3214,15 @@ function gateActs(root){
 }
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
-  if(S.jury)return;
-  if(S.persona==='admin')S.persona='peter';
+  if(curView()==='landing'){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
+  if(S.jury&&S.skin!=='neutral')return;
+  if(!S.jury&&S.persona==='admin')S.persona='peter';
   const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
   document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',v==='landing');document.body.classList.toggle('jury',J);
-  const brandSeg=J?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
+  const brandSeg=J&&v!=='landing'?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${v==='landing'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;

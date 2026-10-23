@@ -17,14 +17,15 @@ function gateActs(root){
 }
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
-  if(S.jury)return;
-  if(S.persona==='admin')S.persona='peter';
+  if(curView()==='landing'){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
+  if(S.jury&&S.skin!=='neutral')return;
+  if(!S.jury&&S.persona==='admin')S.persona='peter';
   const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
   document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',v==='landing');document.body.classList.toggle('jury',J);
-  const brandSeg=J?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
+  const brandSeg=J&&v!=='landing'?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${v==='landing'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
   const unread=pub||p==='admin'?0:myNotes().filter(n=>!n.read).length;
