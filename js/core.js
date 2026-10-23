@@ -57,7 +57,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},

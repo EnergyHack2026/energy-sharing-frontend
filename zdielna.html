@@ -1199,6 +1199,49 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lp-reg-choose .logos.dual .acc-btn:hover{background:var(--card);color:var(--ink)}
 @media(max-width:620px){.lp-reg-choose .logos.dual{flex-wrap:wrap}}
 .lp-reg-choose .logos.dual .login-btn,.lp-reg-choose .logos.dual .acc-btn{min-height:60px}
+/* ---------- sprievodca po prihlásení (4 kroky) ---------- */
+.wz-steps{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;align-items:center;row-gap:10px}
+.wz-steps li{display:flex;align-items:center;gap:10px;color:var(--on-dark-mut);font-size:var(--fs-sm);font-weight:700}
+.wz-steps li+li:before{content:'';width:36px;height:2px;background:var(--line-dark);margin:0 12px}
+.wz-steps .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,var(--accent-dark) 55%,transparent);color:var(--accent-dark)}
+.wz-steps li.done .n{background:color-mix(in srgb,var(--accent-dark) 22%,transparent)}
+.wz-steps li.cur{color:var(--on-dark)}
+.wz-steps li.cur .n{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink);box-shadow:0 0 14px color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+.wz{padding-top:48px}
+.wz-lead{max-width:720px;margin-bottom:24px}
+.wz-list{display:grid;gap:16px}
+.wz-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;display:grid;gap:14px}
+.wz-card.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-t)}
+.wz-om-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.wz-om-top>div{display:grid;gap:4px}
+.wz-addr{font-size:var(--fs-h3)}
+.wz-om-edit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end}
+.wz-icons{display:flex;gap:8px;flex-wrap:wrap}
+.wz-icons button{width:44px;height:44px;border-radius:var(--r-sm);border:1.5px solid var(--line-2);background:var(--card);display:grid;place-items:center;color:var(--ink);cursor:pointer}
+.wz-icons button .icon{width:22px;height:22px}
+.wz-icons button.on{border-color:var(--brand);background:var(--brand-t);color:var(--brand-ink)}
+.wz-om-head{display:flex;align-items:center;gap:14px}
+.wz-om-head>div{display:grid;gap:2px}
+.wz-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand-t);color:var(--brand-ink);flex:none}
+.wz-ic .icon{width:22px;height:22px}
+.wz-opts{display:grid;gap:10px}
+.wz-opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:var(--r);cursor:pointer}
+.wz-opt input{width:20px;height:20px;margin-top:2px;accent-color:var(--brand);flex:none}
+.wz-opt span{display:grid;gap:2px}
+.wz-opt.miss{cursor:default;background:var(--orange-t);border-color:transparent;display:grid;gap:4px}
+.wz-opt.miss .xs{color:var(--orange)}
+.wz-tbd{padding:12px 14px;border-radius:var(--r);background:var(--bg);border:1px dashed var(--line-2)}
+.wz-sum-row{display:grid;grid-template-columns:160px minmax(0,1fr) auto;gap:12px;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
+.wz-sum-row .link{font-weight:700;color:var(--brand-ink)}
+.wz-confirm{margin-top:20px}
+.wz-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+.wz-done{grid-template-columns:auto 1fr;align-items:start;background:var(--tint-green);border:0}
+.wz-done h2{margin-bottom:6px}
+.wz-h{margin:28px 0 14px;font-size:var(--fs-h3)}
+.wz-list .wz-card:has(.pill){grid-template-columns:1fr auto;align-items:center}
+@media(max-width:820px){.wz-steps .t{display:none}.wz-steps li.cur .t{display:inline}.wz-steps li+li:before{width:18px;margin:0 8px}.wz-om-edit{grid-template-columns:1fr}.wz-sum-row{grid-template-columns:1fr auto}.wz-sum-row>.xs{grid-column:1/-1}}
+.wz .wz-done h2{font-size:var(--fs-h2);letter-spacing:-.02em;max-width:none}
+.lp .wz .wz-h{font-size:var(--fs-h2);letter-spacing:-.02em}
 
 </style>
 </head>
@@ -1277,7 +1320,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
@@ -2706,9 +2749,63 @@ function regTimeline(isP,m,g){
    ['Do '+D(inv),'Prvé vyúčtovanie',isP?`Uvidíte každú predanú kWh a sumu. Výplata po provízii ${BR()} príde do ${D(pay)}.`:'Zdieľané kWh uvidíte na vyúčtovaní – platíte iba ich cenu, žiadne poplatky za službu.']];
   return `<ol class="tl">${L.map(([w,t,x],i)=>`<li class="${i<cur?'is-done':i===cur?'is-now':''}"><span class="tl-d" aria-hidden="true"></span><div><span class="tl-w">${w}${i===cur?' · teraz':''}</span><b>${t}</b><p class="sm mut">${x}</p></div></li>`).join('')}</ol>`;
 }
+/* ---------- sprievodca po prihlásení účtom ZSE · VSE: 1 Odberné miesta → 2 Možnosti zdieľania → 3 Cenová poradňa → 4 Kontrola ---------- */
+const WZ_STEPS=['Odberné miesta','Možnosti zdieľania','Cenová poradňa','Kontrola a potvrdenie'];
+const WZ_ICONS=[['home','Dom'],['city','Byt'],['console','Prevádzka'],['leaf','Chata'],['car','Garáž'],['bolt','Iné']];
+const WZ_OPTS={cons:['Využívať zdieľanú elektrinu','Elektrinu od susedov dostanete lacnejšie, keď ju práve spotrebujete.'],
+ prod:['Ponúkať prebytky z výroby','Prebytky z fotovoltiky ponúknete susedom za vlastnú alebo odporúčanú cenu.'],
+ bat:['Ponúkať energiu z batérie','Večer ponúknete energiu uloženú v batérii, keď už slnko nesvieti.']};
+/* odberné miesta načítané z účtu (demo podľa persony); dostupné možnosti podľa údajov z databázy */
+function wzLoad(per,co){
+ const s=SSO[per],isP=per==='anna';
+ const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'home':'console',on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
+ const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'leaf',on:false,ims:false,pv:false,bat:false};
+ const opt=o=>({cons:o.ims,prod:o.ims&&o.pv,bat:o.ims&&o.bat});
+ [main,cot].forEach(o=>{o.opts=opt(o);o.price=null});
+ S.wz={step:1,oms:[main,cot],ok1:false,ok4:false,sent:false,err:''};
+}
+function wzBar(n){
+ return `<ol class="wz-steps" aria-label="Kroky sprievodcu">${WZ_STEPS.map((t,i)=>{const k=i+1,c=k<n?'done':k===n?'cur':'';return `<li class="${c}" ${k===n?'aria-current="step"':''}><span class="n">${k<n?'✓':k}</span><span class="t">${t}</span></li>`}).join('')}</ol>`;
+}
+function wzNav(back,next,nextLbl='Ďalej',dis=false){
+ return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn pri lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
+}
+const wzHead=(o)=>`<div class="wz-om-head"><span class="wz-ic">${icon(o.icon)}</span><div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.addr)} · EIC ${esc(o.eic)}</span></div></div>`;
+function vWizard(){
+ const W=S.wz,n=W.step,sel=W.oms.filter(o=>o.on);
+ const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n} zo 4`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':WZ_STEPS[n-1]}<span class="sig">.</span></h1>${W.sent?'':wzBar(n)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
+ const end='</div></section></div>';
+ const err=W.err?`<p class="supply-err" role="alert">${esc(W.err)}</p>`:'';
+ if(W.sent)return top+`<div class="wz-card wz-done"><span class="supply-ok" aria-hidden="true">✓</span><div><h2>Ďakujeme, žiadosť je odoslaná</h2><p class="mut">Odoslanie žiadosti ešte neznamená aktiváciu zdieľania. Distribútor overí odberné miesta a o výsledku vás budeme informovať e-mailom aj v aplikácii.</p></div></div>
+  <h2 class="wz-h">Stav odberných miest</h2><div class="wz-list">${W.oms.map(o=>{const st=!o.on?['n','Nezapojené']:!o.ims?['y','Čaká na inteligentné meranie']:['b','Čaká na kontrolu distribútora'];return `<div class="wz-card">${wzHead(o)}<span class="pill ${st[0]}">${st[1]}</span></div>`}).join('')}</div>
+  <div class="wz-nav"><span></span><button class="btn pri lg" data-act="view:landing">Hotovo <span aria-hidden="true">→</span></button></div>`+end;
+ if(n===1)return top+`<p class="lead wz-lead">Načítali sme odberné miesta z vášho účtu. Pomenujte ich, vyberte ikonu a označte, ktoré chcete zapojiť.</p>
+  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div><b class="wz-addr">${esc(o.addr)}</b><span class="xs mut">EIC ${esc(o.eic)}</span></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
+   <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}<div class="f"><span>Ikona</span><div class="wz-icons" role="radiogroup" aria-label="Ikona objektu">${WZ_ICONS.map(([k,l])=>`<button type="button" role="radio" aria-checked="${o.icon===k}" aria-label="${l}" title="${l}" class="${o.icon===k?'on':''}" data-act="wzicon:${i}:${k}">${icon(k)}</button>`).join('')}</div></div></div></div>`).join('')}</div>
+  <div class="wz-confirm">${F('Potvrdzujem výber odberných miest a správnosť uvedených údajov.','wz.ok1',{t:'c'})}</div>${err}
+  ${wzNav(0,'wznext')}`+end;
+ if(n===2)return top+`<p class="lead wz-lead">Podľa údajov o vašich odberných miestach ponúkame tieto možnosti. Dostupné sú predvolene zapnuté – zrušte tie, o ktoré nemáte záujem.</p>
+  <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o);return `<div class="wz-card">${wzHead(o)}<div class="wz-opts">${Object.entries(WZ_OPTS).map(([k,[t,d]])=>{
+    const avail=k==='cons'?o.ims:k==='prod'?o.ims&&o.pv:o.ims&&o.bat;
+    if(!avail)return (k==='cons'&&!o.ims)?`<div class="wz-opt miss"><b>${t}</b><span class="xs">Chýbajú údaje na overenie: odberné miesto nemá inteligentné meranie (IMS). <button class="link" data-act="imsreq">Požiadať o inštaláciu</button></span></div>`:'';
+    return `<label class="wz-opt"><input type="checkbox" data-k="wz.oms.${i}.opts.${k}" data-t="c" ${o.opts[k]?'checked':''}><span><b>${t}</b><span class="xs mut">${d}</span></span></label>`}).join('')}</div></div>`}).join('')}</div>${err}
+  ${wzNav(1,'wznext')}`+end;
+ if(n===3)return top+`<p class="lead wz-lead">Tu si nastavíte cenové preferencie pre jednotlivé odberné miesta.</p>
+  <div class="wz-list">${sel.map(o=>`<div class="wz-card">${wzHead(o)}<p class="sm mut wz-tbd">Cenová poradňa – obsah a pravidlá doplníme. Zatiaľ použijeme odporúčané ceny.</p></div>`).join('')}</div>
+  ${wzNav(2,'wznext')}`+end;
+ const optTxt=o=>{const L=Object.entries(o.opts).filter(([,v])=>v).map(([k])=>WZ_OPTS[k][0]);return L.length?L.join(' · '):(o.ims?'Žiadna možnosť nevybraná':'Čaká na inteligentné meranie')};
+ return top+`<p class="lead wz-lead">Skontrolujte údaje pred odoslaním žiadosti. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
+  <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum">${wzHead(o)}
+   <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>
+   <div class="wz-sum-row"><span class="xs mut">Možnosti zapojenia</span><span>${optTxt(o)}</span><button class="link" data-act="wzgo:2">Upraviť</button></div>
+   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>Odporúčané ceny</span><button class="link" data-act="wzgo:3">Upraviť</button></div></div>`).join('')}</div>
+  <div class="wz-confirm">${F('Potvrdzujem správnosť údajov a vybraných nastavení.','wz.ok4',{t:'c'})}</div>${err}
+  ${wzNav(3,'wzsubmit','Potvrdiť a odoslať žiadosť')}`+end;
+}
 function vRegister(){
   const R=S.reg,per=S.persona==='admin'?'peter':S.persona,sso=SSO[per],co=R.company,coN=SKN[co];
   if(R.step==='full')return vOnb();
+  if(R.step==='wiz'&&S.wz)return vWizard();
   const demo=`<div class="pill vis" style="margin-bottom:10px">🔒 Simulované prihlásenie (demo) – nezadávate meno ani heslo</div>`;
   const L=S.landing||{};
   /* výber spôsobu registrácie – v dizajne úvodnej stránky, bez značky (ZSE/VSE sa zapne až po výbere) */
@@ -3479,7 +3576,7 @@ function customerSkin(){
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
-  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v));document.body.classList.toggle('jury',J);
+  document.body.classList.toggle('pub',pub);document.body.classList.toggle('marketing',isNeutral(v)||(v==='register'&&S.reg.step==='wiz'));document.body.classList.toggle('jury',J);
   const brandSeg=J&&!isNeutral(v)?`<span class="seg" role="group" aria-label="Značka">${[['zse','ZSE'],['vse','VSE']].map(([k,l])=>`<button data-act="skin:${k}" aria-pressed="${S.skin===k}">${l}</button>`).join('')}</span>`:'';
   const logo=`<button class="brand" data-act="view:landing" aria-label="${APP_NAME} – úvodná stránka">${S.skin==='neutral'?'':`<img src="${LOGOS[S.skin]}" alt="${BR()}">`}<span>${APP_NAME}<span class="dot">.</span></span></button>`;
   const juryTag=J?`<span class="jury-tag">🎬 Režim poroty <button data-act="jury" aria-label="Vypnúť režim poroty">✕</button></span>`:'';
@@ -3706,12 +3803,22 @@ const ACT={
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
+  wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
+  wzicon:a=>{const [i,k]=a.split(':');S.wz.oms[+i].icon=k;render(false)},
+  wznext:()=>{const W=S.wz;W.err='';
+    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(!W.ok1)W.err='Potvrďte výber odberných miest a správnosť údajov.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.'}
+    if(W.step===2&&!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zapojenia.';
+    if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
+  wzsubmit:()=>{const W=S.wz,per=S.persona==='admin'?'peter':S.persona;W.err='';
+    if(!W.ok4){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
+    W.sent=true;S.reg.sent=true;S.group=S.ob.group;if(['NONE','MATCH','READY'].includes(S.mem[per]))S.mem[per]='PENDING';
+    logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');window.scrollTo(0,0);render(false)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
   sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
     const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
     S.skin=co;S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;
     logEv(`${s.name}: automatické prihlásenie (zákazník ${SKN[co]}, demo)`);render(true);
-    const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;if(S.reg.load>=SSO_STEPS.length){S.reg.step='acc';window.scrollTo(0,0)}render(false);if(S.reg.step==='load')setTimeout(tick,420)};setTimeout(tick,420)},
+    const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;if(S.reg.load>=SSO_STEPS.length){wzLoad(per,co);S.reg.step='wiz';window.scrollTo(0,0)}render(false);if(S.reg.step==='load')setTimeout(tick,420)};setTimeout(tick,420)},
   ssosubmit:()=>{const per=S.persona==='admin'?'peter':S.persona;const m=S.mem[per];S.reg.sent=true;S.reg.group=S.ob.group;window.scrollTo(0,0);
     if(m==='NONE'||m==='MATCH'||m==='READY'){S.group=S.ob.group;S.mem[per]='PENDING';logEv(`${nm(per)}: žiadosť odoslaná cez účet ${BR()} (${gname(S.group)})`);toast('Žiadosť odoslaná – čaká na kontrolu distribútora a aktiváciu');notify('state',per,'Žiadosť odoslaná',`Skupina ${gname(S.group)} – čaká na kontrolu distribútora.`,'group')}else toast(`Demo: žiadosť do skupiny ${gname(S.reg.group)} odoslaná (${nm(per)} je v demo dátach už aktívny člen)`);
     render(true)},
