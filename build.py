@@ -14,7 +14,7 @@ def data_uri(path):
     b = open(os.path.join(root, path), 'rb').read()
     return 'data:image/png;base64,' + base64.b64encode(b).decode()
 
-logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png')}
+logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png', 'assets/hero-scene.png')}
 html = read('index.html')
 
 # CSS: <link rel="stylesheet" href="css/x.css"> → <style>…</style>

@@ -10,46 +10,6 @@ const EIC_SAMPLE='24ZZS0000000003C';
 const maskEic=e=>e&&e.length>=10?e.slice(0,5)+'••••••'+e.slice(-5):'ukážkový profil';
 /* ilustrácia domu; farby berie z tokenov, aby sa menila so značkou */
 function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
-/* nočná scéna úvodu: dom s FVE zdieľa elektrinu so susedom a elektromobilom; farby z tokenov */
-function lpNightHouse(panels){return `<g>
- <path d="M25 68v55l70 41v-56Z" fill="var(--house-front)"/><path d="M95 108v56l70-41V68Z" fill="var(--house-side)"/>
- <path d="m20 65 75-43 75 43-75 43Z" fill="var(--house-roof)"/><path d="m20 65v5l75 43v-5Zm75 48 75-43v-5l-75 43Z" fill="var(--house-roof-edge)"/>
- ${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="var(--panel)" stroke="var(--panel-line)" stroke-width=".8"/><path d="m59 54 48 28M71 47l48 28M83 40l48 28M63 71l47-27M79 80l47-27" stroke="var(--panel-line)" stroke-width=".6" opacity=".8"/>':''}
- <g class="lp-win" filter="url(#lpwg)"><path d="m38 84 18 10v22l-18-10Z"/><path d="m64 98 22 13v38l-22-13Z"/></g>
- <g class="lp-win side" filter="url(#lpwg)"><path d="m106 112 18-10v20l-18 10Z"/><path d="m136 95 16-9v20l-16 9Z"/></g></g>`}
-const lpTree=(x,y,k=1)=>`<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 0v-14" stroke="var(--trunk)" stroke-width="3"/><ellipse cy="-30" rx="13" ry="21" fill="var(--tree)"/><ellipse cx="-4" cy="-35" rx="6" ry="12" fill="var(--tree-hi)" opacity=".55"/></g>`;
-const lpPine=(x,y,k=1)=>`<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 0v-8" stroke="var(--trunk)" stroke-width="3"/><path d="M0-58 14-24H7l11 18H-18l11-18h-7Z" fill="var(--tree)"/><path d="M0-58 5-40-4-30Z" fill="var(--tree-hi)" opacity=".5"/></g>`;
-const lpLamp=(x,y)=>`<g><ellipse cx="${x}" cy="${y}" rx="16" ry="5" fill="url(#lpspill)"/><path d="M${x} ${y}v-22" stroke="var(--lamp)" stroke-width="2"/><circle cx="${x}" cy="${y-23}" r="3" fill="var(--window-glow)" filter="url(#lpwg)"/></g>`;
-function lpScene(){return `<svg viewBox="0 0 580 500" role="img" aria-label="Dom s fotovoltikou zdieľa elektrinu so susedom a elektromobilom">
- <defs>
-  <filter id="lpwg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <filter id="lpflow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="5"/></filter>
-  <radialGradient id="lpsun"><stop stop-color="var(--window-glow)"/><stop offset=".55" stop-color="var(--yellow)"/><stop offset="1" stop-color="var(--yellow)" stop-opacity="0"/></radialGradient>
-  <radialGradient id="lpspill"><stop stop-color="var(--window-glow)" stop-opacity=".45"/><stop offset="1" stop-color="var(--window-glow)" stop-opacity="0"/></radialGradient>
-  <linearGradient id="lpground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="var(--ground-1)"/><stop offset="1" stop-color="var(--ground-2)"/></linearGradient>
- </defs>
- <circle cx="236" cy="80" r="74" fill="none" stroke="var(--yellow)" stroke-opacity=".28" stroke-width="1.2"/><circle cx="236" cy="80" r="118" fill="none" stroke="var(--yellow)" stroke-opacity=".16" stroke-width="1.2"/>
- <circle cx="236" cy="80" r="46" fill="url(#lpsun)" opacity=".55"/><circle class="lp-sun" cx="236" cy="80" r="24" fill="url(#lpsun)"/>
- <path d="M30 300 300 148l260 148-268 160Z" fill="url(#lpground)"/><path d="M30 300v14l262 156v-14Zm262 170 268-160v-14L292 456Z" fill="var(--ground-edge)"/>
- <path d="m300 360 70-40 62 36-70 40Z" fill="var(--drive)" opacity=".9"/>
- ${lpPine(300,200,.8)}${lpTree(335,185,.7)}${lpPine(470,252,.85)}${lpTree(505,268,.9)}
- <g transform="translate(60 140) scale(1.3)">${lpNightHouse(true)}</g>
- <g transform="translate(340 195) scale(.95)">${lpNightHouse(false)}</g>
- <ellipse cx="172" cy="350" rx="46" ry="12" fill="url(#lpspill)"/><ellipse cx="405" cy="357" rx="34" ry="9" fill="url(#lpspill)"/>
- <g transform="translate(368 330)"><path d="m0 8 24-14 46 26-23 15Z" fill="var(--car-shade)"/><path d="m9 5 17-21 25 15 7 18Z" fill="var(--car)"/><path d="m17 2 11-12 17 10 2 13Z" fill="var(--car-glass)"/><path d="M0 8v13l46 27V35Z" fill="var(--car)"/><path d="m46 35 24-15v13L46 48Z" fill="var(--car-shade)"/><ellipse cx="12" cy="28" rx="6" ry="9" fill="var(--ground-edge)"/><ellipse cx="58" cy="36" rx="6" ry="9" fill="var(--ground-edge)"/><circle cx="4" cy="16" r="2.5" fill="var(--window-glow)" filter="url(#lpwg)"/></g>
- <g transform="translate(446 318)"><rect x="-3" y="-20" width="6" height="22" rx="2" fill="var(--lamp)"/><circle cy="-14" r="2.5" fill="var(--accent-dark)" filter="url(#lpwg)"/></g>
- <g fill="none" stroke-linecap="round">
-  <path d="M170 344C215 382 270 342 318 372S382 394 398 368" stroke="var(--yellow)" stroke-width="10" opacity=".55" filter="url(#lpflow)"/>
-  <path d="M202 202C262 150 362 170 430 236" stroke="var(--yellow)" stroke-width="10" opacity=".45" filter="url(#lpflow)"/>
-  <path class="lp-flow" d="M170 344C215 382 270 342 318 372S382 394 398 368" stroke="var(--window-glow)" stroke-width="3"/>
-  <path class="lp-flow" d="M202 202C262 150 362 170 430 236" stroke="var(--window-glow)" stroke-width="2.5"/>
-  <path d="M170 344C215 382 270 342 318 372S382 394 398 368M202 202C262 150 362 170 430 236" stroke="var(--on-dark)" stroke-width="3.5" stroke-dasharray=".1 14" filter="url(#lpwg)"/>
- </g>
- ${lpTree(72,305,1.1)}${lpTree(108,334,.8)}${lpPine(540,300,.75)}
- <g fill="var(--tree)"><ellipse cx="236" cy="372" rx="14" ry="7"/><ellipse cx="258" cy="384" rx="10" ry="5"/><ellipse cx="470" cy="352" rx="12" ry="6"/><ellipse cx="150" cy="372" rx="12" ry="6"/></g>
- ${lpLamp(222,392)}${lpLamp(316,418)}${lpLamp(488,330)}
- <g transform="translate(262 268)"><circle r="17" fill="var(--sig)" stroke="var(--on-dark)" stroke-width="2" filter="url(#lpwg)"/><path d="m3-11-12 14H0l-3 9L10-2H2Z" fill="var(--on-dark)"/></g>
-</svg>`}
 /* polárna žiara v hero – zvislé vlniace sa závesy (zelená, fialová, tyrkysová) */
 const lpAurora=()=>`<svg class="lp-aurora" viewBox="0 0 800 520" preserveAspectRatio="none" aria-hidden="true"><defs>
  ${[['g','--aurora-1'],['p','--aurora-2'],['c','--aurora-3']].map(([k,v])=>`<linearGradient id="lpa${k}" x2="0" y2="1"><stop stop-color="var(${v})" stop-opacity="0"/><stop offset=".3" stop-color="var(${v})" stop-opacity=".85"/><stop offset=".7" stop-color="var(${v})" stop-opacity=".3"/><stop offset="1" stop-color="var(${v})" stop-opacity="0"/></linearGradient>`).join('')}
@@ -75,7 +35,7 @@ function vLanding(){
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
  <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
  <div class="lp-hero-checks"><span><span class="lp-chk-ic">${icon('leaf')}</span>Bez záväzku</span><span><span class="lp-chk-ic">${icon('group')}</span>Bez vlastných panelov</span><span><span class="lp-chk-ic">${icon('chart')}</span>Cena pod kontrolou</span><span><span class="lp-chk-ic">${icon('shield')}</span>Vyúčtovanie od vášho dodávateľa</span></div>
- </div><div class="lp-scene">${lpScene()}<div class="lp-float one">${icon('chart','lp-float-ic')}<span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two">${icon('clock','lp-float-ic')}<div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
+ </div><div class="lp-scene photo"><img class="lp-scene-img" src="assets/hero-scene.png" width="829" height="790" alt="Večerná ilustrácia: dom s fotovoltikou posiela elektrinu susedovi a do elektromobilu pod polárnou žiarou"><div class="lp-float one">${icon('chart','lp-float-ic')}<span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two">${icon('clock','lp-float-ic')}<div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
  <div class="lp-wrap"><div class="lp-promises">${[['shield','Vy rozhodujete','Cenu poznáte vopred.'],['home','S panelmi aj bez nich','Svoje miesto si nájde každý.'],['clock','Správna energia, správny čas','Spájame výrobu so spotrebou.'],['chart','Žiadne hádanie','kWh aj eurá v jednom prehľade.']].map(([i,h,p])=>`<div class="lp-promise">${icon(i)}<div><b>${h}</b><small>${p}</small></div></div>`).join('')}</div></div>
  <section class="lp-section" id="lp-benefits"><div class="lp-wrap"><div class="lp-section-head"><div><span class="kicker">Dve strany. Jedna dobrá myšlienka.</span><h2>Zo slnka môže mať viac každý<span class="sig">.</span></h2></div></div><div class="lp-paths">
