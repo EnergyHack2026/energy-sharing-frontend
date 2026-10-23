@@ -2,6 +2,7 @@
    Zdieľňa – spoločné komponenty (aplikácia aj úvodná stránka).
    Iba var(--…) z tokens.css. Nový komponent pridávajte sem, nie do view.
    ===================================================================== */
+[hidden]{display:none!important}
 
 /* ---------- základ ---------- */
 *{box-sizing:border-box}

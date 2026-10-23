@@ -34,6 +34,21 @@ index.html#jury=1                              # jury mode on (jury=0 off)
 
 Views: `landing potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
 
+## Final version (branch `final`)
+
+The `final` branch is the version for the jury. It starts with the landing page only; features from `main`
+are switched on one by one. Switching is done in one place, `ON` in `js/core.js`:
+
+```js
+const ON=new Set(['landing']);          // e.g. add 'register','potential','home','market'
+```
+
+Keys are views from `VIEWS` (`js/main.js`) plus `chat` (AI assistant) and `tour` (demo story).
+A disabled view falls back to the landing page; buttons and menu items leading to it are hidden
+(`gateActs()` in `js/main.js`). Code of disabled features stays in the repo.
+
+Workflow: one small branch per feature from `final` (e.g. `feat/register`) → check in the browser → merge into `final`.
+
 ## Layout
 
 ```

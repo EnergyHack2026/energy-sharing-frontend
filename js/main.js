@@ -6,7 +6,15 @@ const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map'],['ideas','N�
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
-const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';return v};
+const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(!isOn(v))v='landing';return v};
+/* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
+const ACT_VIEW={eiccheck:'register',eicdemo:'register',eicfill:'register',landingoffer:'market',chat:'chat',tour:'tour',
+  landingfeature:a=>({battery:'home',solidarity:'i_sol',reports:'reports'}[a]||'rewards')};
+function gateActs(root){
+  root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
+    const t=n==='view'?a:typeof m==='function'?m(a):m;if(t&&!isOn(t))el.hidden=true});
+  if(!isOn('register'))root.querySelectorAll('#lp-eic-form,.lp-demo-links,a[href="#lp-eic"]').forEach(el=>el.hidden=true);
+}
 /* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
 function customerSkin(){
   if(S.jury)return;
@@ -25,14 +33,15 @@ function renderShell(){
   $('#top').innerHTML=v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Profil">${icon('user')}<span class="hide-m">Profil</span></button>${gear}`;
-  const items=p==='admin'?NAV_ADMIN:NAV;
+  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k));
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
   const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span></button>`;
-  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
-  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
+  const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
+  $('#side').innerHTML=`<div class="lbl">Začíname</div>`+NAV_PUB.filter(([k])=>isOn(k)).map(btn).join('')+`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
     +`<div class="side-foot"><button class="jury-btn" data-act="jury" aria-pressed="${J}">🎬 ${J?'Vypnúť režim poroty':'Režim poroty'}</button></div>`;
-  const bn=p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]];
+  const bn=(p==='admin'?NAV_ADMIN:[NAV[0],NAV[1],NAV[5],NAV[6]]).filter(([k])=>isOn(k));
   $('#bnav').innerHTML=bn.map(btn).join('')+`<button data-act="more"><span class="ic">${icon('menu')}</span><span>Viac</span></button>`;
+  gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
 const VIEWS={home:vHome,market:vMarket,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_badge:vIdeaBadge,i_sol:vIdeaSol,i_bank:vIdeaBank,i_agent:vIdeaAgent,i_twin:vIdeaTwin,i_send:vIdeaSend,i_ev:vIdeaEv};
@@ -50,7 +59,7 @@ function modalHtml(){
 /* prekreslí iba modál a zachová fokus (prehrávač dňa) */
 function renderModal(){
   const act=document.activeElement,inM=act&&$('#modal').contains(act)&&act.dataset,fa=inM?act.dataset.act:null,fk=inM?act.dataset.k:null;
-  $('#modal').innerHTML=modalHtml();
+  $('#modal').innerHTML=modalHtml();gateActs($('#modal'));
   const el=fk?$('#modal').querySelector(`[data-k="${fk}"]`):fa?$('#modal').querySelector(`[data-act="${CSS.escape(fa)}"]`):null;if(el)el.focus({preventScroll:true})
 }
 function renderMain(){
@@ -61,6 +70,7 @@ function renderMain(){
   checkWelcome();
   $('#main').innerHTML=(VIEWS[v]||vHome)();
   $('#modal').innerHTML=modalHtml();
+  gateActs($('#main'));gateActs($('#modal'));
   const root=inModal?$('#modal'):$('#main');
   if(fk){const el=root.querySelector(`[data-k="${fk}"]`);if(el){el.focus();if(sel)try{el.setSelectionRange(sel[0],sel[1])}catch(e){}}}
   else if(fa){const el=root.querySelector(`[data-act="${CSS.escape(fa)}"]`);if(el)el.focus({preventScroll:true})}

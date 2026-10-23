@@ -22,6 +22,12 @@ const inWin=(i,a,b)=>a<=b?(i>=a&&i<b):(i>=a||i<b);
 const BR=()=>SKN[S.skin]||'ZSE';
 const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
 
+/* ---------- finálna verzia: zapnuté časti ----------
+   Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
+   Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
+const ON=new Set(['landing']);
+const isOn=k=>ON.has(k);
+
 /* ---------- state ---------- */
 const FEE_FIX='pevná (€/MWh)',FEE_PCT='% z tržby',VIS_PUB='verejná',VIS_HID='skrytá',VIS_LOCK='uzamknutá',MAXC=10;
 const PRIO=['zarobiť','ušetriť','darovať'];
