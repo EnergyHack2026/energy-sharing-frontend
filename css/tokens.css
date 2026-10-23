@@ -71,9 +71,6 @@
 
   /* nočná scéna úvodu – polárna žiara, sklenené karty, žiariace okná (dekor) */
   --aurora-1:#2EE6A8; --aurora-2:#7C5CFF; --aurora-3:#22D3EE;
-  /* ilustrácie ponúk – obloha podľa času dňa */
-  --sky-day-1:#BFE6FF; --sky-day-2:#FFF3D1; --sky-dusk-1:#1B2350; --sky-dusk-2:#7A4D9C; --sky-good-1:#DFF3E6; --sky-good-2:#FFF4DC;
-  --lawn:#8CC59A; --lawn-dusk:#2C4A47; --roof-dusk:#3A3F5C; --wall-dusk:#E4D8C6; --wall-side:#D6CBBD; --roof-school:#C9704F; --school-win:#7FB6E0; --lamp-pole:#5B6475;
   --night-glass:rgba(11,20,36,.74); --accent-glow:rgba(94,234,181,.2); --window-glow:#FFD27A;
 
   /* batéria – mimo palety značiek, rovnaká v oboch */
