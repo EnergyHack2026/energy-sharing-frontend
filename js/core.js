@@ -23,7 +23,7 @@ const setPath=(k,v)=>{const a=k.split('.');const l=a.pop();a.reduce((o,p)=>o[p],
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 const inWin=(i,a,b)=>a<=b?(i>=a&&i<b):(i>=a||i<b);
-const BR=()=>SKN[S.skin]||'ZSE';
+const BR=()=>SKN[S.skin]||SKN[S.reg&&S.reg.company]||'ZSE';  /* v neutrálnom dizajne podľa účtu zákazníka */
 const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
 
 /* ---------- finálna verzia: zapnuté časti ----------

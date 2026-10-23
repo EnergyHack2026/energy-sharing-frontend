@@ -17,12 +17,11 @@ function gateActs(root){
   root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
     const t=n==='view'?a:typeof m==='function'?m(a):m;if(t&&!isOn(t))el.hidden=true});
 }
-/* zákaznícky režim: značka podľa oblasti adresy, Operátor iba v režime poroty */
+/* zákaznícky režim: celá aplikácia v štandardnom dizajne Zdieľne (bez značky ZSE/VSE),
+   Operátor iba v režime poroty; porota môže značku ZSE/VSE zapnúť prepínačom */
 function customerSkin(){
-  if(isNeutral(curView())){S.skin='neutral';return}  /* úvod je bez značky ZSE/VSE */
-  if(S.jury&&S.skin!=='neutral')return;
   if(!S.jury&&S.persona==='admin')S.persona='peter';
-  const rg=regionOf(geo(S.om[S.persona].addr).ll);S.skin=rg==='vse'?'vse':'zse';
+  S.skin=S.jury&&!isNeutral(curView())&&S.skinPick in SKN?S.skinPick:'neutral';
 }
 function renderShell(){
   const p=S.persona,v=curView(),pub=PUB.includes(v),J=S.jury;
@@ -57,6 +56,7 @@ function modalHtml(){
   if(String(m).startsWith('bdgnew:'))return bdgModal(m.slice(7),true);
   if(String(m).startsWith('bdg:'))return bdgModal(m.slice(4),false);
   if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='supply')return supplyModal();if(m==='login')return loginModal();if(m==='acc')return accModal();if(m==='more')return moreSheet();
+  if(String(m).startsWith('batt:'))return battModal(+m.slice(5));
   if(String(m).startsWith('ver:'))return verModal(m.slice(4));
   return detailModal(m);
 }
@@ -194,7 +194,7 @@ const ACT={
   simreset:()=>{S.sim.playing=false;stopTimer();S.sim.idx=0;render(false);syncInputs()},
   sort:a=>{S.match.sort=a;render(false)},
   smart:()=>{S.match.loading=true;S.match.done=false;render(false);setTimeout(()=>{S.match.loading=false;S.match.done=true;S.match.sort='match';render(false);toast('Najlepšie spojenie nájdené')},650)},
-  skin:a=>{S.skin=a;render(true)},
+  skin:a=>{S.skinPick=a;render(true)},
   addom:()=>{S.ob.step=2;S.reg.step='full';S.view='register';render(true)},
   cmp:a=>{const i=S.cmp.indexOf(a);if(i>=0)S.cmp.splice(i,1);else if(S.cmp.length>=3){toast('Porovnať môžete najviac 3 ponuky');return}else S.cmp.push(a);render(false)},
   cmpshow:()=>{if(S.cmp.length<2){toast('Vyberte aspoň 2 ponuky');return}S.modal='cmp';render(false)},
@@ -254,19 +254,25 @@ const ACT={
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
+  wzedit:a=>{const W=S.wz,i=+a;W.edit=i;W.pick=i<0?null:(W.oms[i].strat||wzRec(W.oms[i]));render(false)},
+  wzbat:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];if(b==='1'){S.modal='batt:'+i;render(false);return}o.batAns=false;o.opts.bat=false;render(false)},
+  wzbatok:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];o.batAns=b==='1';o.opts.bat=o.batAns;S.modal=null;
+    if(o.batAns){logEv(`${o.name}: záujem o zdieľanie z batérie – žiadosť o kontakt`);toast('Ďakujeme, zákaznícke centrum vás bude kontaktovať')}render(true)},
+  wzev:a=>{S.wz.ev=a==='1';render(false)},
+  wzpick:a=>{S.wz.pick=a;render(false)},
+  wzprice:a=>{const W=S.wz,o=W.oms[+a];o.strat=W.pick;W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(wzPrice(o))} €/kWh`);render(false)},
   wzicon:a=>{const [i,k]=a.split(':');S.wz.oms[+i].icon=k;render(false)},
   wznext:()=>{const W=S.wz;W.err='';
-    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(!W.ok1)W.err='Potvrďte výber odberných miest a správnosť údajov.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.'}
-    if(W.step===2&&!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zapojenia.';
-    if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
+    if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(!W.oms.some(o=>o.on&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
+    if(W.step===2&&W.edit>=0)W.err='Potvrďte alebo zrušte úpravu ceny.';if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},
   wzsubmit:()=>{const W=S.wz,per=S.persona==='admin'?'peter':S.persona;W.err='';
-    if(!W.ok4){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
+    if(!W.ok3){W.err='Potvrďte správnosť údajov a vybraných nastavení.';render(false);return}
     W.sent=true;S.reg.sent=true;S.group=S.ob.group;if(['NONE','MATCH','READY'].includes(S.mem[per]))S.mem[per]='PENDING';
     logEv(`${nm(per)}: žiadosť odoslaná cez sprievodcu (${W.oms.filter(o=>o.on).length} OM)`);notify('state',per,'Žiadosť odoslaná','Čaká na kontrolu distribútora.','group');window.scrollTo(0,0);render(false)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
   sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
     const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
-    S.skin=co;S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;
+    S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;
     logEv(`${s.name}: automatické prihlásenie (zákazník ${SKN[co]}, demo)`);render(true);
     const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;if(S.reg.load>=SSO_STEPS.length){wzLoad(per,co);S.reg.step='wiz';window.scrollTo(0,0)}render(false);if(S.reg.step==='load')setTimeout(tick,420)};setTimeout(tick,420)},
   ssosubmit:()=>{const per=S.persona==='admin'?'peter':S.persona;const m=S.mem[per];S.reg.sent=true;S.reg.group=S.ob.group;window.scrollTo(0,0);
@@ -363,7 +369,7 @@ async function runTour(){
  if(h.get('persona')==='admin'||h.has('skin'))S.jury=true;
  if(['anna','peter','admin'].includes(h.get('persona')))S.persona=h.get('persona');
  if(VIEWS[h.get('view')])S.view=h.get('view');
- if(h.get('skin')in SKN)S.skin=h.get('skin');
+ if(h.get('skin')in SKN)S.skinPick=h.get('skin');
  if(h.has('t'))S.sim.idx=clamp(parseInt(h.get('t'),10)||0,0,96);
  if(['ch','bdg'].includes(h.get('tab')))S.rwtab=h.get('tab')}
 /* zákaznícky režim: „Práve teraz“ ide podľa hodín (ak deep link neurčil čas) */

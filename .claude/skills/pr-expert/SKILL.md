@@ -93,6 +93,23 @@ Používaj konzistentné príklady a údaje naprieč screenshotmi aj technickým
 
 Príbeh musí zároveň niesť odpovede na propozície. Povinné témy začleňuj tam, kde prirodzene patria.
 
+### Príbeh stratégie skupín: jedna veľká skupina, efektívne skupiny zdieľania riadime my
+
+Toto je naše strategické rozhodnutie a odpoveď na otázku zadania „jedna veľká skupina E.SK alebo viac na výber?“. Prezentácia ho musí vyrozprávať ako príbeh s dilemou a rozhodnutím, nie iba ako konštatovanie. Postav ho v troch krokoch:
+
+1. **Dilema.** Pravidlá trhu: odberné miesto môže byť len v jednej skupine a vstup aj výstup nie sú okamžité (žiadosť o zmenu na OKTE). Keby si zákazník vyberal z viacerých skupín, musel by vopred rozhodnúť, s kým zdieľa. Každá zmena (presun, nevhodná skupina, odchod suseda) by znamenala novú žiadosť na OKTE a čakanie. Skupina, ktorú si zákazník zvolí sám, sa navyše časom rozbalansuje (priveľa výrobcov alebo odberateľov, nesedia profily v čase).
+2. **Rozhodnutie.** Zákazník vstúpi raz, jednou žiadosťou, do **jednej veľkej skupiny E.SK**. Formálne členstvo na OKTE sa potom už nemení.
+3. **Riadenie.** Vnútri veľkej skupiny **my** (E.SK ako prevádzkovateľ trhoviska) skladáme a priebežne riadime **efektívne skupiny zdieľania**: párujeme výrobcov a odberateľov podľa profilu v 15-min intervaloch, ceny a lokality. Efektívne skupiny vieme preskladať bez akcie zákazníka a bez novej žiadosti na OKTE.
+
+Prínos pomenuj pre každú rolu:
+- **zákazník (výrobca aj odberateľ):** jeden krok pri registrácii, nemusí nikoho poznať ani si vyberať skupinu, nečaká na zmeny na OKTE,
+- **E.SK:** jedna administratívna zmena na zákazníka namiesto opakovaných, kontrola nad kvalitou párovania a férovosťou, ľahké škálovanie s rastom počtu zákazníkov,
+- **systém:** viac využitých prebytkov, pretože skupiny sa prispôsobujú skutočným profilom spotreby a výroby.
+
+Príbeh prepoj s Annou a Petrom: nepoznajú sa, obaja vstúpia do jednej skupiny E.SK a až efektívna skupina zdieľania, ktorú riadime my, ich spojí. Tento oblúk sa má vrátiť v časti o fungovaní (párovanie), v dátach (priradenie OM do efektívnej skupiny) a v biznis modeli (bod 4 v časti 6).
+
+Pred tvorbou snímok over v kóde, ako to prototyp dnes zobrazuje (`S.group`, `S.mem`, výber skupiny v `S.ob.group`, obrazovky Group a Admin v `js/views-app.js`). Ak rozhranie stále ponúka výber z viacerých skupín alebo inak protirečí tomuto príbehu, rozpor výslovne uveď v zozname chýbajúcich podkladov a navrhni, ako ho na snímke vysvetliť. Či môže E.SK v rámci jednej skupiny na OKTE riadiť vnútorné alokácie, je otázka realizovateľnosti. Ak to podklady nepotvrdzujú, označ to ako predpoklad na overenie, nie ako hotovú vec.
+
 ## 3. Vysvetli, ako aplikácia funguje
 
 Ukáž celý hlavný proces od vstupu po výsledok.
@@ -182,7 +199,7 @@ Pokry tieto otázky:
    - E.SK: čo získa (viď bod 3).
 2. **Cenotvorba.** Kto určuje cenu (výrobca ponúkne, odberateľ má strop, agenti sa dohodnú). Prečo je výhodná pre obe strany, teda platí *výkup < cena zdieľania < dodávková cena*. Ukáž to jednoduchou cenovou osou.
 3. **Ako zarába E.SK.** Provízia z každej zdieľanej kWh (pevná alebo percentuálna; uveď skutočné hodnoty z kódu), poplatky za doplnkové služby, žiadosť o IMS. K tomu nepriame prínosy: lojalita a nižší odchod zákazníkov, appka otváraná častejšie ako 1× ročne vďaka gamifikácii, noví zákazníci (trh nie je obmedzený na bilančnú skupinu E.SK), lepšie využitie prebytkov z FVE.
-4. **Business logika skupín.** Jedna veľká skupina E.SK alebo viac skupín na výber. Kto ju zakladá a spravuje. Aká je metóda zdieľania (alokačný kľúč v 15-min intervale). Pravidlo, že OM môže byť len v jednej skupine. Vstup a výstup nie sú okamžité (žiadosť na OKTE). Pomenuj, ako to prototyp rieši.
+4. **Business logika skupín.** Naša odpoveď je jedna veľká skupina E.SK a v nej efektívne skupiny zdieľania, ktoré riadime my (príbeh v časti 2). Ukáž ju jednoduchou schémou dvoch úrovní: navonok jedna skupina na OKTE, vnútri efektívne skupiny zdieľania, medzi ktorými operátor presúva OM podľa profilu. Vysvetli, kto skupinu zakladá a spravuje (E.SK), aká je metóda zdieľania (alokačný kľúč v 15-min intervale v rámci efektívnej skupiny) a ako stratégia rieši pravidlo jednej skupiny na OM a neokamžitý vstup a výstup cez OKTE. Uveď, prečo sme nezvolili viac skupín na výber (dilema z časti 2). Pomenuj, ako to prototyp dnes rieši a čo je cieľový stav.
 5. **Tok peňazí.** Jednoduchá schéma: odberateľ platí → E.SK zúčtuje a ponechá si províziu → výrobca dostane čistú sumu. Len komodita, bez distribučných a fixných poplatkov, ako určujú propozície.
 6. **Príklad v číslach.** Jeden deň alebo mesiac Anny a Petra z enginu: kWh, cena, zárobok výrobcu, úspora odberateľa, provízia E.SK. Ak je číslo ilustračné alebo z nastavenia v ⚙, tak to aj označ.
 7. **Škálovanie a realizovateľnosť.** Čo by bolo treba pre reálne nasadenie (napojenie na OKTE, reálne IMS dáta, fakturácia, právne a daňové podmienky, od ktorých hackathon abstrahuje). Prepoj to s bodom 5 propozícií („čo treba urobiť, aby sa prototyp posunul do reálneho riešenia“).
@@ -224,7 +241,7 @@ Ako východisko použi:
 | 1:50–4:15 | Fungovanie cez screenshoty a wow moment. |
 | 4:15–5:15 | Dáta, dátový model a zdroje. |
 | 5:15–6:30 | Backend, architektúra a spracovanie požiadavky. |
-| 6:30–8:00 | Biznis model: cenotvorba, tok peňazí, ako zarába E.SK, skupiny. |
+| 6:30–8:00 | Biznis model: cenotvorba, tok peňazí, ako zarába E.SK, stratégia skupín (jedna veľká skupina → efektívne skupiny zdieľania). |
 | 8:00–8:50 | Cesta k reálnemu riešeniu a ďalšie povinné témy. |
 | 8:50–9:30 | Záver a konkrétny ďalší krok. |
 
@@ -267,6 +284,7 @@ Pred odovzdaním over:
 - fungovanie aplikácie je pochopiteľné od vstupu po výsledok,
 - dátový model a backend zodpovedajú podkladom,
 - biznis model má vlastnú snímku, ukazuje prínos pre výrobcu, odberateľa aj E.SK a jeho čísla pochádzajú z enginu alebo sú označené ako predpoklad,
+- príbeh stratégie skupín (dilema → jedna veľká skupina → efektívne skupiny zdieľania riadené nami) je vyrozprávaný celý, nesie ho Anna a Peter a screenshoty mu neprotirečia,
 - screenshoty, technické schémy a scenár si neodporujú,
 - implementované a plánované schopnosti sú jasne odlíšené,
 - wow moment vychádza z doložiteľnej hodnoty,

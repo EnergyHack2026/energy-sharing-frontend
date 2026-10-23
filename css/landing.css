@@ -414,7 +414,44 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-done{grid-template-columns:auto 1fr;align-items:start;background:var(--tint-green);border:0}
 .wz-done h2{margin-bottom:6px}
 .wz-h{margin:28px 0 14px;font-size:var(--fs-h3)}
-.wz-list .wz-card:has(.pill){grid-template-columns:1fr auto;align-items:center}
+.wz-list .wz-card:has(>.pill){grid-template-columns:1fr auto;align-items:center}
 @media(max-width:820px){.wz-steps .t{display:none}.wz-steps li.cur .t{display:inline}.wz-steps li+li:before{width:18px;margin:0 8px}.wz-om-edit{grid-template-columns:1fr}.wz-sum-row{grid-template-columns:1fr auto}.wz-sum-row>.xs{grid-column:1/-1}}
 .wz .wz-done h2{font-size:var(--fs-h2);letter-spacing:-.02em;max-width:none}
 .lp .wz .wz-h{font-size:var(--fs-h2);letter-spacing:-.02em}
+.wz-opts-h{font-size:var(--fs-sm);font-weight:600;color:var(--mut);padding-top:12px;border-top:1px solid var(--line)}
+/* krok Nastavenia – odporúčaná cena a cenové stratégie */
+.wz-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.wz-pr-row{display:grid;grid-template-columns:minmax(0,1.4fr) auto minmax(0,.8fr) minmax(0,1.1fr) auto;gap:20px;align-items:center}
+.wz-pr-row .wz-tags{margin:0}
+.wz-pr-name,.wz-pr-col{display:grid;gap:2px}
+.wz-pr-name b{font-size:var(--fs-h3)}
+.wz-pr-col b{font-size:var(--fs-lg,1.15rem)}
+.wz-ok{color:var(--green);font-weight:700}
+.wz-strats{border:0;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.wz-strats legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.wz-st{position:relative;display:grid;gap:6px;align-content:start;padding:20px;border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--card);cursor:pointer}
+.wz-st input{position:absolute;top:20px;right:20px;width:20px;height:20px;accent-color:var(--brand)}
+.wz-st-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-right:28px}
+.wz-st-p{margin:10px 0 2px}.wz-st-p b{font-size:var(--fs-h2);letter-spacing:-.02em}
+.wz-st-ch{display:flex;gap:8px;align-items:baseline}.wz-st-ch b{font-size:var(--fs-h3)}
+.wz-st .bar{margin-bottom:8px}.wz-st .bar>i{background:var(--mut)}
+.wz-st.rec{border-color:var(--green);background:var(--green-t)}.wz-st.rec .bar>i{background:var(--green)}
+.wz-st.on{box-shadow:0 0 0 3px var(--brand-t);border-color:var(--brand)}
+.wz-st.rec.on{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}
+.wz-st:focus-within{outline:2px solid var(--brand);outline-offset:2px}
+.wz-pr-act{display:flex;justify-content:flex-end;gap:10px}
+@media(max-width:900px){.wz-pr-row{grid-template-columns:1fr 1fr}.wz-pr-name{grid-column:1/-1}.wz-pr-row>.btn{grid-column:1/-1;justify-self:start}.wz-strats{grid-template-columns:1fr}}
+.wz-st.rec .pill.g{background:var(--green);color:var(--card)}
+/* otázky Áno / Nie pri odbernom mieste (batéria, elektromobil) */
+.wz-q{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r)}
+.wz-q>span:first-child{font-weight:700}
+.wz-info{margin:0;padding:12px 14px;border-radius:var(--r);background:var(--blue-t);color:var(--ink)}
+/* elektromobil (za zákazníka) a okno zdieľania z batérie */
+.wz-extra{margin-top:16px}
+.wz-extra .wz-q{border:0;padding:0}
+.wz-sum.wz-extra .wz-sum-row{border-top:0;padding-top:0}
+.wz-bm{max-width:560px}
+.wz-bm-list{margin:16px 0;padding-left:20px;display:grid;gap:10px}
+.wz-bm-req{padding:14px 16px;border-radius:var(--r);background:var(--orange-t);display:grid;gap:4px}
+.wz-bm-req p{margin:0}
+.wz-bm-act{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px}
