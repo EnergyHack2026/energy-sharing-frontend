@@ -249,7 +249,11 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-reg-choose{padding-top:56px}
 .lp-reg-choose .lp-path{min-height:340px}
 .lp-reg-choose .logos{margin-top:24px}
-.lp-reg-demo{margin-top:16px;gap:10px}
+.lp-reg{background-color:var(--surface-dark);background-size:cover;background-position:right 30%;background-repeat:no-repeat}
+.lp-reg:before{display:none}
+.lp-reg-choose .lp-path.consumer .btn{margin-top:28px}
+.lp-reg-tip{margin-top:16px!important;font-size:var(--fs-sm)!important;color:var(--mut);max-width:420px}
+.lp-reg-tip .link{font-weight:700;color:var(--brand-ink)}
 
 /* ---------- nočný štýl úvodu: polárna žiara, hviezdy, sklenené karty, žiariaca scéna ---------- */
 .marketing .top{background:var(--surface-dark);border-color:var(--line-dark)}
@@ -280,13 +284,9 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-hero-checks>span{gap:12px}
 .lp-chk-dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--accent-dark);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent-dark) 18%,transparent),0 0 12px var(--accent-dark)}
 @media(prefers-reduced-motion:reduce){.lp-hero:before{animation:none}}
-.lp-aurora{position:absolute;top:0;right:0;width:70%;height:100%;pointer-events:none;opacity:.9;transform-origin:top center;animation:lp-curtain 18s ease-in-out infinite alternate}
-@keyframes lp-curtain{from{transform:skewX(0deg) scaleY(1)}to{transform:skewX(-6deg) scaleY(1.04) translateX(-3%)}}
 .lp-hero:before{opacity:.45}
 .lp-float-ic{position:absolute;right:16px;top:16px;width:22px;height:22px;color:var(--accent-dark)}
 .lp-float.one{padding-right:52px}.lp-float.two{padding-right:48px}
-@media(prefers-reduced-motion:reduce){.lp-aurora{animation:none}}
-@media(max-width:900px){.lp-aurora{width:100%;opacity:.6}}
 
 /* ---------- hero: celé pozadie je obrázok scény (hero-bg.jpg v priečinku assets, 1659 × 948) ----------
    Ľavá časť obrázka je tmavá – je pod textom. Živé karty z enginu sa vznášajú nad scénou. */

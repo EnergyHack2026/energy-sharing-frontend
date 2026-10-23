@@ -10,12 +10,6 @@ const EIC_SAMPLE='24ZZS0000000003C';
 const maskEic=e=>e&&e.length>=10?e.slice(0,5)+'••••••'+e.slice(-5):'ukážkový profil';
 /* ilustrácia domu; farby berie z tokenov, aby sa menila so značkou */
 function lpHouse(roof='var(--lp-roof)',body='#f4ece0',panels=true){return `<g><path d="m20 65 75-43 75 43-75 43Z" fill="${roof}"/><path d="M25 68v55l70 41v-56Z" fill="${body}"/><path d="M95 108v56l70-41V68Z" fill="#d6cbbd"/><path class="lp-win" d="m42 84 17 10v25l-17-10Zm32 19 12 7v34l-12-7Z" fill="#4a4652"/><path class="lp-win side" d="m111 107 16-9v24l-16 9Zm26-15 15-8v24l-15 9Z" fill="#625d6c"/>${panels?'<path d="m47 61 47-27 48 28-47 27Z" fill="#2c2b3a" stroke="#9c9db1"/><path d="m59 54 48 28m-35-35 48 28M83 40l48 28M63 71l47-27m-31 36 47-27" stroke="#87889f" stroke-width=".7"/>':''}</g>`}
-/* polárna žiara v hero – zvislé vlniace sa závesy (zelená, fialová, tyrkysová) */
-const lpAurora=()=>`<svg class="lp-aurora" viewBox="0 0 800 520" preserveAspectRatio="none" aria-hidden="true"><defs>
- ${[['g','--aurora-1'],['p','--aurora-2'],['c','--aurora-3']].map(([k,v])=>`<linearGradient id="lpa${k}" x2="0" y2="1"><stop stop-color="var(${v})" stop-opacity="0"/><stop offset=".3" stop-color="var(${v})" stop-opacity=".85"/><stop offset=".7" stop-color="var(${v})" stop-opacity=".3"/><stop offset="1" stop-color="var(${v})" stop-opacity="0"/></linearGradient>`).join('')}
- <filter id="lpab" x="-20%" y="-10%" width="140%" height="120%"><feGaussianBlur stdDeviation="9"/></filter><filter id="lpas"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
- <g filter="url(#lpab)">${[['g','M60 0C120 120 20 260 110 520H190C100 260 210 120 150 0Z'],['p','M170 0C240 140 150 280 240 520H300C220 280 320 140 250 0Z'],['g','M290 0C350 110 270 270 360 520H450C360 270 450 110 390 0Z'],['c','M420 0C470 130 410 260 480 520H520C450 260 520 130 470 0Z'],['g','M500 0C570 120 480 280 590 520H660C560 280 660 120 590 0Z'],['p','M620 0C690 140 600 270 700 520H800C700 270 800 140 720 0Z']].map(([k,d])=>`<path d="${d}" fill="url(#lpa${k})"/>`).join('')}</g>
- <g fill="none" stroke-width="2" filter="url(#lpas)" opacity=".6">${[['g','M75 0C135 120 35 260 125 520'],['g','M305 0C365 110 285 270 375 520'],['c','M435 0C485 130 425 260 495 520'],['g','M515 0C585 120 495 280 605 520'],['p','M640 0C710 140 620 270 720 520']].map(([k,d])=>`<path d="${d}" stroke="url(#lpa${k})"/>`).join('')}</g></svg>`;
 /* úrovne Slnečného klubu: body posúvajú zákazníka vyššie, s úrovňou rastú výhody od dodávateľa */
 const LEVELS=[['Bronz',0],['Striebro',250],['Zlato',500],['Slnko',1000]];
 function lvlOf(p){let i=0;LEVELS.forEach(([,t],k)=>{if(p>=t)i=k});const nx=LEVELS[i+1];return {i,name:LEVELS[i][0],next:nx&&nx[0],need:nx?nx[1]-p:0}}
@@ -194,7 +188,7 @@ function vRegister(){
   const demo=`<div class="pill vis" style="margin-bottom:10px">🔒 Simulované prihlásenie (demo) – nezadávate meno ani heslo</div>`;
   const L=S.landing||{};
   /* výber spôsobu registrácie – v dizajne úvodnej stránky, bez značky (ZSE/VSE sa zapne až po výbere) */
-  if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="reg-heading">${lpAurora()}<div class="lp-wrap">
+  if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" style="background-image:linear-gradient(90deg,var(--surface-dark) 30%,color-mix(in srgb,var(--surface-dark) 35%,transparent)),url(assets/hero-bg.jpg)" aria-labelledby="reg-heading"><div class="lp-wrap">
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
    <p class="lp-intro">Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.</p>
@@ -202,10 +196,9 @@ function vRegister(){
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>
-    <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGOS.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGOS.vse}" alt="">Zákazník VSE</button></div>
-    <div class="row lp-reg-demo"><span class="xs mut">Demo účet:</span><span class="seg" role="group" aria-label="Demo účet">${[['anna','Anna – FVE + batéria'],['peter','Peter – bistro']].map(([k,l])=>`<button data-act="persona:${k}" aria-pressed="${per===k}">${l}</button>`).join('')}</span></div>${icon('bolt','path-art')}</article>
+    <div class="logos"><button data-act="sso:zse" aria-label="Som zákazník ZSE – automatické prihlásenie"><img src="${LOGOS.zse}" alt="">Zákazník ZSE</button><button data-act="sso:vse" aria-label="Som zákazník VSE – automatické prihlásenie"><img src="${LOGOS.vse}" alt="">Zákazník VSE</button></div>${icon('bolt','path-art')}</article>
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
-    <button class="btn dark" data-act="regfull">Spustiť registráciu →</button>${icon('pen','path-art')}</article>
+    <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše.</p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;
   if(R.step==='load')return `<div class="gap"><div class="card" style="max-width:560px;margin:0 auto">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><h2>Načítavam váš účet…</h2></div><div class="chk-list" style="margin-top:12px">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div>`;
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';
