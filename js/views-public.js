@@ -201,8 +201,7 @@ function vRegister(){
   if(R.step==='choose')return `<div class="lp"><section class="lp-hero lp-reg" style="background-image:linear-gradient(90deg,var(--surface-dark) 30%,color-mix(in srgb,var(--surface-dark) 35%,transparent)),url(assets/hero-bg.jpg)" aria-labelledby="reg-heading"><div class="lp-wrap">
    <span class="kicker">${L.checked&&L.eic?`Registrácia · EIC ${maskEic(L.eic)} ✓`:'Registrácia'}</span>
    <h1 id="reg-heading">Zaregistrujte sa <em>za minútu<span class="sig">.</span></em></h1>
-   <p class="lp-intro">Vyberte, u koho máte dnes elektrinu. Dodávateľa meniť nemusíte.</p>
-   <div class="lp-hero-checks"><span><i class="lp-chk-dot"></i>Bez záväzku</span><span><i class="lp-chk-dot"></i>Výkupná zmluva ostáva</span><span><i class="lp-chk-dot"></i>Aktivácia k 1. dňu mesiaca</span></div>
+   <p class="lp-intro">Vyberte spôsob registrácie nižšie. Zaberie to len chvíľu a je bez záväzku.</p>
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE / VSE</h3><p>Kliknite na svoju spoločnosť – prihlásime vás automaticky a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme sami.</p>
