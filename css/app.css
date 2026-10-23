@@ -666,3 +666,5 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .supply-brand{display:flex;align-items:center;gap:14px}
 .supply-brand img{height:26px;width:auto}
 .supply-brand span{width:1px;height:24px;background:var(--line-2)}
+.modal .acc-chip{display:inline-block;border:1px dashed var(--line-2);background:var(--bg);color:var(--ink);border-radius:var(--r-pill);padding:3px 10px;font:inherit;font-size:var(--fs-xs);font-weight:700;cursor:pointer;margin-left:4px}
+.modal .acc-chip:hover{background:var(--brand-t)}

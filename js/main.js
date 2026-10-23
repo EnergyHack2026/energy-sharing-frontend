@@ -56,7 +56,7 @@ function modalHtml(){
   if(m==='bell')return bellPanel();
   if(String(m).startsWith('bdgnew:'))return bdgModal(m.slice(7),true);
   if(String(m).startsWith('bdg:'))return bdgModal(m.slice(4),false);
-  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='supply')return supplyModal();if(m==='login')return loginModal();if(m==='more')return moreSheet();
+  if(m==='exit')return exitModal();if(m==='cmp')return cmpModal();if(m==='calc')return calcModal();if(m==='supply')return supplyModal();if(m==='login')return loginModal();if(m==='acc')return accModal();if(m==='more')return moreSheet();
   if(String(m).startsWith('ver:'))return verModal(m.slice(4));
   return detailModal(m);
 }
@@ -203,6 +203,11 @@ const ACT={
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
   login:()=>{S.modal='login';render(false)},
+  acc:()=>{S.acc.err='';S.acc.done=false;S.modal='acc';render(false)},
+  accdemo:()=>{Object.assign(S.acc,{cno:'5300009999',psc:'917 01',email:'peter.demo@zdielna.sk',err:''});renderModal()},
+  accreq:()=>{const a=S.acc,cno=String(a.cno||'').replace(/\s/g,''),psc=String(a.psc||'').replace(/\s/g,''),e=String(a.email||'').trim();
+    a.err=!/^\d{10}$/.test(cno)?'Zadajte 10-miestne zákaznícke číslo z faktúry.':!/^\d{5}$/.test(psc)?'Zadajte PSČ odberného miesta (5 číslic).':!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail – bude vaším prihlasovacím menom.':!a.ok?'Na vytvorenie účtu potrebujeme váš súhlas.':'';
+    if(!a.err){a.email=e;a.done=true;logEv(`Vytvorený zákaznícky účet (demo): ${cno} · ${e}`)}renderModal()},
   supply:()=>{S.sup.sent=false;S.sup.err='';S.modal='supply';render(false)},
   supplyreq:()=>{const u=S.sup,e=String(u.email||'').trim();
     u.err=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)?'Zadajte platný e-mail, na ktorý vám pošleme ponuku.':!u.ok?'Pre zaslanie ponuky potrebujeme váš súhlas.':'';
