@@ -132,6 +132,17 @@ function vBenefits(){
 /* ponuka dodávky ZSE · VSE (dual brand) pre zákazníkov iných dodávateľov – nenápadná, nikdy podmienka zdieľania.
    Jedna ponuka, jedna cena; konkrétneho dodávateľa určí adresa odberného miesta. */
 const SUP_PRICE=0.1137;
+/* prihlásenie zákazníckym účtom ZSE · VSE – iba demo: polia sú predvyplnené, nič sa neodosiela ani neukladá */
+function loginModal(){
+ const brand=`<div class="supply-brand"><img src="${LOGO_OFF.zse}" alt="ZSE"><span aria-hidden="true"></span><img src="${LOGO_OFF.vse}" alt="VSE"></div>`;
+ return `<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Prihlásenie zákazníckym účtom"><div class="row between">${brand}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
+  <h2 style="margin-top:14px">Prihlásenie do zákazníckeho účtu</h2>
+  <p class="sm mut" style="margin:6px 0 16px">Použite rovnaké údaje ako do Moje ZSE alebo Moje VSE. Spoločnosť rozpoznáme podľa účtu.</p>
+  <div class="pill vis" style="margin-bottom:14px">🔒 Demo prihlásenie – údaje sú predvyplnené a nikam sa neodosielajú</div>
+  <div class="fields one"><label class="f"><span>E-mail alebo zákaznícke číslo</span><input type="text" value="peter.demo@zdielna.sk" readonly></label><label class="f"><span>Heslo</span><input type="password" value="demo-heslo" readonly></label></div>
+  <div class="row" style="margin-top:16px"><button class="btn pri" data-act="sso:auto">Prihlásiť sa</button><button class="btn" data-act="closemodal">Zrušiť</button></div>
+  <p class="xs mut" style="margin-top:14px">Nemáte účet? Vytvorte si ho na <a class="link" href="https://www.zse.sk/" target="_blank" rel="noopener">zse.sk ↗</a> alebo <a class="link" href="https://www.vse.sk/" target="_blank" rel="noopener">vse.sk ↗</a>.</p></div></div>`;
+}
 function supplyModal(){
  const u=S.sup;
  const brand=`<div class="supply-brand"><img src="${LOGO_OFF.zse}" alt="ZSE"><span aria-hidden="true"></span><img src="${LOGO_OFF.vse}" alt="VSE"></div>`;
@@ -219,7 +230,7 @@ function vRegister(){
   </div></section>
   <section class="lp-section lp-reg-choose"><div class="lp-wrap"><div class="lp-paths">
    <article class="lp-path"><span class="kicker">Rýchla cesta</span><h3>Som zákazník ZSE alebo VSE</h3><p>Prihláste sa svojím zákazníckym účtom – spoločnosť rozpoznáme sami a údaje o odberných miestach, inteligentnom meraní a zmluvách doplníme za vás.</p>
-    <div class="logos dual"><button data-act="sso:auto" aria-label="Prihlásiť sa účtom ZSE alebo VSE"><span class="dual-logos"><img src="${LOGO_OFF.zse}" alt=""><i aria-hidden="true"></i><img src="${LOGO_OFF.vse}" alt=""></span><span>Prihlásiť sa účtom</span><span aria-hidden="true">→</span></button></div><p class="lp-reg-tip">Prihlásite sa bezpečne cez svoj existujúci zákaznícky účet.</p>${icon('bolt','path-art')}</article>
+    <div class="logos dual"><button data-act="login" aria-label="Prihlásiť sa účtom ZSE alebo VSE"><span class="dual-logos"><img src="${LOGO_OFF.zse}" alt=""><i aria-hidden="true"></i><img src="${LOGO_OFF.vse}" alt=""></span><span>Prihlásiť sa účtom</span><span aria-hidden="true">→</span></button></div><p class="lp-reg-tip">Ešte nemáte zákaznícky účet? Vytvoríte si ho za pár minút na <a class="link" href="https://www.zse.sk/" target="_blank" rel="noopener">zse.sk ↗</a> alebo <a class="link" href="https://www.vse.sk/" target="_blank" rel="noopener">vse.sk ↗</a>.</p>${icon('bolt','path-art')}</article>
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
     <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše. <button class="link" data-act="supply">Pozrieť ponuku dodávky →</button></p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;
