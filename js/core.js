@@ -61,7 +61,7 @@ const defaults=()=>({
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
-  don:{on:false,pct:40,rcp:'r1',need:30},esg:{on:false,kwh:20,rcp:'r2'},
+  don:{on:false,pct:40,rcp:'r2',need:30,rcps:[{id:'r2',w:50},{id:'r3',w:30},{id:'r1',w:20}],pub:false},esg:{on:false,kwh:20,rcp:'r2'},
   bank:{on:false,pct:100,bal:120,rate:90,fee:5,winter:0.19,month:0,pays:[],playing:false},
   gifts:[],send:{to:'k1',code:'',kwh:3,occ:'Narodeniny',msg:'Všetko najlepšie! Posielam ti kúsok slnka z Piešťan.',fee:0,src:'bank',anim:null,last:null},
   agent:{on:false,done:[],minA:0.09,maxP:0.12,goal:200,prio:'zarobiť',appl:{pw:true,pb:true,wash:true,ev:true},cancel:{}},
@@ -86,7 +86,13 @@ const GROUPS=[
  /* ukážka presunu: skupina s lepším časovým súladom pre odberateľa aj výrobcu (operátor do nej presúva) */
  {id:'g21',code:'PS-ZSE-0521',dp:-0.002,name:'Poludňajšie slnko',prod:9,cons:18,cap:30,reg:'zse',town:'Trnava · Hlohovec',succ:81,tag:'Najlepší súlad s vaším profilom',why:'členovia vyrábajú presne v čase vašej spotreby',f:1.12}
 ];
-const RCP={r1:{name:'Rodina v núdzi – Hlohovec',via:'cez Mesto Hlohovec',ic:'🏠'},r2:{name:'ZŠ Komenského – Piešťany',via:'cez Mesto Piešťany',ic:'🏫'},r3:{name:'Charita – Trnava',via:'cez Trnavskú arcidiecéznu charitu (ilustračne)',ic:'🤝'}};
+/* číselník príjemcov Solidárneho slnka – spravuje operátor; každý má odberné miesto s IMS v skupine zdieľania E.SK (ilustračné údaje) */
+const RCP={r1:{name:'Rodina v núdzi – Hlohovec',type:'Rodina v núdzi',via:'cez Mesto Hlohovec',town:'Hlohovec',ic:'🏠',eic:'24ZZS000000R001'},
+ r2:{name:'ZŠ Komenského – Piešťany',type:'Škola',via:'cez Mesto Piešťany',town:'Piešťany',ic:'🏫',eic:'24ZZS000000R002'},
+ r3:{name:'Charita – Trnava',type:'Charita',via:'cez Trnavskú arcidiecéznu charitu (ilustračne)',town:'Trnava',ic:'🤝',eic:'24ZZS000000R003'},
+ r4:{name:'Domov seniorov – Piešťany',type:'Sociálne zariadenie',via:'cez Mesto Piešťany',town:'Piešťany',ic:'🌼',eic:'24ZZS000000R004'},
+ r5:{name:'Krízové centrum – Trnava',type:'Sociálne bývanie',via:'cez Trnavský samosprávny kraj (ilustračne)',town:'Trnava',ic:'🛏',eic:'24ZZS000000R005'}};
+const DON_MAX=3;   /* najviac 3 príjemcovia na výrobcu */
 const CONTACTS={k1:{name:'Babka Mária',town:'Košice',om:'SK-OM-7712'},k2:{name:'Brat Tomáš',town:'Poprad',om:'SK-OM-5520'},k3:{name:'Mama Eva',town:'Prešov',om:'SK-OM-8104'},k4:{name:'Kamarátka Lucia',town:'Bratislava',om:'SK-OM-2231'}};
 const gname=id=>(GROUPS.find(g=>g.id===id)||GROUPS[0]).name;
 /* obsadenosť skupiny: členovia (výrobcovia + odberatelia) voči kapacite */

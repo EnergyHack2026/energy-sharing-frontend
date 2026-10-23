@@ -127,7 +127,7 @@ document.addEventListener('input',e=>{
   if(k==='p.price'||k==='p.indiv.price'||k==='p.indiv.on'){const ip=S.p.indiv.on;notify('price','peter',ip?'Individuálna cena od Anny':'Výrobca zmenil cenu',`Anna teraz ponúka ${fpr(ip?S.p.indiv.price:S.p.price)} €/kWh${ip?' – iba pre vás':''}.`,'market',{key:'price'})}
   render(false);syncInputs();
 });
-document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.k&&(el.dataset.t==='c'||el.dataset.t==='s'))render(true)});
+document.addEventListener('change',e=>{const el=e.target;if(el.id==='don-add'&&el.value){if(S.don.rcps.length<DON_MAX&&!S.don.rcps.some(r=>r.id===el.value)){S.don.rcps.push({id:el.value,w:0});ACT.doneq();toast('Príjemca pridaný – pomer sme rozdelili rovnakým dielom')}return}if(el.dataset&&el.dataset.k&&(el.dataset.t==='c'||el.dataset.t==='s'))render(true)});
 /* poradie energetických miest – presun myšou (drag & drop); klávesnicou tlačidlami ▲ ▼ */
 let dragPk=null;
 const placeOf=e=>e.target&&e.target.closest?e.target.closest('.place[data-pk]'):null;
@@ -269,6 +269,8 @@ const ACT={
   iwbuy:a=>{const w=iwS(),o=[...IW_PARTNERS,...IW_SHOP()].find(x=>x.id===a);if(!o||w.bal<o.c||w.red[a])return;w.bal-=o.c;w.red[a]='IW-'+Math.random().toString(36).slice(2,6).toUpperCase();logEv(`${nm(regPer())}: iWatt vymenené – ${o.t}`);toast(`Vymenené za ${fm(o.c,0)} iWatt · kód ${w.red[a]}`);render(false)},
   svc:a=>{S.modal='svc:'+a;render(false)},
   svcok:a=>{(S.svcAsked||(S.svcAsked={}))[a]=true;S.modal=null;logEv(`${nm(regPer())}: záujem o ponuku – ${SVC[a].t}`);toast(`Ďakujeme – poradca ${BR()} vás kontaktuje s ponukou: ${SVC[a].t}`);render(false)},
+  donrm:a=>{const L=S.don.rcps;if(L.length<2)return;S.don.rcps=L.filter(r=>r.id!==a);S.don.rcp=S.don.rcps[0].id;render(false)},
+  doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length,b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
   plmove:a=>{const [k,d]=a.split(':');const L=placeOrder(regPer()),i=L.indexOf(k),j=i+(+d);if(i<0||j<0||j>=L.length)return;L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)},
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},

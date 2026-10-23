@@ -433,20 +433,32 @@ function placeRow(p,pp){
 /* poradie miest si zákazník mení presunom (drag & drop) – platí v Nastaveniach aj v Skupine zdieľania */
 function placeOrder(pp){const keys=myPlaces(pp).map(p=>p.key),o=(S.placeOrder||[]).filter(k=>keys.includes(k));return [...o,...keys.filter(k=>!o.includes(k))]}
 function placesList(pp){const L=placeOrder(pp),P=myPlaces(pp).sort((a,b)=>L.indexOf(a.key)-L.indexOf(b.key));return `<div class="places">${P.map(p=>placeRow(p,pp)).join('')}</div><p class="xs mut" style="margin-top:6px">Poradie miest zmeníte potiahnutím za úchyt ⋮⋮ alebo šípkami.</p>`}
-/* ---------- Solidárne slnko: darovanie časti prebytku – nastavenie pri mieste s výrobou, dopad v Prehľadoch ---------- */
+/* ---------- Solidárne slnko: výrobca daruje % zo zvyšku prebytku (čo sa nevyzdieľalo v skupine ani neuložilo do batérie)
+   a pomerom ho rozdelí medzi 1–3 príjemcov z číselníka. Bez provízie a poplatkov, bez odmeny v iWatt. ---------- */
+const donList=()=>(S.don.rcps||[]).filter(r=>RCP[r.id]).slice(0,DON_MAX);
+function donShares(){const L=donList(),t=L.reduce((a,r)=>a+Math.max(0,+r.w||0),0);return L.map(r=>({...r,r:RCP[r.id],sh:t>0?Math.max(0,+r.w||0)/t:1/L.length}))}
 function solStats(){
   const res=S.don.on?dayRun():runDay(S.c.appTime,{cfg:{...manualCfg(),donPct:S.don.pct}}),A=agg(res).anna,mon=A.don*S.sim.days;
-  return {mon,val:mon*S.c.ref,lost:mon*S.p.feedin,hh:S.don.need>0?Math.floor(mon/S.don.need):0,r:RCP[S.don.rcp]};
+  const L=donShares().map(x=>({...x,kwh:mon*x.sh,val:mon*x.sh*S.c.ref}));
+  return {mon,val:mon*S.c.ref,lost:mon*S.p.feedin,L,sum:(S.don.rcps||[]).slice(0,DON_MAX).reduce((a,r)=>a+(+r.w||0),0),r:L[0]?L[0].r:RCP.r2};
 }
 function solSettingsCard(){
-  const x=solStats();
-  return `<div class="card" id="sol-card"><h3>${icon('heart')} Solidárne slnko</h3><p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý susedia nespotrebujú a inak by išiel do výkupu. Energiu doručí obec alebo organizácia – bez provízie a bez poplatkov.</p>
-   <div class="fields" style="margin-top:10px">${F('Darovať časť prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',u:' %'})+F('Príjemca','don.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])}):''}</div>
-   ${S.don.on?`<p class="sm" style="margin-top:8px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.r.name} (${x.r.via}) – hodnota pre príjemcu ${eur(x.val)}, vy sa vzdáte výkupu ${eur(x.lost)}.</p>`:''}</div>`;
+  const x=solStats(),L=donList(),free=Object.keys(RCP).filter(k=>!L.some(r=>r.id===k));
+  const row=(r,i)=>{const c=RCP[r.id],e=x.L[i];return `<div class="don-r"><span class="don-ic" aria-hidden="true">${c.ic}</span><div class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></div>
+    <label class="don-w"><input type="number" min="0" max="100" step="5" data-k="don.rcps.${i}.w" data-t="n" value="${r.w}" aria-label="Pomer pre ${c.name}"><em>%</em></label>
+    <span class="don-k">${S.don.on&&e?`≈ ${fm(e.kwh,0)} kWh`:''}</span><button class="btn sm" data-act="donrm:${r.id}" aria-label="Odobrať ${c.name}" ${L.length<2?'disabled':''}>✕</button></div>`};
+  return `<div class="card" id="sol-card"><h3>${icon('heart')} Solidárne slnko</h3><p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
+   <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
+   ${S.don.on?`<div class="don-head"><b>Príjemcovia a pomer</b><span class="xs ${x.sum===100?'mut':'don-warn'}">${x.sum===100?'Spolu 100 %':`Spolu ${x.sum} % – rozdelíme pomerne`}</span></div>
+    <div class="don-list">${L.map(row).join('')}</div>
+    <div class="row" style="margin-top:10px">${L.length<DON_MAX&&free.length?`<label class="f don-add"><span class="sr">Pridať príjemcu</span><select data-act-change="donadd" id="don-add"><option value="">+ Pridať príjemcu (najviac ${DON_MAX})</option>${free.map(k=>`<option value="${k}">${RCP[k].ic} ${RCP[k].name}</option>`).join('')}</select></label>`:''}<button class="btn sm" data-act="doneq">Rozdeliť rovnakým dielom</button></div>
+    <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>
+    <div class="fields one" style="margin-top:8px">${F('Uviesť moje meno pri príjemcoch ako darcu (poďakovanie)','don.pub',{t:'c'})}</div>
+    <p class="xs mut">Príjemcov overuje a spravuje ${BR()}. Každý má odberné miesto s inteligentným meraním v skupine zdieľania.</p>`:''}</div>`;
 }
 function solReportCard(){
   const x=solStats();
-  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Solidárne slnko: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.r.ic} ${x.r.name} · hodnota pre príjemcu ${eur(x.val)}${x.hh?` · podporené domácnosti: ${x.hh}`:''} · bez provízie a poplatkov</p></div><button class="link" data-act="view:profile">Nastavenia →</button></div>`;
+  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Solidárne slnko: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.L.map(e=>`${e.r.ic} ${e.r.name} ${fm(e.kwh,0)} kWh`).join(' · ')} · hodnota pre príjemcov ${eur(x.val)} · bez provízie a poplatkov${S.don.pub?' · vaše meno je uvedené pri príjemcoch':''}</p></div><button class="link" data-act="view:profile">Nastavenia →</button></div>`;
 }
 function vProfile(){
   const per=S.persona,pp=per==='admin'?'peter':per,om=S.om[pp],ims=pp==='anna'?S.p.ims:S.c.ims,gg=geo(om.addr);

@@ -13,7 +13,7 @@ function mapMembers(){
    {id:'C',addr:'Hlohovec',role:'Odberateľ',label:'',ims:true,grp:gname(S.group)},
    {id:'D',addr:'Bratislava',role:'Odberateľ (EV)',label:'',ims:true,grp:gname(S.group)},
    {id:'V1',addr:'Prešov',pv:true,bat:true,role:'Výrobca s batériou',ims:true,grp:'Poludnie 9'},{id:'V2',addr:'Košice',bistro:true,role:'Odberateľ (reštaurácia)',ims:true,grp:'Poludnie 9'},{id:'V3',addr:'Košice',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V4',addr:'Michalovce',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V5',addr:'Poprad',pv:true,role:'Výrobca',ims:true,grp:'Poludnie 9'}];
-  if(S.don.on){const r=RCP[S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Solidárneho slnka',label:r.ic,ims:true,grp:'Solidárne slnko',rcp:true})}
+  if(S.don.on){const r=RCP[(S.don.rcps&&S.don.rcps[0]||{}).id||S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Solidárneho slnka',label:r.ic,ims:true,grp:'Solidárne slnko',rcp:true})}
   for(const g of S.gifts){const c=CONTACTS[g.to];if(c&&!L.find(x=>x.id==='k_'+g.to))L.push({id:'k_'+g.to,addr:c.town,role:'Príjemca darčeka – '+c.name,label:'🎁',ims:true,grp:'Pošli slnko'})}
   const placed=[];
   for(const m of L){const g=geo(m.addr);let [x,y]=prj(g.ll);for(let k=0;k<10&&placed.some(p=>Math.hypot(p[0]-x,p[1]-y)<36);k++){x+=k%2?-34:30;y+=k%2?16:10}placed.push([x,y]);m.x=x;m.y=y;m.reg=regionOf(g.ll);m.town=g.town}
