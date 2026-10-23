@@ -128,7 +128,9 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-offer-body{padding:24px}
 .lp-offer-body h3{font-size:20px}
 .lp-offer-body>p{font-size:var(--fs-sm);color:var(--mut);margin-top:6px}
-.lp-offer-price{font-size:34px;font-weight:800;letter-spacing:-.045em;margin:18px 0}
+.lp-offer-price{font-size:34px;font-weight:800;letter-spacing:-.045em;margin:18px 0 10px}
+.lp-offer-save{align-self:flex-start;margin-bottom:16px}
+.lp-offer{display:flex;flex-direction:column}.lp-offer-body{flex:1;display:flex;flex-direction:column}.lp-offer-body .btn{margin-top:auto}
 .lp-offer-price span{font-size:var(--fs-sm);font-weight:500;letter-spacing:0;color:var(--mut)}
 .lp-offer-meta{display:flex;justify-content:space-between;font-size:var(--fs-sm);border-top:1px solid var(--line);padding:13px 0 18px;color:var(--mut)}
 .lp-offer-meta b{color:var(--ink)}
