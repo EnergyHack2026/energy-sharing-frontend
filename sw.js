@@ -1,10 +1,10 @@
 /* Zdieľňa – service worker (úloha 12): aplikácia funguje aj bez internetu.
    Pri novej verzii zmeňte CACHE – stará cache sa zmaže. Funguje iba cez http(s). */
-const CACHE='zdielna-v9';
+const CACHE='zdielna-v10';
 const ASSETS=['./','./index.html','./manifest.webmanifest',
   './css/tokens.css','./css/app.css','./css/landing.css',
   './js/core.js','./js/engine.js','./js/ui.js','./js/views-app.js','./js/views-public.js','./js/views-map.js','./js/views-ideas.js','./js/badges.js','./js/notify.js','./js/chat.js','./js/main.js',
-  './assets/zse.png','./assets/vse.png','./assets/zdielna.svg','./assets/hero-bg.jpg','./assets/icon-192.png','./assets/icon-512.png','./assets/icon-maskable-512.png','./assets/apple-touch-icon.png'];
+  './assets/zse.png','./assets/vse.png','./assets/zdielna-dot.svg','./assets/hero-bg.jpg','./assets/icon-192.png','./assets/icon-512.png','./assets/icon-maskable-512.png','./assets/apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 /* cache first, potom sieť; Google Fonts sa uložia pri prvom načítaní (offline → systémové písmo) */

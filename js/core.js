@@ -2,7 +2,7 @@
 const APP_NAME='Zdieľňa';
 const LOGOS={zse:'assets/zse.png',vse:'assets/vse.png'},SKN={zse:'ZSE',vse:'VSE'};
 /* značka Zdieľne bez ZSE/VSE – úvodná stránka */
-const LOGO_APP='assets/zdielna.svg';
+const LOGO_APP='assets/zdielna-dot.svg';
 /* ---------- utils ---------- */
 const pad=n=>String(n).padStart(2,'0');
 const T2I=t=>{const m=/^(\d{1,2}):(\d{2})$/.exec(t||'');if(!m)return 0;return Math.max(0,Math.min(96,Math.round((+m[1]*60+ +m[2])/15)))};
