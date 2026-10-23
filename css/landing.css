@@ -108,6 +108,11 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-progress span{display:block;height:100%;background:var(--accent-dark);border-radius:var(--r-pill)}
 .lp-challenge-bottom{display:flex;justify-content:space-between;font-size:var(--fs-sm);color:var(--on-dark-mut)}
 .lp-challenge-bottom b{color:#fff}
+.lp-level{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-dark)}
+.lp-level-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.lp-level-steps span{font-size:var(--fs-xs);font-weight:700;text-align:center;padding:6px 4px;border-radius:var(--r-pill);border:1px solid var(--line-dark);color:var(--on-dark-mut)}
+.lp-level-steps span.done{color:var(--on-dark);border-color:color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+.lp-level-steps span.cur{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink)}
 
 /* ---------- ponuky ---------- */
 .lp-offers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
