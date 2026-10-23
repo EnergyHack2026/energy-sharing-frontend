@@ -39,7 +39,7 @@ function vLanding(){
  <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <div class="lp-join-cta"><span class="lp-eic-label">Zistite, čo môže zdieľanie priniesť vám</span><div class="lp-eic-box lp-join-box"><span class="lp-join-q">Chcete sa pridať do sveta zdieľania energie?</span><button class="btn pri" type="button" data-act="view:join">Pridať sa <span aria-hidden="true">→</span></button></div><p class="lp-eic-help">Stačí kód EIC z faktúry za elektrinu – hneď uvidíte svoj odhad, bez záväzku.</p></div>
+ <button class="lp-quick" type="button" data-act="view:join"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
  <div class="lp-hero-checks"><span><i class="lp-dot"></i> Bez záväzku</span><span><i class="lp-dot"></i> Bez vlastných panelov</span><span><i class="lp-dot"></i> Cena pod kontrolou</span><span><i class="lp-dot"></i> Vyúčtovanie od vášho dodávateľa</span></div>
  </div><div class="lp-scene">${lpScene()}<div class="lp-float one"><span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two"><div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
