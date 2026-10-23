@@ -329,3 +329,18 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
  #lp-club{scroll-margin-top:76px}
 }
 .lp-reg-choose .logos img{height:28px;width:auto;border-radius:0}
+/* registrácia – symetrické karty: rovnaký nadpis, akcie zarovnané na spodok, rovnako široké tlačidlá spoločností */
+.lp-reg-choose .lp-path{display:flex;flex-direction:column}
+.lp-reg-choose .lp-path h3{max-width:none}
+.lp-reg-choose .lp-path>p:not(.lp-reg-tip){max-width:460px;margin-bottom:28px}
+.lp-reg-choose .lp-path .logos,.lp-reg-choose .lp-path.consumer .btn{margin-top:auto!important}
+.lp-reg-choose .logos{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:460px}
+.lp-reg-choose .logos button{justify-content:center;min-height:52px;padding:8px 16px}
+.lp-reg-choose .lp-path.consumer .btn{align-self:flex-start;min-height:52px;padding-inline:26px}
+.lp-reg-tip{min-height:3.2em}
+@media(max-width:520px){.lp-reg-choose .logos{grid-template-columns:1fr}}
+.lp-reg-choose .logos{max-width:520px}
+.lp-reg-choose .logos button{white-space:nowrap;gap:12px}
+.lp-reg-choose .logos img{height:24px}
+.lp-reg-choose .lp-path .path-art{display:none}
+.lp-reg-choose .lp-reg-tip{max-width:460px}
