@@ -157,7 +157,32 @@ Rozlišuj:
 
 Backend neodvodzuj iba zo screenshotov. Vychádzaj z kódu, dokumentácie alebo potvrdeného opisu. Neznáme časti označ na doplnenie.
 
-## 6. Vytvor wow moment
+## 6. Predstav biznis model
+
+Biznis model je povinná súčasť prezentácie. Propozície vyžadujú „prezentáciu obchodného prínosu pre zákazníkov a spoločnosť E.SK“, porota hodnotí „Prínos a realizovateľnosť“ a zadanie žiada „business logiku, ako sa budú tvoriť skupiny zdieľania“. Venuj mu vlastnú snímku (ideálne dve) v hlavnej prezentácii, nie v prílohe.
+
+Vychádzaj z toho, čo je v prototype implementované, a over to v kóde:
+- ceny a provízia: `js/core.js` (`S.p.price`, `S.p.feedin`, `S.c.ref`, `S.fee` – pevná €/MWh alebo % z obchodu),
+- výpočet provízie a čistej ceny: `js/engine.js` (`feeOf`, `netPrice`), zúčtovanie v `agg()`,
+- skupiny, členstvo a stavy žiadosti: `S.group`, `S.mem` a obrazovky Group a Admin v `js/views-app.js`,
+- doplnkové služby (batéria, energetická banka, darovanie, „Pošli slnko“): `S.bat`, `S.bank`, `S.gifts`.
+
+Pokry tieto otázky:
+
+1. **Hodnotová ponuka pre každú rolu.** Jedna veta a jedno číslo z enginu:
+   - výrobca: zarobí viac než pri výkupe (cena zdieľania vs. výkupná cena),
+   - odberateľ: ušetrí oproti dodávkovej cene,
+   - E.SK: čo získa (viď bod 3).
+2. **Cenotvorba.** Kto určuje cenu (výrobca ponúkne, odberateľ má strop, agenti sa dohodnú). Prečo je výhodná pre obe strany, teda platí *výkup < cena zdieľania < dodávková cena*. Ukáž to jednoduchou cenovou osou.
+3. **Ako zarába E.SK.** Provízia z každej zdieľanej kWh (pevná alebo percentuálna; uveď skutočné hodnoty z kódu), poplatky za doplnkové služby, žiadosť o IMS. K tomu nepriame prínosy: lojalita a nižší odchod zákazníkov, appka otváraná častejšie ako 1× ročne vďaka gamifikácii, noví zákazníci (trh nie je obmedzený na bilančnú skupinu E.SK), lepšie využitie prebytkov z FVE.
+4. **Business logika skupín.** Jedna veľká skupina E.SK alebo viac skupín na výber. Kto ju zakladá a spravuje. Aká je metóda zdieľania (alokačný kľúč v 15-min intervale). Pravidlo, že OM môže byť len v jednej skupine. Vstup a výstup nie sú okamžité (žiadosť na OKTE). Pomenuj, ako to prototyp rieši.
+5. **Tok peňazí.** Jednoduchá schéma: odberateľ platí → E.SK zúčtuje a ponechá si províziu → výrobca dostane čistú sumu. Len komodita, bez distribučných a fixných poplatkov, ako určujú propozície.
+6. **Príklad v číslach.** Jeden deň alebo mesiac Anny a Petra z enginu: kWh, cena, zárobok výrobcu, úspora odberateľa, provízia E.SK. Ak je číslo ilustračné alebo z nastavenia v ⚙, tak to aj označ.
+7. **Škálovanie a realizovateľnosť.** Čo by bolo treba pre reálne nasadenie (napojenie na OKTE, reálne IMS dáta, fakturácia, právne a daňové podmienky, od ktorých hackathon abstrahuje). Prepoj to s bodom 5 propozícií („čo treba urobiť, aby sa prototyp posunul do reálneho riešenia“).
+
+Nevymýšľaj trhové čísla (počet zákazníkov, obrat, TAM). Ak ich chceš použiť, označ ich ako predpoklad a uveď do zoznamu chýbajúcich podkladov.
+
+## 7. Vytvor wow moment
 
 Vyber jeden hlavný moment, v ktorom publikum jasne uvidí hodnotu aplikácie.
 
@@ -178,7 +203,7 @@ Presne urč:
 
 Nevymýšľaj úspory, výsledky, referencie ani schopnosti aplikácie. Oddeľ reálne výsledky od ilustračných príkladov.
 
-## 7. Dodrž čas a vizuálnu zrozumiteľnosť
+## 8. Dodrž čas a vizuálnu zrozumiteľnosť
 
 Plánuj 9:30 obsahu vrátane prechodov a páuz a 0:30 rezervy.
 
@@ -187,12 +212,13 @@ Ako východisko použi:
 | Čas | Obsah |
 |---|---|
 | 0:00–0:35 | Úvod zachytávajúci pozornosť. |
-| 0:35–1:20 | Problém a cieľový používateľ. |
-| 1:20–2:00 | Hlavná idea riešenia. |
-| 2:00–4:45 | Fungovanie cez screenshoty a wow moment. |
-| 4:45–6:00 | Dáta, dátový model a zdroje. |
-| 6:00–7:40 | Backend, architektúra a spracovanie požiadavky. |
-| 7:40–8:50 | Ďalšie povinné témy a dôkazy prínosu. |
+| 0:35–1:20 | Problém a roly (výrobca, odberateľ, E.SK). |
+| 1:20–1:50 | Hlavná idea riešenia. |
+| 1:50–4:15 | Fungovanie cez screenshoty a wow moment. |
+| 4:15–5:15 | Dáta, dátový model a zdroje. |
+| 5:15–6:30 | Backend, architektúra a spracovanie požiadavky. |
+| 6:30–8:00 | Biznis model: cenotvorba, tok peňazí, ako zarába E.SK, skupiny. |
+| 8:00–8:50 | Cesta k reálnemu riešeniu a ďalšie povinné témy. |
 | 8:50–9:30 | Záver a konkrétny ďalší krok. |
 
 Povinné body propozícií rozlož naprieč celou prezentáciou. Časovanie uprav podľa ich rozsahu a hodnotiacich váh.
@@ -212,7 +238,7 @@ Na každej snímke používaj:
 
 Technické vysvetlenie prispôsob publiku, ale zachovaj jeho vecnú správnosť.
 
-## 8. Dodaj kompletný výstup
+## 9. Dodaj kompletný výstup
 
 Priprav:
 1. Nosnú myšlienku a cieľ prezentácie.
@@ -220,9 +246,10 @@ Priprav:
 3. Storyboard v tabuľke: snímka, čas, posolstvo, text na plátne, vizuál a ID pokrytých požiadaviek.
 4. Kompletný hovorený scenár ku každej snímke.
 5. Návrh dátovej a backendovej schémy.
-6. Presný opis wow momentu.
-7. Zoznam chýbajúcich podkladov, ak existujú.
-8. Záverečnú vetu a konkrétny ďalší krok.
+6. Biznis model: hodnotová ponuka pre každú rolu, cenová os, schéma toku peňazí, príklad v číslach a cesta k nasadeniu.
+7. Presný opis wow momentu.
+8. Zoznam chýbajúcich podkladov, ak existujú.
+9. Záverečnú vetu a konkrétny ďalší krok.
 
 V scenári oddeľ text na plátne, hovorený komentár a pokyny rečníkovi. Pridaj prirodzené prechody a účelné pauzy.
 
@@ -232,6 +259,7 @@ Pred odovzdaním over:
 - každý bod propozícií má konkrétnu odpoveď,
 - fungovanie aplikácie je pochopiteľné od vstupu po výsledok,
 - dátový model a backend zodpovedajú podkladom,
+- biznis model má vlastnú snímku, ukazuje prínos pre výrobcu, odberateľa aj E.SK a jeho čísla pochádzajú z enginu alebo sú označené ako predpoklad,
 - screenshoty, technické schémy a scenár si neodporujú,
 - implementované a plánované schopnosti sú jasne odlíšené,
 - wow moment vychádza z doložiteľnej hodnoty,
