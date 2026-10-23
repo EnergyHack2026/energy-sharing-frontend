@@ -29,7 +29,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register','home','group','reports','rewards','profile','map','ideas','i_badge','i_sol','i_ev','chat']);
+const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','map','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -57,7 +57,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  imsReqd:{chata:true},iw:{bal:12000,best:0,day:1,red:{},got:{},pend:[]},wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},

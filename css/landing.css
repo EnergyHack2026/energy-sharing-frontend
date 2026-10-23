@@ -499,3 +499,24 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-own-in{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:16px;align-items:end;padding-left:32px}
 .wz-warn{margin:6px 0 0;color:var(--orange);font-weight:700}
 @media(max-width:620px){.wz-own-in{grid-template-columns:1fr;padding-left:0}}
+/* ---------- načítanie účtu po prihlásení ---------- */
+.ssl{max-width:640px;gap:18px}
+.ssl-head{display:flex;align-items:center;gap:14px}
+.ssl-head img{height:34px;width:auto;border-radius:6px}
+.ssl-head>div{display:grid;gap:2px;flex:1}
+.ssl-pc{font-size:var(--fs-h3);font-variant-numeric:tabular-nums}
+.ssl-bar{height:8px;border-radius:var(--r-pill);background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.ssl-bar i{display:block;height:100%;background:var(--brand);transition:width .5s ease}
+.ssl.done .ssl-bar i{background:var(--green)}
+.ssl-steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ssl-steps li{display:flex;gap:12px;align-items:flex-start;color:var(--mut)}
+.ssl-steps li.ok,.ssl-steps li.run{color:var(--ink)}
+.ssl-i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;border:1.5px solid var(--line-2);font-size:var(--fs-xs);font-weight:800}
+.ssl-steps li.ok .ssl-i{background:var(--green);border-color:var(--green);color:var(--card)}
+.ssl-steps li.run .ssl-i{border-color:var(--brand)}
+.ssl-t{display:grid;gap:1px}
+.ssl-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.ssl-sec{display:flex;gap:8px;align-items:center;flex:1;min-width:240px}
+.ssl-sec .icon{width:18px;height:18px;color:var(--green);flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.ssl-bar i{transition:none}}

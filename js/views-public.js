@@ -199,7 +199,9 @@ function calcModal(){
   <div class="row" style="margin-top:10px"><button class="btn pri" data-act="view:register">Zaregistrovať sa</button><button class="btn" data-act="closemodal">Zavrieť</button></div></div></div>`;
 }
 const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'om_house',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'om_shop',pv:false}};
-const SSO_STEPS=['Overujem zákaznícky účet','Načítavam odberné miesta','Kontrolujem inteligentné meranie (IMS)','Načítavam zmluvy'];
+const SSO_STEPS=['Overujeme váš zákaznícky účet','Hľadáme vaše odberné miesta','Kontrolujeme inteligentné elektromery','Načítavame zmluvy'];
+/* čo sme pri jednotlivých krokoch našli – musí sedieť s miestami v sprievodcovi (wzLoad) */
+function ssoFound(per,co){const isP=per==='anna',n=isP?2:3;return [`Účet ${SKN[co]} je overený`,`Našli sme ${n} odberné miesta`,`${n-1} s inteligentným elektromerom, 1 bez neho`,`Zmluva o dodávke ${SKN[co]}${isP?' a o výkupe prebytkov':''}`]}
 /* ---------- registrácia, krok 2: porovnanie skupín a ďalší postup ---------- */
 /* odhad pre skupinu z enginu: objem × zhoda skupiny (f), cena posunutá o typický rozdiel v skupine (dp) */
 function grpEst(g,isP){
@@ -271,7 +273,7 @@ function wzLoad(per,co){
  const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'om_house',mwh:5.4,pmwh:5.6,on:true,ims:true,pv:true,bat:false};
  const oms=isP?[main,cot]:[main,home,cot];
  /* batéria: jedna otázka Áno / Nie pri mieste s výrobou (null = neodpovedané); Áno otvorí okno s výhodami a žiadosťou o kontakt */
- oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.own=null;o.batAns=null;o.imsReq=false});
+ oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.own=null;o.batAns=null;o.imsReq=o.id==='om2'&&!!(S.imsReqd||{}).chata});
  /* elektromobil: jedna otázka za zákazníka, nie za odberné miesto */
  S.wz={step:1,oms,ev:null,sent:false,err:'',edit:-1,pick:null,own:null};
 }
@@ -369,9 +371,10 @@ function vWizard(){
   ${wzNav(2,'wzsubmit','Vstúpiť do Zdieľne<span class="sig">.</span>',false,'dark sig-btn')}`+end;
 }
 /* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
-const REG_LOCKED={group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
+const REG_LOCKED={challenges:['Výzvy','Denné výzvy na presun spotreby do slnečného okna a slnečné body.'],group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
  reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
- rewards:['Odmeny','Začnete zbierať slnečné body a odznaky v Slnečnom klube.']};
+ cert:['Certifikát','Certifikát a nálepka pre vašu prevádzku podľa podielu slnka od susedov.'],
+ rewards:[IWT+' odmeny','Začnete zbierať '+IWT+' a odznaky a meniť ich za výhody.']};
 const regPer=()=>S.persona==='admin'?'peter':S.persona;
 const regPending=()=>!!(S.wz&&S.wz.sent)&&S.mem[regPer()]==='PENDING';
 /* kroky žiadosti – rovnaké ako v časovej osi regTimeline */
@@ -383,7 +386,7 @@ function regSteps4(){
 /* stavový riadok – na každej obrazovke portálu, kým žiadosť nie je schválená */
 function pendingBar(){
  const L=regSteps4();
- return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Skupina zdieľania, Prehľady a Odmeny sú zamknuté.</span></div>
+ return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Výzvy, Skupina zdieľania, Prehľady a ${IWT} odmeny sú zamknuté.</span></div>
   ${S.jury?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
   <ol class="pend-steps">${L.map(([t,w,c],i)=>`<li class="${c}" ${c==='cur'?'aria-current="step"':''}><span class="n">${c==='done'?'✓':i+1}</span><span><b>${t}</b><span class="xs mut">${w}</span></span></li>`).join('')}</ol></section>`;
 }
@@ -399,7 +402,7 @@ function vHomePending(){
   <div class="card"><span class="kicker">Vaše odberné miesta</span><h3>Stav zapojenia</h3><div class="pend-oms">${(W.oms||[]).map(o=>{const s=st(o);return `<div class="pend-om">${wzHead(o)}<span class="pill ${s[0]}">${s[1]}</span></div>`}).join('')}</div></div>
   <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
   <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
-   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button>, <button class="link" data-act="view:ideas">nápady</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
+   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
 }
 /* zamknutá obrazovka počas čakania na schválenie */
 function vLocked(v){
@@ -424,9 +427,17 @@ function vRegister(){
    <article class="lp-path consumer"><span class="kicker">Iný dodávateľ</span><h3>Som zákazník inej spoločnosti</h3><p>Spustite registráciu – za pár krokov pridáte odberné miesto, overíme inteligentné meranie a odporučíme skupinu. Dodávateľa meniť nemusíte.</p>
     <button class="btn dark" data-act="regfull">Spustiť registráciu →</button><p class="lp-reg-tip">Zákazníci ZSE a VSE sa prihlásia jedným klikom a v Slnečnom klube majú výhody navyše. <button class="link" data-act="supply">Pozrieť ponuku dodávky →</button></p>${icon('pen','path-art')}</article>
   </div></div></section></div>`;
-  /* načítanie účtu – v rovnakom dizajne ako sprievodca */
-  if(R.step==='load')return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="load-heading"><div class="lp-wrap"><span class="kicker">Registrácia · krok 1 z ${REG_STEPS.length}</span><h1 id="load-heading">Načítavam váš účet<span class="sig">.</span></h1>${wzBar(1)}</div></section>
-   <section class="lp-section wz"><div class="lp-wrap"><div class="wz-card wz-load">${demo}<div class="row"><img src="${LOGOS[co]}" alt="${coN}" style="height:34px;border-radius:6px"><b>Účet ${coN}</b></div><div class="chk-list" role="status" aria-live="polite">${SSO_STEPS.map((s,i)=>`<div class="${i<R.load?'ok':'wait'}">${i<R.load?'✓':i===R.load?'<span class="spin" aria-hidden="true"></span>':'○'} ${s}</div>`).join('')}</div></div></div></section></div>`;
+  /* načítanie účtu – priebeh v percentách, kroky s výsledkom, oznámenie pre čítačky, istota bezpečia, Zrušiť; po dokončení krátky stav „pripravené“ */
+  if(R.step==='load'){const n=SSO_STEPS.length,done=Math.min(R.load,n),ok=done>=n,fd=ssoFound(per,co),pc=Math.round(done/n*100);
+   return `<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="load-heading"><div class="lp-wrap"><span class="kicker">Registrácia · krok 1 z ${REG_STEPS.length}</span><h1 id="load-heading">${ok?'Účet je pripravený':'Načítavame váš účet'}<span class="sig">.</span></h1>${wzBar(1)}</div></section>
+   <section class="lp-section wz"><div class="lp-wrap"><div class="wz-card ssl ${ok?'done':''}">
+    <div class="ssl-head"><div><b>Zákaznícky účet ${coN}</b><span class="xs mut">${ok?'Všetko sme načítali. O chvíľu pokračujeme na vaše odberné miesta.':'Zvyčajne to trvá pár sekúnd. Nezatvárajte okno.'}</span></div><b class="ssl-pc">${pc} %</b></div>
+    <div class="ssl-bar" role="progressbar" aria-label="Priebeh načítania účtu" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}"><i style="width:${pc}%"></i></div>
+    <ol class="ssl-steps">${SSO_STEPS.map((s,i)=>{const st=i<done?'ok':i===done?'run':'wait';return `<li class="${st}"><span class="ssl-i" aria-hidden="true">${st==='ok'?'✓':st==='run'?'<span class="spin"></span>':i+1}</span><span class="ssl-t"><b>${s}</b>${st==='ok'?`<span class="xs mut">${fd[i]}</span>`:''}<span class="sr">${st==='ok'?' – hotovo':st==='run'?' – prebieha':' – čaká'}</span></span></li>`}).join('')}</ol>
+    <p class="sr" role="status" aria-live="polite">${ok?'Účet je pripravený.':done?fd[done-1]+'.':SSO_STEPS[0]+'.'}</p>
+    <div class="ssl-foot"><span class="ssl-sec">${icon('shield')}<span class="xs mut">Údaje čítame priamo z vášho účtu ${coN}. Heslo ani prihlasovacie údaje neukladáme.</span></span>${ok?'':'<button class="btn" data-act="regback">Zrušiť</button>'}</div>
+    ${S.jury?`<p class="xs mut">Demo: prihlásenie je simulované – nezadávate meno ani heslo.</p>`:''}
+   </div></div></section></div>`}
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';
   const sent=!!R.sent,g=GROUPS.find(x=>x.id===(sent?R.group:S.ob.group))||GROUPS[0];
   const reg=regionOf(geo(om.addr).ll),best=sent?g:grpBest(isP),bm=grpEst(best,isP).m*12;

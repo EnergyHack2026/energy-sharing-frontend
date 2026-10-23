@@ -166,7 +166,9 @@ function bdgMini(per){
   const L=bdgAll(per).filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,4);
   return `<div class="bdg-mini">${L.map(st=>`<button class="bdg-mini-i" data-act="bdg:${st.b.id}" title="${esc(st.b.name)}" aria-label="${esc(st.b.name)}">${badgeSvg(st)}</button>`).join('')}<button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
 }
-const rewardTabs=()=>`<div class="seg" role="tablist" aria-label="Odmeny">${[['ch','Výzvy'],['bdg','Odznaky']].map(([k,l])=>`<button role="tab" data-act="rwtab:${k}" aria-pressed="${(S.rwtab||'ch')===k}">${l}</button>`).join('')}</div>`;
+/* prevádzka (odberné miesto typu Prevádzka) má navyše certifikát „Slnko od susedov“ */
+const isShop=()=>{const p=S.persona==='admin'?'peter':S.persona;return omKind(S.om[p].type)==='om_shop'};
+const rewardTabs=()=>CH_MODE?`<div class="seg" role="tablist" aria-label="Výzvy">${[['ch','Výzvy'],['bdg','Odznaky']].map(([k,l])=>`<button role="tab" data-act="chtab:${k}" aria-pressed="${(S.chtab||'ch')===k}">${l}</button>`).join('')}</div>`:'';
 
 /* ---------- detail a odomknutie (modál) ---------- */
 function bdgModal(id,isNew){

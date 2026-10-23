@@ -39,6 +39,7 @@ const ICONS={
  print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>',
  plug:'<path d="M9 3v5m6-5v5M6 8h12v3a6 6 0 0 1-12 0V8Zm6 9v4"/>',
  grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',
+ pump:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="10" cy="12" r="3.5"/><path d="M10 8.5v7M6.5 12h7M17 9v6"/>',
  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
  /* typy odberných miest (sprievodca registrácie) – každý s odlišnou siluetou */
  om_house:'<path d="M3 11 12 3l9 8"/><path d="M5 9.5V21h14V9.5M10 21v-6h4v6M16 5.5V3.5h2.5v4"/>',
@@ -49,6 +50,9 @@ const ICONS={
  om_other:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>'
 };
 function icon(name,cl='icon'){return `<svg class="${cl}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||ICONS.sun}</svg>`}
+/* názov meny iWatt; červená bodka nad i iba v hlavnom nadpise stránky iWatt odmien (IWT_SIG) */
+const IWT='iWatt';
+const IWT_SIG='<span class="iwt"><span class="iwt-i">ı</span>Watt</span>';
 /* ---------- odberné miesto: typ objektu, ikona a štítky profilu – rovnaké na všetkých obrazovkách ---------- */
 const OM_TYPES=[['om_house','Dom'],['om_flat','Byt'],['om_shop','Prevádzka'],['om_cabin','Chata'],['om_garage','Garáž'],['om_other','Iné']];
 const OM_LEGACY={'Domácnosť':'om_house','Podnikanie (bistro)':'om_shop','Podnikanie':'om_shop'};   /* staršie hodnoty v uloženom stave */
