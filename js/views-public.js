@@ -129,27 +129,26 @@ function vBenefits(){
    <p class="xs mut" style="margin-top:10px">Všetky sumy sú odhady, nie garancia. Predpoklady: prebytok ${fm(S.p.surplus,1)} kWh/deň, ${S.bat.on?`batéria ${fm(S.bat.cap,0)} kWh, `:''}výkup ${fpr(S.p.feedin)} €/kWh, provízia ${feeTxt()}. Dajú sa zmeniť v „⚙ Upraviť čísla a časy“.</p></div>
   </div>`;
 }
-/* ponuka dodávky ZSE/VSE pre zákazníkov iných dodávateľov – nenápadná, nikdy podmienka zdieľania.
-   Dodávateľ podľa regiónu odberného miesta, kontakt so súhlasom, potvrdenie s adresou, kam ponuka príde. */
-const SUP={zse:{name:'ZSE',reg:'Západné Slovensko',web:'https://www.zse.sk/',price:0.1137},vse:{name:'VSE',reg:'Východné Slovensko',web:'https://www.vse.sk/',price:null}};
+/* ponuka dodávky ZSE · VSE (dual brand) pre zákazníkov iných dodávateľov – nenápadná, nikdy podmienka zdieľania.
+   Jedna ponuka, jedna cena; konkrétneho dodávateľa určí adresa odberného miesta. */
+const SUP_PRICE=0.1137;
 function supplyModal(){
- const u=S.sup,c=SUP[u.co];
- const head=t=>`<div class="row between"><h2>${t}</h2><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>`;
+ const u=S.sup;
+ const brand=`<div class="supply-brand"><img src="${LOGO_OFF.zse}" alt="ZSE"><span aria-hidden="true"></span><img src="${LOGO_OFF.vse}" alt="VSE"></div>`;
+ const head=t=>`<div class="row between">${brand}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div><h2 style="margin-top:14px">${t}</h2>`;
  const wrap=b=>`<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Ponuka dodávky ZSE a VSE">${b}</div></div>`;
  if(u.sent)return wrap(`${head('Ďakujeme, máte to vybavené')}
-  <div class="supply-done"><span class="supply-ok" aria-hidden="true">✓</span><p>Ponuku dodávky od <b>${c.name}</b> vám pošleme na <b>${esc(u.email)}</b>${u.tel?` a ozveme sa aj na číslo <b>${esc(u.tel)}</b>`:''} do 2 pracovných dní.</p></div>
+  <div class="supply-done"><span class="supply-ok" aria-hidden="true">✓</span><p>Ponuku dodávky vám pošleme na <b>${esc(u.email)}</b>${u.tel?` a ozveme sa aj na číslo <b>${esc(u.tel)}</b>`:''} do 2 pracovných dní.</p></div>
   <p class="sm mut" style="margin-top:12px">Medzitým môžete pokojne pokračovať v registrácii – zdieľanie funguje aj s vaším súčasným dodávateľom.</p>
   <div class="row" style="margin-top:18px"><button class="btn pri" data-act="closemodal">Pokračovať v registrácii</button></div>`);
  const b=(t,d)=>`<li><b>${t}</b><span class="xs mut">${d}</span></li>`;
- return wrap(`${head('Elektrina od ZSE alebo VSE')}
-  <p style="margin:10px 0 16px">Zdieľanie funguje s akýmkoľvek dodávateľom. Ako zákazník ZSE alebo VSE z neho však máte najviac.</p>
+ return wrap(`${head('Elektrina od ZSE a VSE')}
+  <p style="margin:8px 0 16px">Zdieľanie funguje s akýmkoľvek dodávateľom. Ako zákazník ZSE alebo VSE z neho však máte najviac.</p>
   <ul class="supply-list">${b('Prihlásenie jedným klikom','Odberné miesto, meranie aj zmluvy doplníme za vás.')}${b('Výhody navyše v Slnečnom klube','Od úrovne Zlato zľava na dodávku a nižšia provízia pri zdieľaní.')}${b('Jedno vyúčtovanie','Dodávka aj zdieľaná elektrina na jednej faktúre.')}</ul>
-  <h3 class="supply-h">Kde máte odberné miesto?</h3>
-  <div class="supply-co" role="radiogroup" aria-label="Dodávateľ podľa regiónu">${Object.entries(SUP).map(([k,x])=>`<button type="button" role="radio" aria-checked="${u.co===k}" class="${u.co===k?'on':''}" data-act="supco:${k}"><img src="${LOGO_OFF[k]}" alt=""><span><b>${x.reg}</b><span class="xs mut">dodávateľ ${x.name}</span></span></button>`).join('')}</div>
-  <div class="supply-price">${c.price?`<span class="xs mut">Dodávka pre domácnosti ${c.name} 2026</span><b>od ${fm(c.price,4)} € <span>/ kWh bez DPH</span></b><span class="xs mut">DomovMini, jednopásmová sadzba · bez distribučných a fixných poplatkov</span>`:`<span class="xs mut">Dodávka pre domácnosti ${c.name}</span><b class="sm">Aktuálne ceny nájdete v cenníku ${c.name}.</b>`}<a class="link" href="${c.web}" target="_blank" rel="noopener">Pozrieť cenníky na ${c.web.replace(/^https:\/\/|\/$/g,'')} ↗</a></div>
+  <div class="supply-price"><span class="xs mut">Dodávka elektriny pre domácnosti 2026</span><b>od ${fm(SUP_PRICE,4)} € <span>/ kWh bez DPH</span></b><span class="xs mut">jednopásmová sadzba · bez distribučných a fixných poplatkov</span></div>
   <h3 class="supply-h">Kam vám máme poslať ponuku?</h3>
   <div class="fields">${F('E-mail','sup.email',{t:'x'})}${F('Telefón (nepovinné)','sup.tel',{t:'x'})}</div>
-  <div style="margin-top:10px">${F(`Súhlasím so spracovaním e-mailu a telefónu na zaslanie ponuky od ${c.name}.`,'sup.ok',{t:'c'})}</div>
+  <div style="margin-top:10px">${F('Súhlasím so spracovaním e-mailu a telefónu na zaslanie ponuky dodávky elektriny.','sup.ok',{t:'c'})}</div>
   ${u.err?`<p class="supply-err" role="alert">${esc(u.err)}</p>`:''}
   <div class="row" style="margin-top:16px"><button class="btn pri" data-act="supplyreq">Poslať mi ponuku</button><button class="btn" data-act="closemodal">Teraz nie</button></div>
   <p class="xs mut" style="margin-top:12px">Zmena dodávateľa je dobrovoľná a nie je podmienkou zdieľania.</p>`);
