@@ -38,8 +38,10 @@ Z propozícií vytiahni každú samostatnú požiadavku vrátane podbodov. Odde�
 
 Vytvor kontrolnú maticu:
 
-| ID | Požiadavka propozícií | Čo treba vysvetliť alebo doložiť | Snímka | Miesto v scenári | Podklad | Stav |
-|---|---|---|---|---|---|---|
+| ID | Požiadavka propozícií | Rola (výrobca / odberateľ / E.SK) | Čo treba vysvetliť alebo doložiť | Snímka | Miesto v scenári | Podklad | Stav |
+|---|---|---|---|---|---|---|---|
+
+Pri každej požiadavke urči, ktorej role sa týka. Ak sa týka oboch strán trhu, odpoveď musí byť zvlášť pre výrobcu aj pre odberateľa.
 
 Používaj stavy:
 - pokryté,
@@ -58,12 +60,31 @@ Sformuluj jednu nosnú vetu:
 
 „Aplikácia pomáha [komu] vyriešiť [problém] prostredníctvom [princíp riešenia], čo prináša [hlavný prínos].“
 
-Vyber jedného typického používateľa a jeden súvislý scenár. Na ňom prepoj:
-1. Problém používateľa.
-2. Jeho vstup alebo požiadavku.
-3. Činnosť aplikácie.
-4. Spracovanie údajov.
-5. Výsledok a jeho hodnotu.
+### Kto je zákazník
+
+Aplikácia je trhovisko, takže má dve strany trhu a zadávateľa. Prezentácia musí jasne pomenovať všetky tri roly:
+
+| Rola | Persona v prototype | Kto to je | Problém | Čo urobí v aplikácii | Čo z toho má |
+|---|---|---|---|---|---|
+| **Výrobca** | Anna | domácnosť s fotovoltikou a IMS | prebytky predáva lacno do výkupu, nepozná nikoho na zdieľanie | ponúkne prebytky za svoju cenu | zarobí viac než pri výkupe |
+| **Odberateľ** | Peter | malý podnik (bistro) bez fotovoltiky, spotreba cez deň | platí plnú dodávkovú cenu, nepozná výrobcu | nájde ponuku, vstúpi do skupiny, posunie spotrebu | ušetrí oproti dodávkovej cene |
+| **E.SK (ZSE/VSE)** | prevádzkovateľ trhoviska, porota | dodávateľ elektriny | zákazník otvorí appku 1× ročne, prebytky končia vo výkupe | prevádzkuje trh, zúčtuje, odmeňuje | lojalita, nový produkt, viac využitých prebytkov |
+
+Údaje o personách over v kóde (`js/core.js` → `S.om`, `js/engine.js`). Hodnoty v € a kWh ber z enginu, nie z hlavy.
+
+Pre výrobcu aj odberateľa ukáž: kto to je, aký má problém, čo urobí v appke a koľko získa.
+Prínos pre E.SK pomenuj samostatne, pretože ho propozície vyžadujú (obchodný prínos pre zákazníkov **a** spoločnosť E.SK).
+
+Zaraď samostatnú snímku **„Pre koho to je“** s tromi stĺpcami: výrobca, odberateľ, E.SK.
+
+### Príbeh
+
+Vyber jeden súvislý scenár, v ktorom sa výrobca a odberateľ **nepoznajú** a aplikácia ich spojí. To je jadro zadania (zdieľanie bez potreby poznať členov skupiny vopred). Príbeh rozprávaj z oboch strán a na ňom prepoj:
+1. Problém výrobcu aj odberateľa.
+2. Ich vstupy (ponuka s cenou, dopyt).
+3. Činnosť aplikácie (párovanie, skupina, dohoda o cene).
+4. Spracovanie údajov (predikcia, 15-min alokácia, zúčtovanie).
+5. Výsledok a hodnotu pre každú rolu vrátane E.SK.
 
 Používaj konzistentné príklady a údaje naprieč screenshotmi aj technickým vysvetlením.
 
