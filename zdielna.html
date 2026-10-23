@@ -1114,6 +1114,10 @@ body.marketing .main{max-width:none;padding:0 0 40px}
  .lp-scene.bg-cards .lp-float.one{top:0;right:0}
  .lp-scene.bg-cards .lp-float.two{bottom:2%;left:0}
 }
+/* po scrollovaní je lišta plná (nie priesvitná) s tieňom – čitateľná nad svetlými sekciami */
+.marketing .top{transition:background-color .2s ease,box-shadow .2s ease,border-color .2s ease}
+body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{background:var(--surface-dark);border-color:var(--line-dark);box-shadow:0 6px 24px rgba(0,0,0,.28)}
+@media(prefers-reduced-motion:reduce){.marketing .top{transition:none}}
 
 </style>
 </head>
@@ -3662,6 +3666,8 @@ async function runTour(){
 /* zákaznícky režim: „Práve teraz“ ide podľa hodín (ak deep link neurčil čas) */
 if(!S.jury&&!new URLSearchParams(location.hash.slice(1)).has('t'))S.sim.idx=realIdx();
 render(true);
+/* priesvitná lišta nad hero: po začatí scrollovania je plná, aby menu ostalo čitateľné nad obsahom */
+{const onScroll=()=>document.body.classList.toggle('scrolled',window.scrollY>24);addEventListener('scroll',onScroll,{passive:true});onScroll()}
 setInterval(()=>{if(S.jury||S.sim.playing||S.tourOn)return;const r=realIdx();if(r===S.sim.idx)return;notifyTick(S.sim.idx,r);S.sim.idx=r;if(!S.modal&&!PUB.includes(curView()))render(false)},30000);
 /* aplikácia v mobile (PWA) – service worker iba cez http(s), nie z file:// ani zo samostatného zdielna.html */
 if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)&&!window.__STANDALONE)navigator.serviceWorker.register('sw.js').catch(()=>{});

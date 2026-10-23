@@ -348,6 +348,8 @@ async function runTour(){
 /* zákaznícky režim: „Práve teraz“ ide podľa hodín (ak deep link neurčil čas) */
 if(!S.jury&&!new URLSearchParams(location.hash.slice(1)).has('t'))S.sim.idx=realIdx();
 render(true);
+/* priesvitná lišta nad hero: po začatí scrollovania je plná, aby menu ostalo čitateľné nad obsahom */
+{const onScroll=()=>document.body.classList.toggle('scrolled',window.scrollY>24);addEventListener('scroll',onScroll,{passive:true});onScroll()}
 setInterval(()=>{if(S.jury||S.sim.playing||S.tourOn)return;const r=realIdx();if(r===S.sim.idx)return;notifyTick(S.sim.idx,r);S.sim.idx=r;if(!S.modal&&!PUB.includes(curView()))render(false)},30000);
 /* aplikácia v mobile (PWA) – service worker iba cez http(s), nie z file:// ani zo samostatného zdielna.html */
 if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol)&&!window.__STANDALONE)navigator.serviceWorker.register('sw.js').catch(()=>{});

@@ -305,3 +305,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
  .lp-scene.bg-cards .lp-float.one{top:0;right:0}
  .lp-scene.bg-cards .lp-float.two{bottom:2%;left:0}
 }
+/* po scrollovaní je lišta plná (nie priesvitná) s tieňom – čitateľná nad svetlými sekciami */
+.marketing .top{transition:background-color .2s ease,box-shadow .2s ease,border-color .2s ease}
+body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{background:var(--surface-dark);border-color:var(--line-dark);box-shadow:0 6px 24px rgba(0,0,0,.28)}
+@media(prefers-reduced-motion:reduce){.marketing .top{transition:none}}
