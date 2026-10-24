@@ -4,7 +4,7 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['challenges','Výzvy','sun'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
@@ -37,13 +37,13 @@ function renderShell(){
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&true);
-  const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
+  const isCur=k=>v===k||(k==='rewards'&&v==='challenges')||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
   const lk=k=>regPending()&&REG_LOCKED[k]?`<span class="nav-lock" title="Po schválení žiadosti">${icon('lock')}</span>`:'';
   const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span>${lk(k)}</button>`;
   const sub=(v==='ideas'||v.startsWith('i_'))?IDEAS.filter(([k])=>isOn(k)).map(([k,i,l,,st])=>st==='soon'?`<button class="sub soon" disabled aria-disabled="true" title="Pripravujeme"><span class="ic">${icon(i)}</span><span>${l}<small>Pripravujeme…</small></span></button>`:`<button data-act="view:${k}" ${v===k?'aria-current="page"':''} class="sub"><span class="ic">${icon(i)}</span><span>${l}${st==='q'?' <span class="q-mark" title="na zváženie">?</span>':''}</span></button>`).join(''):'';
   $('#side').innerHTML=`<div class="lbl">${p==='admin'?'Operátor':'Moja Zdieľňa'}</div>`+items.map(it=>btn(it)+(it[0]==='ideas'?sub:'')).join('')
     +`<div class="side-foot"><button class="jury-btn" data-act="jury" aria-pressed="${J}">🎬 ${J?'Vypnúť režim poroty':'Režim poroty'}</button></div>`;
-  const bn=(p==='admin'?NAV_ADMIN:NAV.filter(([k])=>['home','challenges','group','rewards'].includes(k))).filter(([k])=>isOn(k));
+  const bn=(p==='admin'?NAV_ADMIN:NAV.filter(([k])=>['home','group','rewards','cert'].includes(k))).filter(([k])=>isOn(k));
   $('#bnav').innerHTML=bn.map(btn).join('')+`<button data-act="more"><span class="ic">${icon('menu')}</span><span>Viac</span></button>`;
   gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
@@ -195,7 +195,8 @@ const ACT={
   grpsel:a=>{const p=S.persona==='admin'?'peter':S.persona,g=GROUPS.find(x=>x.id===a);if(!g)return;S.group=a;S.ob.group=a;S.mem[p]='READY';logEv(`${nm(p)}: vybraná skupina ${g.name} (z trhoviska)`);toast('Skupina '+g.name+' vybraná – odošlite žiadosť');notify('state',p,'Vybraná skupina '+g.name,'Žiadosť je pripravená – odošlite ju.','group');pubGo('group')},
   /* prestup = výstup z terajšej skupiny + rezervácia vybranej */
   grpres:a=>{const p=S.persona==='admin'?'peter':S.persona;if(S.mem[p]==='ENDING'){S.reserve[p]=gname(a)+' (rezervácia po skončení členstva)';toast('Rezervácia uložená: '+gname(a));render(true);return}S.exitSel=a;S.modal='exit';render(false)},
-  rwtab:a=>{S.modal=null;if(a==='ch'||a==='bdg'){S.chtab=a;S.view='challenges'}else if(a==='cert')S.view='cert';else{S.rwtab='iw';S.view='rewards'}window.scrollTo(0,0);render(true)},
+  chgo:a=>{S.modal=null;S.chtab='ch';S.chFrom=a||'rewards';S.view='challenges';window.scrollTo(0,0);render(true)},
+  rwtab:a=>{S.modal=null;if(a==='ch'||a==='bdg'){S.chtab=a;S.chFrom='rewards';S.view='challenges'}else if(a==='cert')S.view='cert';else{S.rwtab='iw';S.view='rewards'}window.scrollTo(0,0);render(true)},
   chtab:a=>{S.chtab=a;render(false)},
   bdg:a=>{S.modal='bdg:'+a;render(false)},
   bdgnav:a=>{bdgNav(S.persona,+a);render(false)},

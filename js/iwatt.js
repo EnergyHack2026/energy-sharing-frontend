@@ -50,12 +50,13 @@ function vIwatt(){
     <div class="iw-hero-row"><button class="btn lg iw-play" data-act="iwplay">Spustiť hru</button><button class="btn lg iw-how" data-act="detail:iwhow">Ako hrať?</button></div></div>
     <p class="iw-bal">Zostatok <b>${fm(w.bal,0)} ${IWT}</b><span aria-hidden="true">·</span>Rekord v behu <b>${iwBest()} ☀</b>${pend?`<span aria-hidden="true">·</span>+${fm(pend,0)} ${IWT} na vyzdvihnutie`:''}</p></section>
    ${pend?`<div class="card iw-pend"><span class="pend-ic">${icon('gift')}</span><div><b>Nevyzdvihnuté odmeny z hry: ${fm(pend,0)} ${IWT}</b><p class="sm mut">${w.pend.map(p=>`úroveň ${p.lv} · ${fm(p.amt,0)} ${IWT}`).join(' · ')}</p></div><button class="btn pri" data-act="iwclaimall">Vyzdvihnúť</button></div>`:''}
-   ${secHead(`Ako získať ${IWT}`,'Každá aktivita sa ráta.')}
-   <div class="iw-earn">${IW_EARN.map(([ic,t,d])=>`<div class="iw-earn-i"><span class="svc-ic">${icon(ic)}</span><div><b>${t}</b><span class="xs mut">${d}</span></div></div>`).join('')}</div>
-   ${secHead('E-shop '+BR(),`Produkty a služby za ${IWT}.`,'')}
+   ${chEarnSection(S.persona==='admin'?'peter':S.persona)}
+   ${secHead('Míňajte · E-shop '+BR(),`Produkty a služby za ${IWT}.`,'')}
    <div class="iw-grid iw-shop">${IW_SHOP().map(o=>offer(o,true)).join('')}</div>
    ${secHead('Partneri v okolí','Zľavy u susedov.')}
    <div class="iw-grid">${IW_PARTNERS.map(o=>offer(o,false)).join('')}</div>
+   ${secHead('Vaše odznaky','Míľniky, ktoré ste dosiahli.',`+${fm(IW_BDG,0)} ${IWT} za každý nový odznak – overený elektromerom.`)}
+   <div class="card">${bdgMini(S.persona==='admin'?'peter':S.persona)}</div>
    </div>`;
 }
 function iwHowModal(){

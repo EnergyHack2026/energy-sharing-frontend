@@ -168,7 +168,8 @@ function bdgMini(per){
 }
 /* prevádzka (odberné miesto typu Prevádzka) má navyše certifikát „Slnko od susedov“ */
 const isShop=()=>{const p=S.persona==='admin'?'peter':S.persona;return omKind(S.om[p].type)==='om_shop'};
-const rewardTabs=()=>CH_MODE?`<div class="seg" role="tablist" aria-label="Výzvy">${[['ch','Výzvy'],['bdg','Odznaky']].map(([k,l])=>`<button role="tab" data-act="chtab:${k}" aria-pressed="${(S.chtab||'ch')===k}">${l}</button>`).join('')}</div>`:'';
+/* Výzvy a Odznaky sú podstránky Odmien (Výzvy aj z Domova) – namiesto záložiek odkaz späť */
+const rewardTabs=()=>CH_MODE?`<button class="btn sm ch-back" data-act="view:${S.chFrom==='home'?'home':'rewards'}">← ${S.chFrom==='home'?'Domov':'Odmeny'}</button>`:'';
 
 /* ---------- detail a odomknutie (modál) ---------- */
 function bdgModal(id,isNew){

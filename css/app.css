@@ -1004,3 +1004,17 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 /* hra Slnečný deň v okne */
 .iw-game{width:min(1140px,100%);height:min(92vh,820px);display:flex;flex-direction:column}
 .iw-game iframe{flex:1;width:100%;border:0;background:var(--bg)}
+/* Výzva dňa na Domove a sekcia Zarábajte v Odmenách */
+.ch-home{display:flex;align-items:center;gap:16px;border-left:5px solid var(--yellow)}
+.ch-home-b{flex:1;display:grid;gap:2px}.ch-home-b .kicker{margin:0}
+.ch-home-t{font-size:var(--fs-h3)}
+.ch-home-a{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.earn-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:14px}
+.earn-c{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.earn-c .btn,.earn-c>.link{margin-top:auto}
+.earn-main{border:2px solid var(--brand)}
+.ch-mini{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:8px 0;border-top:1px solid var(--line)}
+.ch-mini>div{display:grid;gap:2px}
+.ch-back{margin-right:8px}
+.hero .ch-back{background:transparent;color:var(--on-dark);border-color:var(--line-dark)}
+@media(max-width:900px){.earn-grid{grid-template-columns:1fr}.ch-home{flex-direction:column;align-items:flex-start}}
