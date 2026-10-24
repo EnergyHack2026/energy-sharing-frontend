@@ -58,6 +58,7 @@ function daySpark(res,per){
   return `<svg class="day-spark" viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${area(aa)}" fill="var(--yellow)" opacity=".18"/><path d="${area(sh)}" fill="var(--green)" opacity=".45"/>${per==='peter'?`<path d="${line(res.A.c)}" fill="none" stroke="var(--blue)" stroke-width="1.6"/>`:''}<path d="${line(aa)}" fill="none" stroke="var(--yellow)" stroke-width="1.6"/><line x1="0" x2="${W}" y1="${H-4}" y2="${H-4}" stroke="var(--line)"/></svg>`;
 }
 function vHome(){
+ if(S.reg.demoCustomer&&S.wz)return vDemoProfile();
   const per=S.persona==='admin'?'peter':S.persona;
   const res=dayRun(),sim=agg(res,S.sim.idx),full=agg(res,96);
   const pot=agg(potRun());

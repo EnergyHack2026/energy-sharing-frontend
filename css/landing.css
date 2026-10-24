@@ -560,3 +560,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lpc .svc-ic{background:color-mix(in srgb,var(--accent-dark) 18%,transparent);color:var(--accent-dark)}
 @media(max-width:1200px) and (min-width:581px){.lp-offers{grid-template-columns:repeat(2,1fr)}}
 .lp-offer-meta{gap:10px}.lp-offer-meta b{text-align:right}
+
+.dp-chart svg{width:100%;height:auto;display:block}.dp-legend{gap:12px;font-size:.8em;flex-wrap:wrap}.dp-legend span{display:flex;align-items:center;gap:5px}.dp-legend i{width:12px;height:4px;display:inline-block}
