@@ -190,6 +190,7 @@ function svcModal(k){
   </div></div>`;
 }
 function vGroup(){
+  if(S.reg.demoCustomer&&S.wz)return vDemoGroups();
   const per=S.persona==='admin'?'peter':S.persona,m=S.mem[per],g=GROUPS.find(x=>x.id===S.group),o=gOcc(g);
   const ims=per==='anna'?S.p.ims:S.c.ims,res=dayRun(),full=agg(res);
   const lead={NONE:'Zatiaľ nie ste v žiadnej skupine. Vyberte si ju nižšie.',MATCH:'Máte predbežnú zhodu – vyberte skupinu.',READY:'Žiadosť je pripravená na odoslanie.',PENDING:'Žiadosť čaká na kontrolu distribútora a aktiváciu.',ACTIVE:'Zdieľate elektrinu so susedmi v tejto skupine.',ENDING:'Požiadali ste o vystúpenie – zdieľanie pokračuje do konca členstva.'}[m];
