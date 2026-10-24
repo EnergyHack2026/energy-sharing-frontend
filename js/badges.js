@@ -162,6 +162,13 @@ function vBadges(per){
      return `<button class="bdg-item ${st.earned?'':'locked'} ${BDG().fresh[b.id]?'fresh':''}" data-act="bdg:${b.id}" aria-label="${esc(st.secret?'Tajný odznak':b.name)}, ${st.earned?'získaný':'zatiaľ nezískaný'}"><span class="bdg-ico">${badgeSvg(st)}</span><b>${esc(st.secret?'???':b.name)}</b>${bdgStatus(st)}</button>`}).join('')}</div></details>`}).join('')}
    <p class="note">Odznaky sa udeľujú až po overení podľa merania IMS a nikdy nie za vyššiu spotrebu. Nemajú peňažnú hodnotu. Opakovateľné odznaky ukazujú, koľkokrát ste ich získali.</p></div>`;
 }
+/* odznaky v Odmenách: získané farebne (najnovšie prvé), ostatné vyblednuté – celý riadok, väčšie */
+function bdgStrip(per){
+  const all=bdgAll(per),got=all.filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))),rest=all.filter(s=>!s.earned);
+  const L=[...got,...rest].slice(0,8);
+  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
+   <div class="bdg-strip-f"><span class="sm mut">Získané ${got.length} z ${all.length}</span><button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
+}
 function bdgMini(per){
   const L=bdgAll(per).filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,4);
   return `<div class="bdg-mini">${L.map(st=>`<button class="bdg-mini-i" data-act="bdg:${st.b.id}" title="${esc(st.b.name)}" aria-label="${esc(st.b.name)}">${badgeSvg(st)}</button>`).join('')}<button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;

@@ -1021,3 +1021,12 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .earn-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.earn-h{display:flex;justify-content:space-between;align-items:center;width:100%}.earn-c b{font-size:var(--fs-h3)}
 @media(max-width:900px){.earn-grid{grid-template-columns:1fr}}
 .earn-grid>.card{margin-top:0}.earn-grid{align-items:stretch}
+/* odznaky v Odmenách */
+.bdg-strip{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:12px}
+.bdg-st{border:0;background:none;padding:6px 4px;display:grid;justify-items:center;gap:8px;cursor:pointer;border-radius:var(--r)}
+.bdg-st:hover{background:var(--bg)}
+.bdg-st svg{width:100%;max-width:96px;height:auto;filter:drop-shadow(0 6px 8px rgba(30,27,34,.25))}
+.bdg-st span{font-size:var(--fs-xs);font-weight:700;text-align:center;line-height:1.3}
+.bdg-st.off svg{filter:grayscale(1) opacity(.35)}.bdg-st.off span{color:var(--mut);font-weight:600}
+.bdg-strip-f{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+@media(max-width:900px){.bdg-strip{grid-template-columns:repeat(4,minmax(0,1fr))}}
