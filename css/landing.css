@@ -546,7 +546,7 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz .wz-lead{max-width:none;margin:0 0 18px;font-size:var(--fs-lg);font-weight:600;color:var(--ink)}
 .wz .wz-info{margin-bottom:16px}
 /* úvod – karta výziev zo skutočnej aplikácie */
-.lpc{display:grid;gap:10px;transform:none}
+.lpc{display:grid;gap:10px}
 .lpc-h{display:flex;justify-content:space-between;align-items:center;gap:10px}.lpc-h .xs{color:var(--on-dark-mut)}
 .lpc-tl{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:4px}
 .lpc-tl i{flex:1;background:color-mix(in srgb,var(--on-dark) 20%,transparent);border-radius:3px 3px 0 0}.lpc-tl i.w{background:var(--accent-dark)}
