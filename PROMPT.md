@@ -384,3 +384,16 @@ Urob:
 - Na Domove a v Odmenách sa žiadne číslo nezobrazuje dvakrát.
 - Vrátiť **ZIP s rovnakou štruktúrou** (index.html, build.py, zdielna.html, manifest.webmanifest,
   sw.js, README.md, PROMPT.md, css/, js/, assets/) a krátky zoznam zmien po úlohách 1–12.
+
+---
+
+## 14. Stav po iterácii 4 (hotové – pri ďalších úpravách nemeniť, len nadväzovať)
+
+- Aplikácia beží na demo zákazníkovi **Joz Ggál** (export, 12 energetických miest). Meno sa berie z dát cez `demoFullName()` /
+  `demoCustomerParts()` / `demoWho()`; „Anna“ sa v zákazníckych textoch (log, chat, mapa, nápady, výzvy) nahrádza menom zákazníka cez `nm()`.
+- Prihlásenie: horné „Prihlásiť sa“ → e-mail + heslo (predvyplnené) → rovno do aplikácie. Karta „Rýchla cesta“ na výbere registrácie
+  → rovnaké okno v režime registrácie → štandardný sprievodca registráciou.
+- Skupina zdieľania: každé energetické miesto v detaile skupiny je rozbaľovacia položka (v zbalenom stave hlavička miesta).
+- Nastavenia: zoznam všetkých 12 miest, ceny z exportu zhodné so Skupinou zdieľania, úprava ceny priamo pri mieste („Upraviť cenu“).
+- Horná lišta: prepínač persón má „meno zákazníka“ a „Operátor“, prepínač ZSE / VSE v aplikácii nie je.
+- Pri novej verzii vždy zmeň `CACHE` v `sw.js` a spusti `python3 build.py`.

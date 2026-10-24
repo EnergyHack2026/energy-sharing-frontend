@@ -32,7 +32,40 @@ index.html#jury=1                              # jury mode on (jury=0 off)
 
 `persona=admin` or `skin=…` in the link switches jury mode on automatically.
 
-Views: `landing potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
+Views: `landing join potential benefits register home market group reports rewards profile admin map ideas i_badge i_sol i_bank i_agent i_twin i_send i_ev`
+
+## Docker on Ubuntu
+
+From the frontend directory, with Docker Engine and the Compose plugin installed:
+
+```bash
+docker compose up -d --build
+docker compose ps
+curl -I http://localhost:8000/
+```
+
+Open `http://SERVER_IP:8000/`. Allow inbound TCP 8000 in the server/provider firewall if necessary.
+The container serves the static app using Nginx and restarts automatically with Docker.
+After pulling changes, run `docker compose up -d --build` again.
+Logs: `docker compose logs --tail 100 frontend`. Stop: `docker compose down`.
+
+This deploys the current prototype with simulated data; it does not connect it to the backend API.
+PWA installation and offline service workers require HTTPS, except on localhost.
+
+## Final version (branch `final`)
+
+The `final` branch is the version for the jury. It starts with the landing page only; features from `main`
+are switched on one by one. Switching is done in one place, `ON` in `js/core.js`:
+
+```js
+const ON=new Set(['landing']);          // e.g. add 'register','potential','home','market'
+```
+
+Keys are views from `VIEWS` (`js/main.js`) plus `chat` (AI assistant) and `tour` (demo story).
+A disabled view falls back to the landing page; buttons and menu items leading to it are hidden
+(`gateActs()` in `js/main.js`). Code of disabled features stays in the repo.
+
+Workflow: one small branch per feature from `final` (e.g. `feat/register`) → check in the browser → merge into `final`.
 
 ## Layout
 
@@ -47,7 +80,7 @@ js/core.js          utils + state S
 js/engine.js        model: profiles, allocation, settlement (no DOM)
 js/ui.js            icon set, form helper F(), charts, QR, map pieces
 js/views-app.js     Home, Market, Group, Reports, Rewards, Profile, Admin, Onboarding
-js/views-public.js  Landing (valid EIC → straight to Registration), Benefits, Registration, Váš potenciál (deep link only)
+js/views-public.js  Landing („Pridať sa“ → Registration), Join (EIC entry, currently not linked), Registration (choice step in the landing design, brand-neutral), Benefits, Registration, Váš potenciál (deep link only)
 js/views-map.js     Map
 js/views-ideas.js   Ideas (7 visions)
 js/badges.js        Odmeny → Odznaky: badge definitions, SVG badge, stage, unlock, share card, welcome popup
@@ -83,6 +116,14 @@ The landing page is the template for every screen.
 10. **Every screen starts with a hero band** – `hero({kicker,title,lead,acts,aside,top,foot})` in `js/ui.js`
     (dark band, big title with `<em>` accent, floating stat cards `hstat()`), section titles via `secHead()`.
     Same language as `.lp-hero` / `.lp-club` on the landing page. No "simulácia" footnotes in the app.
+11. **Red dot = brand signature.** The wordmark is always „Zdieľňa" + red dot (`--sig`, same in every skin).
+    Use the red dot wherever it fits: the final full stop of `h1`/`h2` headings – `hero()` and `secHead()` add it
+    automatically (`sig()` in `js/ui.js`), in hand-written markup use `<span class="sig">.</span>`.
+    **Never two red dots in a row:** only the last full stop of a heading is red (e.g. „Začnite jedným kódom.
+    Objavte nové možnosti" + red dot), no red dot in kickers, `h3` or body text, nor on a line right before a red-dot heading.
+12. **Landing page is brand-neutral** – no ZSE/VSE logo, name or colours (skin `neutral`, dark `#1E1B22` + solar amber).
+    ZSE/VSE branding appears only inside the app. Exception: the registration step text may name
+    „účet ZSE alebo VSE" (text only, no logo or colours).
 
 ## Regions (map)
 
@@ -153,3 +194,34 @@ After the ZSE/VSE login (`S.reg.step==='acc'`, `vRegister` in `js/views-public.j
 
 `S.reg.sent` / `S.reg.group` keep the result of the registration screen separate from the demo membership,
 so Anna and Peter (already active in the demo data) can go through the flow without losing their group.
+
+## Demo customer „Joz Ggál“ (iteration 4)
+
+The prototype runs on the exported demo customer (`customer_id` 330, 12 energy points – `DEMO_REGISTRATION_EXPORT`
+in `js/demo-customers.js`). The export stores the name in capitals; the UI shows it title-cased („Joz Ggál“) via
+`demoFullName()` / `demoCustomerParts()` / `demoWho(id)` (`js/core.js`, `js/demo-customers.js`). `nm(id)` in `js/core.js`
+returns this name for the active persona, so the activity log, chat answers, map KPI, ideas and the day sheets no longer say „Anna“.
+The welcome popup greets by first name (`welcomeModal()` in `js/badges.js`). Peter stays as the fictional neighbour in the simulation.
+
+**Login** (`loginModal()` in `js/views-public.js`, actions in `js/main.js`, state `S.loginMode` = `app` | `reg`):
+
+- Top bar „Prihlásiť sa“ → e-mail + password modal, prefilled `joz.ggal@example.sk` / `Joz Ggal` (nothing is sent; empty fields give a toast).
+  `ACT.loginenter` enters the app directly (Domov), membership `ACTIVE`, all 12 energy points loaded.
+- „Rýchla cesta“ card on the registration choice page → `ACT.loginreg` → the same modal in registration mode →
+  `ACT.loginstd` → the standard registration flow (`ACT.sso('auto')`: account load → wizard → submit → approval).
+  The modal also offers „Vstúpiť rovno do aplikácie →“ for customers who already share.
+
+**Skupina zdieľania** – every energy point inside the group detail is an accordion (`demoCompositionPlace()` in
+`js/demo-groups.js`, CSS `.dg-om-acc` in `css/landing.css`). Collapsed: icon, name, EIC, tags and status pill; expanded: group,
+offer prices from registration and the August result.
+
+**Nastavenia** (`vProfile()` in `js/views-app.js`) – header with the customer name and number, list of all 12 energy points
+(`demoSettingsPlace()`) with status, group and prices „Nákup od skupiny / Predaj skupine / Výkup prebytkov“ taken from the
+finance export, i.e. the same numbers as in Skupina zdieľania. „Upraviť cenu“ opens inline fields in the style of the former
+price card (state `S.dpx`, `S.dpxOpen`; actions `pxedit`, `pxreset` in `js/main.js`). Edits are not persisted and do not change the
+August result. The old „Cenové nastavenia“ card is hidden for the demo customer.
+
+**Top bar** – the persona switch has two buttons, the customer name and „Operátor“; the ZSE / VSE switch is no longer in the app
+header (it stays on the public pages in jury mode).
+
+`sw.js` cache bumped to `zdielna-v48`; `zdielna.html` regenerated with `python3 build.py`.
