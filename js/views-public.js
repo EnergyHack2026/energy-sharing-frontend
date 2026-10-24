@@ -156,9 +156,9 @@ function loginModal(){
  const brand=`<div class="supply-brand"><img src="${LOGO_OFF.zse}" alt="ZSE"><span aria-hidden="true"></span><img src="${LOGO_OFF.vse}" alt="VSE"></div>`;
  return `<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Prihlásenie zákazníckym účtom"><div class="row between">${brand}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
   <h2 style="margin-top:14px">Prihlásenie do zákazníckeho účtu</h2>
-  <p class="sm mut" style="margin:6px 0 16px">Použite rovnaké údaje ako do Moje ZSE alebo Moje VSE. Spoločnosť rozpoznáme podľa účtu.</p>
+  <p class="sm mut" style="margin:6px 0 16px">Vyberte testovací účet z databázového exportu. Celý proces prebieha lokálne v prehliadači.</p>
   <div class="pill vis" style="margin-bottom:14px">🔒 Demo prihlásenie – údaje sú predvyplnené a nikam sa neodosielajú</div>
-  <div class="fields one"><label class="f"><span>E-mail alebo zákaznícke číslo</span><input type="text" value="peter.demo@zdielna.sk" readonly></label><label class="f"><span>Heslo</span><input type="password" value="demo-heslo" readonly></label></div>
+  <div class="fields one">${demoPicker()}</div><p class="xs mut">12 scenárov · 11 zákazníkov. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
   <div class="row" style="margin-top:16px"><button class="btn pri" data-act="sso:auto">Prihlásiť sa</button><button class="btn" data-act="closemodal">Zrušiť</button></div>
   <p class="xs mut" style="margin-top:14px">Ešte nemáte online účet? <button class="link" data-act="acc">Vytvoríme vám ho →</button></p></div></div>`;
 }
@@ -201,7 +201,7 @@ function calcModal(){
 const SSO={anna:{name:'Anna Kováčová',role:'výrobca',addr:{zse:'Krajinská 8, Piešťany',vse:'Levočská 21, Prešov'},id:{zse:'SK-OM-1101',vse:'SK-OM-8811'},type:'om_house',pv:true},peter:{name:'Peter Malý',role:'odberateľ',addr:{zse:'Hlavná 12, Trnava',vse:'Hlavná 48, Košice'},id:{zse:'SK-OM-0001',vse:'SK-OM-7001'},type:'om_shop',pv:false}};
 const SSO_STEPS=['Overujeme váš zákaznícky účet','Hľadáme vaše odberné miesta','Kontrolujeme inteligentné elektromery','Načítavame zmluvy'];
 /* čo sme pri jednotlivých krokoch našli – musí sedieť s miestami v sprievodcovi (wzLoad) */
-function ssoFound(per,co){const isP=per==='anna',n=isP?2:3;return [`Účet ${SKN[co]} je overený`,`Našli sme ${n} odberné miesta`,`${n-1} s inteligentným elektromerom, 1 bez neho`,`Zmluva o dodávke ${SKN[co]}${isP?' a o výkupe prebytkov':''}`]}
+function ssoFound(per,co){if(S.reg.demoCustomer){const rows=demoRows();return [`Testovací zákazník ${demoCustomerId()}`,`${rows.length} pripojenie / pripojenia, ${rows.reduce((n,r)=>n+r.meters.length,0)} elektromerov`,rows.every(r=>r.has_ims)?'IMS a úplné profily podľa exportu':'Bez IMS a bez úplných profilov','Zmluvy nie sú v exporte – overenie je simulované']} const isP=per==='anna',n=isP?2:3;return [`Účet ${SKN[co]} je overený`,`Našli sme ${n} odberné miesta`,`${n-1} s inteligentným elektromerom, 1 bez neho`,`Zmluva o dodávke ${SKN[co]}${isP?' a o výkupe prebytkov':''}`]}
 /* ---------- registrácia, krok 2: porovnanie skupín a ďalší postup ---------- */
 /* odhad pre skupinu z enginu: objem × zhoda skupiny (f), cena posunutá o typický rozdiel v skupine (dp) */
 function grpEst(g,isP){
@@ -266,6 +266,7 @@ const WZ_OPTS={cons:['Využívať zdieľanú elektrinu','Elektrinu od susedov do
  bat:['Ponúkať energiu z batérie','Večer ponúknete energiu uloženú v batérii, keď už slnko nesvieti.']};
 /* odberné miesta načítané z účtu (demo podľa persony); dostupné možnosti podľa údajov z databázy */
 function wzLoad(per,co){
+ if(S.reg.demoCustomer){demoLoad();return}
  const s=SSO[per],isP=per==='anna';
  const main={id:'om1',eic:isP?'24ZZS0000000001A':'24ZZS0000000002B',addr:s.addr[co],name:isP?'Dom':'Bistro',icon:isP?'om_house':'om_shop',mwh:isP?4.2:18.6,pmwh:isP?6.8:0,on:true,ims:true,pv:isP,bat:isP&&S.bat.on};
  const cot={id:'om2',eic:isP?'24ZZS0000000011K':'24ZZS0000000012L',addr:'Záhradná 3, Piešťany',name:'Chata',icon:'om_cabin',mwh:1.1,on:true,ims:false,pv:false,bat:false};
@@ -305,8 +306,10 @@ function battModal(i){
 }
 function vWizard(){
  const W=S.wz,n=W.step,sel=W.oms.filter(o=>o.on);
- const top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n+1} z ${REG_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n+1)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
+ let top=`<div class="lp"><section class="lp-hero lp-reg" aria-labelledby="wz-heading"><div class="lp-wrap"><span class="kicker">${W.sent?'Registrácia · hotovo':`Registrácia · krok ${n+1} z ${REG_STEPS.length}`}</span><h1 id="wz-heading">${W.sent?'Žiadosť sme prijali':(WZ_HEAD[n]||[WZ_STEPS[n-1]])[0]}<span class="sig">.</span></h1>${!W.sent&&WZ_HEAD[n]?`<p class="lead">${WZ_HEAD[n][1]}</p>`:''}${W.sent?'':wzBar(n+1)}</div></section><section class="lp-section wz"><div class="lp-wrap">`;
  const end='</div></section></div>';
+ const demoNotice=S.reg.demoCustomer?'<p class="wz-info sm">Prototyp · údaje z lokálneho exportu. Ceny, párovanie, úspory a schválenie sú simulované; 15-minútové merania a zmluvy zatiaľ chýbajú.</p>':'';
+ top+=demoNotice;
  const err=W.err?`<p class="supply-err" role="alert">${esc(W.err)}</p>`:'';
  const isP=(S.persona==='admin'?'peter':S.persona)==='anna';
  if(W.sent){const g=GROUPS.find(x=>x.id===S.group)||GROUPS[0];
@@ -328,7 +331,7 @@ function vWizard(){
  if(n===1)return top+`<p class="lead wz-lead">Načítali sme odberné miesta z vášho účtu. Označte, ktoré chcete zapojiť, pomenujte ich a rovno vyberte, ako budú zdieľať. Dostupné možnosti sú predvolene zapnuté – zrušte tie, o ktoré nemáte záujem.</p>
   <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div class="wz-om-id">${omIc(o.icon)}<div><b class="wz-addr">${esc(o.addr)}</b><span class="wz-om-meta"><span class="xs mut">${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
    <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}${omTypeField('wz.oms.'+i+'.icon',o.icon)}</div>
-   ${o.on?opts(o,i):''}</div>`).join('')}</div>
+   ${demoDetails(o)}${o.on?opts(o,i):''}</div>`).join('')}</div>
   <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil? <span class="xs mut">Nepovinné</span>')}</div>
   ${err}
   ${wzNav(0,'wznext')}`+end;
@@ -344,7 +347,7 @@ function vWizard(){
   <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,k=o.strat||wzRec(o);
    return `<div class="wz-card wz-pr ${ed?'on':''}"><div class="wz-pr-row">
     <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
-    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${fm(o.pmwh,1)} MWh</b>`:''}</div>
+    <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${o.pmwh==null?'Chýba ročný profil':fm(o.pmwh,1)+' MWh'}</b>`:''}</div>
     ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs mut">${wzCtx(o)}</span><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':wzStratName(k)}</span></div>
     ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}`}</div>
     ${ed?`<fieldset class="wz-strats"><legend>Cenová stratégia – ${esc(o.name)}</legend>${['match','bal','price'].map(k=>strat(o,k)).join('')}</fieldset>
@@ -387,7 +390,7 @@ function regSteps4(){
 function pendingBar(){
  const L=regSteps4();
  return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Výzvy, Skupina zdieľania, Prehľady a ${IWT} odmeny sú zamknuté.</span></div>
-  ${S.jury?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
+  ${(S.jury||S.reg.demoCustomer)?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
   <ol class="pend-steps">${L.map(([t,w,c],i)=>`<li class="${c}" ${c==='cur'?'aria-current="step"':''}><span class="n">${c==='done'?'✓':i+1}</span><span><b>${t}</b><span class="xs mut">${w}</span></span></li>`).join('')}</ol></section>`;
 }
 /* Domov počas čakania: stav žiadosti, odberné miesta, odhad a čo sa odomkne */
@@ -435,7 +438,7 @@ function vRegister(){
     <div class="ssl-bar" role="progressbar" aria-label="Priebeh načítania účtu" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}"><i style="width:${pc}%"></i></div>
     <ol class="ssl-steps">${SSO_STEPS.map((s,i)=>{const st=i<done?'ok':i===done?'run':'wait';return `<li class="${st}"><span class="ssl-i" aria-hidden="true">${st==='ok'?'✓':st==='run'?'<span class="spin"></span>':i+1}</span><span class="ssl-t"><b>${s}</b>${st==='ok'?`<span class="xs mut">${fd[i]}</span>`:''}<span class="sr">${st==='ok'?' – hotovo':st==='run'?' – prebieha':' – čaká'}</span></span></li>`}).join('')}</ol>
     <p class="sr" role="status" aria-live="polite">${ok?'Účet je pripravený.':done?fd[done-1]+'.':SSO_STEPS[0]+'.'}</p>
-    <div class="ssl-foot"><span class="ssl-sec">${icon('shield')}<span class="xs mut">Údaje čítame priamo z vášho účtu ${coN}. Heslo ani prihlasovacie údaje neukladáme.</span></span>${ok?'':'<button class="btn" data-act="regback">Zrušiť</button>'}</div>
+    <div class="ssl-foot"><span class="ssl-sec">${icon('shield')}<span class="xs mut">Lokálne testovacie údaje. Prihlásenie aj kontrola zmlúv sú simulované.</span></span>${ok?'':'<button class="btn" data-act="regback">Zrušiť</button>'}</div>
     ${S.jury?`<p class="xs mut">Demo: prihlásenie je simulované – nezadávate meno ani heslo.</p>`:''}
    </div></div></section></div>`}
   const om=S.om[per],ims=per==='anna'?S.p.ims:S.c.ims,m=S.mem[per],isP=per==='anna';

@@ -216,7 +216,7 @@ const ACT={
   detail:a=>{S.modal=a;render(false)},
   closemodal:()=>{const was=S.modal;S.modal=null;if(was==='player'){clearInterval(plT);S.pl.playing=false}render(was==='bell'||was==='welcome')},
   calc:()=>{S.modal='calc';render(false)},
-  login:()=>{S.modal='login';render(false)},
+  login:()=>{S.reg.demoCustomer=S.reg.demoCustomer||330;S.modal='login';render(false)},
   acc:()=>{S.acc.err='';S.acc.done=false;S.modal='acc';render(false)},
   accdemo:()=>{Object.assign(S.acc,{cno:'5300009999',psc:'917 01',email:'peter.demo@zdielna.sk',err:''});renderModal()},
   accreq:()=>{const a=S.acc,cno=String(a.cno||'').replace(/\s/g,''),psc=String(a.psc||'').replace(/\s/g,''),e=String(a.email||'').trim();
@@ -292,8 +292,8 @@ const ACT={
     logEv(`${nm(per)}: žiadosť schválená distribútorom – +50 bodov za registráciu`);notify('state',per,'Žiadosť schválená','Zdieľanie je aktívne. Za registráciu máte +50 slnečných bodov.','home');toast('Žiadosť schválená · +50 slnečných bodov za registráciu');render(true)},
   regback:()=>{S.reg.step='choose';window.scrollTo(0,0);render(false)},
   sso:co=>{S.modal=null;if(co==='auto')co='zse'; /* dual brand: spoločnosť určí účet zákazníka – v deme ZSE */
-    const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
-    S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;
+    if(S.reg.demoCustomer)demoLoad();const per=S.persona==='admin'?'peter':S.persona;if(S.persona==='admin')S.persona='peter';const s=SSO[per];
+    S.reg.company=co;S.reg.step='load';S.reg.load=0;S.reg.sent=false;S.om[per].addr=s.addr[co];S.om[per].id=s.id[co];S.om[per].type=s.type;S.om[per].pv=s.pv;if(S.reg.demoCustomer)demoLoad();
     logEv(`${s.name}: automatické prihlásenie (zákazník ${SKN[co]}, demo)`);render(true);
     /* krok za krokom; po dokončení krátko ukáže „Účet je pripravený“ a sám pokračuje (alebo tlačidlom Pokračovať) */
     const tick=()=>{if(S.reg.step!=='load')return;S.reg.load++;render(false);if(S.reg.load<SSO_STEPS.length)setTimeout(tick,650);else setTimeout(ACT.ssonext,1600)};setTimeout(tick,650)},
