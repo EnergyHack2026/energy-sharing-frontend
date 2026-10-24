@@ -265,7 +265,7 @@ const WZ_SUP=[0.1137,0.1533];
 const wzCtx=(o,p=wzPrice(o))=>wzImported(o)?`Referencia ${fm(wzImported(o).reference_price_eur_kwh,5)} €/kWh · ${wzProd(o)?'výkup':'dodávka'}`:wzProd(o)?(p>S.p.feedin?`${fm(p/S.p.feedin,1)}× viac ako výkup ${fpr(S.p.feedin)} €/kWh`:`výkup ${fpr(S.p.feedin)} €/kWh`):`dodávka ${fpr(WZ_SUP[0])} – ${fpr(WZ_SUP[1])} €/kWh`;
 /* stav miesta bez inteligentného merania – zapojí sa až po inštalácii; po žiadosti o IMS to ukáže všade */
 const wzNoIms=o=>o.imsReq?'<span class="pill y" title="Žiadosť o inteligentný elektromer (IMS) je podaná">Čaká na IMS · žiadosť podaná</span>':'<span class="pill y" title="Čaká na inteligentný elektromer (IMS)">Čaká na IMS</span>';
-const wzImsReq=o=>o.imsReq?'<span class="pill g">Žiadosť o IMS podaná</span>':`<button class="link" data-act="wzims:${S.wz.oms.indexOf(o)}">Požiadať o inštaláciu</button>`;
+const wzImsReq=o=>o.source?`<span class="xs">${o.imsConfirmed?'✓ Potvrdené IMS za '+esc(o.imsConfirmed)+' € pre toto EIC':'Vyberte a potvrďte riešenie IMS pri tomto mieste v kroku 2.'}</span>`:o.imsReq?'<span class="pill g">Žiadosť o IMS podaná</span>':`<button class="link" data-act="wzims:${S.wz.oms.indexOf(o)}">Požiadať o inštaláciu</button>`;
 const EIC=`<abbr title="Kód odberného miesta – nájdete ho na faktúre">EIC</abbr>`;
 const wzTags=o=>omTags(wzProd(o));
 const WZ_OPTS={cons:['Využívať zdieľanú elektrinu','Elektrinu od susedov dostanete lacnejšie, keď ju práve spotrebujete.'],

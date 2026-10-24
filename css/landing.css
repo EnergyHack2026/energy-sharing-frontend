@@ -612,3 +612,7 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .dg-unit-prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}.dg-unit-prices>div{display:grid;gap:7px;border:1px solid #cbd9e4;border-radius:10px;padding:15px;background:#fff}.dg-unit-prices span{font-size:.8em;color:#52697f}.dg-unit-prices strong{font-size:1.3em;color:#102c45}.dg-unit-prices small{font-size:.7em;color:#627386}
 
 .dg-offer-note{margin:14px 0}.dg-offer-note summary{cursor:pointer;font-size:.8em;color:#627386}
+
+.db-ims-confirm{border:1px solid #cbded5;border-radius:14px;background:#f8fcfa;padding:20px;margin-top:18px}.db-ims-confirm h3{margin:0 0 12px}.db-ims-shop{border-top:1px solid #dce6df;margin-top:18px;padding-top:16px}
+
+.db-distributor-links{display:grid;gap:12px;margin:16px 0}.db-distributor-links>div{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px;border:1px solid #dce6df;border-radius:10px;background:#fff}
