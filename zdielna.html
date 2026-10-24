@@ -5827,7 +5827,7 @@ function bdgStage(per,list){
 /* konkrétny ďalší krok pre nezískaný odznak */
 function bdgNext(st){
   const b=st.b,p=st.prog;
-  if(p){const left=Math.max(0,p[1]-p[0]),u=p[2],n=u==='€'?eur(left):fm(left,u==='kWh'?0:0)+' '+u;
+  if(p){const left=Math.max(0,p[1]-p[0]),u=p[2],n=u==='€'?eur(left):u==='dní'?(left===1?'1 deň':left<5?fm(left,0)+' dni':fm(left,0)+' dní'):fm(left,0)+' '+u;
     const how={rytmus:'presúvajte spotrebu do slnečného okna',strecha:'ponúkajte prebytky susedom',srdce:'darujte cez Lúč pomoci',sezona:'zdieľajte aj v zamračené dni',komunita:'otvorte Zdieľňu aj zajtra'}[b.cat]||'plňte výzvy';
     return `Ešte ${n} – ${how}.`}
   return b.how;
@@ -5846,11 +5846,11 @@ function vBadgesNew(per){
   const k=Math.max(0,last.findIndex(s=>s.b.id===B.sel[per])),L0=last[k];
   const latest=L0?`<div class="card bdg-last"><button class="bdg-last-i" data-act="bdg:${L0.b.id}" aria-label="Detail odznaku ${esc(L0.b.name)}">${badgeSvg(L0)}</button>
     <div class="bdg-last-t"><span class="kicker">${B.fresh[L0.b.id]?'Nový odznak':'Posledný získaný'} · ${k+1} / ${last.length}</span><b>${esc(L0.b.name)}${L0.b.kind==='rep'?` <span class="pill n">×${L0.count}</span>`:''}</b><span class="sm mut">Získané ${fdate(L0.date)} · ${esc(bdgLine(L0))}</span></div>
-    <div class="bdg-last-a"><button class="btn sm ghost" data-act="bdgnav:-1" aria-label="Predchádzajúci">‹</button><button class="btn sm ghost" data-act="bdgnav:1" aria-label="Ďalší">›</button><button class="btn sm" data-act="bdgshare:${L0.b.id}">Zdieľať</button></div></div>`:'';
+    <div class="bdg-last-a"><button class="btn sm" data-act="bdgnav:-1" aria-label="Predchádzajúci">‹</button><button class="btn sm" data-act="bdgnav:1" aria-label="Ďalší">›</button><button class="btn sm" data-act="bdgshare:${L0.b.id}">Zdieľať</button></div></div>`:'';
   /* na dosah – najbližšie k získaniu (s pokrokom) */
   const near=list.filter(s=>!s.secret&&s.prog&&(!s.earned||s.next!=null)).sort((a,b)=>bdgPct(b)-bdgPct(a)).slice(0,3);
   const nearH=near.length?`<h3 class="bdg-h">Na dosah</h3><div class="bdg-near">${near.map(st=>`<div class="card bdg-nc"><div class="bdg-nc-h"><span class="bdg-nc-i">${badgeSvg(st)}</span><div><b>${esc(st.b.name)}${st.earned?` · ďalšia úroveň`:''}</b><span class="xs mut">${fm(st.prog[0],st.prog[2]==='€'?2:0)} / ${fm(st.prog[1],0)} ${st.prog[2]}</span></div></div>
-    <span class="bar"><i style="width:${(bdgPct(st)*100).toFixed(0)}%"></i></span><p class="sm">${esc(bdgNext(st))}</p>${['rytmus','komunita'].includes(st.b.cat)?'<button class="link" data-act="chgo:rewards">Zobraziť výzvy →</button>':''}</div>`).join('')}</div>`:'';
+    <span class="bar"><i style="width:${(bdgPct(st)*100).toFixed(0)}%"></i></span><p class="sm">${esc(bdgNext(st))}</p>${st.b.cat==='rytmus'?'<button class="link" data-act="chgo:rewards">Zobraziť výzvy →</button>':''}</div>`).join('')}</div>`:'';
   /* zbierka */
   const chips=`<div class="bdg-chips" role="tablist" aria-label="Kategórie odznakov">${[['all','Všetky',tot,gotN],...cats.map(c=>{const L=list.filter(s=>s.b.cat===c);return [c,BCAT[c].name,L.length,L.filter(s=>s.earned).length]})].map(([k,l,n,g])=>`<button role="tab" class="chip ${f===k?'on':''}" aria-pressed="${f===k}" data-act="bdgcat:${k}">${l} <span>${g}/${n}</span></button>`).join('')}</div>`;
   const shown=list.filter(s=>f==='all'||s.b.cat===f).sort((a,b)=>(b.earned-a.earned));
