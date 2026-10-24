@@ -420,7 +420,7 @@ function chEarnSection(per){
   chCredit(per);
   const items=chItems(per),auto=chAuto(per),open=items.filter(x=>x.st==='new').sort((a,b)=>b.eur-a.eur),doneN=items.filter(x=>x.st==='done').length+auto.filter(a=>a.done).length,tot=items.length+auto.length;
   const nx=open[0];
-  return `${secHead('Zarábajte','Zbierajte iWatt.','Každá overená výzva, deň v hre aj pozvaný sused sa ráta.')}
+  return `${secHead('Zarábajte','Zbierajte iWatt.')}
    <div class="earn-grid">
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('clock')}</span><span class="pill ${doneN?'g':'n'}">${doneN} / ${tot} splnené</span></div><b>Výzvy dnes</b><span class="sm mut">${nx?`Ďalej: ${nx.verb} ${nx.t} · +${fm(CH_IW,0)} iWatt`:'Dnešné výzvy máte prijaté.'}</span><button class="btn sm" data-act="chgo:rewards">Zobraziť výzvy</button></div>
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('sun')}</span><span class="pill n">do 150 iWatt denne</span></div><b>Slnečný deň</b><span class="sm mut">Cez deň zbierajte slnko, večer rozsvieťte domy susedov.</span><button class="btn sm" data-act="iwplay">Hrať</button></div>
