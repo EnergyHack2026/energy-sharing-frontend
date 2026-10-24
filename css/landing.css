@@ -574,3 +574,15 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lp-footer-legal a,.lp-footer-legal .link{color:var(--mut);font-size:var(--fs-xs);text-decoration:none}
 .lp-footer-legal .lp-proto{margin-left:auto}
 @media(max-width:580px){.lp-chart-x{font-size:19px}.lp-footer-legal .lp-proto{margin-left:0}}
+/* zlúčená sekcia Predikcia a výzvy */
+.lp-iw-rate{margin-top:14px;font-size:var(--fs-sm);font-weight:700;color:var(--green)}
+.lp-smart-cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:24px}
+.lpc-l{display:grid;gap:8px;margin-top:14px}
+.lpc-l-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--yellow-t)}
+.lpc-l-h b{color:var(--yellow-ink)}
+.lpc-l-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm)}
+.lpc-l-row>div{display:grid;gap:2px}.lpc-l-row b{font-size:var(--fs-sm)}
+.lpc-l-row.best{border-color:var(--brand);background:var(--tint-green)}
+.lpc-l-iw{font-weight:800;color:var(--green);white-space:nowrap;font-size:var(--fs-sm)}
+.lpc-l-n{margin:2px 0 0}
+@media(max-width:580px){.lpc-l-row{grid-template-columns:minmax(0,1fr) auto}.lpc-l-row .svc-ic,.lpc-l-h .xs{display:none}}
