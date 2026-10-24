@@ -384,7 +384,7 @@ function vWizard(){
 /* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
 const REG_LOCKED={challenges:['Výzvy','Denné výzvy na presun spotreby do slnečného okna a slnečné body.'],group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
  reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
- cert:['Dobrý sused','Znak a nálepka s QR kódom pre prevádzky, ktoré berú slnko od susedov a pomáhajú v okolí.'],
+ cert:['Dobrý sused','Darovanie cez Lúč pomoci a odporúčanie Zdieľne susedom.'],
  help:['Lúč pomoci','Darujete časť prebytku, ktorý sa nevyzdieľal, škole, charite alebo rodine v núdzi.'],
  rewards:['Odmeny','Začnete zbierať '+IWT+' a odznaky a meniť ich za výhody.']};
 const regPer=()=>S.persona==='admin'?'peter':S.persona;

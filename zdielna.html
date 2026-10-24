@@ -1085,6 +1085,16 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .don-add select{min-width:260px}
 @media(max-width:620px){.don-r{grid-template-columns:auto minmax(0,1fr) auto}.don-w,.don-k{grid-column:2}}
 .help-steps{margin:10px 0 0;padding-left:20px;display:grid;gap:8px}
+/* Dobrý sused: Lúč pomoci + odporúčanie */
+.dn-grid{align-items:start}
+.ref-link{display:flex;gap:8px;margin-top:12px}.ref-link .inp{flex:1;min-width:0;border-radius:var(--r-pill);padding:10px 14px;border:1px solid var(--line-2);background:var(--bg);font:inherit;font-size:var(--fs-sm)}
+.ref-qr{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:var(--r)}
+.ref-qr-img svg{display:block;width:150px;height:150px;border-radius:8px}
+.ref-qr-ph{width:150px;height:150px;border:1.5px dashed var(--line-2);border-radius:8px;display:grid;place-items:center;align-content:center;gap:6px;text-align:center;padding:10px}
+.ref-qr-ph .icon{width:28px;height:28px;color:var(--mut)}
+.ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 8px}
+.ref-stats>div{display:grid;gap:2px;padding:10px 12px;border-radius:var(--r);background:var(--bg)}.ref-stats b{font-size:var(--fs-h3)}
+@media(max-width:560px){.ref-qr{grid-template-columns:1fr}.ref-link{flex-wrap:wrap}}
 
 </style>
 <style>
@@ -1707,7 +1717,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  imsReqd:{chata:true},iw:{bal:12000,best:0,day:1,red:{},got:{},pend:[]},wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  imsReqd:{chata:true},ref:{qr:false,inv:3,act:1},iw:{bal:12000,best:0,day:1,red:{},got:{},pend:[]},wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
@@ -2815,7 +2825,7 @@ function invoiceHtml(who){
 let CH_MODE=false;
 function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
-const vCertView=()=>isShop()?vCert():vIwatt();
+const vCertView=()=>vGoodNeighbour();
 function vRewards(){
   if(!CH_MODE)return vIwatt();
   if(S.persona==='anna')return vRewardsAnna();
@@ -2960,6 +2970,29 @@ function vHelp(){
     aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} · hodnota ${eur(x.val)}`):''});
   if(!isP)return `<div class="gap">${head}<div class="card"><h3>Ako to funguje</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Ak raz budete mať vlastnú fotovoltiku, Lúč pomoci si zapnete tu. Ponuku nájdete v Skupine zdieľania → Produkty a služby.</p></div></div>`;
   return `<div class="gap">${head}${solSettingsCard()}${S.don.on?solReportCard():''}</div>`;
+}
+/* ---------- Dobrý sused: vľavo nastavenie Lúča pomoci, vpravo odporúčanie Zdieľne (odkaz + QR kód) ---------- */
+const refCode=()=>{const p=S.persona==='admin'?'peter':S.persona;return 'ZDIELNA-'+(p==='anna'?'ANNA':'PETER')+'7K'};
+const refUrl=()=>`https://zdielna.sk/pozvanka/${refCode()}`;
+function refCard(){
+  const R=S.ref;
+  return `<div class="card ref-card"><span class="kicker">Odporučte Zdieľňu</span><h3>Pozvite suseda, získajte odmenu</h3>
+   <p class="sm mut" style="margin-top:4px">Pošlite odkaz alebo ukážte QR kód. Keď sa sused zaregistruje a začne zdieľať, dostanete <b>+5 000 iWatt</b>.</p>
+   <div class="ref-link"><input id="ref-url" class="inp" readonly value="${refUrl()}" aria-label="Váš odkaz na pozvánku"><button class="btn pri" data-act="refcopy">Kopírovať</button></div>
+   <div class="row" style="margin-top:10px"><button class="btn" data-act="refshare">${icon('arrow')} Zdieľať odkaz</button><span class="xs mut">Kód pozvánky: <b>${refCode()}</b></span></div>
+   <div class="ref-qr"><div class="ref-qr-img">${R.qr?qrSvg(refUrl(),'#0b1424'):`<div class="ref-qr-ph">${icon('console')}<span class="xs mut">QR kód sa zobrazí tu</span></div>`}</div>
+    <div><b>QR kód na pozvánku</b><p class="xs mut" style="margin:4px 0 10px">Naskenujú ho susedia v mobile – napríklad z letáku, na schôdzi alebo na dverách prevádzky.</p>
+     ${R.qr?'<button class="btn sm" data-act="refqrpng">⬇ Stiahnuť QR (PNG)</button>':'<button class="btn sm dark" data-act="refqr">Vygenerovať QR kód</button>'}</div></div>
+   <div class="ref-stats"><div><b>${R.inv}</b><span class="xs mut">pozvaných</span></div><div><b>${R.act}</b><span class="xs mut">už zdieľa</span></div><div><b>${fm(R.act*5000,0)}</b><span class="xs mut">iWatt za odporúčania</span></div></div>
+   <p class="xs mut">Ukážkové údaje. Odmena sa pripíše až po aktivácii zdieľania odporučeného suseda.</p></div>`;
+}
+function vGoodNeighbour(){
+  const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
+  const head=hero({kicker:'Dobrý sused',title:'Pomáhajte v okolí. <em>Pozvite susedov.</em>',
+    lead:'Časť nevyzdieľaného prebytku môžete darovať tým, ktorí to potrebujú, a susedov pozvať do Zdieľne – za každého, kto začne zdieľať, dostanete odmenu.',
+    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+5 000 iWatt','keď sused začne zdieľať')});
+  const left=isP?solSettingsCard():`<div class="card" id="sol-card"><span class="kicker">Lúč pomoci</span><h3>Darovanie je pre výrobcov</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Nemáte vlastné panely? Pomôcť môžete inak – pozvite susedov s fotovoltikou, aby ich slnko ostalo v okolí.</p></div>`;
+  return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
 }
 function vProfile(){
   const per=S.persona,pp=per==='admin'?'peter':per,om=S.om[pp],ims=pp==='anna'?S.p.ims:S.c.ims,gg=geo(om.addr);
@@ -5112,7 +5145,7 @@ function vWizard(){
 /* ---------- portál po „Vstúpiť do Zdieľne“: kým distribútor žiadosť neschváli, časť funkcií je zamknutá ---------- */
 const REG_LOCKED={challenges:['Výzvy','Denné výzvy na presun spotreby do slnečného okna a slnečné body.'],group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
  reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
- cert:['Dobrý sused','Znak a nálepka s QR kódom pre prevádzky, ktoré berú slnko od susedov a pomáhajú v okolí.'],
+ cert:['Dobrý sused','Darovanie cez Lúč pomoci a odporúčanie Zdieľne susedom.'],
  help:['Lúč pomoci','Darujete časť prebytku, ktorý sa nevyzdieľal, škole, charite alebo rodine v núdzi.'],
  rewards:['Odmeny','Začnete zbierať '+IWT+' a odznaky a meniť ich za výhody.']};
 const regPer=()=>S.persona==='admin'?'peter':S.persona;
@@ -5962,7 +5995,7 @@ function renderShell(){
    :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
-  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&(k!=='cert'||isShop()));
+  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&true);
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
   const lk=k=>regPending()&&REG_LOCKED[k]?`<span class="nav-lock" title="Po schválení žiadosti">${icon('lock')}</span>`:'';
   const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span>${lk(k)}</button>`;
@@ -6197,6 +6230,12 @@ const ACT={
   svcok:a=>{(S.svcAsked||(S.svcAsked={}))[a]=true;S.modal=null;logEv(`${nm(regPer())}: záujem o ponuku – ${SVC[a].t}`);toast(`Ďakujeme – poradca ${BR()} vás kontaktuje s ponukou: ${SVC[a].t}`);render(false)},
   donrm:a=>{const L=S.don.rcps;if(L.length<2)return;S.don.rcps=L.filter(r=>r.id!==a);S.don.rcp=S.don.rcps[0].id;render(false)},
   doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length,b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
+  refcopy:()=>{const u=refUrl(),ok=()=>toast('Odkaz skopírovaný'),fb=()=>{const i=document.getElementById('ref-url');if(i){i.select();try{document.execCommand('copy');ok()}catch(e){toast('Skopírujte odkaz ručne')}}};try{navigator.clipboard?navigator.clipboard.writeText(u).then(ok,fb):fb()}catch(e){fb()}},
+  refshare:()=>{const u=refUrl();if(navigator.share){navigator.share({title:'Zdieľňa',text:'Pridaj sa do Zdieľne – elektrina zo slnka od susedov.',url:u}).catch(()=>{})}else ACT.refcopy()},
+  refqr:()=>{S.ref.qr=true;render(false)},
+  refqrpng:()=>{const svg=qrSvg(refUrl(),'#0b1424'),img=new Image(),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    img.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(img,0,0,800,800);URL.revokeObjectURL(url);c.toBlob(b=>{const h=URL.createObjectURL(b),a=document.createElement('a');a.href=h;a.download='zdielna-pozvanka-qr.png';a.click();setTimeout(()=>URL.revokeObjectURL(h),1500)},'image/png');toast('QR kód stiahnutý')}catch(e){toast('Sťahovanie sa nepodarilo')}};
+    img.onerror=()=>{URL.revokeObjectURL(url);toast('Sťahovanie sa nepodarilo')};img.src=url},
   plmove:a=>{const [k,d]=a.split(':');const L=placeOrder(regPer()),i=L.indexOf(k),j=i+(+d);if(i<0||j<0||j>=L.length)return;L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)},
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},

@@ -323,7 +323,7 @@ function invoiceHtml(who){
 let CH_MODE=false;
 function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
-const vCertView=()=>isShop()?vCert():vIwatt();
+const vCertView=()=>vGoodNeighbour();
 function vRewards(){
   if(!CH_MODE)return vIwatt();
   if(S.persona==='anna')return vRewardsAnna();
@@ -468,6 +468,29 @@ function vHelp(){
     aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} · hodnota ${eur(x.val)}`):''});
   if(!isP)return `<div class="gap">${head}<div class="card"><h3>Ako to funguje</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Ak raz budete mať vlastnú fotovoltiku, Lúč pomoci si zapnete tu. Ponuku nájdete v Skupine zdieľania → Produkty a služby.</p></div></div>`;
   return `<div class="gap">${head}${solSettingsCard()}${S.don.on?solReportCard():''}</div>`;
+}
+/* ---------- Dobrý sused: vľavo nastavenie Lúča pomoci, vpravo odporúčanie Zdieľne (odkaz + QR kód) ---------- */
+const refCode=()=>{const p=S.persona==='admin'?'peter':S.persona;return 'ZDIELNA-'+(p==='anna'?'ANNA':'PETER')+'7K'};
+const refUrl=()=>`https://zdielna.sk/pozvanka/${refCode()}`;
+function refCard(){
+  const R=S.ref;
+  return `<div class="card ref-card"><span class="kicker">Odporučte Zdieľňu</span><h3>Pozvite suseda, získajte odmenu</h3>
+   <p class="sm mut" style="margin-top:4px">Pošlite odkaz alebo ukážte QR kód. Keď sa sused zaregistruje a začne zdieľať, dostanete <b>+5 000 iWatt</b>.</p>
+   <div class="ref-link"><input id="ref-url" class="inp" readonly value="${refUrl()}" aria-label="Váš odkaz na pozvánku"><button class="btn pri" data-act="refcopy">Kopírovať</button></div>
+   <div class="row" style="margin-top:10px"><button class="btn" data-act="refshare">${icon('arrow')} Zdieľať odkaz</button><span class="xs mut">Kód pozvánky: <b>${refCode()}</b></span></div>
+   <div class="ref-qr"><div class="ref-qr-img">${R.qr?qrSvg(refUrl(),'#0b1424'):`<div class="ref-qr-ph">${icon('console')}<span class="xs mut">QR kód sa zobrazí tu</span></div>`}</div>
+    <div><b>QR kód na pozvánku</b><p class="xs mut" style="margin:4px 0 10px">Naskenujú ho susedia v mobile – napríklad z letáku, na schôdzi alebo na dverách prevádzky.</p>
+     ${R.qr?'<button class="btn sm" data-act="refqrpng">⬇ Stiahnuť QR (PNG)</button>':'<button class="btn sm dark" data-act="refqr">Vygenerovať QR kód</button>'}</div></div>
+   <div class="ref-stats"><div><b>${R.inv}</b><span class="xs mut">pozvaných</span></div><div><b>${R.act}</b><span class="xs mut">už zdieľa</span></div><div><b>${fm(R.act*5000,0)}</b><span class="xs mut">iWatt za odporúčania</span></div></div>
+   <p class="xs mut">Ukážkové údaje. Odmena sa pripíše až po aktivácii zdieľania odporučeného suseda.</p></div>`;
+}
+function vGoodNeighbour(){
+  const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
+  const head=hero({kicker:'Dobrý sused',title:'Pomáhajte v okolí. <em>Pozvite susedov.</em>',
+    lead:'Časť nevyzdieľaného prebytku môžete darovať tým, ktorí to potrebujú, a susedov pozvať do Zdieľne – za každého, kto začne zdieľať, dostanete odmenu.',
+    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+5 000 iWatt','keď sused začne zdieľať')});
+  const left=isP?solSettingsCard():`<div class="card" id="sol-card"><span class="kicker">Lúč pomoci</span><h3>Darovanie je pre výrobcov</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Nemáte vlastné panely? Pomôcť môžete inak – pozvite susedov s fotovoltikou, aby ich slnko ostalo v okolí.</p></div>`;
+  return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
 }
 function vProfile(){
   const per=S.persona,pp=per==='admin'?'peter':per,om=S.om[pp],ims=pp==='anna'?S.p.ims:S.c.ims,gg=geo(om.addr);

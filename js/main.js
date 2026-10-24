@@ -36,7 +36,7 @@ function renderShell(){
    :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
-  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&(k!=='cert'||isShop()));
+  const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&true);
   const isCur=k=>v===k||(k==='ideas'&&v.startsWith('i_'))||(k==='landing'&&v==='potential');
   const lk=k=>regPending()&&REG_LOCKED[k]?`<span class="nav-lock" title="Po schválení žiadosti">${icon('lock')}</span>`:'';
   const btn=([k,l,i])=>`<button data-act="view:${k}" ${isCur(k)?'aria-current="page"':''}><span class="ic">${icon(i)}</span><span>${l}</span>${lk(k)}</button>`;
@@ -271,6 +271,12 @@ const ACT={
   svcok:a=>{(S.svcAsked||(S.svcAsked={}))[a]=true;S.modal=null;logEv(`${nm(regPer())}: záujem o ponuku – ${SVC[a].t}`);toast(`Ďakujeme – poradca ${BR()} vás kontaktuje s ponukou: ${SVC[a].t}`);render(false)},
   donrm:a=>{const L=S.don.rcps;if(L.length<2)return;S.don.rcps=L.filter(r=>r.id!==a);S.don.rcp=S.don.rcps[0].id;render(false)},
   doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length,b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
+  refcopy:()=>{const u=refUrl(),ok=()=>toast('Odkaz skopírovaný'),fb=()=>{const i=document.getElementById('ref-url');if(i){i.select();try{document.execCommand('copy');ok()}catch(e){toast('Skopírujte odkaz ručne')}}};try{navigator.clipboard?navigator.clipboard.writeText(u).then(ok,fb):fb()}catch(e){fb()}},
+  refshare:()=>{const u=refUrl();if(navigator.share){navigator.share({title:'Zdieľňa',text:'Pridaj sa do Zdieľne – elektrina zo slnka od susedov.',url:u}).catch(()=>{})}else ACT.refcopy()},
+  refqr:()=>{S.ref.qr=true;render(false)},
+  refqrpng:()=>{const svg=qrSvg(refUrl(),'#0b1424'),img=new Image(),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    img.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.imageSmoothingEnabled=false;x.drawImage(img,0,0,800,800);URL.revokeObjectURL(url);c.toBlob(b=>{const h=URL.createObjectURL(b),a=document.createElement('a');a.href=h;a.download='zdielna-pozvanka-qr.png';a.click();setTimeout(()=>URL.revokeObjectURL(h),1500)},'image/png');toast('QR kód stiahnutý')}catch(e){toast('Sťahovanie sa nepodarilo')}};
+    img.onerror=()=>{URL.revokeObjectURL(url);toast('Sťahovanie sa nepodarilo')};img.src=url},
   plmove:a=>{const [k,d]=a.split(':');const L=placeOrder(regPer()),i=L.indexOf(k),j=i+(+d);if(i<0||j<0||j>=L.length)return;L.splice(j,0,L.splice(i,1)[0]);S.placeOrder=L;render(false)},
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},

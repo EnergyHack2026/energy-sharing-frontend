@@ -934,3 +934,13 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .don-add select{min-width:260px}
 @media(max-width:620px){.don-r{grid-template-columns:auto minmax(0,1fr) auto}.don-w,.don-k{grid-column:2}}
 .help-steps{margin:10px 0 0;padding-left:20px;display:grid;gap:8px}
+/* Dobrý sused: Lúč pomoci + odporúčanie */
+.dn-grid{align-items:start}
+.ref-link{display:flex;gap:8px;margin-top:12px}.ref-link .inp{flex:1;min-width:0;border-radius:var(--r-pill);padding:10px 14px;border:1px solid var(--line-2);background:var(--bg);font:inherit;font-size:var(--fs-sm)}
+.ref-qr{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:var(--r)}
+.ref-qr-img svg{display:block;width:150px;height:150px;border-radius:8px}
+.ref-qr-ph{width:150px;height:150px;border:1.5px dashed var(--line-2);border-radius:8px;display:grid;place-items:center;align-content:center;gap:6px;text-align:center;padding:10px}
+.ref-qr-ph .icon{width:28px;height:28px;color:var(--mut)}
+.ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 8px}
+.ref-stats>div{display:grid;gap:2px;padding:10px 12px;border-radius:var(--r);background:var(--bg)}.ref-stats b{font-size:var(--fs-h3)}
+@media(max-width:560px){.ref-qr{grid-template-columns:1fr}.ref-link{flex-wrap:wrap}}
