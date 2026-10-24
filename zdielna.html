@@ -5019,7 +5019,7 @@ function demoLoad(){
  const oms=rows.map(r=>({id:'connection-'+r.connection_id,eic:r.consumption_eic_codes[0],addr:[r.city,r.region].filter(Boolean).join(' · '),
   name:r.object_name||'Odberné miesto '+r.connection_id,icon:'om_house',mwh:r.annual_expected_consumption_mwh,pmwh:r.expected_annual_production_kwh==null?null:r.expected_annual_production_kwh/1000,
   on:r.sharing_enabled===true,ims:r.has_ims,pv:!!r.production_eic_codes.length,bat:false,source:r,
-  opts:{cons:r.has_ims&&r.receive_shared_energy===true,prod:r.has_ims&&r.offer_shared_energy===true&&!!r.production_eic_codes?.length,bat:false},strat:null,own:null,august:DEMO_AUGUST.connections.find(a=>a.connection_id===r.connection_id&&a.customer_id===r.customer_id&&a.consumption_eic===r.consumption_eic_codes[0]),batAns:null,imsReq:false,imsOption:r.has_ims?null:'170'}));
+  opts:{cons:r.has_ims&&r.receive_shared_energy===true,prod:r.has_ims&&r.offer_shared_energy===true&&!!r.production_eic_codes?.length,bat:false},strat:'bal',consStrat:'bal',own:null,august:DEMO_AUGUST.connections.find(a=>a.connection_id===r.connection_id&&a.customer_id===r.customer_id&&a.consumption_eic===r.consumption_eic_codes[0]),batAns:null,imsReq:false,imsOption:r.has_ims?null:'170'}));
  S.wz={step:1,oms,ev:rows[0].has_electric_vehicle??null,sent:false,err:'',edit:-1,pick:null,own:null};
  const o=oms[0];Object.assign(S.om[S.persona],{id:o.eic,addr:o.addr,type:o.icon,pv:o.pv,kwp:o.source.installed_power_kw??0});
 }
@@ -5447,7 +5447,7 @@ const WZ_STRAT={match:{t:'Uprednostniť spárovanie',d:'Viac možností na prepo
  price:{t:'Uprednostniť cenu',d:'Výhodnejšia cena, menej možností',sell:0.122,buy:0.084,ch:33,sh:26}};
 const wzSide=(o,side)=>side==='cons'?{...o,pv:false,strat:o.consStrat||null,own:o.consOwn??null,priceSide:'cons'}:o;
 const wzProd=o=>o.pv;                                   /* miesto vyrába (FVE) */
-const wzRec=o=>wzProd(o)?'bal':o.mwh>=10?'match':'bal'; /* odporúčanie podľa profilu miesta */
+const wzRec=o=>'bal'; /* odporúčanie podľa profilu miesta */
 const wzImported=o=>o.august?.[o.priceSide==='cons'||!o.pv?'consumption_price':'production_price'];
 const wzPrice=(o,k)=>{if(k===undefined&&!o.strat&&wzImported(o))return wzImported(o).price_eur_kwh;k=k||o.strat||wzRec(o);if(k==='import')return wzImported(o)?.price_eur_kwh;if(k==='own')return o.own;if(wzImported(o)){const delta=(wzProd(o)?{match:.005,bal:.015,price:.03}:{match:.03,bal:.015,price:.005})[k];return Math.round((wzImported(o).reference_price_eur_kwh+(wzProd(o)?delta:-delta))*100000)/100000}return WZ_STRAT[k][wzProd(o)?'sell':'buy']};
 const wzStratName=k=>k==='own'?'Vlastná cena':WZ_STRAT[k].t;
@@ -5475,7 +5475,7 @@ function wzLoad(per,co){
  const home={id:'om3',eic:'24ZZS0000000022P',addr:co==='vse'?'Južná 9, Košice':'Ružová 5, Trnava',name:'Rodinný dom',icon:'om_house',mwh:5.4,pmwh:5.6,on:true,ims:true,pv:true,bat:false};
  const oms=isP?[main,cot]:[main,home,cot];
  /* batéria: jedna otázka Áno / Nie pri mieste s výrobou (null = neodpovedané); Áno otvorí okno s výhodami a žiadosťou o kontakt */
- oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat=null;o.own=null;o.batAns=null;o.imsReq=o.id==='om2'&&!!(S.imsReqd||{}).chata});
+ oms.forEach(o=>{o.opts={cons:o.ims,prod:o.ims&&o.pv,bat:false};o.strat='bal';o.consStrat='bal';o.own=null;o.batAns=null;o.imsReq=o.id==='om2'&&!!(S.imsReqd||{}).chata});
  /* elektromobil: jedna otázka za zákazníka, nie za odberné miesto */
  S.wz={step:1,oms,ev:null,sent:false,err:'',edit:-1,pick:null,own:null};
 }
@@ -5557,7 +5557,7 @@ function vWizard(){
     <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.addr||o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.name||'')}</span><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
     <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${o.pmwh==null?'Chýba ročný profil':fm(o.pmwh,1)+' MWh'}</b>`:''}</div>
     ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-price-pair">${o.pv?priceBlock('prod'):''}${priceBlock('cons')}</div><div class="wz-price-actions">${o.pv?`<button class="btn" data-act="wzedit:${i}:prod">Upraviť cenu výroby</button>`:''}<button class="btn" data-act="wzedit:${i}:cons">Upraviť cenu spotreby</button></div>`}</div>
-    ${demoAugustDetails(o)}${ed?`${wzImported(e)?`<label class="wz-own"><span class="row"><input type="radio" name="wz-st" data-act="wzpick:import" ${W.pick==='import'?'checked':''}><b>Ponechať cenu z exportu: ${fm(wzImported(e).price_eur_kwh,5)} €/kWh</b></span><span class="xs mut">Aktuálna cena pre ${W.editSide==='cons'?'spotrebu':'výrobu'} · august 2026</span></label>`:''}<fieldset class="wz-strats"><legend>${W.editSide==='cons'?'Cena spotreby':'Cena výroby'} – ${esc(o.addr||o.name)}</legend>${['match','bal','price'].map(k=>strat(e,k)).join('')}</fieldset>
+    ${demoAugustDetails(o)}${ed?`${wzImported(e)?`<label class="wz-own"><span class="row"><input type="radio" name="wz-st" data-act="wzpick:import" ${W.pick==='import'?'checked':''}><b>Použiť pôvodnú cenu z exportu: ${fm(wzImported(e).price_eur_kwh,5)} €/kWh</b></span><span class="xs mut">Historická cena pre ${W.editSide==='cons'?'spotrebu':'výrobu'} · august 2026</span></label>`:''}<fieldset class="wz-strats"><legend>${W.editSide==='cons'?'Cena spotreby':'Cena výroby'} – ${esc(o.addr||o.name)}</legend>${['match','bal','price'].map(k=>strat(e,k)).join('')}</fieldset>
     <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(e)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
      ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(e),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(e,W.own)}</span>${wzOwnWarn(e,W.own)?`<p class="wz-warn">${wzOwnWarn(e,W.own)}</p>`:''}</div></div>`:''}</div>
     <p class="xs mut">* Šance a podiely sú ilustračné, nejde o nový výpočet párovania. Objem vychádza z augustovej výroby alebo spotreby; pri chýbajúcom meraní z ročného odhadu / 12. Stratégie používajú referenčnú cenu daného miesta a modelové cenové rozdiely.</p>
