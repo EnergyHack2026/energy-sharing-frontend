@@ -289,7 +289,13 @@ function wzBar(n){
 function wzNav(back,next,nextLbl='Ďalej',dis=false,cls='pri'){
  return `<div class="wz-nav">${back?`<button class="btn lg" data-act="wzgo:${back}">← Späť</button>`:'<span></span>'}<button class="btn ${cls} lg" data-act="${next}" ${dis?'disabled':''}>${nextLbl} <span aria-hidden="true">→</span></button></div>`;
 }
-const wzHead=(o)=>`<div class="wz-om-head">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="wz-om-meta"><span class="xs mut">${esc(o.addr)} · ${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>`;
+const wzPlaceName=o=>{const name=String(o.name||'').trim();return !name||/^Odberné miesto \d+$/.test(name)?(o.addr||'Energetické miesto'):name};
+ function regNextQuestions(){return `<div class="card reg-next"><span class="kicker">Po odoslaní žiadosti</span><h3>Čo ďalej po odoslaní žiadosti?</h3>
+ <details open><summary>Musím ešte niečo urobiť?</summary><p>Pri miestach s IMS teraz čakáte na overenie. V prehľade sledujte stav každého energetického miesta. Ak bude potrebné niečo doplniť, v tomto prototype zobrazíme ďalší krok simulovane.</p></details>
+ <details><summary>Čo ak moje miesto ešte nemá IMS?</summary><p>V detaile miesta požiadajte o inštaláciu IMS. Zachovali sme váš výber riešenia za 1 € alebo 170 €. Samotný výber riešenia nie je odoslaním žiadosti o inštaláciu. Miesto začne zdieľať až po inštalácii a overení.</p></details>
+ <details><summary>Kedy sa začne zdieľanie?</summary><p>Po schválení a splnení podmienok merania. Časová os nižšie ukazuje modelový termín; odoslanie žiadosti ešte nie je aktiváciou. V prototype možno schválenie spustiť tlačidlom „Simulovať schválenie“.</p></details>
+ <details><summary>Kde uvidím výsledky a prínosy?</summary><p>Po aktivácii sa odomknú prehľady zdieľanej energie a vyúčtovania. Výpočty v registrácii sú modelové odhady; skutočný prínos závisí od nameraného priebehu spotreby a výroby.</p></details></div>`}
+ const wzHead=(o)=>`<div class="wz-om-head">${omIc(o.icon)}<div><b>${esc(wzPlaceName(o))}</b><span class="wz-om-meta"><span class="xs mut">${esc(o.addr)} · ${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>`;
 /* okno po „Áno“ pri batérii: výhody, čo je potrebné, žiadosť o kontakt */
 function battModal(i){
  const o=S.wz&&S.wz.oms[i];if(!o)return '';
@@ -404,7 +410,8 @@ function vHomePending(){
    acts:S.jury?'<button class="btn" data-act="regapprove">🎬 Simulovať schválenie</button>':'',
    aside:hstat(isP?'Odhad zárobku navyše':'Odhad úspory',eur0(y)+' ročne','modelový odhad, nie garancia')})}
   ${pendingBar()}
-  <div class="card"><span class="kicker">Vaše odberné miesta</span><h3>Stav zapojenia</h3><div class="pend-oms">${(W.oms||[]).map(o=>{const s=st(o);return `<div class="pend-om">${wzHead(o)}<span class="pill ${s[0]}">${s[1]}</span></div>`}).join('')}</div></div>
+  <div class="card"><span class="kicker">Vaše energetické miesta</span><h3>Stav zapojenia</h3><div class="pend-oms">${(W.oms||[]).map(o=>{const s=st(o);return `<div class="pend-om">${wzHead(o)}<div class="pend-place-status">${!o.ims&&o.imsOption?`<span class="xs mut">Zvolené IMS za ${esc(o.imsOption)} €</span>`:''}<span class="pill ${s[0]}">${s[1]}</span>${o.on&&!o.ims?wzImsReq(o):''}</div></div>`}).join('')}</div></div>
+  ${regNextQuestions()}
   <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
   <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
    <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
