@@ -293,6 +293,7 @@ const ACT={
   dpseriesall:a=>{demoProfileState().hidden=DP_SERIES.filter(([k])=>a==='hide'||a==='mine'&&k.startsWith('group_')).map(([k])=>k);render(false)},
   demochcomplete:id=>{if(!(S.demoChallengePlans||{})[id]||!demoRealChallenges().some(c=>c.id===id))return;const done=S.demoChallengeDone||(S.demoChallengeDone={});if(done[id])return;done[id]=true;toast('Demo: splnenie potvrdené, +20 bodov do rozdelenia energie');render(false)},
   demochplan:id=>{if(!demoRealChallenges().some(c=>c.id===id))return;const plans=S.demoChallengePlans||(S.demoChallengePlans={});plans[id]=!plans[id];render(false)},
+  adminexport:kind=>{if(adminData().month!=='2026-08')return;if(['json','csv'].includes(kind))adminDownload(kind)},
   dpplay:()=>{const p=demoProfileState();if(p.playing){p.playing=false;clearInterval(demoProfileTimer);render(false);return}if(p.idx>=96)p.idx=0;p.playing=true;clearInterval(demoProfileTimer);demoProfileTimer=setInterval(()=>{if(S.view!=='home'){p.playing=false;clearInterval(demoProfileTimer);return}p.idx++;if(p.idx>=96){p.idx=96;p.playing=false;clearInterval(demoProfileTimer)}render(false)},250);render(false)},
   dpreset:()=>{const p=demoProfileState();p.idx=0;p.playing=false;clearInterval(demoProfileTimer);render(false)},
   wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},

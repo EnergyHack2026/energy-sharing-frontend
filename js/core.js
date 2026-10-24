@@ -29,7 +29,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','chat']);
+const ON=new Set(['admin','landing','register','home','challenges','group','reports','rewards','cert','profile','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */

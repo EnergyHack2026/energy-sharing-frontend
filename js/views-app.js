@@ -610,6 +610,7 @@ function vProfile(){
   <div class="card"><h3>Pomoc</h3><p class="sm mut" style="margin-top:4px">Otázky vám zodpovie AI asistent – tlačidlo chatu vpravo dole.</p><div class="row" style="margin-top:8px"><button class="btn sm" data-act="ask:Kedy začne zdieľanie?">Kedy začne zdieľanie?</button><button class="btn sm" data-act="ask:Ako bola vypočítaná suma?">Ako bola vypočítaná suma?</button><button class="btn sm" data-act="ask:Ako zmením skupinu?">Ako zmením skupinu?</button></div></div></div>`;
 }
 function vAdmin(){
+ return vDemoAdmin();
   const res=dayRun(),a=agg(res),pa=sum(res.P.fpFull),errA=sum(res.A.a.map((v,i)=>Math.abs(v-res.P.fpFull[i])))/Math.max(.001,pa),errC=sum(res.A.c.map((v,i)=>Math.abs(v-res.P.fc[i])))/Math.max(.001,sum(res.P.fc));
   const reqs=['anna','peter'].map(w=>({w,m:S.mem[w],ims:w==='anna'?S.p.ims:S.c.ims}));
   const comp=S.p.price<=S.c.max+1e-9;
