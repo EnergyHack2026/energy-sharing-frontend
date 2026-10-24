@@ -1058,3 +1058,11 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .bdg-chips .chip span{color:var(--mut);font-weight:600;margin-left:4px}
 .bdg-chips .chip.on{background:var(--surface-dark);border-color:var(--surface-dark);color:var(--on-dark)}.bdg-chips .chip.on span{color:var(--on-dark-mut)}
 @media(max-width:900px){.bdg-head{grid-template-columns:1fr}.bdg-near{grid-template-columns:1fr}.bdg-last{flex-wrap:wrap}}
+/* uvítacie okno – menej obsahu, iWatt a odznak */
+.modal.welcome{max-width:380px;padding:20px 24px 22px}
+.wl-sun{width:120px;margin:4px auto 0}
+.welcome h2{font-size:26px;margin-top:6px}
+.wl-lead{font-size:var(--fs-md);margin:6px 0 14px}
+.wl-row{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-bottom:16px}
+.wl-row>span:last-child{display:grid;gap:2px}
+.wl-bdg{width:44px;flex:none}.wl-bdg svg{width:100%;height:auto;display:block}

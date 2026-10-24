@@ -1209,6 +1209,14 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .bdg-chips .chip span{color:var(--mut);font-weight:600;margin-left:4px}
 .bdg-chips .chip.on{background:var(--surface-dark);border-color:var(--surface-dark);color:var(--on-dark)}.bdg-chips .chip.on span{color:var(--on-dark-mut)}
 @media(max-width:900px){.bdg-head{grid-template-columns:1fr}.bdg-near{grid-template-columns:1fr}.bdg-last{flex-wrap:wrap}}
+/* uvítacie okno – menej obsahu, iWatt a odznak */
+.modal.welcome{max-width:380px;padding:20px 24px 22px}
+.wl-sun{width:120px;margin:4px auto 0}
+.welcome h2{font-size:26px;margin-top:6px}
+.wl-lead{font-size:var(--fs-md);margin:6px 0 14px}
+.wl-row{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-bottom:16px}
+.wl-row>span:last-child{display:grid;gap:2px}
+.wl-bdg{width:44px;flex:none}.wl-bdg svg{width:100%;height:auto;display:block}
 
 </style>
 <style>
@@ -5706,6 +5714,7 @@ const BADGES=[
  {id:'evening',cat:'strecha',who:'anna',kind:'rep',metal:'silver',icon:'battery',col:'--c-bat',name:'Večerná hviezda',how:'Batéria večer predala uloženú energiu susedom.',live:c=>c.batSold>0.01,need:()=>S.bat.on},
  {id:'better',cat:'strecha',who:'anna',kind:'tier',tiers:[10,100,500],unit:'€',icon:'coins',col:'--c-prod',name:'Lepšie než výkup',how:'Zárobok navyše oproti tomu, keby ste všetko predali výkupcovi.',live:c=>Math.max(0,c.annaVs)},
 
+ {id:'welcome',cat:'komunita',who:'both',kind:'once',metal:'bronze',icon:'home',col:'--brand',name:'Vitajte v Zdieľni',how:'Prvé prihlásenie do Zdieľne po schválení registrácie.',live:c=>!!(S.visit[S.persona]&&S.visit[S.persona].day>0)},
  {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Spoločná energia.'},
  {id:'morning',cat:'komunita',who:'both',kind:'tier',tiers:[3,7,30],unit:'dní',icon:'sunrise',col:'--c-prod',name:'Ranné slniečko',how:'Dni, keď ste sa pozreli do Zdieľne. Každý deň dostanete na štart slnečné body – a za sériu viac.',live:c=>c.visits},
 
@@ -5959,16 +5968,19 @@ function bdgShare(id){
 }
 
 /* ---------- uvítacia „slniečková“ hláška – raz za deň dema (S.day) ---------- */
-const welcomePts=streak=>Math.min(30,5+5*streak);
+/* odmena za dennú návštevu v iWatt: 5, 7, 9 … najviac 15 (1 000 iWatt ≈ 2 €) */
+const welcomePts=streak=>Math.min(15,3+2*streak);
 function checkWelcome(){
   const per=S.persona;if(per!=='anna'&&per!=='peter')return;
-  if(S.tourOn||S.modal||PUB.includes(curView())||regPending())return;   /* body až po schválení registrácie */
+  if(S.tourOn||S.modal||PUB.includes(curView())||regPending())return;   /* odmeny až po schválení registrácie */
   const v=S.visit[per]||(S.visit[per]={day:0,streak:0});if(v.day===S.day)return;
-  const streak=v.day===S.day-1?v.streak+1:1,pts=welcomePts(streak);
+  const first=!v.day,streak=v.day===S.day-1?v.streak+1:1,pts=welcomePts(streak);
+  if(first&&typeof bdgCredit==='function')bdgCredit(per);   /* základ odznakov pred prvým prihlásením */
   v.day=S.day;v.streak=streak;
-  if(per==='anna')S.pts.baseA+=pts;else S.pts.base+=pts;
-  S.welcome={per,day:S.day,streak,pts,next:welcomePts(streak+1)};S.modal='welcome';
-  logEv(`${nm(per)}: deň ${S.day} – +${pts} slnečných bodov za návštevu`);
+  S.iw.bal+=pts;
+  if(first){S.iw.bal+=IW_BDG;const w=S.iw;w.bdgPaid=w.bdgPaid||{};(w.bdgPaid[per]=w.bdgPaid[per]||[]).push('welcome');}
+  S.welcome={per,day:S.day,streak,pts,first,next:welcomePts(streak+1)};S.modal='welcome';
+  logEv(`${nm(per)}: deň ${S.day} – +${pts} iWatt za návštevu${first?` a +${IW_BDG} iWatt za odznak Vitajte v Zdieľni`:''}`);
 }
 function sunSvg(pts){
   let r='';for(let k=0;k<12;k++)r+=`<path d="M100,10 L108,40 L92,40Z" transform="rotate(${k*30} 100 100)"/>`;
@@ -5976,24 +5988,21 @@ function sunSvg(pts){
    <circle cx="100" cy="100" r="96" fill="var(--sun-glow)"/><g class="wl-rays" fill="var(--sun-2)">${r}</g>
    <circle cx="100" cy="100" r="54" fill="url(#wlg)" stroke="var(--sun-edge)" stroke-width="3"/>
    <text x="100" y="104" text-anchor="middle" font-size="34" font-weight="800" fill="var(--sun-ink)" font-family="Figtree,Arial,sans-serif">+${pts}</text>
-   <text x="100" y="126" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="2" fill="var(--sun-ink)" font-family="Figtree,Arial,sans-serif">BODOV</text></svg>`;
+   <text x="100" y="126" text-anchor="middle" font-size="12" font-weight="800" letter-spacing="2" fill="var(--sun-ink)" font-family="Figtree,Arial,sans-serif">iWATT</text></svg>`;
 }
 function welcomeModal(){
   const w=S.welcome;if(!w)return '';
   const h=new Date().getHours(),greet=h<10?'Dobré ráno':h<18?'Pekný deň':'Dobrý večer',name=w.per==='anna'?'Anna':'Peter';
-  const pa=agg(potRun());
-  const today=w.per==='anna'?`Vaša strecha je pripravená – dnes môžete susedom ponúknuť približne <b>${fm(pa.anna.offered,1)} kWh</b>.`:`Dnes môžete od susedov prijať približne <b>${fm(pa.peter.recv,1)} kWh</b> slnečnej elektriny.`;
-  const st=bdgState(BADGES.find(b=>b.id==='morning'),bdgCtx()),need=st.next!=null?Math.max(0,Math.ceil(st.next-st.val)):0;
-  const lead=w.streak>1?`Ste tu ${w.streak}. deň po sebe – slnko si to všíma.`:'Slnko vyšlo aj pre vás.';
+  const wb=BADGES.find(b=>b.id==='welcome'),bst=wb?bdgState(wb,bdgCtx()):null;
+  const extra=w.first&&bst?`<div class="wl-row"><span class="wl-bdg">${badgeSvg(bst)}</span><span><b>Nový odznak: Vitajte v Zdieľni</b><span class="xs mut">+${fm(IW_BDG,0)} iWatt za odznak</span></span></div>`
+   :`<div class="wl-row"><span class="wl-tag">Zajtra</span><span><b>+${w.next} iWatt</b><span class="xs mut">za ${w.streak+1}. deň v rade</span></span></div>`;
   return `<div class="modal-bg" data-act="closemodal"><div class="modal welcome" role="dialog" aria-modal="true" aria-label="Uvítanie – deň ${w.day} v Zdieľni">
    <button class="btn sm wl-x" data-act="closemodal" aria-label="Zavrieť">✕</button>
    <div class="wl-sun">${sunSvg(w.pts)}</div>
-   <span class="kicker">Deň ${w.day} v Zdieľni</span>
    <h2>${greet}, ${name}!</h2>
-   <p class="wl-lead">${lead} Na štart máte <b>+${w.pts} slnečných bodov</b>.</p>
-   <p class="sm mut">${today}</p>
-   <div class="wl-next"><span class="wl-tag">Zajtra</span><span><b>+${w.next} bodov</b> za ${w.streak+1}. deň v rade · ${need>0?`ešte ${need===1?'1 deň':need<5?need+' dni':need+' dní'} do ${st.tier<0?'odznaku':{silver:'striebornej úrovne odznaku',gold:'zlatej úrovne odznaku'}[TIER_METALS[3][st.tier+1]]||'ďalšej úrovne odznaku'} <b>Ranné slniečko</b>`:'odznak <b>Ranné slniečko</b> je váš ☀'}</span></div>
-   <button class="btn pri lg block" data-act="closemodal">Poďme na to ☀</button></div></div>`;
+   <p class="wl-lead">${w.first?'Vitajte v Zdieľni.':w.streak>1?`${w.streak}. deň v rade.`:'Vitajte späť.'} Za dnešnú návštevu máte <b>+${w.pts} iWatt</b>.</p>
+   ${extra}
+   <button class="btn pri lg block" data-act="closemodal">Poďme na to</button></div></div>`;
 }
 
 </script>
