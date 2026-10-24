@@ -1018,3 +1018,5 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .ch-back{margin-right:8px}
 .hero .ch-back{background:transparent;color:var(--on-dark);border-color:var(--line-dark)}
 @media(max-width:900px){.earn-grid{grid-template-columns:1fr}.ch-home{flex-direction:column;align-items:flex-start}}
+.earn-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.earn-h{display:flex;justify-content:space-between;align-items:center;width:100%}.earn-c b{font-size:var(--fs-h3)}
+@media(max-width:900px){.earn-grid{grid-template-columns:1fr}}

@@ -419,11 +419,12 @@ function chHomeCard(per){
 function chEarnSection(per){
   chCredit(per);
   const items=chItems(per),auto=chAuto(per),open=items.filter(x=>x.st==='new').sort((a,b)=>b.eur-a.eur),doneN=items.filter(x=>x.st==='done').length+auto.filter(a=>a.done).length,tot=items.length+auto.length;
-  const rows=open.slice(0,2).map(it=>`<div class="ch-mini"><div><b>${it.verb} ${it.t}</b><span class="xs mut">namiesto ${it.o.orig} · +${fm(CH_IW,0)} iWatt</span></div><button class="btn sm" data-act="acceptx:${it.ow}.${it.k}">Prijať</button></div>`).join('')||'<p class="sm mut">Dnešné výzvy máte prijaté. Overíme ich podľa elektromera.</p>';
-  return `${secHead('Zarábajte','Presúvajte spotrebu, zbierajte iWatt.','Každá overená výzva, deň v hre aj pozvaný sused sa ráta.')}
-   <div class="earn-grid"><div class="card earn-c earn-main"><div class="row between"><span class="kicker">Výzvy dnes</span><span class="xs mut">${doneN} / ${tot} splnené</span></div>${rows}<button class="link" data-act="chgo:rewards">Všetky výzvy (${tot}) →</button></div>
-    <div class="card earn-c"><span class="svc-ic">${icon('sun')}</span><b>Slnečný deň</b><span class="sm mut">Cez deň zbierajte slnko, večer rozsvieťte domy susedov. Až 150 iWatt denne.</span><button class="btn sm" data-act="iwplay">Hrať</button></div>
-    <div class="card earn-c"><span class="svc-ic">${icon('group')}</span><b>Pozvite suseda</b><span class="sm mut">+${fm(IW_REF,0)} iWatt, keď začne zdieľať.</span><button class="btn sm" data-act="view:cert">Pozvať</button></div></div>`;
+  const nx=open[0];
+  return `${secHead('Zarábajte','Zbierajte iWatt.','Každá overená výzva, deň v hre aj pozvaný sused sa ráta.')}
+   <div class="earn-grid">
+    <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('clock')}</span><span class="pill ${doneN?'g':'n'}">${doneN} / ${tot} splnené</span></div><b>Výzvy dnes</b><span class="sm mut">${nx?`Ďalej: ${nx.verb} ${nx.t} · +${fm(CH_IW,0)} iWatt`:'Dnešné výzvy máte prijaté.'}</span><button class="btn sm" data-act="chgo:rewards">Zobraziť výzvy</button></div>
+    <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('sun')}</span><span class="pill n">do 150 iWatt denne</span></div><b>Slnečný deň</b><span class="sm mut">Cez deň zbierajte slnko, večer rozsvieťte domy susedov.</span><button class="btn sm" data-act="iwplay">Hrať</button></div>
+    <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('group')}</span><span class="pill n">+${fm(IW_REF,0)} iWatt</span></div><b>Pozvite suseda</b><span class="sm mut">Odmenu dostanete, keď sused začne zdieľať.</span><button class="btn sm" data-act="view:cert">Pozvať</button></div></div>`;
 }
 function vRewards(){
   if(!CH_MODE)return vIwatt();
