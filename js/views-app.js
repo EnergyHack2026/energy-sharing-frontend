@@ -450,7 +450,7 @@ function solSettingsCard(){
    <div class="fields" style="margin-top:10px">${F('Koľko zo zvyšku prebytku darujete','don.pct',{t:'r',step:5,u:' %'})}</div>
    ${`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
     <div class="don-list">${Object.keys(RCP).map(row).join('')}</div>
-    ${S.don.on?`<p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:'<p class="sm mut" style="margin-top:10px">Posuňte posuvník a začnite darovať – vybraní príjemcovia dostanú dar rovným dielom.</p>'}`}</div>`;
+    ${S.don.on?`<p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:`<p class="sm mut" style="margin-top:10px">${S.don.pct>0?'Vyberte aspoň jedného príjemcu – dar sa rozdelí rovným dielom.':L.length?'Posuňte posuvník a začnite darovať – vybraní príjemcovia dostanú dar rovným dielom.':'Nastavte, koľko darujete, a vyberte 1 až 3 príjemcov.'}</p>`}`}</div>`;
 }
 function solReportCard(){
   const x=solStats();

@@ -121,7 +121,7 @@ document.addEventListener('input',e=>{
   else if(t==='c')v=el.checked;else if(t==='i')v=parseInt(el.value,10);else if(t==='t'){if(!el.value)return;v=el.value}else v=el.value;
   setPath(k,v);
   {const pr=k.split('.');if(pr.length===3&&pr[2]==='orig'&&(pr[0]==='p'||pr[0]==='c')){const o=getPath(pr[0]+'.'+pr[1]);if(o&&!o.accepted)setPath(pr[0]+'.'+pr[1]+'.time',v)}}
-  if(k==='don.pct')S.don.on=S.don.pct>0;   /* darovanie je zapnuté, keď je podiel väčší ako 0 % */
+  if(k==='don.pct')S.don.on=S.don.pct>0&&S.don.rcps.length>0;   /* darovanie beží, keď je podiel > 0 % a je vybraný príjemca */
   if(k==='sim.idx'&&S.sim.playing){S.sim.playing=false;stopTimer()}
   if(k==='pl.idx'){S.pl.playing=false;clearInterval(plT);renderModal();return}
   if(k==='bank.month'&&S.bank.playing){S.bank.playing=false;clearInterval(bankT)}
@@ -271,8 +271,8 @@ const ACT={
   svc:a=>{S.modal='svc:'+a;render(false)},
   svcok:a=>{(S.svcAsked||(S.svcAsked={}))[a]=true;S.modal=null;logEv(`${nm(regPer())}: záujem o ponuku – ${SVC[a].t}`);toast(`Ďakujeme – poradca ${BR()} vás kontaktuje s ponukou: ${SVC[a].t}`);render(false)},
   donrm:a=>{const L=S.don.rcps;if(L.length<2)return;S.don.rcps=L.filter(r=>r.id!==a);S.don.rcp=S.don.rcps[0].id;render(false)},
-  donpick:a=>{const L=S.don.rcps,on=L.some(r=>r.id===a);if(on){if(L.length<2){toast('Vyberte aspoň jedného príjemcu');render(false);return}S.don.rcps=L.filter(r=>r.id!==a)}else{if(L.length>=DON_MAX){toast('Najviac '+DON_MAX+' príjemcovia');render(false);return}L.push({id:a,w:0})}S.don.rcp=S.don.rcps[0].id;ACT.doneq()},
-  doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length,b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
+  donpick:a=>{const L=S.don.rcps,on=L.some(r=>r.id===a);if(on)S.don.rcps=L.filter(r=>r.id!==a);else{if(L.length>=DON_MAX){toast('Najviac '+DON_MAX+' príjemcovia');render(false);return}L.push({id:a,w:0})}S.don.rcp=S.don.rcps[0]?S.don.rcps[0].id:'r2';S.don.on=S.don.pct>0&&S.don.rcps.length>0;ACT.doneq()},
+  doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length;if(!n){render(false);return}const b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
   refcopy:()=>{const u=refUrl(),ok=()=>toast('Odkaz skopírovaný'),fb=()=>{const i=document.getElementById('ref-url');if(i){i.select();try{document.execCommand('copy');ok()}catch(e){toast('Skopírujte odkaz ručne')}}};try{navigator.clipboard?navigator.clipboard.writeText(u).then(ok,fb):fb()}catch(e){fb()}},
   refshare:()=>{const u=refUrl();if(navigator.share){navigator.share({title:'Zdieľňa',text:'Pridaj sa do Zdieľne – elektrina zo slnka od susedov.',url:u}).catch(()=>{})}else ACT.refcopy()},
   refqr:()=>{S.ref.qr=true;render(false)},
