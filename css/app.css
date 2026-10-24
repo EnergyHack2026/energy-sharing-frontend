@@ -956,3 +956,9 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .dn-grid .don-r .don-t{grid-column:2}
 .dn-grid .don-add select{min-width:0;width:100%}
 .dn-grid #sol-card .row{flex-wrap:wrap}
+/* výber príjemcov zaškrtnutím */
+.dn-grid .don-r.don-pick,.don-r.don-pick{grid-template-columns:auto auto minmax(0,1fr);cursor:pointer}
+.don-pick input{width:20px;height:20px;accent-color:var(--brand);flex:none}
+.dn-grid .don-pick .don-t{grid-column:3}
+.don-pick.on{border-color:var(--brand);background:var(--brand-t)}
+.don-pick.dis{opacity:.5;cursor:default}

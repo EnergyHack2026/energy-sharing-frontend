@@ -270,6 +270,7 @@ const ACT={
   svc:a=>{S.modal='svc:'+a;render(false)},
   svcok:a=>{(S.svcAsked||(S.svcAsked={}))[a]=true;S.modal=null;logEv(`${nm(regPer())}: záujem o ponuku – ${SVC[a].t}`);toast(`Ďakujeme – poradca ${BR()} vás kontaktuje s ponukou: ${SVC[a].t}`);render(false)},
   donrm:a=>{const L=S.don.rcps;if(L.length<2)return;S.don.rcps=L.filter(r=>r.id!==a);S.don.rcp=S.don.rcps[0].id;render(false)},
+  donpick:a=>{const L=S.don.rcps,on=L.some(r=>r.id===a);if(on){if(L.length<2){toast('Vyberte aspoň jedného príjemcu');render(false);return}S.don.rcps=L.filter(r=>r.id!==a)}else{if(L.length>=DON_MAX){toast('Najviac '+DON_MAX+' príjemcovia');render(false);return}L.push({id:a,w:0})}S.don.rcp=S.don.rcps[0].id;ACT.doneq()},
   doneq:()=>{const L=S.don.rcps.slice(0,DON_MAX),n=L.length,b=Math.floor(100/n);L.forEach((r,i)=>r.w=b+(i<100-b*n?1:0));render(false)},
   refcopy:()=>{const u=refUrl(),ok=()=>toast('Odkaz skopírovaný'),fb=()=>{const i=document.getElementById('ref-url');if(i){i.select();try{document.execCommand('copy');ok()}catch(e){toast('Skopírujte odkaz ručne')}}};try{navigator.clipboard?navigator.clipboard.writeText(u).then(ok,fb):fb()}catch(e){fb()}},
   refshare:()=>{const u=refUrl();if(navigator.share){navigator.share({title:'Zdieľňa',text:'Pridaj sa do Zdieľne – elektrina zo slnka od susedov.',url:u}).catch(()=>{})}else ACT.refcopy()},

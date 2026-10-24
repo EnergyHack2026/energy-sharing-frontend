@@ -443,15 +443,13 @@ function solStats(){
   return {mon,val:mon*S.c.ref,lost:mon*S.p.feedin,L,sum:(S.don.rcps||[]).slice(0,DON_MAX).reduce((a,r)=>a+(+r.w||0),0),r:L[0]?L[0].r:RCP.r2};
 }
 function solSettingsCard(){
-  const x=solStats(),L=donList(),free=Object.keys(RCP).filter(k=>!L.some(r=>r.id===k));
-  const row=(r,i)=>{const c=RCP[r.id],e=x.L[i];return `<div class="don-r"><span class="don-ic" aria-hidden="true">${c.ic}</span><div class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></div>
-    <label class="don-w"><input type="number" min="0" max="100" step="5" data-k="don.rcps.${i}.w" data-t="n" value="${r.w}" aria-label="Pomer pre ${c.name}"><em>%</em></label>
-    <span class="don-k">${S.don.on&&e?`≈ ${fm(e.kwh,0)} kWh`:''}</span><button class="btn sm" data-act="donrm:${r.id}" aria-label="Odobrať ${c.name}" ${L.length<2?'disabled':''}>✕</button></div>`};
+  const x=solStats(),L=donList(),full=L.length>=DON_MAX;
+  /* výber zaškrtnutím z číselníka – najviac 3, dar sa rozdelí rovným dielom */
+  const row=k=>{const c=RCP[k],on=L.some(r=>r.id===k),dis=!on&&full;return `<label class="don-r don-pick ${on?'on':''} ${dis?'dis':''}"><input type="checkbox" data-act="donpick:${k}" ${on?'checked':''} ${dis?'disabled':''} aria-label="${c.name}"><span class="don-ic" aria-hidden="true">${c.ic}</span><span class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></span></label>`};
   return `<div class="card" id="sol-card"><h3 class="sol-h">${icon('heart')} Lúč pomoci</h3>${(S.persona==='peter')?'<p class="xs mut sol-for">Platí pre vaše miesto s výrobou: <b>Rodinný dom</b></p>':''}<p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
    <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
-   ${S.don.on?`<div class="don-head"><b>Príjemcovia a pomer</b><span class="xs ${x.sum===100?'mut':'don-warn'}">${x.sum===100?'Spolu 100 %':`Spolu ${x.sum} % – rozdelíme pomerne`}</span></div>
-    <div class="don-list">${L.map(row).join('')}</div>
-    <div class="row" style="margin-top:10px">${L.length<DON_MAX&&free.length?`<label class="f don-add"><span class="sr">Pridať príjemcu</span><select data-act-change="donadd" id="don-add"><option value="">+ Pridať príjemcu (najviac ${DON_MAX})</option>${free.map(k=>`<option value="${k}">${RCP[k].ic} ${RCP[k].name}</option>`).join('')}</select></label>`:''}<button class="btn sm" data-act="doneq">Rozdeliť rovnakým dielom</button></div>
+   ${S.don.on?`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
+    <div class="don-list">${Object.keys(RCP).map(row).join('')}</div>
     <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>
     <div class="fields one" style="margin-top:8px">${F('Uviesť moje meno pri príjemcoch ako darcu (poďakovanie)','don.pub',{t:'c'})}</div>
     <p class="xs mut">Príjemcov overuje a spravuje ${BR()}. Každý má odberné miesto s inteligentným meraním v skupine zdieľania.</p>`:''}</div>`;
