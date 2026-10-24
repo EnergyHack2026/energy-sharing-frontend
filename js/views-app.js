@@ -593,6 +593,7 @@ function vGoodNeighbour(){
   return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
 }
 function vProfile(){
+ if(S.reg.demoCustomer&&S.wz&&S.persona!=='admin')return vDemoCustomerProfile();
   const per=S.persona,pp=per==='admin'?'peter':per,om=S.om[pp],ims=pp==='anna'?S.p.ims:S.c.ims,gg=geo(om.addr);
   const rg=regionOf(gg.ll);
   return `<div class="gap">${hero({cls:'compact',kicker:'Nastavenia',title:per==='anna'?'Anna <em>Kováčová.</em>':per==='peter'?'Peter <em>Malý.</em>':'Operátor <em>'+BR()+'.</em>',lead:`${esc(om.addr)} · ${omLabel(om.type)}`,top:pill(REG[rg].on?'g':'o',REG[rg].name+' · '+REG[rg].co+(REG[rg].on?'':' – mimo služby'))+pill(ims?'n':'o',ims?'IMS ✓':'IMS chýba')})}
