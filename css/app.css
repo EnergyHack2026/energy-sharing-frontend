@@ -1001,3 +1001,6 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .ch-rules{text-align:center}
 @media(max-width:700px){.ch-row{grid-template-columns:auto minmax(0,1fr)}.ch-row-a{grid-column:1/-1;justify-content:flex-start}}
 .ch-h{margin-top:12px}
+/* hra Slnečný deň v okne */
+.iw-game{width:min(1140px,100%);height:min(92vh,820px);display:flex;flex-direction:column}
+.iw-game iframe{flex:1;width:100%;border:0;background:var(--bg)}

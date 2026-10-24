@@ -7,7 +7,7 @@
 const IW_LV=[[5,5],[15,10],[30,15]],IW_DAY=15;
 const IW_REF=2500,IW_BDG=100;   /* odporúčanie suseda (≈ 5 €), nový odznak */
 const iwLevel=n=>IW_LV.reduce((l,[min],i)=>n>=min?i+1:l,0);
-const IW_EARN=[['sun','Slnečný beh',`Úroveň 1 / 2 / 3: ${IW_LV.map(x=>fm(x[1],0)).join(' / ')} ${IWT}, spolu najviac ${IW_DAY} denne`],['star','Splnená výzva',`+${fm(CH_IW,0)} ${IWT} po overení elektromerom, najviac ${fm(CH_CAP,0)} denne`],['group','Odporúčanie suseda',`+${fm(IW_REF,0)} ${IWT}, keď začne zdieľať`],['award','Nový odznak',`+${fm(IW_BDG,0)} ${IWT} za každý odznak`]];
+const IW_EARN=[['sun','Slnečný deň',`+30 za dokončený deň, +5 za každý rozsvietený dom, najviac 150 ${IWT} denne`],['star','Splnená výzva',`+${fm(CH_IW,0)} ${IWT} po overení elektromerom, najviac ${fm(CH_CAP,0)} denne`],['group','Odporúčanie suseda',`+${fm(IW_REF,0)} ${IWT}, keď začne zdieľať`],['award','Nový odznak',`+${fm(IW_BDG,0)} ${IWT} za každý odznak`]];
 const IW_PARTNERS=[
  {id:'p1',ic:'gift',who:'Kaviareň Pri fontáne',where:'Trnava',t:'Káva k zákusku zadarmo',c:4000,img:'assets/partner-kaviaren.jpg',pos:'40% 70%',alt:'Káva a čokoládový zákusok na stolíku v kaviarni'},
  {id:'p2',ic:'market',who:'Pekáreň Klások',where:'Hlohovec',t:'−15 % na celý nákup',c:6000,img:'assets/partner-pekaren.jpg',pos:'50% 50%',alt:'Čerstvý remeselný chlieb v pekárni'},
@@ -61,96 +61,26 @@ function vIwatt(){
 function iwHowModal(){
   return `<div class="modal-bg" data-act="closemodal"><div class="modal wz-bm" role="dialog" aria-modal="true" aria-labelledby="iwh-h"><div class="row between"><span class="svc-ic">${icon('sun')}</span><button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
    <h2 id="iwh-h" style="margin-top:14px">Ako hrať?</h2>
-   <ul class="wz-bm-list"><li><b>Skákanie.</b> Ťuknite kdekoľvek do hry alebo stlačte medzerník – iWattík vyskočí. V skoku môžete skočiť ešte raz.</li><li><b>Prekážky.</b> Preskakujte balíky sena a ploty – náraz hru ukončí. Hra sa postupne zrýchľuje.</li><li><b>Slniečka.</b> Cestou ich zbierajte. Čím viac ich máte, tým vyššiu úroveň a väčšiu odmenu získate.</li></ul>
-   <div class="wz-bm-req"><b>Úrovne a odmeny</b><p class="sm">${IW_LV.map(([min,amt],i)=>`Úroveň ${i+1}: ${min}+ slniečok = ${fm(amt,0)} ${IWT}`).join(' · ')}. Z hry získate spolu najviac ${IW_DAY} ${IWT} denne – lepšia úroveň doplní rozdiel. Odmenu si vyzdvihnete hneď alebo neskôr.</p></div>
+   <ul class="wz-bm-list"><li><b>Cez deň zbierajte slnko.</b> Ťuknite do hry alebo stlačte medzerník – iWattík vyskočí, v skoku ešte raz. Slniečka nabíjajú jeho batériu.</li><li><b>Pozor na prekážky a mraky.</b> Náraz do plota či kríka vezme kus batérie, za mrakom majú slniečka menej energie.</li><li><b>Večer rozsvieťte domy susedov.</b> Skočte k domu – ak máte v batérii dosť energie, dom sa rozsvieti.</li></ul>
+   <div class="wz-bm-req"><b>Odmeny</b><p class="sm">+30 ${IWT} za dokončený deň, +5 za každý rozsvietený dom, +40 za celú ulicu. Z hry najviac 150 ${IWT} denne, každý 7. deň v rade +300 navyše. Pripíšu sa hneď po skončení dňa.</p></div>
    <div class="wz-bm-act"><button class="btn" data-act="closemodal">Zavrieť</button><button class="btn pri" data-act="iwplay">Spustiť hru</button></div></div></div>`;
 }
 /* ---------- hra: nekonečný beh letnou krajinou (canvas vo vlastnej vrstve – prekreslenie aplikácie ju nezruší) ---------- */
 let IWG=null;
 function iwStart(){
   S.modal=null;render(false);iwClose(true);
-  const ov=document.createElement('div');ov.id='iw-ov';ov.className='iw-ov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Hra Slnečný beh s iWattíkom');
-  ov.innerHTML=`<div class="iw-frame"><div class="iw-top"><span class="iw-hud">${iwSun}<b id="iw-n">0</b><span class="xs" id="iw-l">úroveň 0</span></span><span class="xs" id="iw-m">0 m</span><button class="btn sm" id="iw-x" aria-label="Ukončiť hru">✕</button></div><canvas id="iw-c" width="800" height="360"></canvas>
-   <div class="iw-msg" id="iw-msg"><b>Ťuknite a bežte!</b><span class="sm">Medzerník alebo ťuknutie = skok · v skoku ešte raz</span></div><div class="iw-end" id="iw-end" hidden></div></div>`;
+  const ov=document.createElement('div');ov.id='iw-ov';ov.className='iw-ov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Hra Slnečný deň');
+  ov.innerHTML=`<div class="iw-frame iw-game"><div class="iw-top"><b>Slnečný deň</b><button class="btn sm" id="iw-x" aria-label="Zavrieť hru">✕</button></div><iframe id="iw-if" title="Hra Slnečný deň"></iframe></div>`;
   document.body.appendChild(ov);
-  const cv=ov.querySelector('#iw-c'),cx=cv.getContext('2d'),cs=getComputedStyle(document.documentElement),C=k=>cs.getPropertyValue(k).trim();
-  const col={sky:C('--blue-t'),sky2:C('--card'),hill:C('--tint-green'),hill2:C('--green-t'),ground:C('--green'),wheat:C('--yellow-t'),wheat2:C('--yellow'),tree:C('--green'),trunk:C('--yellow-ink'),cloud:C('--card'),sun:C('--yellow'),ink:C('--ink'),card:C('--card'),red:C('--sig'),hay:C('--yellow'),hay2:C('--yellow-ink'),wood:C('--yellow-ink'),flower:[C('--sig'),C('--yellow'),C('--card'),C('--purple')],body:C('--accent-dark'),tuft:C('--aurora-3'),tip:C('--aurora-2'),glow:C('--aurora-1'),roof:C('--surface-dark'),panel:C('--blue')};
-  const G={t:0,run:false,over:false,y:0,vy:0,jumps:0,sp:280,dist:0,n:0,obs:[],suns:[],far:[],near:[],clouds:[],flowers:[],nextO:1.4,nextS:.6,last:0,raf:0};IWG=G;
-  const GY=300,PX=110,PS=46;G.y=GY-PS/2;
-  for(let i=0;i<6;i++)G.far.push({x:i*170,k:Math.random()<.35?'house':'tree',s:.7+Math.random()*.5});
-  for(let i=0;i<4;i++)G.clouds.push({x:i*230+60,y:40+Math.random()*60,s:.7+Math.random()*.6});
-  for(let i=0;i<40;i++)G.flowers.push({x:Math.random()*820,y:GY+8+Math.random()*44,c:i%4});
-  const jump=()=>{if(G.over)return;if(!G.run){G.run=true;ov.querySelector('#iw-msg').hidden=true;G.last=performance.now();loop(G.last);return}if(G.jumps<2){G.vy=-740;G.jumps++}};
-  const key=e=>{if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();jump()}if(e.code==='Escape')iwClose()};
-  cv.addEventListener('pointerdown',e=>{e.preventDefault();jump()});ov.querySelector('#iw-msg').addEventListener('pointerdown',jump);
-  ov.querySelector('#iw-x').addEventListener('click',()=>iwClose());document.addEventListener('keydown',key);G.key=key;
-  const vis=()=>{if(document.hidden&&G.run&&!G.over){cancelAnimationFrame(G.raf);G.run=false;const m=ov.querySelector('#iw-msg');m.hidden=false;m.innerHTML='<b>Pauza</b><span class="sm">Ťuknite a pokračujte</span>'}};document.addEventListener('visibilitychange',vis);G.vis=vis;
-  const tree=(x,s)=>{cx.fillStyle=col.trunk;cx.fillRect(x-3*s,GY-30*s,6*s,30*s);cx.fillStyle=col.tree;cx.beginPath();cx.arc(x,GY-40*s,20*s,0,7);cx.arc(x-12*s,GY-30*s,14*s,0,7);cx.arc(x+12*s,GY-30*s,14*s,0,7);cx.fill()};
-  const house=(x,s)=>{cx.fillStyle=col.card;cx.fillRect(x-24*s,GY-40*s,48*s,40*s);cx.fillStyle=col.roof;cx.beginPath();cx.moveTo(x-30*s,GY-40*s);cx.lineTo(x,GY-64*s);cx.lineTo(x+30*s,GY-40*s);cx.fill();cx.fillStyle=col.panel;cx.save();cx.translate(x+4*s,GY-52*s);cx.rotate(-.65);cx.fillRect(-10*s,-3*s,20*s,6*s);cx.restore()};
-  const cloud=(c)=>{cx.fillStyle=col.cloud;cx.beginPath();cx.arc(c.x,c.y,16*c.s,0,7);cx.arc(c.x+18*c.s,c.y-8*c.s,20*c.s,0,7);cx.arc(c.x+38*c.s,c.y,16*c.s,0,7);cx.fill()};
-  function draw(){
-    const g=cx.createLinearGradient(0,0,0,GY);g.addColorStop(0,col.sky);g.addColorStop(1,col.sky2);cx.fillStyle=g;cx.fillRect(0,0,800,360);
-    cx.fillStyle=col.sun;cx.beginPath();cx.arc(680,72,36,0,7);cx.fill();cx.strokeStyle=col.sun;cx.lineWidth=4;for(let a=0;a<12;a++){const an=a*Math.PI/6+G.t*.3;cx.beginPath();cx.moveTo(680+Math.cos(an)*46,72+Math.sin(an)*46);cx.lineTo(680+Math.cos(an)*58,72+Math.sin(an)*58);cx.stroke()}
-    for(const c of G.clouds)cloud(c);
-    const o1=G.dist*.08%900;cx.fillStyle=col.hill2;cx.beginPath();for(const hx of [0,900])cx.ellipse(hx+200-o1,GY+30,360,110,0,0,7),cx.ellipse(hx+680-o1,GY+30,320,95,0,0,7);cx.fill();
-    cx.fillStyle=col.wheat;const o2=G.dist*.2%400;for(let i=-1;i<3;i++)cx.fillRect(i*400-o2+40,GY-14,240,14);
-    for(const f of G.far)f.k==='tree'?tree(f.x,f.s):house(f.x,f.s);
-    cx.fillStyle=col.ground;cx.fillRect(0,GY,800,60);
-    for(const f of G.flowers){cx.fillStyle=col.flower[f.c];cx.beginPath();cx.arc(f.x,f.y,3,0,7);cx.fill()}
-    for(const o of G.obs){if(o.k==='hay'){cx.fillStyle=col.hay;cx.beginPath();cx.arc(o.x+o.w/2,GY-o.h/2,o.h/2,0,7);cx.fill();cx.strokeStyle=col.hay2;cx.lineWidth=2;cx.beginPath();cx.arc(o.x+o.w/2,GY-o.h/2,o.h/4,0,7);cx.arc(o.x+o.w/2,GY-o.h/2,o.h/2.6,0,5);cx.stroke()}
-      else{cx.fillStyle=col.wood;for(let i=0;i<3;i++){cx.beginPath();cx.roundRect(o.x+i*13,GY-o.h,9,o.h,[4,4,0,0]);cx.fill()}cx.fillRect(o.x-2,GY-o.h*.7,o.w+4,6);cx.fillRect(o.x-2,GY-o.h*.35,o.w+4,6)}}
-    for(const s of G.suns){if(s.got)continue;cx.strokeStyle=col.sun;cx.lineWidth=3;for(let a=0;a<8;a++){const an=a*Math.PI/4+G.t*2;cx.beginPath();cx.moveTo(s.x+Math.cos(an)*11,s.y+Math.sin(an)*11);cx.lineTo(s.x+Math.cos(an)*16,s.y+Math.sin(an)*16);cx.stroke()}cx.fillStyle=col.sun;cx.beginPath();cx.arc(s.x,s.y,8,0,7);cx.fill()}
-    /* iWattík: tyrkysový svetielkujúci tvor s chocholkou, veľkými očami a svetielkom v ruke */
-    const air=G.jumps>0,run=G.run&&!air,b=run?Math.sin(G.t*18)*2:0,cxp=PX+PS/2,cyp=G.y+b,leg=run?Math.sin(G.t*20)*5:2,wv=Math.sin(G.t*6)*3;
-    cx.save();cx.translate(cxp,cyp);cx.rotate(air?-.1:0);
-    cx.fillStyle=col.body;cx.beginPath();cx.ellipse(-9-leg,PS/2-2,7,5,0,0,7);cx.ellipse(9+leg,PS/2-2,7,5,0,0,7);cx.fill();
-    cx.shadowColor=col.glow;cx.shadowBlur=14;
-    cx.fillStyle=col.tuft;cx.beginPath();cx.moveTo(-6,-PS/2+6);cx.quadraticCurveTo(-4,-PS/2-22+wv,16,-PS/2-26+wv);cx.quadraticCurveTo(4,-PS/2-12,8,-PS/2+6);cx.fill();
-    cx.fillStyle=col.tip;cx.beginPath();cx.arc(15,-PS/2-25+wv,4,0,7);cx.fill();
-    cx.fillStyle=col.body;cx.beginPath();cx.ellipse(0,0,PS/2-1,PS/2+1,0,0,7);cx.fill();cx.shadowBlur=0;
-    cx.beginPath();cx.ellipse(-PS/2+2,4,5,10,.6,0,7);cx.ellipse(PS/2-2,2,5,10,-.6,0,7);cx.fill();
-    cx.fillStyle=col.ink;cx.beginPath();cx.ellipse(-8,-4,5,6.5,0,0,7);cx.ellipse(9,-3,5,6.5,0,0,7);cx.fill();
-    cx.fillStyle=col.card;cx.beginPath();cx.arc(-6.5,-6,2,0,7);cx.arc(10.5,-5,2,0,7);cx.fill();
-    cx.strokeStyle=col.ink;cx.lineWidth=2;cx.beginPath();cx.arc(1,4,5,.4,2.7);cx.stroke();
-    cx.shadowColor=col.sun;cx.shadowBlur=12;cx.fillStyle=col.sun;cx.beginPath();cx.moveTo(1,8);cx.lineTo(4,13);cx.lineTo(1,18);cx.lineTo(-2,13);cx.fill();
-    cx.beginPath();cx.arc(-PS/2-6,0,5,0,7);cx.fill();cx.shadowBlur=0;cx.restore();
-  }
-  function end(){
-    G.over=true;G.run=false;cancelAnimationFrame(G.raf);
-    const w=iwS(),lv=iwLevel(G.n),today=(w.today||0)+w.pend.reduce((a,p)=>a+p.amt,0),amt=lv?Math.max(0,Math.min(IW_LV[lv-1][1],IW_DAY)-today):0,got=lv&&amt<=0;const rec=G.n>iwBest();if(rec)iwBest(G.n);
-    logEv(`${nm(regPer())}: Slnečný beh – ${G.n} slniečok (úroveň ${lv})`);
-    const e=ov.querySelector('#iw-end');e.hidden=false;
-    const txt=!lv?`Na úroveň 1 potrebujete aspoň ${IW_LV[0][0]} slniečok. Skúste to znova!`
-     :got?`Podarilo sa vám dosiahnuť úroveň ${lv}. Dnešný limit odmien z hry (${IW_DAY} ${IWT}) ste už vyčerpali – zajtra môžete získať ďalšie.`
-     :`Podarilo sa vám dosiahnuť úroveň ${lv}. Získavate <b>${fm(amt,0)} ${IWT}</b>. Vyzdvihnúť si ich môžete hneď, alebo aj neskôr – je to na vás.`;
-    e.innerHTML=`<div class="iw-end-in">${wattik('iw-end-art')}<h2>Vaše skóre: <span class="iw-score">${G.n}</span> ${iwSun}</h2><p class="sm">${rec?'🏆 Nový rekord!':'Váš rekord: '+iwBest()+' slniečok'}</p><p>${txt}</p>${lv&&!got?`<p class="sm iw-end-note">${IW_DAY-today-amt>0?`Lepšou úrovňou dnes ešte získate až ${IW_DAY-today-amt} ${IWT} navyše.`:`Tým ste dosiahli dnešný limit z hry (${IW_DAY} ${IWT}).`}</p>`:''}
-     <div class="iw-end-act">${lv&&!got?'<button class="btn lg dark sig-btn" id="iw-claim">Vyzdvihnúť odmenu</button>':''}<button class="btn lg" id="iw-again">Hrať znova</button></div></div>`;
-    if(lv&&!got){w.pend.push({lv,amt});   /* odmena čaká – vyzdvihnúť hneď alebo neskôr v záložke ${IWT} */
-      e.querySelector('#iw-claim').addEventListener('click',()=>{iwClaim();const b=e.querySelector('#iw-claim');b.disabled=true;b.textContent='Vyzdvihnuté ✓ · zostatok '+fm(iwS().bal,0)+' iWatt'})}
-    e.querySelector('#iw-again').addEventListener('click',()=>iwStart());
-  }
-  function loop(now){
-    const dt=Math.max(0,Math.min(.04,(now-G.last)/1000));G.last=now;G.t+=dt;
-    G.sp=Math.min(620,280+G.t*9);G.dist+=G.sp*dt;
-    G.vy+=2200*dt;G.y+=G.vy*dt;if(G.y>=GY-PS/2){G.y=GY-PS/2;G.vy=0;G.jumps=0}
-    for(const f of G.far){f.x-=G.sp*.35*dt;if(f.x<-80){f.x+=1020;f.k=Math.random()<.35?'house':'tree';f.s=.7+Math.random()*.5}}
-    for(const c of G.clouds){c.x-=G.sp*.06*dt;if(c.x<-100)c.x+=950}
-    for(const f of G.flowers){f.x-=G.sp*dt;if(f.x<-5)f.x+=820}
-    G.nextO-=dt;if(G.nextO<=0){const fence=Math.random()<.35;G.obs.push(fence?{k:'fence',x:820,w:35,h:58}:{k:'hay',x:820,w:42,h:42});G.nextO=Math.max(.75,1.6-G.t*.012)+Math.random()*.7}
-    G.nextS-=dt;if(G.nextS<=0){const n=3+Math.floor(Math.random()*3),hi=Math.random()<.5,base=hi?150:236;for(let i=0;i<n;i++)G.suns.push({x:830+i*34,y:base-(hi?Math.sin(i/(n-1)*Math.PI)*40:0)});G.nextS=1.1+Math.random()*1.2}
-    for(const o of G.obs)o.x-=G.sp*dt;G.obs=G.obs.filter(o=>o.x>-60);
-    for(const s of G.suns)s.x-=G.sp*dt;G.suns=G.suns.filter(s=>s.x>-30);
-    const pl={x:PX+4,y:G.y-PS/2+4,w:PS-8,h:PS-4};
-    for(const s of G.suns)if(!s.got&&s.x>pl.x-10&&s.x<pl.x+pl.w+10&&s.y>pl.y-10&&s.y<pl.y+pl.h+10){s.got=true;G.n++;ov.querySelector('#iw-n').textContent=G.n;ov.querySelector('#iw-l').textContent='úroveň '+iwLevel(G.n)}
-    ov.querySelector('#iw-m').textContent=fm(G.dist/40,0)+' m';
-    for(const o of G.obs){const hit=o.k==='hay'?(Math.hypot(Math.max(o.x,Math.min(pl.x+pl.w/2,o.x+o.w))-(o.x+o.w/2),0)<o.w/2&&pl.y+pl.h>GY-o.h+6&&pl.x<o.x+o.w-4&&pl.x+pl.w>o.x+4):(pl.x<o.x+o.w-4&&pl.x+pl.w>o.x+4&&pl.y+pl.h>GY-o.h+4);if(hit){draw();end();return}}
-    draw();G.raf=requestAnimationFrame(loop);
-  }
-  draw();
+  const f=ov.querySelector('#iw-if');
+  try{f.srcdoc=new TextDecoder().decode(Uint8Array.from(atob(GAME_B64),ch=>ch.charCodeAt(0)))}catch(e){f.src='game/slnecny-den.html'}
+  f.addEventListener('load',()=>{try{f.contentWindow.focus()}catch(e){}});
+  const key=e=>{if(e.code==='Escape')iwClose()};document.addEventListener('keydown',key);IWG={key};
+  ov.querySelector('#iw-x').addEventListener('click',()=>iwClose());
 }
 /* vyzdvihnutie odmien z hry (hneď na konci hry alebo neskôr v záložke iWatt) */
 function iwClaim(){const w=iwS();if(!w.pend.length)return 0;const amt=w.pend.reduce((s,p)=>s+p.amt,0);w.bal+=amt;w.today=(w.today||0)+amt;w.pend=[];logEv(`${nm(regPer())}: vyzdvihnuté +${fm(amt,0)} iWatt zo Slnečného behu`);toast(`+${fm(amt,0)} iWatt pripísaných · zostatok ${fm(w.bal,0)} iWatt`);return amt}
 function iwClose(silent){
-  const ov=document.getElementById('iw-ov');if(IWG){cancelAnimationFrame(IWG.raf);if(IWG.key)document.removeEventListener('keydown',IWG.key);if(IWG.vis)document.removeEventListener('visibilitychange',IWG.vis);IWG=null}
+  const ov=document.getElementById('iw-ov');if(IWG){if(IWG.raf)cancelAnimationFrame(IWG.raf);if(IWG.key)document.removeEventListener('keydown',IWG.key);if(IWG.vis)document.removeEventListener('visibilitychange',IWG.vis);IWG=null}
   if(ov)ov.remove();if(!silent)render(false);
 }

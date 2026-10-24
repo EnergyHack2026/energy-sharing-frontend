@@ -1,9 +1,9 @@
 /* Zdieľňa – service worker (úloha 12): aplikácia funguje aj bez internetu.
    Pri novej verzii zmeňte CACHE – stará cache sa zmaže. Funguje iba cez http(s). */
-const CACHE='zdielna-v25';
+const CACHE='zdielna-v26';
 const ASSETS=['./','./index.html','./manifest.webmanifest',
   './css/tokens.css','./css/app.css','./css/landing.css',
-  './js/core.js','./js/engine.js','./js/ui.js','./js/views-app.js','./js/demo-august.js','./js/demo-customers.js','./js/demo-benefits.js','./js/demo-groups.js','./js/views-public.js','./js/views-map.js','./js/views-ideas.js','./js/badges.js','./js/notify.js','./js/chat.js','./js/iwatt.js','./js/main.js',
+  './js/core.js','./js/engine.js','./js/ui.js','./js/views-app.js','./js/demo-august.js','./js/demo-customers.js','./js/demo-benefits.js','./js/demo-groups.js','./js/views-public.js','./js/views-map.js','./js/views-ideas.js','./js/badges.js','./js/notify.js','./js/chat.js','./js/game-data.js','./js/iwatt.js','./js/main.js',
   './assets/zse.png','./assets/vse.png','./assets/zse-logo.svg','./assets/vse-logo.png','./assets/zdielna-dot.svg','./assets/hero-bg.jpg','./assets/iwattik.png','./assets/iwatt-banner.png','./assets/partner-kaviaren.jpg','./assets/partner-pekaren.jpg','./assets/partner-kvetinarstvo.jpg','./assets/partner-bistro.jpg','./assets/shop-virtualna-bateria.jpg','./assets/shop-wallbox.jpg','./assets/shop-tepelne-cerpadlo.jpg','./assets/shop-fotovoltika.jpg','./assets/icon-192.png','./assets/icon-512.png','./assets/icon-maskable-512.png','./assets/apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
