@@ -15,7 +15,7 @@ def data_uri(path):
     mime = 'image/jpeg' if path.endswith('.jpg') else 'image/svg+xml' if path.endswith('.svg') else 'image/png'
     return 'data:' + mime + ';base64,' + base64.b64encode(b).decode()
 
-logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png', 'assets/hero-bg.jpg', 'assets/zse-logo.svg', 'assets/vse-logo.png', 'assets/iwattik.png', 'assets/iwatt-banner.png', 'assets/partner-kaviaren.jpg', 'assets/partner-pekaren.jpg', 'assets/partner-kvetinarstvo.jpg', 'assets/partner-bistro.jpg', 'assets/shop-virtualna-bateria.jpg', 'assets/shop-wallbox.jpg', 'assets/shop-tepelne-cerpadlo.jpg', 'assets/shop-fotovoltika.jpg')}
+logos = {p: data_uri(p) for p in ('assets/zse.png', 'assets/vse.png', 'assets/hero-bg.jpg', 'assets/zse-logo.svg', 'assets/vse-logo.png', 'assets/iwattik.png', 'assets/iwattik-cut.png', 'assets/iwatt-banner.png', 'assets/partner-kaviaren.jpg', 'assets/partner-pekaren.jpg', 'assets/partner-kvetinarstvo.jpg', 'assets/partner-bistro.jpg', 'assets/shop-virtualna-bateria.jpg', 'assets/shop-wallbox.jpg', 'assets/shop-tepelne-cerpadlo.jpg', 'assets/shop-fotovoltika.jpg')}
 # hra Slnečný deň → js/game-data.js (base64; otvára sa v iframe cez srcdoc, funguje aj zo samostatného súboru)
 game = os.path.join(root, 'game', 'slnecny-den.html')
 if os.path.exists(game):

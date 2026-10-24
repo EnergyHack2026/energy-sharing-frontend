@@ -1066,3 +1066,8 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .wl-row{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-bottom:16px}
 .wl-row>span:last-child{display:grid;gap:2px}
 .wl-bdg{width:44px;flex:none}.wl-bdg svg{width:100%;height:auto;display:block}
+/* uvítacie okno – iWattík s odmenou */
+.wl-iw{position:relative;width:150px;margin:0 auto}
+.wl-iw img{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 14px rgba(0,0,0,.18))}
+.wl-iw-pts{position:absolute;right:-34px;top:18px;display:grid;place-items:center;min-width:64px;padding:8px 10px;border-radius:var(--r-pill);background:var(--yellow);color:var(--sun-ink,#5A3B00);font-size:22px;font-weight:800;line-height:1;box-shadow:0 6px 14px rgba(0,0,0,.15);transform:rotate(8deg)}
+.wl-iw-pts small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}

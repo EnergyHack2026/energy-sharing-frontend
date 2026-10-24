@@ -33,7 +33,7 @@ function renderShell(){
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
   const gear=J?`<button class="btn sm" data-act="drawer" aria-label="Upraviť čísla a časy">${icon('sliders')}<span class="hide-m">Čísla a časy</span></button>`:'';
   $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
-   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Výzvy a odmeny</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
+   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-offers">Ponuky</a><a href="#lp-forecast">Predikcia a výzvy</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&true);
@@ -186,6 +186,7 @@ const ACT={
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
   landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
+  lpside:a=>{S.lpSide=a;render(false)},
   landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else if(a==='challenges'){S.persona='peter';S.chtab='ch';S.chFrom='home';pubGo('challenges')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
