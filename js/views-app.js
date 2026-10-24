@@ -429,7 +429,7 @@ function vRewards(){
   if(!CH_MODE)return vIwatt();
   if(S.rwtab!=='bdg')return vChallengesNew(S.persona==='anna'?'anna':'peter');
   if(S.persona==='anna')return vRewardsAnna();
-  if(S.rwtab==='bdg')return `<div class="gap">${hero({kicker:'Slnečný klub',title:'Odznaky, ktoré <em>si zaslúžite.</em>',lead:'Udeľujú sa až po overení podľa merania IMS – nikdy za vyššiu spotrebu.',extra:`<div class="hero-tabs">${rewardTabs()}</div>`})}${vBadges('peter')}</div>`;
+  if(S.rwtab==='bdg')return vBadgesNew('peter');
   const P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
   const earned=earnedToday('peter'),tot=S.pts.base+earned,lvl=Math.floor(tot/500)+1,next=500-tot%500;
   const res=dayRun(),surplus=win?sum(P.fp.slice(win.a,win.b)):0;
@@ -447,7 +447,7 @@ function vRewards(){
   ${goalCard()}${antiCheatCard()}</div>`;
 }
 function vRewardsAnna(){
-  if(S.rwtab==='bdg')return `<div class="gap">${hero({kicker:'Slnečný klub',title:'Odznaky, ktoré <em>si zaslúžite.</em>',lead:'Udeľujú sa až po overení podľa merania IMS – nikdy za vyššiu spotrebu.',extra:`<div class="hero-tabs">${rewardTabs()}</div>`})}${vBadges('anna')}</div>`;
+  if(S.rwtab==='bdg')return vBadgesNew('anna');
   const P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i]))),st=annaStats(),d=S.sim.days;
   const earned=earnedToday('anna'),tot=S.pts.baseA+earned,lvl=Math.floor(tot/500)+1,next=500-tot%500;
   const demand=win?sum(P.fc.slice(win.a,win.b)):0;

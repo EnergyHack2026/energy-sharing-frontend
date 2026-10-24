@@ -199,6 +199,7 @@ const ACT={
   rwtab:a=>{S.modal=null;if(a==='ch'||a==='bdg'){S.chtab=a;S.chFrom='rewards';S.view='challenges'}else if(a==='cert')S.view='cert';else{S.rwtab='iw';S.view='rewards'}window.scrollTo(0,0);render(true)},
   chtab:a=>{S.chtab=a;render(false)},
   bdg:a=>{S.modal='bdg:'+a;render(false)},
+  bdgcat:a=>{S.bdgCat=a;render(false)},
   bdgnav:a=>{bdgNav(S.persona,+a);render(false)},
   bdgshare:a=>bdgShare(a),
   bdgopen:a=>{S.rwtab='bdg';S.modal=null;BDG().sel[S.persona]=a;pubGo('rewards')},
