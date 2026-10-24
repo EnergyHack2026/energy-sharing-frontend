@@ -336,7 +336,7 @@ function chSlots(win,ow){const L=[];if(!win)return L;const [a,b]=ow==='p'?[win.b
 function chItems(per){
   const isP=per==='anna',fu=S.fu[per],fuOpen=fu&&S.day>fu.from;
   const L=isP?[['p','pw','home','Pračka mimo slnka','Presuňte pračku ('+fm(S.p.pw.kwh,1)+' kWh) na'],['p','pb','pump','Ohrev bojlera','Presuňte ohrev bojlera ('+fm(S.p.pb.kwh,1)+' kWh) na']]
-   :[['c','wash','home','Umývačka so slnkom','Spustite umývačku o'],['c','ev','car','Nabíjanie auta','Nabite auto ('+fm(S.c.ev.kwh,1)+' kWh) o'],['c','wh','pump','Ohrev vody','Presuňte ohrev vody na']];
+   :[['c','wash','home','Umývačka so slnkom','Spustite umývačku o'],['c','ev','car','Nabíjanie auta','Nabite auto ('+fm(S.c.ev.kwh,1)+' kWh) o'],['c','wh','pump','Ohrev vody','Presuňte ohrev vody na'],['c','dry','sunrise','Sušička','Spustite sušičku ('+fm(S.c.dry.kwh,1)+' kWh) o'],['c','cool','om_shop','Predchladenie boxov','Predchlaďte chladiace boxy ('+fm(S.c.cool.kwh,1)+' kWh) o'],['c','oven','bolt','Predpečenie','Predpečte v rúre ('+fm(S.c.oven.kwh,1)+' kWh) o']];
   if(fuOpen)L.push(isP?['p','pev','car','Elektromobil','Nabíjajte elektromobil ('+fm(S.p.pev.kwh,1)+' kWh) až o']:['c','ice','bolt','Výrobník ľadu','Presuňte cyklus výrobníka ľadu ('+fm(S.c.ice.kwh,1)+' kWh) na']);
   return L.map(([ow,k,ic,name,verb])=>{const o=A_(ow,k),t=o.accepted?o.time:chPicked(ow,k),g=gainKey(ow,k,t);
     return {ow,k,ic,name,verb,o,t,g,st:chState(ow,k),eur:(isP?g.earn:g.sav)*S.sim.days,rec:recKey(ow,k)}});
@@ -369,7 +369,7 @@ function vChallengesNew(per){
   const until=!win?'':now<win.a?`okno o ${Math.floor((win.a-now)/4)} h ${(win.a-now)%4*15} min`:now<win.b?'okno práve prebieha':'dnešné okno skončilo';
   const tl=`<div class="ch-tl" aria-hidden="true">${hours.map((x,h)=>`<i class="${inWin(h)?'w':''}" style="height:${Math.max(4,x/mxh*100)}%"></i>`).join('')}<b class="ch-now" style="left:${(now/96*100).toFixed(1)}%"></b></div><div class="ch-tl-l"><span>00:00</span><span>teraz ${I2T(now)} · ${until}</span><span>24:00</span></div>`;
   const head=hero({kicker:'Dnes · slnečné okno',title:`${win?I2T(win.a)+' – '+I2T(win.b):'—'} <em>${isP?'susedia potrebujú slnko':'perieme so slnkom'}.</em>`,
-    lead:`${isP?'V okne skupina potrebuje':'Očakávaný prebytok v skupine'} ${fm(win?sum((isP?P.fc:P.fp).slice(win.a,win.b)):0,1)} kWh.`,extra:`${tl}<div class="hero-tabs">${rewardTabs()}</div>`,
+    lead:`${isP?'V okne skupina potrebuje':'Očakávaný prebytok v skupine'} ${fm(win?sum((isP?P.fc:P.fp).slice(win.a,win.b)):0,1)} kWh.`,
     aside:hstat('Dnes',`${doneN} / ${total} výziev`,`+${fm(iw,0)} iWatt · séria ${streak} ${streak===1?'deň':streak>1&&streak<5?'dni':'dní'}`)});
   const bestCard=best?`<div class="card ch-best"><span class="kicker">Odporúčame dnes</span><div class="ch-best-h"><span class="svc-ic">${icon(best.ic)}</span><div><h3>${best.verb} ${best.t}</h3><p class="sm mut">namiesto ${best.o.orig}</p></div></div>
     <div class="ch-gain"><span class="ch-iw">+${fm(CH_IW,0)} iWatt</span><span class="sm">${isP?'zarobíte':'ušetríte'} ~${eur(Math.max(0,best.eur))} mesačne</span></div>
@@ -386,7 +386,8 @@ function vChallengesNew(per){
   const lockRow=fu=>fu&&fu.shown&&!(S.day>fu.from)?`<div class="ch-row ch-lock"><span class="svc-ic">${icon('lock')}</span><div class="ch-row-t"><b>Nová výzva zajtra</b><span class="xs mut">Odomkne sa po polnoci (deň ${fu.from+1}).</span></div></div>`:'';
   const restList=[...rest.map(row),...auto.filter(a=>!a.done).map(autoRow),lockRow(S.fu[per])].join('');
   const doneList=[...done.map(row),...auto.filter(a=>a.done).map(autoRow)].join('');
-  return `<div class="gap">${head}<div class="grid g2 ch-top">${bestCard}${prog}</div>
+  const day=`<div class="card ch-day">${rewardTabs()}<div class="ch-day-tl">${tl}</div></div>`;
+  return `<div class="gap">${head}${day}<div class="grid g2 ch-top">${bestCard}${prog}</div>
    ${restList?`<h3 class="ch-h">Ďalšie výzvy dnes</h3><div class="ch-list">${restList}</div>`:''}
    ${doneList?`<h3 class="ch-h">Splnené ✓</h3><div class="ch-list ch-done">${doneList}</div>`:''}
    <p class="xs mut ch-rules">Overuje inteligentný elektromer · ${fm(CH_IW,0)} iWatt za výzvu, denný limit ${fm(CH_CAP,0)} iWatt · nikdy nie za vyššiu spotrebu · nesplnená výzva nemá žiadny trest.</p></div>`;

@@ -11,7 +11,7 @@ function profiles(appT,mul=1){
   const fcBase=genFlat(T2I(s.c.cStart),T2I(s.c.cEnd),s.c.daily,s.c.base);
   const mkfc=real=>{const fc=fcBase.slice();const add=(k,t)=>loadArr(k,t).forEach((v,i)=>fc[i]+=v);
     add(s.c.appKwh,real&&s.c.washCheat?s.c.appOrig:appT);
-    for(const k of ['ev','wh','ice']){const o=s.c[k];add(o.kwh,real&&o.cheat?o.orig:o.time)}
+    for(const k of ['ev','wh','ice','dry','cool','oven']){const o=s.c[k];if(!o)continue;add(o.kwh,real&&o.cheat?o.orig:o.time)}
     return fc};
   const fc=mkfc(false),fcReal=mkfc(true);
   return {fpFull,fpReal,fp:fpFull.map(x=>x*share),fcBase,fc,fcReal};
@@ -174,7 +174,7 @@ function A_(owner,key){
   if(owner==='c'&&key==='wash')return {label:'umývačka',get kwh(){return S.c.appKwh},get orig(){return S.c.appOrig},get time(){return S.c.appTime},set time(v){S.c.appTime=v},get accepted(){return S.c.accepted},set accepted(v){S.c.accepted=v},get cheat(){return S.c.washCheat}};
   return S[owner][key];
 }
-const KEYS={c:['wash','ev','wh','ice'],p:['pw','pb','pev']};
+const KEYS={c:['wash','ev','wh','ice','dry','cool','oven'],p:['pw','pb','pev']};
 function gainKey(owner,key,t){
   const o=A_(owner,key),old=o.time,run=()=>agg(runDay(S.c.appTime,{forecast:true,potential:true}));
   o.time=t;const a=run();o.time=o.orig;const b=run();o.time=old;
