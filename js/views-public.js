@@ -161,9 +161,9 @@ function loginModal(){
  const brand=`<div class="supply-brand"><img src="${LOGO_OFF.zse}" alt="ZSE"><span aria-hidden="true"></span><img src="${LOGO_OFF.vse}" alt="VSE"></div>`;
  return `<div class="modal-bg" data-act="closemodal"><div class="modal" role="dialog" aria-modal="true" aria-label="Prihlásenie zákazníckym účtom"><div class="row between">${brand}<button class="btn sm" data-act="closemodal" aria-label="Zavrieť">✕</button></div>
   <h2 style="margin-top:14px">Prihlásenie do zákazníckeho účtu</h2>
-  <p class="sm mut" style="margin:6px 0 16px">Vyberte testovací účet z databázového exportu. Celý proces prebieha lokálne v prehliadači.</p>
+  <p class="sm mut" style="margin:6px 0 16px">Prihláste sa e-mailom a heslom. Celý proces prebieha lokálne v prehliadači.</p>
   <div class="pill vis" style="margin-bottom:14px">🔒 Demo prihlásenie – údaje sú predvyplnené a nikam sa neodosielajú</div>
-  <div class="fields one">${demoPicker()}</div><p class="xs mut">1 zákazník · 13 energetických miest vrátane nízkoodberového demo miesta. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
+  <div class="fields one"><label class="f"><span>E-mail</span><input type="email" value="anna.gal@example.sk" readonly aria-label="E-mail demo účtu Anna Gal"></label><label class="f"><span>Heslo</span><input type="password" value="demo-anna" readonly aria-label="Predvyplnené demo heslo"></label></div><p class="xs mut" style="margin-top:12px">Po prihlásení uvidíte všetkých 13 energetických miest zákazníčky Anna Gal. Značka ZSE je ukážková. Bez pripojenia k backendu.</p>
   <div class="row" style="margin-top:16px"><button class="btn pri" data-act="sso:auto">Prihlásiť sa</button><button class="btn" data-act="closemodal">Zrušiť</button></div>
   <p class="xs mut" style="margin-top:14px">Ešte nemáte online účet? <button class="link" data-act="acc">Vytvoríme vám ho →</button></p></div></div>`;
 }
