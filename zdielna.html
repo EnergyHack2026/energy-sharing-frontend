@@ -1181,6 +1181,9 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .bdg-st.off svg{filter:grayscale(1) opacity(.35)}.bdg-st.off span{color:var(--mut);font-weight:600}
 .bdg-strip-f{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 @media(max-width:900px){.bdg-strip{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* tooltip pri odznakoch */
+.bdg-st{position:relative}
+.bdg-st[data-tip]:hover:after,.bdg-st[data-tip]:focus-visible:after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:max-content;max-width:220px;padding:8px 10px;border-radius:var(--r-sm);background:var(--surface-dark);color:var(--on-dark);font-size:var(--fs-xs);font-weight:600;line-height:1.35;text-align:center;z-index:5;pointer-events:none;box-shadow:0 6px 16px rgba(0,0,0,.2)}
 
 </style>
 <style>
@@ -5808,7 +5811,7 @@ function vBadges(per){
 function bdgStrip(per){
   const all=bdgAll(per),got=all.filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))),rest=all.filter(s=>!s.earned);
   const L=[...got,...rest].slice(0,8);
-  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
+  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" data-tip="+${fm(IW_BDG,0)} iWatt za každý nový odznak – overený elektromerom" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
    <div class="bdg-strip-f"><span class="sm mut">Získané ${got.length} z ${all.length}</span><button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
 }
 function bdgMini(per){
@@ -6085,7 +6088,7 @@ function vIwatt(){
    <div class="iw-grid iw-shop">${IW_SHOP().map(o=>offer(o,true)).join('')}</div>
    ${secHead('Partneri v okolí','Zľavy u susedov.')}
    <div class="iw-grid">${IW_PARTNERS.map(o=>offer(o,false)).join('')}</div>
-   ${secHead('Vaše odznaky','Míľniky, ktoré ste dosiahli.',`+${fm(IW_BDG,0)} ${IWT} za každý nový odznak – overený elektromerom.`)}
+   ${secHead('Vaše odznaky','Míľniky, ktoré ste dosiahli.')}
    <div class="card">${bdgStrip(S.persona==='admin'?'peter':S.persona)}</div>
    </div>`;
 }

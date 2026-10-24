@@ -55,7 +55,7 @@ function vIwatt(){
    <div class="iw-grid iw-shop">${IW_SHOP().map(o=>offer(o,true)).join('')}</div>
    ${secHead('Partneri v okolí','Zľavy u susedov.')}
    <div class="iw-grid">${IW_PARTNERS.map(o=>offer(o,false)).join('')}</div>
-   ${secHead('Vaše odznaky','Míľniky, ktoré ste dosiahli.',`+${fm(IW_BDG,0)} ${IWT} za každý nový odznak – overený elektromerom.`)}
+   ${secHead('Vaše odznaky','Míľniky, ktoré ste dosiahli.')}
    <div class="card">${bdgStrip(S.persona==='admin'?'peter':S.persona)}</div>
    </div>`;
 }

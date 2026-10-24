@@ -166,7 +166,7 @@ function vBadges(per){
 function bdgStrip(per){
   const all=bdgAll(per),got=all.filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))),rest=all.filter(s=>!s.earned);
   const L=[...got,...rest].slice(0,8);
-  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
+  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" data-tip="+${fm(IW_BDG,0)} iWatt za každý nový odznak – overený elektromerom" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
    <div class="bdg-strip-f"><span class="sm mut">Získané ${got.length} z ${all.length}</span><button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
 }
 function bdgMini(per){
