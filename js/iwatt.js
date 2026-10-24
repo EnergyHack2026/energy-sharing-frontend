@@ -68,6 +68,13 @@ function iwHowModal(){
 }
 /* ---------- hra: nekonečný beh letnou krajinou (canvas vo vlastnej vrstve – prekreslenie aplikácie ju nezruší) ---------- */
 let IWG=null;
+/* most medzi aplikáciou a hrou v iframe: spoločný zostatok iWatt a rekord */
+window.zdielnaGame={
+  bal:()=>S.iw.bal,
+  best:()=>iwBest(),
+  earn:(amt,suns)=>{amt=Math.max(0,Math.round(+amt||0));S.iw.bal+=amt;if((+suns||0)>iwBest())iwBest(+suns);if(amt)logEv(`${nm(regPer())}: +${amt} iWatt zo Slnečného dňa`);render(false)},
+  close:()=>iwClose()
+};
 function iwStart(){
   S.modal=null;render(false);iwClose(true);
   const ov=document.createElement('div');ov.id='iw-ov';ov.className='iw-ov';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Hra Slnečný deň');

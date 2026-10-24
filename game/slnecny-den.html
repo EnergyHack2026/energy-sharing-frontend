@@ -174,14 +174,14 @@ const BIZ_AT = [0.02,0.12,0.40,0.62], BIZ_TYPES = ["workshop","bakery","stand","
 /* ================== ULOŽENIE ================== */
 const SKEY = "zdielna-slnecny-den-v1";
 /* v aplikácii Zdieľňa beží hra v rámci (iframe) – zostatok iWatt a rekord sú spoločné s aplikáciou */
-const host=(()=>{try{return window.parent!==window&&window.parent.S&&window.parent.S.iw?window.parent:null}catch(e){return null}})();
+const host=(()=>{try{return window.parent!==window&&window.parent.zdielnaGame?window.parent.zdielnaGame:null}catch(e){return null}})();
 function todayStr(d){d=d||new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
 function loadState(){
   let s=null;
   try{ s=JSON.parse(localStorage.getItem(SKEY)||"null"); }catch(e){}
   s=Object.assign({balance:ECON.START_BALANCE,record:0,earnedDay:"",earnedToday:0,streak:0,lastPlay:"",streakPaidDay:""},s||{});
   if(s.earnedDay!==todayStr()){s.earnedDay=todayStr();s.earnedToday=0;}
-  if(host){s.balance=host.S.iw.bal;try{s.record=Math.max(s.record,host.iwBest())}catch(e){}}
+  if(host){try{s.balance=host.bal();s.record=Math.max(s.record,host.best())}catch(e){}}
   return s;
 }
 function saveState(){ try{ localStorage.setItem(SKEY,JSON.stringify(store)); }catch(e){} }
@@ -778,7 +778,7 @@ function finish(){
   const newRecord=G.suns>store.record; if(newRecord)store.record=G.suns;
   store.tutorialDone=true;
   saveState();
-  if(host){try{host.S.iw.bal=store.balance;if(newRecord)host.iwBest(store.record)}catch(e){}}
+  if(host){try{host.earn(gameEarn+streakEarn,G.suns);store.balance=host.bal();saveState()}catch(e){}}
 
   // texty
   document.getElementById("endTitle").textContent=perfect?"Celá ulica svieti":"Dobrú noc";
@@ -816,7 +816,7 @@ function finish(){
   refreshMeta();
 }
 document.getElementById("startBtn").addEventListener("click",start);
-document.getElementById("rewardsLink").addEventListener("click",e=>{if(host){e.preventDefault();try{host.iwClose()}catch(_){}}});
+document.getElementById("rewardsLink").addEventListener("click",e=>{if(host){e.preventDefault();try{host.close()}catch(_){}}});
 document.getElementById("againBtn").addEventListener("click",start);
 
 /* úvodná scéna za štartovacím oknom */

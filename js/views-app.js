@@ -398,7 +398,13 @@ function vChallengesNew(per){
    <p class="xs mut ch-rules">Overuje inteligentný elektromer · ${fm(CH_IW,0)} iWatt za výzvu, denný limit ${fm(CH_CAP,0)} iWatt · nikdy nie za vyššiu spotrebu · nesplnená výzva nemá žiadny trest.</p></div>`;
 }
 /* pripíše iWatt za overené (splnené) výzvy – raz za výzvu a deň, najviac CH_CAP denne */
-function chCredit(per){
+function bdgCredit(per){
+  const w=S.iw;w.bdgPaid=w.bdgPaid||{};const ids=bdgAll(per).flatMap(s=>s.ids);
+  if(!w.bdgPaid[per]){w.bdgPaid[per]=ids.slice();return}
+  const nw=ids.filter(i=>!w.bdgPaid[per].includes(i));if(!nw.length)return;
+  w.bdgPaid[per].push(...nw);const got=nw.length*IW_BDG;w.bal+=got;logEv(`${nm(per)}: +${got} iWatt za nové odznaky`);setTimeout(()=>toast(`+${got} iWatt za nový odznak`),0);
+}
+function chCredit(per){bdgCredit(per);
   const w=S.iw,key=S.day+':'+per;w.chPaid=w.chPaid||{};const paid=w.chPaid[key]||(w.chPaid[key]=[]);
   const done=[...chItems(per).filter(x=>x.st==='done').map(x=>x.ow+'.'+x.k),...chAuto(per).filter(a=>a.done).map(a=>'auto:'+a.name)];
   let got=0;for(const id of done){if(paid.includes(id)||paid.length*CH_IW>=CH_CAP)continue;paid.push(id);w.bal+=CH_IW;got+=CH_IW}
