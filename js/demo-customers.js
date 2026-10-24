@@ -27,7 +27,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 272,
   "object_name": "Odberné miesto 272",
@@ -119,7 +119,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 344,
   "object_name": "Odberné miesto 344",
@@ -193,7 +193,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 417,
   "object_name": "Odberné miesto 417",
@@ -285,7 +285,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 540,
   "object_name": "Odberné miesto 540",
@@ -377,7 +377,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1225,
   "object_name": "Odberné miesto 1225",
@@ -451,7 +451,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1244,
   "object_name": "Odberné miesto 1244",
@@ -525,7 +525,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1297,
   "object_name": "Odberné miesto 1297",
@@ -599,7 +599,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1324,
   "object_name": "Odberné miesto 1324",
@@ -673,7 +673,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1611,
   "object_name": "Odberné miesto 1611",
@@ -765,7 +765,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1869,
   "object_name": "Odberné miesto 1869",
@@ -857,7 +857,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1870,
   "object_name": "Odberné miesto 1870",
@@ -949,7 +949,7 @@ const DEMO_REGISTRATION_EXPORT=[
  {
   "customer_id": 330,
   "customer_number": "5300000330",
-  "first_name": "JOZ",
+  "first_name": "Anna",
   "last_name": "GGÁL",
   "connection_id": 1875,
   "object_name": "Odberné miesto 1875",
@@ -1021,7 +1021,7 @@ const DEMO_REGISTRATION_EXPORT=[
   }
  }
 ];
-DEMO_REGISTRATION_EXPORT.push({customer_id:330,customer_number:'5300000330',first_name:'JOZ',last_name:'GGÁL',connection_id:99001,object_name:'Málo využívaná chata · demo',object_type:null,city:'MODRA',region:'BL',tariff:'D2',tdo:null,hdo:null,has_ims:false,has_consumption:true,has_production_meter:false,registry_has_production:false,installed_power_kw:null,expected_consumption_2026_mwh:.3,expected_annual_consumption_kwh:300,expected_annual_production_kwh:null,consumption_eic_codes:['24DEMO0000099001'],production_eic_codes:[],meters:[{kind:'consumption',eic_code:'24DEMO0000099001',registry_meter_id:99001,measurement_meter_id:null,has_measurement_mapping:false,mapping_count:0}],sharing_enabled:false,receive_shared_energy:true,offer_shared_energy:false,has_electric_vehicle:null,simulated_low_use:true});
+DEMO_REGISTRATION_EXPORT.push({customer_id:330,customer_number:'5300000330',first_name:'Anna',last_name:'GGÁL',connection_id:99001,object_name:'Málo využívaná chata · demo',object_type:null,city:'MODRA',region:'BL',tariff:'D2',tdo:null,hdo:null,has_ims:false,has_consumption:true,has_production_meter:false,registry_has_production:false,installed_power_kw:null,expected_consumption_2026_mwh:.3,expected_annual_consumption_kwh:300,expected_annual_production_kwh:null,consumption_eic_codes:['24DEMO0000099001'],production_eic_codes:[],meters:[{kind:'consumption',eic_code:'24DEMO0000099001',registry_meter_id:99001,measurement_meter_id:null,has_measurement_mapping:false,mapping_count:0}],sharing_enabled:false,receive_shared_energy:true,offer_shared_energy:false,has_electric_vehicle:null,simulated_low_use:true});
 const DEMO_ROWS=DEMO_REGISTRATION_EXPORT.map(r=>{
  const old=DEMO_PREVIOUS_ROWS.find(o=>o.connection_id===r.connection_id&&o.consumption_eic_codes[0]===r.consumption_eic_codes[0]);
  return {...old,...r,production_eic_codes:r.production_eic_codes||[],consumption_eic_codes:r.consumption_eic_codes||[],annual_expected_consumption_mwh:r.expected_consumption_2026_mwh,
