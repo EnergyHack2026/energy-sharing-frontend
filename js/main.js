@@ -4,8 +4,8 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
-const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart']];
+const NAV_ADMIN=[['admin','Konzola','console']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];

@@ -419,7 +419,7 @@ function vHomePending(){
   ${regNextQuestions()}
   <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
   <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
-   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
+   <p class="sm mut" style="margin-top:12px">Medzitým si môžete upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
 }
 /* zamknutá obrazovka počas čakania na schválenie */
 function vLocked(v){

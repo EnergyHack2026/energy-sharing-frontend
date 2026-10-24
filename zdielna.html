@@ -1893,7 +1893,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','map','chat']);
+const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -5560,7 +5560,7 @@ function vHomePending(){
   ${regNextQuestions()}
   <div class="card"><span class="kicker">Od žiadosti po prvé vyúčtovanie</span><h3>Čo sa bude diať</h3>${regTimeline(isP,'PENDING',g)}</div>
   <div class="card"><span class="kicker">Po schválení</span><h3>Čo sa vám odomkne</h3><div class="pend-locks">${Object.entries(REG_LOCKED).map(([k,[t,d]])=>`<div class="pend-lock"><span class="pend-ic">${icon('lock')}</span><div><b>${t}</b><p class="sm mut">${d}</p></div></div>`).join('')}</div>
-   <p class="sm mut" style="margin-top:12px">Medzitým si môžete pozrieť <button class="link" data-act="view:map">mapu zdieľania</button> alebo upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
+   <p class="sm mut" style="margin-top:12px">Medzitým si môžete upraviť <button class="link" data-act="view:profile">nastavenia</button>.</p></div></div>`;
 }
 /* zamknutá obrazovka počas čakania na schválenie */
 function vLocked(v){
@@ -6336,8 +6336,8 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
-const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart']];
+const NAV_ADMIN=[['admin','Konzola','console']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
 const ADMIN_OK=['admin','profile','landing','potential','benefits','register','map','ideas'];
