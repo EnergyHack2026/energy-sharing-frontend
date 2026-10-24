@@ -1038,7 +1038,7 @@ function demoLoad(){
  const oms=rows.map(r=>({id:'connection-'+r.connection_id,eic:r.consumption_eic_codes[0],addr:[r.city,r.region].filter(Boolean).join(' · '),
   name:r.object_name||'Odberné miesto '+r.connection_id,icon:'om_house',mwh:r.annual_expected_consumption_mwh,pmwh:r.expected_annual_production_kwh==null?null:r.expected_annual_production_kwh/1000,
   on:r.sharing_enabled===true,ims:r.has_ims,pv:!!r.production_eic_codes.length,bat:false,source:r,
-  opts:{cons:r.has_ims&&r.receive_shared_energy===true,prod:r.has_ims&&r.offer_shared_energy===true&&!!r.production_eic_codes?.length,bat:false},strat:null,own:null,batAns:null,imsReq:false,imsOption:r.has_ims?null:'170'}));
+  opts:{cons:r.has_ims&&r.receive_shared_energy===true,prod:r.has_ims&&r.offer_shared_energy===true&&!!r.production_eic_codes?.length,bat:false},strat:null,own:null,august:DEMO_AUGUST.connections.find(a=>a.connection_id===r.connection_id&&a.customer_id===r.customer_id&&a.consumption_eic===r.consumption_eic_codes[0]),batAns:null,imsReq:false,imsOption:r.has_ims?null:'170'}));
  S.wz={step:1,oms,ev:rows[0].has_electric_vehicle??null,sent:false,err:'',edit:-1,pick:null,own:null};
  const o=oms[0];Object.assign(S.om[S.persona],{id:o.eic,addr:o.addr,type:o.icon,pv:o.pv,kwp:o.source.installed_power_kw??0});
 }
