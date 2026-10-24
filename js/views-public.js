@@ -163,7 +163,7 @@ function loginModal(){
   <h2 style="margin-top:14px">Prihlásenie do zákazníckeho účtu</h2>
   <p class="sm mut" style="margin:6px 0 16px">Vyberte testovací účet z databázového exportu. Celý proces prebieha lokálne v prehliadači.</p>
   <div class="pill vis" style="margin-bottom:14px">🔒 Demo prihlásenie – údaje sú predvyplnené a nikam sa neodosielajú</div>
-  <div class="fields one">${demoPicker()}</div><p class="xs mut">1 zákazník · 12 odberných miest. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
+  <div class="fields one">${demoPicker()}</div><p class="xs mut">1 zákazník · 13 energetických miest vrátane nízkoodberového demo miesta. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
   <div class="row" style="margin-top:16px"><button class="btn pri" data-act="sso:auto">Prihlásiť sa</button><button class="btn" data-act="closemodal">Zrušiť</button></div>
   <p class="xs mut" style="margin-top:14px">Ešte nemáte online účet? <button class="link" data-act="acc">Vytvoríme vám ho →</button></p></div></div>`;
 }

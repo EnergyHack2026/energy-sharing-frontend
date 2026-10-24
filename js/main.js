@@ -287,6 +287,7 @@ const ACT={
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
+  wzskipims:a=>{const o=S.wz.oms[+a];o.on=false;o.imsConfirmed=null;o.imsReq=false;render(false)},
   imsconfirm:a=>{const o=S.wz?.oms[+a];if(!o||o.ims)return;o.imsConfirmed=o.imsOption||'170';o.imsReq=true;toast('Demo: potvrdené IMS za '+o.imsConfirmed+' € pre EIC '+o.eic);render(false)},
   wzimsoption:a=>{const [idx,option]=a.split(':');const o=S.wz.oms[+idx];if(!o||o.ims||!['1','170'].includes(option))return;if(o.imsOption!==option){o.imsConfirmed=null;o.imsReq=false}o.imsOption=option;render(false)},
   dpseries:k=>{if(!DP_SERIES.some(s=>s[0]===k))return;const p=demoProfileState(),h=new Set(p.hidden||[]);if(h.has(k))h.delete(k);else h.add(k);p.hidden=[...h];render(false)},
