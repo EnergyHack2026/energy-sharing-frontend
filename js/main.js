@@ -4,7 +4,7 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['challenges','Výzvy','sun'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['rewards',IWT+' odmeny','star'],['cert','Certifikát','award'],['map','Mapa','map']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['challenges','Výzvy','sun'],['rewards',IWT+' odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
@@ -321,9 +321,9 @@ const ACT={
     if(done.length){logEv('AI správca naplánoval: '+done.join(', '));toast('🤖 Naplánované: '+done.join(', '))}else toast('Všetky povolené spotrebiče sú už naplánované');render(true)},
   agentreset:()=>{S.agent.cancel={};render(false)},
   agcx:k=>{S.agent.cancel[k]=!S.agent.cancel[k];logEv(`AI správca: rozhodnutie „${k}“ ${S.agent.cancel[k]?'zrušené používateľom':'obnovené'}`);render(false)},
-  stickerpng:()=>{const {sh,lv}=badgeShare(),month=new Date().toLocaleDateString('sk-SK',{month:'long',year:'numeric'}),svg=stickerSvg(S.badge.name||'Bistro',sh,lv,month);
+  stickerpng:()=>{if(!esgOk()){toast('Nálepku si stiahnete po splnení všetkých troch podmienok');return}const svg=stickerSvg(S.badge.name||'Bistro',badgeShare().sh);
     const img=new Image(),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
-    img.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.drawImage(img,0,0,800,800);URL.revokeObjectURL(url);c.toBlob(b=>{const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='nalepka-varime-zo-slnka.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)},'image/png');toast('Nálepka stiahnutá')}catch(e){toast('Sťahovanie sa nepodarilo')}};
+    img.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.drawImage(img,0,0,800,800);URL.revokeObjectURL(url);c.toBlob(b=>{const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='nalepka-dobry-sused.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)},'image/png');toast('Nálepka stiahnutá')}catch(e){toast('Sťahovanie sa nepodarilo')}};
     img.onerror=()=>{URL.revokeObjectURL(url);toast('Sťahovanie sa nepodarilo')};img.src=url},
   sendto:k=>{S.send.to=k;render(false)},
   sendsun:()=>{const s=S.send,kwh=Math.max(0,+s.kwh||0),c=CONTACTS[s.to];
