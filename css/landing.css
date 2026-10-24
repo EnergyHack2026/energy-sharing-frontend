@@ -539,3 +539,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .da-metered{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px;padding-top:14px;border-top:1px solid #e5dfd7}.da-metered>div{display:grid;gap:4px}.da-detail{margin-top:12px}.da-detail summary{cursor:pointer;font-weight:600;font-size:.85em}.da-detail>div{margin-top:12px}@media(max-width:650px){.da-metered{grid-template-columns:1fr}}
 
 .pend-place-status{display:grid;gap:6px;justify-items:end}.reg-next details{padding:14px 0;border-bottom:1px solid #e5dfd7}.reg-next summary{font-weight:600;cursor:pointer}.reg-next p{margin:10px 0 0;line-height:1.6}.pend-om .wz-om-head{min-width:0}
+
+.dg-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:20px 0}.dg-metrics>div{display:grid;gap:5px}.dg-place-group{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:16px;padding-top:12px;border-top:1px solid #e5dfd7}.dg-place-group .icon{width:16px;height:16px}@media(max-width:650px){.dg-metrics{grid-template-columns:1fr 1fr}}
