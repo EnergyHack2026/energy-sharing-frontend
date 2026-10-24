@@ -450,9 +450,7 @@ function solSettingsCard(){
    <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
    ${S.don.on?`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
     <div class="don-list">${Object.keys(RCP).map(row).join('')}</div>
-    <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>
-    <div class="fields one" style="margin-top:8px">${F('Uviesť moje meno pri príjemcoch ako darcu (poďakovanie)','don.pub',{t:'c'})}</div>
-    <p class="xs mut">Príjemcov overuje a spravuje ${BR()}. Každý má odberné miesto s inteligentným meraním v skupine zdieľania.</p>`:''}</div>`;
+    <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:''}</div>`;
 }
 function solReportCard(){
   const x=solStats();
