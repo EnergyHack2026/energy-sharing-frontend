@@ -8,8 +8,8 @@
 const BCAT={
   rytmus:{name:'Slnečný rytmus',shape:'circle',sub:'Presun spotreby do slnečného okna'},
   strecha:{name:'Strecha, ktorá zdieľa',shape:'roof',sub:'Výroba a predaj prebytkov'},
-  komunita:{name:'Komunita',shape:'hex',sub:'Spoločné ciele – bez rebríčka jednotlivcov'},
-  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie a darčeky'},
+  komunita:{name:'Komunita',shape:'hex',sub:'Vy a Zdieľňa'},
+  srdce:{name:'Srdce',shape:'heart',sub:'Darovanie'},
   sezona:{name:'Sezónne',shape:'star',sub:'Iba v určitom období roka'}
 };
 /* kind: once = raz · rep = opakovateľný (×N) · tier = úrovne podľa hodnoty */
@@ -28,20 +28,15 @@ const BADGES=[
  {id:'evening',cat:'strecha',who:'anna',kind:'rep',metal:'silver',icon:'battery',col:'--c-bat',name:'Večerná hviezda',how:'Batéria večer predala uloženú energiu susedom.',live:c=>c.batSold>0.01,need:()=>S.bat.on},
  {id:'better',cat:'strecha',who:'anna',kind:'tier',tiers:[10,100,500],unit:'€',icon:'coins',col:'--c-prod',name:'Lepšie než výkup',how:'Zárobok navyše oproti tomu, keby ste všetko predali výkupcovi.',live:c=>Math.max(0,c.annaVs)},
 
- {id:'goal',cat:'komunita',who:'both',kind:'rep',metal:'gold',icon:'group',col:'--c-shared',name:'Cieľ skupiny',how:'Skupina využila aspoň 80 % prebytkov dňa. Spoločný úspech, bez rebríčka. Vyhodnocuje sa o 24:00.',live:c=>c.eod&&c.annaSucc>=.8},
- {id:'connector',cat:'komunita',who:'anna',kind:'once',metal:'silver',icon:'market',col:'--brand',name:'Prepájač',how:'Nový sused sa pripojil cez váš prepájací kód.',live:()=>S.codeOk},
- {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Slnečný kruh 17.'},
+ {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Spoločná energia.'},
  {id:'morning',cat:'komunita',who:'both',kind:'tier',tiers:[3,7,30],unit:'dní',icon:'sunrise',col:'--c-prod',name:'Ranné slniečko',how:'Dni, keď ste sa pozreli do Zdieľne. Každý deň dostanete na štart slnečné body – a za sériu viac.',live:c=>c.visits},
- {id:'eastwest',cat:'komunita',who:'both',kind:'once',metal:'silver',icon:'map',col:'--c-cons',name:'Západ – východ',how:'Vaša elektrina putovala medzi oblasťami ZSE a VSE, napríklad cez Pošli slnko.',live:c=>c.eastWest},
 
- {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko alebo Pošli slnko.',live:c=>c.don>0.001||c.gifts>0},
- {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Solidárne slnko – bez provízie a bez poplatkov.',live:c=>c.don},
- {id:'sent',cat:'srdce',who:'anna',kind:'rep',metal:'silver',icon:'gift',col:'--c-prod',name:'Poslané slnko',how:'Darček cez Pošli slnko bol odoslaný blízkemu človeku.',count:c=>c.gifts},
+ {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Lúč pomoci.',live:c=>c.don>0.001},
+ {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Lúč pomoci – bez provízie a bez poplatkov.',live:c=>c.don},
 
  {id:'longest',cat:'sezona',who:'both',kind:'once',metal:'slnko',icon:'sun',col:'--c-prod',name:'Najdlhší deň',how:'Zdieľali ste 21. júna, v deň letného slnovratu.'},
  {id:'spring',cat:'sezona',who:'both',kind:'once',metal:'silver',icon:'leaf',col:'--c-shared',name:'Prvý jarný lúč',how:'Prvé zdieľanie po zime.'},
  {id:'autumn',cat:'sezona',who:'both',kind:'tier',tiers:[10],unit:'dní',icon:'leaf',col:'--c-grid',name:'Jesenný lovec',how:'10 zamračených októbrových dní (výroba pod 70 %), keď ste aj tak zdieľali.',live:c=>c.cloudy?1:0},
- {id:'xmas',cat:'sezona',who:'anna',kind:'once',metal:'slnko',secret:true,icon:'gift',col:'--brand',name:'Vianoce zo slnka',how:'Do 24. decembra máte v Slnečnej banke cieľ, ktorý si nastavil AI správca.',live:()=>S.bank.bal>=S.agent.goal,prog:()=>[S.bank.bal,S.agent.goal,'kWh']}
 ];
 /* ilustračná história (dátumy ISO) – nastavená tak, aby sa v deme dali odznaky odomknúť */
 const BDG_BASE={
@@ -49,7 +44,7 @@ const BDG_BASE={
  streak:{val:5},shifted:{val:98.2,dates:{10:'2026-06-03'}},saved:{val:61.3,dates:{10:'2026-06-20'}},
  first_share:{date:'2026-04-03'},shared:{val:993,dates:{100:'2026-04-29'}},nowaste:{count:23,date:'2026-10-11'},
  forecast:{count:11,date:'2026-10-09'},evening:{count:41,date:'2026-10-17'},better:{val:72.4,dates:{10:'2026-05-18'}},
- goal:{count:3,date:'2026-09-30'},morning:{val:1},connector:{date:'2026-06-02'},founder:{date:'2026-03-20'},
+ goal:{count:3,date:'2026-09-30'},morning:{val:1},founder:{date:'2026-03-20'},
  longest:{date:'2026-06-21'},spring:{date:'2026-03-08'},autumn:{val:6}
 };
 const BDG=()=>S.bdg||(S.bdg={base:JSON.parse(JSON.stringify(BDG_BASE)),seen:{},cnt:{},sel:{},fresh:{}});
@@ -158,6 +153,40 @@ function bdgStage(per,list){
    <div class="bdg-cap"><h2>${esc(b.name)}${b.kind==='rep'?` <span class="bdg-x">×${st.count}</span>`:''}</h2><p>Získané ${fdate(st.date)}</p><p class="sm">${esc(bdgLine(st))}</p>
    <div class="row" style="justify-content:center;margin-top:12px"><button class="btn sm" data-act="bdgshare:${b.id}">Zdieľať</button><button class="btn ghost sm" data-act="bdg:${b.id}">Detail</button></div></div></div>`;
 }
+/* ---------- stránka Odznaky: banner s pokrokom, posledný odznak (menší), Na dosah, zbierka s filtrami ---------- */
+/* konkrétny ďalší krok pre nezískaný odznak */
+function bdgNext(st){
+  const b=st.b,p=st.prog;
+  if(p){const left=Math.max(0,p[1]-p[0]),u=p[2],n=u==='€'?eur(left):u==='dní'?(left===1?'1 deň':left<5?fm(left,0)+' dni':fm(left,0)+' dní'):fm(left,0)+' '+u;
+    const how={rytmus:'presúvajte spotrebu do slnečného okna',strecha:'ponúkajte prebytky susedom',srdce:'darujte cez Lúč pomoci',sezona:'zdieľajte aj v zamračené dni',komunita:'otvorte Zdieľňu aj zajtra'}[b.cat]||'plňte výzvy';
+    return `Ešte ${n} – ${how}.`}
+  return b.how;
+}
+function bdgPct(st){const p=st.prog;return p&&p[1]>0?Math.max(0,Math.min(1,p[0]/p[1])):0}
+function vBadgesNew(per){
+  const list=bdgAll(per),got=list.filter(s=>s.earned),gotN=got.length,tot=list.length,B=BDG();
+  const cats=Object.keys(BCAT).filter(c=>list.some(s=>s.b.cat===c));
+  const f=S.bdgCat&&cats.includes(S.bdgCat)?S.bdgCat:'all';
+  /* banner */
+  const head=`<div class="card hero bdg-head"><div class="bdg-head-t">${rewardTabs()}<span class="kicker">Slnečný klub</span><h1>Odznaky, ktoré <em>si zaslúžite.</em></h1>
+    <p class="lead">Za overené správanie podľa elektromera · +${fm(IW_BDG,0)} iWatt za každý nový odznak <span class="bdg-q" tabindex="0" data-tip="Tvar = kategória, kov = úroveň (bronz, striebro, zlato, slnko). Nikdy za vyššiu spotrebu, odznaky nemajú peňažnú hodnotu.">?</span></p></div>
+    <div class="bdg-head-p"><b>${gotN} / ${tot}</b><span>získaných</span><span class="bar"><i style="width:${(gotN/tot*100).toFixed(0)}%"></i></span></div></div>`;
+  /* posledný získaný – menší pás */
+  const last=[...got].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const k=Math.max(0,last.findIndex(s=>s.b.id===B.sel[per])),L0=last[k];
+  const latest=L0?`<div class="card bdg-last"><button class="bdg-last-i" data-act="bdg:${L0.b.id}" aria-label="Detail odznaku ${esc(L0.b.name)}">${badgeSvg(L0)}</button>
+    <div class="bdg-last-t"><span class="kicker">${B.fresh[L0.b.id]?'Nový odznak':'Posledný získaný'} · ${k+1} / ${last.length}</span><b>${esc(L0.b.name)}${L0.b.kind==='rep'?` <span class="pill n">×${L0.count}</span>`:''}</b><span class="sm mut">Získané ${fdate(L0.date)} · ${esc(bdgLine(L0))}</span></div>
+    <div class="bdg-last-a"><button class="btn sm" data-act="bdgnav:-1" aria-label="Predchádzajúci">‹</button><button class="btn sm" data-act="bdgnav:1" aria-label="Ďalší">›</button><button class="btn sm" data-act="bdgshare:${L0.b.id}">Zdieľať</button></div></div>`:'';
+  /* na dosah – najbližšie k získaniu (s pokrokom) */
+  const near=list.filter(s=>!s.secret&&s.prog&&(!s.earned||s.next!=null)).sort((a,b)=>bdgPct(b)-bdgPct(a)).slice(0,3);
+  const nearH=near.length?`<h3 class="bdg-h">Na dosah</h3><div class="bdg-near">${near.map(st=>`<div class="card bdg-nc"><div class="bdg-nc-h"><span class="bdg-nc-i">${badgeSvg(st)}</span><div><b>${esc(st.b.name)}${st.earned?` · ďalšia úroveň`:''}</b><span class="xs mut">${fm(st.prog[0],st.prog[2]==='€'?2:0)} / ${fm(st.prog[1],0)} ${st.prog[2]}</span></div></div>
+    <span class="bar"><i style="width:${(bdgPct(st)*100).toFixed(0)}%"></i></span><p class="sm">${esc(bdgNext(st))}</p>${st.b.cat==='rytmus'?'<button class="link" data-act="chgo:rewards">Zobraziť výzvy →</button>':''}</div>`).join('')}</div>`:'';
+  /* zbierka */
+  const chips=`<div class="bdg-chips" role="tablist" aria-label="Kategórie odznakov">${[['all','Všetky',tot,gotN],...cats.map(c=>{const L=list.filter(s=>s.b.cat===c);return [c,BCAT[c].name,L.length,L.filter(s=>s.earned).length]})].map(([k,l,n,g])=>`<button role="tab" class="chip ${f===k?'on':''}" aria-pressed="${f===k}" data-act="bdgcat:${k}">${l} <span>${g}/${n}</span></button>`).join('')}</div>`;
+  const shown=list.filter(s=>f==='all'||s.b.cat===f).sort((a,b)=>(b.earned-a.earned));
+  const grid=`<div class="bdg-grid">${shown.map(st=>{const b=st.b;return `<button class="bdg-item ${st.earned?'':'locked'} ${B.fresh[b.id]?'fresh':''}" data-act="bdg:${b.id}" aria-label="${esc(st.secret?'Tajný odznak':b.name)}, ${st.earned?'získaný':'zatiaľ nezískaný'}"><span class="bdg-ico">${badgeSvg(st)}</span><b>${esc(st.secret?'???':b.name)}</b>${bdgStatus(st)}</button>`}).join('')}</div>`;
+  return `<div class="gap">${head}${latest}${nearH}<h3 class="bdg-h">Zbierka</h3><div class="card">${chips}${grid}</div></div>`;
+}
 function vBadges(per){
   const list=bdgAll(per),earnedN=list.filter(s=>s.earned).length;
   const cats=Object.keys(BCAT).filter(c=>list.some(s=>s.b.cat===c));
@@ -166,11 +195,21 @@ function vBadges(per){
      return `<button class="bdg-item ${st.earned?'':'locked'} ${BDG().fresh[b.id]?'fresh':''}" data-act="bdg:${b.id}" aria-label="${esc(st.secret?'Tajný odznak':b.name)}, ${st.earned?'získaný':'zatiaľ nezískaný'}"><span class="bdg-ico">${badgeSvg(st)}</span><b>${esc(st.secret?'???':b.name)}</b>${bdgStatus(st)}</button>`}).join('')}</div></details>`}).join('')}
    <p class="note">Odznaky sa udeľujú až po overení podľa merania IMS a nikdy nie za vyššiu spotrebu. Nemajú peňažnú hodnotu. Opakovateľné odznaky ukazujú, koľkokrát ste ich získali.</p></div>`;
 }
+/* odznaky v Odmenách: získané farebne (najnovšie prvé), ostatné vyblednuté – celý riadok, väčšie */
+function bdgStrip(per){
+  const all=bdgAll(per),got=all.filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))),rest=all.filter(s=>!s.earned);
+  const L=[...got,...rest].slice(0,8);
+  return `<div class="bdg-strip">${L.map(st=>`<button class="bdg-st ${st.earned?'':'off'}" data-act="bdg:${st.b.id}" data-tip="+${fm(IW_BDG,0)} iWatt za každý nový odznak – overený elektromerom" aria-label="${esc(st.b.name)}${st.earned?'':' (zatiaľ nezískaný)'}">${badgeSvg(st)}<span>${esc(st.b.name)}</span></button>`).join('')}</div>
+   <div class="bdg-strip-f"><span class="sm mut">Získané ${got.length} z ${all.length}</span><button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
+}
 function bdgMini(per){
   const L=bdgAll(per).filter(s=>s.earned).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,4);
   return `<div class="bdg-mini">${L.map(st=>`<button class="bdg-mini-i" data-act="bdg:${st.b.id}" title="${esc(st.b.name)}" aria-label="${esc(st.b.name)}">${badgeSvg(st)}</button>`).join('')}<button class="link" data-act="rwtab:bdg">Všetky odznaky →</button></div>`;
 }
-const rewardTabs=()=>`<div class="seg" role="tablist" aria-label="Odmeny">${[['ch','Výzvy'],['bdg','Odznaky']].map(([k,l])=>`<button role="tab" data-act="rwtab:${k}" aria-pressed="${(S.rwtab||'ch')===k}">${l}</button>`).join('')}</div>`;
+/* prevádzka (odberné miesto typu Prevádzka) má navyše certifikát „Slnko od susedov“ */
+const isShop=()=>{const p=S.persona==='admin'?'peter':S.persona;return omKind(S.om[p].type)==='om_shop'};
+/* Výzvy a Odznaky sú podstránky Odmien (Výzvy aj z Domova) – namiesto záložiek odkaz späť */
+const rewardTabs=()=>CH_MODE?`<button class="btn sm ch-back" data-act="view:${S.chFrom==='home'?'home':'rewards'}">← ${S.chFrom==='home'?'Domov':'Odmeny'}</button>`:'';
 
 /* ---------- detail a odomknutie (modál) ---------- */
 function bdgModal(id,isNew){
@@ -184,7 +223,7 @@ function bdgModal(id,isNew){
     <h2>${esc(st.secret?'Tajný odznak':b.name)}${b.kind==='rep'&&st.earned?` <span class="bdg-x">×${st.count}</span>`:''}</h2>
     <p>${st.earned?'Získané '+fdate(st.date):st.secret?'Odhalí sa, keď ho získate.':'Zatiaľ nezískaný'}</p></div>
    <div style="padding:18px 20px 20px">
-    <p>${esc(st.secret?'Tento odznak je prekvapenie. Patrí k Slnečnej banke a AI správcovi.':b.how)}</p>
+    <p>${esc(st.secret?'Tento odznak je prekvapenie.':b.how)}</p>
     ${!st.secret&&(st.prog)?`<div style="margin-top:12px">${bdgBar(st.prog)}</div>`:''}
     ${b.kind!=='once'?`<p class="sm mut" style="margin-top:10px">${esc(bdgLine(st))}</p>`:''}
     ${tiers}
@@ -234,7 +273,7 @@ function bdgShare(id){
    <text x="540" y="990" font-family="Arial,sans-serif" font-size="68" font-weight="800" fill="#ffffff" text-anchor="middle">${esc(b.name)}${b.kind==='rep'?' ×'+st.count:''}</text>
    <text x="540" y="1060" font-family="Arial,sans-serif" font-size="34" fill="#d9d5e2" text-anchor="middle">${esc(bdgLine(st).slice(0,60))}</text>
    <text x="540" y="1110" font-family="Arial,sans-serif" font-size="30" fill="#b9b4c4" text-anchor="middle">${esc(fdate(st.date))}</text>
-   <text x="540" y="1270" font-family="Arial,sans-serif" font-size="40" font-weight="800" fill="#ffffff" text-anchor="middle">Zdieľňa<tspan fill="${ac}">.</tspan> <tspan font-weight="400" fill="#b9b4c4">slnko od suseda · ${BR()}</tspan></text></svg>`;
+   <text x="540" y="1270" font-family="Arial,sans-serif" font-size="40" font-weight="800" fill="#ffffff" text-anchor="middle">Zdieľňa<tspan fill="${tokHex('--sig')}">.</tspan> <tspan font-weight="400" fill="#b9b4c4">slnko od suseda · ${BR()}</tspan></text></svg>`;
   const img=new Image(),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
   img.onload=()=>{try{const cv=document.createElement('canvas');cv.width=1080;cv.height=1350;cv.getContext('2d').drawImage(img,0,0);URL.revokeObjectURL(url);
     cv.toBlob(bl=>{const u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='zdielna-odznak-'+b.id+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(u),1500)},'image/png');toast('Karta odznaku stiahnutá')}catch(e){toast('Zdieľanie sa nepodarilo')}};
@@ -245,7 +284,7 @@ function bdgShare(id){
 const welcomePts=streak=>Math.min(30,5+5*streak);
 function checkWelcome(){
   const per=S.persona;if(per!=='anna'&&per!=='peter')return;
-  if(S.tourOn||S.modal||PUB.includes(curView()))return;
+  if(S.tourOn||S.modal||PUB.includes(curView())||regPending())return;   /* body až po schválení registrácie */
   const v=S.visit[per]||(S.visit[per]={day:0,streak:0});if(v.day===S.day)return;
   const streak=v.day===S.day-1?v.streak+1:1,pts=welcomePts(streak);
   v.day=S.day;v.streak=streak;

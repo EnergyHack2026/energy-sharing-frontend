@@ -12,6 +12,7 @@ Najprv si prečítaj podklady v `doc/` a `README.md` v koreni repa (pravidlá di
 - [doc/zadanie.md](../../../doc/zadanie.md) – zadanie a kritériá poroty,
 - [doc/cenniky.md](../../../doc/cenniky.md) – ceny dodávky (DD1–DD6) a výkupu (Virtuálna batéria Flexi),
 - [doc/data-model.md](../../../doc/data-model.md) – kmeňové dáta, 15-min spotreba a prebytky, EIC, IMS, TDO, HDO.
+- [doc/odmenovanie-a-akvizicia.md](../../../doc/odmenovanie-a-akvizicia.md) – model odmeňovania a akvizícia do ZSE/VSE (kontroluj súlad Odmien, Registrácie a reportu).
 
 Ceny, pojmy a údaje v UI porovnaj s cenníkmi a dátovým modelom. Ak prototyp používa iné hodnoty
 (napr. výkup alebo dodávkovú cenu) alebo pole, ktoré v dátach neexistuje, nahlás to ako zistenie (dôveryhodnosť). Potom čítaj kód relevantných view v `js/` a štýly v `css/`.
@@ -66,6 +67,17 @@ Porota je E.SK – riešenie musí pôsobiť ako niečo, čo by mohli nasadiť p
 - Je to zábavné na pohľad (animácia odomknutia, zdieľateľná karta), ale nezahlcuje hlavné úlohy.
 
 ## E. Remeslo UI (pravidlá projektu z README)
+- **Značka Zdieľňa a červená bodka.** Názov je všade „Zdieľňa" s červenou bodkou (`--sig`, rovnaká vo všetkých
+  skinoch). Červená bodka je podpis značky – kde sa dá, končí ňou nadpis `h1`/`h2` (`sig()` v `js/ui.js`,
+  ručne `<span class="sig">.</span>`). Kontroluj:
+  - chýba bodka tam, kde by mohla byť (logo, pätička, faktúra, zdieľateľné karty, nadpisy končiace bodkou),
+  - **nikdy dve červené bodky za sebou** – v nadpise s dvomi vetami je červená iba posledná
+    („Začnite jedným kódom. Objavte nové možnosti" + červená bodka); žiadna červená bodka v kickri, `h3`
+    ani v texte, ani na riadku tesne pred nadpisom s červenou bodkou,
+  - bodka nie je farbou značky ZSE/VSE (`--brand`), ale vždy `--sig`.
+- **Úvodná stránka je firemne neutrálna:** žiadne logo, názov ani farby ZSE/VSE (skin `neutral`). Značka ZSE/VSE
+  sa objaví až v aplikácii. Akékoľvek logo, farba alebo názov ZSE/VSE na úvode je 🔴 zistenie – výnimkou je
+  text kroku „Zaregistrujte sa“ v sekcii „Ako to funguje“, ktorý môže spomenúť účet ZSE alebo VSE (iba text).
 - Žiadny raw hex v `js/` ani mimo `css/tokens.css`; nová farba = nový token.
 - Dátové farby majú pevný význam všade: výroba `--c-prod`, spotreba `--c-cons`, zdieľané `--c-shared`,
   batéria `--c-bat`, sieť/výkup `--c-grid`. Legenda pri každom grafe.

@@ -1,13 +1,13 @@
 {
-  "name": "Zdieľňa – slnko od suseda",
+  "name": "Zdieľňa",
   "short_name": "Zdieľňa",
-  "description": "Zdieľanie elektriny od ZSE a VSE – hackathonový prototyp.",
+  "description": "Zdieľanie elektriny so susedmi – hackathonový prototyp.",
   "lang": "sk",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#FBF9F5",
-  "theme_color": "#6E1009",
+  "theme_color": "#1E1B22",
   "icons": [
     { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
