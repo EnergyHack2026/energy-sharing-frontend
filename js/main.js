@@ -298,14 +298,14 @@ const ACT={
   dpreset:()=>{const p=demoProfileState();p.idx=0;p.playing=false;clearInterval(demoProfileTimer);render(false)},
   wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
-  wzedit:a=>{const W=S.wz,[idx,side]=a.split(':'),i=+idx;W.edit=i;W.editSide=side||'prod';const o=i<0?null:wzSide(W.oms[i],W.editSide);W.pick=o?(o.strat||wzRec(o)):null;W.own=o?(o.own??wzPrice(o)):null;render(false)},
+  wzedit:a=>{const W=S.wz,[idx,side]=a.split(':'),i=+idx;W.edit=i;W.editSide=side||'prod';const o=i<0?null:wzSide(W.oms[i],W.editSide);W.pick=o?(o.strat||(wzImported(o)?'import':wzRec(o))):null;W.own=o?(o.own??wzPrice(o)):null;render(false)},
   wzbat:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];if(b==='1'){S.modal='batt:'+i;render(false);return}o.batAns=false;o.opts.bat=false;render(false)},
   wzbatok:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];o.batAns=b==='1';o.opts.bat=o.batAns;S.modal=null;
     if(o.batAns){logEv(`${o.name}: záujem o zdieľanie z batérie – žiadosť o kontakt`);toast('Ďakujeme, zákaznícke centrum vás bude kontaktovať')}render(true)},
   wzims:a=>{const o=S.wz.oms[+a];o.imsReq=true;(S.imsReqd||(S.imsReqd={}))[o.id==='om2'?'chata':'main']=true;logEv(`${o.name}: žiadosť o inštaláciu IMS odoslaná`);toast('Žiadosť o inteligentný elektromer odoslaná. Presná cena a podmienky budú potvrdené po posúdení žiadosti.');render(false)},
   wzev:a=>{S.wz.ev=a==='1';render(false)},
   wzpick:a=>{S.wz.pick=a;render(false)},
-  wzprice:a=>{const W=S.wz,o=W.oms[+a];if(W.pick==='own'){if(!(W.own>0)){toast('Zadajte vlastnú cenu v €/kWh');return}if(W.editSide==='cons')o.consOwn=W.own;else o.own=W.own}if(W.editSide==='cons')o.consStrat=W.pick;else o.strat=W.pick;const price=wzPrice(wzSide(o,W.editSide));W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(price)} €/kWh`);render(false)},
+  wzprice:a=>{const W=S.wz,o=W.oms[+a];if(W.pick==='own'){if(!(W.own>0)){toast('Zadajte vlastnú cenu v €/kWh');return}if(W.editSide==='cons')o.consOwn=W.own;else o.own=W.own}if(W.editSide==='cons')o.consStrat=W.pick==='import'?null:W.pick;else o.strat=W.pick==='import'?null:W.pick;const price=wzPrice(wzSide(o,W.editSide));W.edit=-1;W.pick=null;toast(`${o.name}: cena ${fpr(price)} €/kWh`);render(false)},
   wznext:()=>{const W=S.wz;W.err='';
     if(W.step===1){if(!W.oms.some(o=>o.on))W.err='Vyberte aspoň jedno odberné miesto, ktoré chcete zapojiť.';else if(W.oms.some(o=>o.on&&!String(o.name||'').trim()))W.err='Pomenujte každé vybrané odberné miesto.';else if(W.oms.some(o=>o.on&&o.ims)&&!W.oms.some(o=>o.on&&o.ims&&Object.values(o.opts).some(Boolean)))W.err='Vyberte aspoň jednu možnosť zdieľania.'}
     if(W.step===2&&W.edit>=0)W.err='Potvrďte alebo zrušte úpravu ceny.';if(!W.err){W.step++;window.scrollTo(0,0)}render(false)},

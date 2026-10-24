@@ -255,7 +255,7 @@ const wzSide=(o,side)=>side==='cons'?{...o,pv:false,strat:o.consStrat||null,own:
 const wzProd=o=>o.pv;                                   /* miesto vyrába (FVE) */
 const wzRec=o=>wzProd(o)?'bal':o.mwh>=10?'match':'bal'; /* odporúčanie podľa profilu miesta */
 const wzImported=o=>o.august?.[o.priceSide==='cons'||!o.pv?'consumption_price':'production_price'];
-const wzPrice=(o,k)=>{if(k===undefined&&!o.strat&&wzImported(o))return wzImported(o).price_eur_kwh;k=k||o.strat||wzRec(o);return k==='own'?o.own:WZ_STRAT[k][wzProd(o)?'sell':'buy']};
+const wzPrice=(o,k)=>{if(k===undefined&&!o.strat&&wzImported(o))return wzImported(o).price_eur_kwh;k=k||o.strat||wzRec(o);if(k==='import')return wzImported(o)?.price_eur_kwh;if(k==='own')return o.own;if(wzImported(o)){const delta=(wzProd(o)?{match:.005,bal:.015,price:.03}:{match:.03,bal:.015,price:.005})[k];return Math.round((wzImported(o).reference_price_eur_kwh+(wzProd(o)?delta:-delta))*100000)/100000}return WZ_STRAT[k][wzProd(o)?'sell':'buy']};
 const wzStratName=k=>k==='own'?'Vlastná cena':WZ_STRAT[k].t;
 /* upozornenie pri vlastnej cene mimo cenového okna výkup – dodávka (cenníky bez DPH); cenu neblokuje */
 const wzOwnWarn=(o,p)=>!(p>0)?'Zadajte cenu v €/kWh.':wzProd(o)?(p<=S.p.feedin?`Nižšia ako výkup ${fpr(S.p.feedin)} €/kWh – do výkupu by ste predali výhodnejšie.`:p>=WZ_SUP[1]?'Vyššia ako dodávková cena susedov – ponuku pravdepodobne nikto neprijme.':''):(p>=WZ_SUP[1]?'Vyššia ako dodávková cena – na zdieľaní neušetríte.':p<=S.p.feedin?'Nižšia ako výkup – za túto cenu výrobcovia pravdepodobne nepredajú.':'');
@@ -349,12 +349,12 @@ function vWizard(){
   ${err}
   ${wzNav(0,'wznext')}`+end;
  if(n===2){
-  const strat=(o,k)=>{const x=WZ_STRAT[k],rec=k===wzRec(o),on=W.pick===k,vol=Math.round(o.mwh*1000/12*x.sh/100);
+  const strat=(o,k)=>{const x=WZ_STRAT[k],rec=k===wzRec(o),on=W.pick===k,base=wzProd(o)?(o.august?.august_production_measured_kwh??(o.pmwh>0?o.pmwh*1000/12:null)):(o.august?.august_consumption_measured_kwh??o.mwh*1000/12),vol=base==null?null:Math.round(base*x.sh/100);
    return `<label class="wz-st ${rec?'rec':''} ${on?'on':''}"><input type="radio" name="wz-st" data-act="wzpick:${k}" ${on?'checked':''}>
     <span class="wz-st-h"><b>${x.t}</b>${rec?'<span class="pill g">Odporúčame pre vás</span>':''}</span><span class="xs mut">${x.d}</span>
-    <span class="wz-st-p"><b>${fpr(wzPrice(o,k))}</b> €/kWh</span><span class="xs mut">${wzCtx(o,wzPrice(o,k))}</span>
+    <span class="wz-st-p"><b>${fm(wzPrice(o,k),5)}</b> €/kWh</span><span class="xs mut">${wzCtx(o,wzPrice(o,k))}</span>
     <span class="wz-st-ch"><b>${x.ch} %</b><span class="xs mut">modelová šanca spárovania*</span></span><span class="bar" aria-hidden="true"><i style="width:${x.ch}%"></i></span>
-    <span class="xs mut">Odhad spárovaného objemu</span><b>${vol} kWh / modelový mesiac</b>
+    <span class="xs mut">Odhad spárovaného objemu</span><b>${vol==null?'Chýba objem výroby':vol+' kWh / modelový mesiac'}</b>
     <span class="xs mut">Priemerný spárovaný podiel</span><b>${x.sh} %</b></label>`};
   return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť. Ceny sú bez DPH.</p>
   <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,e=wzSide(o,W.editSide),k=o.strat||wzRec(o);
@@ -363,10 +363,10 @@ function vWizard(){
     <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.addr||o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.name||'')}</span><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
     <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${o.pmwh==null?'Chýba ročný profil':fm(o.pmwh,1)+' MWh'}</b>`:''}</div>
     ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-price-pair">${o.pv?priceBlock('prod'):''}${priceBlock('cons')}</div><div class="wz-price-actions">${o.pv?`<button class="btn" data-act="wzedit:${i}:prod">Upraviť cenu výroby</button>`:''}<button class="btn" data-act="wzedit:${i}:cons">Upraviť cenu spotreby</button></div>`}</div>
-    ${demoAugustDetails(o)}${ed?`<fieldset class="wz-strats"><legend>${W.editSide==='cons'?'Cena spotreby':'Cena výroby'} – ${esc(o.addr||o.name)}</legend>${['match','bal','price'].map(k=>strat(e,k)).join('')}</fieldset>
+    ${demoAugustDetails(o)}${ed?`${wzImported(e)?`<label class="wz-own"><span class="row"><input type="radio" name="wz-st" data-act="wzpick:import" ${W.pick==='import'?'checked':''}><b>Ponechať cenu z exportu: ${fm(wzImported(e).price_eur_kwh,5)} €/kWh</b></span><span class="xs mut">Aktuálna cena pre ${W.editSide==='cons'?'spotrebu':'výrobu'} · august 2026</span></label>`:''}<fieldset class="wz-strats"><legend>${W.editSide==='cons'?'Cena spotreby':'Cena výroby'} – ${esc(o.addr||o.name)}</legend>${['match','bal','price'].map(k=>strat(e,k)).join('')}</fieldset>
     <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(e)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
      ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(e),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(e,W.own)}</span>${wzOwnWarn(e,W.own)?`<p class="wz-warn">${wzOwnWarn(e,W.own)}</p>`:''}</div></div>`:''}</div>
-    <p class="xs mut">* Modelový odhad podľa profilu miesta a ponúk v skupine, nie záväzný prísľub.</p>
+    <p class="xs mut">* Šance a podiely sú ilustračné, nejde o nový výpočet párovania. Objem vychádza z augustovej výroby alebo spotreby; pri chýbajúcom meraní z ročného odhadu / 12. Stratégie používajú referenčnú cenu daného miesta a modelové cenové rozdiely.</p>
     <div class="wz-pr-act"><button class="btn" data-act="wzedit:-1">Zrušiť</button><button class="btn pri" data-act="wzprice:${i}">Potvrdiť výber</button></div>`:''}</div>`}).join('')}</div>${err}
   ${wzNav(1,'wznext')}`+end;}
  const yn3=v=>v===true?'Áno':v===false?'Nie':'Neuvedené';
