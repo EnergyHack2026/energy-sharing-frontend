@@ -1689,7 +1689,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register','home','challenges','group','reports','rewards','help','cert','profile','map','chat']);
+const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','map','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -2960,16 +2960,7 @@ function solSettingsCard(){
 }
 function solReportCard(){
   const x=solStats();
-  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Lúč pomoci: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.L.map(e=>`${e.r.ic} ${e.r.name} ${fm(e.kwh,0)} kWh`).join(' · ')} · hodnota pre príjemcov ${eur(x.val)} · bez provízie a poplatkov${S.don.pub?' · vaše meno je uvedené pri príjemcoch':''}</p></div><button class="link" data-act="view:help">Lúč pomoci →</button></div>`;
-}
-/* ---------- Lúč pomoci – samostatná stránka (pod Výzvami a Odmenami); darovať môže iba výrobca ---------- */
-function vHelp(){
-  const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
-  const head=hero({kicker:'Lúč pomoci',title:'Slnko, ktoré ostane <em>pre tých, čo to potrebujú.</em>',
-    lead:isP?'Časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie, môžete darovať škole, charite alebo rodine v núdzi. Susedia v skupine majú vždy prednosť, dar ide bez provízie a poplatkov.':'Lúč pomoci je pre výrobcov: časť prebytku, ktorý sa nevyzdieľal, darujú škole, charite alebo rodine v núdzi – bez provízie a poplatkov.',
-    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} · hodnota ${eur(x.val)}`):''});
-  if(!isP)return `<div class="gap">${head}<div class="card"><h3>Ako to funguje</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Ak raz budete mať vlastnú fotovoltiku, Lúč pomoci si zapnete tu. Ponuku nájdete v Skupine zdieľania → Produkty a služby.</p></div></div>`;
-  return `<div class="gap">${head}${solSettingsCard()}${S.don.on?solReportCard():''}</div>`;
+  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Lúč pomoci: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.L.map(e=>`${e.r.ic} ${e.r.name} ${fm(e.kwh,0)} kWh`).join(' · ')} · hodnota pre príjemcov ${eur(x.val)} · bez provízie a poplatkov${S.don.pub?' · vaše meno je uvedené pri príjemcoch':''}</p></div><button class="link" data-act="view:cert">Dobrý sused →</button></div>`;
 }
 /* ---------- Dobrý sused: vľavo nastavenie Lúča pomoci, vpravo odporúčanie Zdieľne (odkaz + QR kód) ---------- */
 const refCode=()=>{const p=S.persona==='admin'?'peter':S.persona;return 'ZDIELNA-'+(p==='anna'?'ANNA':'PETER')+'7K'};
@@ -5146,7 +5137,6 @@ function vWizard(){
 const REG_LOCKED={challenges:['Výzvy','Denné výzvy na presun spotreby do slnečného okna a slnečné body.'],group:['Skupina zdieľania','Uvidíte svoju skupinu, susedov, s ktorými zdieľate, a stav členstva.'],
  reports:['Prehľady','Uvidíte, koľko elektriny ste zdieľali alebo prijali a akú to malo hodnotu v €.'],
  cert:['Dobrý sused','Darovanie cez Lúč pomoci a odporúčanie Zdieľne susedom.'],
- help:['Lúč pomoci','Darujete časť prebytku, ktorý sa nevyzdieľal, škole, charite alebo rodine v núdzi.'],
  rewards:['Odmeny','Začnete zbierať '+IWT+' a odznaky a meniť ich za výhody.']};
 const regPer=()=>S.persona==='admin'?'peter':S.persona;
 const regPending=()=>!!(S.wz&&S.wz.sent)&&S.mem[regPer()]==='PENDING';
@@ -5159,7 +5149,7 @@ function regSteps4(){
 /* stavový riadok – na každej obrazovke portálu, kým žiadosť nie je schválená */
 function pendingBar(){
  const L=regSteps4();
- return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Výzvy, Skupina zdieľania, Prehľady, Odmeny a Lúč pomoci sú zamknuté.</span></div>
+ return `<section class="pend-bar" aria-label="Stav žiadosti"><div class="pend-bar-head"><span class="pend-ic">${icon('clock')}</span><div><b>Žiadosť čaká na schválenie</b><span class="xs mut">Kým ju distribútor neschváli, Výzvy, Skupina zdieľania, Prehľady, Odmeny a Dobrý sused sú zamknuté.</span></div>
   ${(S.jury||S.reg.demoCustomer)?'<button class="btn sm" data-act="regapprove">🎬 Simulovať schválenie</button>':''}</div>
   <ol class="pend-steps">${L.map(([t,w,c],i)=>`<li class="${c}" ${c==='cur'?'aria-current="step"':''}><span class="n">${c==='done'?'✓':i+1}</span><span><b>${t}</b><span class="xs mut">${w}</span></span></li>`).join('')}</ol></section>`;
 }
@@ -5963,7 +5953,7 @@ const PUB=['landing','join','potential','benefits','register'];
 /* neutrálne obrazovky – bez značky ZSE/VSE (značka sa určí až podľa EIC) */
 const NEUTRAL=['landing','join'];
 const isNeutral=v=>NEUTRAL.includes(v)||(v==='register'&&S.reg.step==='choose');
-const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['challenges','Výzvy','sun'],['rewards','Odmeny','star'],['help','Lúč pomoci','sunrise'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
+const NAV=[['home','Domov','home'],['group','Skupina zdieľania','group'],['reports','Prehľady','chart'],['challenges','Výzvy','sun'],['rewards','Odmeny','star'],['cert','Dobrý sused','heart'],['map','Mapa','map']];
 const NAV_ADMIN=[['admin','Konzola','console'],['map','Mapa','map']];
 /* cesta zákazníka: začiatok → koniec */
 const NAV_PUB=[['landing','Úvod','info'],['benefits','Výhody','coins'],['register','Registrácia','pen']];
@@ -5971,7 +5961,7 @@ const ADMIN_OK=['admin','profile','landing','potential','benefits','register','m
 const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(v==='market')v='group';if(!isOn(v))v='landing';return v};
 /* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
 const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
-  landingfeature:a=>({battery:'home',solidarity:'help',reports:'reports'}[a]||'rewards')};
+  landingfeature:a=>({battery:'home',solidarity:'cert',reports:'reports'}[a]||'rewards')};
 function gateActs(root){
   root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
     const t=n==='view'?a:typeof m==='function'?m(a):m;if(t&&!isOn(t))el.hidden=true});
@@ -6007,7 +5997,7 @@ function renderShell(){
   gateActs($('#top'));$('#fab').hidden=!isOn('chat');
   const tc=document.querySelector('meta[name=theme-color]');if(tc)tc.content=tokHex('--surface-dark');
 }
-const VIEWS={home:vHome,challenges:vChallenges,help:vHelp,cert:vCertView,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_sol:vIdeaSol};
+const VIEWS={home:vHome,challenges:vChallenges,cert:vCertView,group:vGroup,reports:vReports,rewards:vRewards,profile:vProfile,admin:vAdmin,landing:vLanding,join:vJoin,potential:vPotential,benefits:vBenefits,register:vRegister,map:vMap,ideas:vIdeas,i_sol:vIdeaSol};
 function modalHtml(){
   const m=S.modal;if(!m)return '';
   if(m==='welcome')return welcomeModal();
@@ -6143,7 +6133,7 @@ const ACT={
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
   landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
-  landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('help')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else{S.persona='peter';pubGo('rewards')}},
+  landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
   rtab:a=>{S.rtab=a;render(false)},

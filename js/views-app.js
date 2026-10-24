@@ -458,16 +458,7 @@ function solSettingsCard(){
 }
 function solReportCard(){
   const x=solStats();
-  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Lúč pomoci: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.L.map(e=>`${e.r.ic} ${e.r.name} ${fm(e.kwh,0)} kWh`).join(' · ')} · hodnota pre príjemcov ${eur(x.val)} · bez provízie a poplatkov${S.don.pub?' · vaše meno je uvedené pri príjemcoch':''}</p></div><button class="link" data-act="view:help">Lúč pomoci →</button></div>`;
-}
-/* ---------- Lúč pomoci – samostatná stránka (pod Výzvami a Odmenami); darovať môže iba výrobca ---------- */
-function vHelp(){
-  const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
-  const head=hero({kicker:'Lúč pomoci',title:'Slnko, ktoré ostane <em>pre tých, čo to potrebujú.</em>',
-    lead:isP?'Časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie, môžete darovať škole, charite alebo rodine v núdzi. Susedia v skupine majú vždy prednosť, dar ide bez provízie a poplatkov.':'Lúč pomoci je pre výrobcov: časť prebytku, ktorý sa nevyzdieľal, darujú škole, charite alebo rodine v núdzi – bez provízie a poplatkov.',
-    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} · hodnota ${eur(x.val)}`):''});
-  if(!isP)return `<div class="gap">${head}<div class="card"><h3>Ako to funguje</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Ak raz budete mať vlastnú fotovoltiku, Lúč pomoci si zapnete tu. Ponuku nájdete v Skupine zdieľania → Produkty a služby.</p></div></div>`;
-  return `<div class="gap">${head}${solSettingsCard()}${S.don.on?solReportCard():''}</div>`;
+  return `<div class="card sol-rep"><span class="pend-ic">${icon('heart')}</span><div><b>Lúč pomoci: tento mesiac ste darovali ${fm(x.mon,0)} kWh</b><p class="sm mut">${x.L.map(e=>`${e.r.ic} ${e.r.name} ${fm(e.kwh,0)} kWh`).join(' · ')} · hodnota pre príjemcov ${eur(x.val)} · bez provízie a poplatkov${S.don.pub?' · vaše meno je uvedené pri príjemcoch':''}</p></div><button class="link" data-act="view:cert">Dobrý sused →</button></div>`;
 }
 /* ---------- Dobrý sused: vľavo nastavenie Lúča pomoci, vpravo odporúčanie Zdieľne (odkaz + QR kód) ---------- */
 const refCode=()=>{const p=S.persona==='admin'?'peter':S.persona;return 'ZDIELNA-'+(p==='anna'?'ANNA':'PETER')+'7K'};
