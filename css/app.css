@@ -944,3 +944,15 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 8px}
 .ref-stats>div{display:grid;gap:2px;padding:10px 12px;border-radius:var(--r);background:var(--bg)}.ref-stats b{font-size:var(--fs-h3)}
 @media(max-width:560px){.ref-qr{grid-template-columns:1fr}.ref-link{flex-wrap:wrap}}
+/* Lúč pomoci v polovičnej karte Dobrého suseda */
+.sol-h{display:flex;align-items:center;gap:8px}.sol-h .icon{width:20px;height:20px;color:var(--brand)}
+.sol-for{margin:2px 0 0}
+.dn-grid #sol-card .fields{grid-template-columns:1fr}
+.dn-grid .don-r{grid-template-columns:auto minmax(0,1fr) auto;row-gap:8px}
+.dn-grid .don-r .don-t{grid-column:2/4}
+.dn-grid .don-r .don-w{grid-column:2}
+.dn-grid .don-r .don-k{grid-column:3;grid-row:2;text-align:right}
+.dn-grid .don-r>.btn{grid-column:3;grid-row:1;align-self:start}
+.dn-grid .don-r .don-t{grid-column:2}
+.dn-grid .don-add select{min-width:0;width:100%}
+.dn-grid #sol-card .row{flex-wrap:wrap}

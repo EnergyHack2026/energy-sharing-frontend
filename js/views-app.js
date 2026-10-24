@@ -447,7 +447,7 @@ function solSettingsCard(){
   const row=(r,i)=>{const c=RCP[r.id],e=x.L[i];return `<div class="don-r"><span class="don-ic" aria-hidden="true">${c.ic}</span><div class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></div>
     <label class="don-w"><input type="number" min="0" max="100" step="5" data-k="don.rcps.${i}.w" data-t="n" value="${r.w}" aria-label="Pomer pre ${c.name}"><em>%</em></label>
     <span class="don-k">${S.don.on&&e?`≈ ${fm(e.kwh,0)} kWh`:''}</span><button class="btn sm" data-act="donrm:${r.id}" aria-label="Odobrať ${c.name}" ${L.length<2?'disabled':''}>✕</button></div>`};
-  return `<div class="card" id="sol-card"><span class="kicker">Nastavenie daru</span><h3>Koľko a komu darujete</h3><p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
+  return `<div class="card" id="sol-card"><h3 class="sol-h">${icon('heart')} Lúč pomoci</h3>${(S.persona==='peter')?'<p class="xs mut sol-for">Platí pre vaše miesto s výrobou: <b>Rodinný dom</b></p>':''}<p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
    <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
    ${S.don.on?`<div class="don-head"><b>Príjemcovia a pomer</b><span class="xs ${x.sum===100?'mut':'don-warn'}">${x.sum===100?'Spolu 100 %':`Spolu ${x.sum} % – rozdelíme pomerne`}</span></div>
     <div class="don-list">${L.map(row).join('')}</div>
@@ -480,7 +480,7 @@ function vGoodNeighbour(){
   const head=hero({kicker:'Dobrý sused',title:'Pomáhajte v okolí. <em>Pozvite susedov.</em>',
     lead:'Časť nevyzdieľaného prebytku môžete darovať tým, ktorí to potrebujú, a susedov pozvať do Zdieľne – za každého, kto začne zdieľať, dostanete odmenu.',
     aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+5 000 iWatt','keď sused začne zdieľať')});
-  const left=isP?solSettingsCard():`<div class="card" id="sol-card"><span class="kicker">Lúč pomoci</span><h3>Darovanie je pre výrobcov</h3><ol class="help-steps"><li><b>Výrobca zapne Lúč pomoci</b> a určí, koľko percent zo zvyšku prebytku daruje.</li><li><b>Vyberie 1 až 3 príjemcov</b> z overeného zoznamu a pomer, ako sa dar rozdelí.</li><li><b>V každej štvrťhodine</b> najprv dostanú elektrinu susedia v skupine, potom batéria a až zvyšok ide príjemcom.</li></ol><p class="sm mut" style="margin-top:8px">Nemáte vlastné panely? Pomôcť môžete inak – pozvite susedov s fotovoltikou, aby ich slnko ostalo v okolí.</p></div>`;
+  const left=solSettingsCard();
   return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
 }
 function vProfile(){
