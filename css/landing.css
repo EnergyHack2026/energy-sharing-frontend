@@ -595,3 +595,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lpc-l-n{margin:2px 0 0}
 @media(max-width:580px){.lpc-l-row{grid-template-columns:minmax(0,1fr) auto}.lpc-l-row .svc-ic,.lpc-l-h .xs{display:none}}
 >>>>>>> final-last-version-
+
+.dg-composition>.dg-group-places{margin-top:20px}.dg-composition .dg-group-places>.wz-card{background:#fcfbf8}
