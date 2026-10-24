@@ -12,7 +12,7 @@ const ADMIN_OK=['admin','profile','landing','potential','benefits','register','m
 const curView=()=>{let v=S.view;if(S.persona==='admin'&&!ADMIN_OK.includes(v)&&!v.startsWith('i_'))v='admin';if(S.persona!=='admin'&&v==='admin')v='home';if(v==='market')v='group';if(!isOn(v))v='landing';return v};
 /* kam vedie tlačidlo (data-act) – odkazy na vypnuté časti finálnej verzie sa skryjú */
 const ACT_VIEW={eiccheck:'join',eicdemo:'join',eicfill:'join',landingoffer:'market',chat:'chat',tour:'tour',
-  landingfeature:a=>({battery:'home',solidarity:'cert',reports:'reports'}[a]||'rewards')};
+  landingfeature:a=>({battery:'home',solidarity:'cert',reports:'reports',challenges:'challenges'}[a]||'rewards')};
 function gateActs(root){
   root.querySelectorAll('[data-act]').forEach(el=>{const [n,...r]=el.dataset.act.split(':'),a=r.join(':'),m=ACT_VIEW[n];
     const t=n==='view'?a:typeof m==='function'?m(a):m;if(t&&!isOn(t))el.hidden=true});
@@ -33,7 +33,7 @@ function renderShell(){
   const bell=pub||p==='admin'?'':`<button class="btn sm bell" data-act="bell" aria-label="Notifikácie${unread?', neprečítané: '+unread:''}">${icon('bell')}${unread?`<span class="bell-n">${unread}</span>`:''}</button>`;
   const gear=J?`<button class="btn sm" data-act="drawer" aria-label="Upraviť čísla a časy">${icon('sliders')}<span class="hide-m">Čísla a časy</span></button>`:'';
   $('#top').innerHTML=v!=='landing'&&isNeutral(v)?`${logo}<span class="spacer"></span>${juryTag}<button class="btn sm" data-act="view:landing">← Späť na úvod</button>`
-   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Slnečný klub</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
+   :v==='landing'?`${logo}<nav class="market-nav" aria-label="Hlavná navigácia"><a href="#lp-benefits">Prečo zdieľať</a><a href="#lp-how">Ako to funguje</a><a href="#lp-forecast">Predikcia</a><a href="#lp-club">Výzvy a odmeny</a><a href="#lp-offers">Ponuky</a></nav><span class="spacer"></span>${juryTag}${brandSeg}<button class="btn sm dark" data-act="view:home">Vstúpiť do aplikácie →</button>`
    :pub?`${logo}<span class="spacer"></span>${juryTag}${brandSeg}${gear}${J?`<button class="btn sm hide-m" data-act="tour">🎬 Demo príbeh</button>`:''}<button class="btn sm pri" data-act="view:home">Prejsť do aplikácie →</button>`
    :`${logo}${J?`<span class="seg" role="group" aria-label="Prepínač persón (demo)">${[['anna','Anna','výrobca'],['peter','Peter','odberateľ'],['admin','Operátor','']].map(([k,l,r])=>`<button data-act="persona:${k}" aria-pressed="${p===k}">${l}${r?`<span class="hide-m"> · ${r}</span>`:''}</button>`).join('')}</span>`:''}<span class="spacer"></span>${juryTag}${brandSeg}${bell}<button class="btn sm" data-act="view:profile" aria-label="Nastavenia">${icon('user')}<span class="hide-m">Nastavenia</span></button>${gear}`;
   const items=(p==='admin'?NAV_ADMIN:NAV).filter(([k])=>isOn(k)&&true);
@@ -119,6 +119,7 @@ document.addEventListener('input',e=>{
   const el=e.target,k=el.dataset&&el.dataset.k;if(!k)return;const t=el.dataset.t;let v;
   if(t==='n'){v=parseFloat(String(el.value).replace(',','.'));if(isNaN(v))return;const mn=el.min!==''?+el.min:-Infinity,mx=el.max!==''?+el.max:Infinity;v=Math.min(mx,Math.max(mn,v))}
   else if(t==='c')v=el.checked;else if(t==='i')v=parseInt(el.value,10);else if(t==='t'){if(!el.value)return;v=el.value}else v=el.value;
+  if(k.startsWith('dp.')){S.dp.playing=false;clearInterval(demoProfileTimer)}
   setPath(k,v);
   {const pr=k.split('.');if(pr.length===3&&pr[2]==='orig'&&(pr[0]==='p'||pr[0]==='c')){const o=getPath(pr[0]+'.'+pr[1]);if(o&&!o.accepted)setPath(pr[0]+'.'+pr[1]+'.time',v)}}
   if(k==='don.pct')S.don.on=S.don.pct>0&&S.don.rcps.length>0;   /* darovanie beží, keď je podiel > 0 % a je vybraný príjemca */
@@ -185,7 +186,7 @@ const ACT={
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
   landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
-  landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else{S.persona='peter';pubGo('rewards')}},
+  landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else if(a==='challenges'){S.persona='peter';S.chtab='ch';S.chFrom='home';pubGo('challenges')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
   rtab:a=>{S.rtab=a;render(false)},
@@ -286,6 +287,8 @@ const ACT={
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
   wzimsoption:a=>{const [idx,option]=a.split(':');const o=S.wz.oms[+idx];if(!o||o.ims||!['1','170'].includes(option))return;o.imsOption=option;render(false)},
+  dpplay:()=>{const p=demoProfileState();if(p.playing){p.playing=false;clearInterval(demoProfileTimer);render(false);return}if(p.idx>=96)p.idx=0;p.playing=true;clearInterval(demoProfileTimer);demoProfileTimer=setInterval(()=>{if(S.view!=='home'){p.playing=false;clearInterval(demoProfileTimer);return}p.idx++;if(p.idx>=96){p.idx=96;p.playing=false;clearInterval(demoProfileTimer)}render(false)},250);render(false)},
+  dpreset:()=>{const p=demoProfileState();p.idx=0;p.playing=false;clearInterval(demoProfileTimer);render(false)},
   wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
   wzedit:a=>{const W=S.wz,[idx,side]=a.split(':'),i=+idx;W.edit=i;W.editSide=side||'prod';const o=i<0?null:wzSide(W.oms[i],W.editSide);W.pick=o?(o.strat||wzRec(o)):null;W.own=o?(o.own??wzPrice(o)):null;render(false)},
