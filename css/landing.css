@@ -95,7 +95,7 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
 .lp-step-num{font-size:var(--fs-sm);font-weight:800;border:1.5px solid var(--brand);color:var(--brand-ink);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;margin-bottom:22px}
 .lp-step-grid h3{font-size:var(--fs-h3)}
-.lp-step-grid p{font-size:var(--fs-sm);color:var(--mut);margin-top:10px}
+.lp-step-grid p{font-size:var(--fs-md);color:var(--ink);opacity:.8;margin-top:10px;line-height:1.5}
 
 /* ---------- Slnečný klub (gamifikácia) ---------- */
 .lp-club{background:var(--surface-dark);color:#fff;border-radius:28px;padding:56px;margin:90px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;position:relative;overflow:hidden}
@@ -568,3 +568,9 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lp-side{flex:none}.lp-side button{padding:9px 18px;font-size:var(--fs-sm)}
 .lp-offer-price{margin-bottom:4px}
 .lp-offer-cmp{font-size:var(--fs-sm);font-weight:700;color:var(--green);margin-bottom:12px}
+/* pätička – právne odkazy; graf predpovede – čitateľné popisy osi aj na mobile */
+.lp-footer{flex-wrap:wrap}
+.lp-footer-legal{display:flex;gap:18px;flex-wrap:wrap;align-items:center;width:100%;border-top:1px solid var(--line);padding-top:14px;margin-top:6px;font-size:var(--fs-xs);color:var(--mut)}
+.lp-footer-legal a,.lp-footer-legal .link{color:var(--mut);font-size:var(--fs-xs);text-decoration:none}
+.lp-footer-legal .lp-proto{margin-left:auto}
+@media(max-width:580px){.lp-chart-x{font-size:19px}.lp-footer-legal .lp-proto{margin-left:0}}
