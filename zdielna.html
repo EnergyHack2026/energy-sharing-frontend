@@ -2996,7 +2996,7 @@ function refCard(){
 function vGoodNeighbour(){
   const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
   const head=hero({kicker:'Dobrý sused',title:'Pomáhajte v okolí. <em>Pozvite susedov.</em>',
-    lead:'Časť nevyzdieľaného prebytku môžete darovať tým, ktorí to potrebujú, a susedov pozvať do Zdieľne – za každého, kto začne zdieľať, dostanete odmenu.',
+    lead:'Pomôžte prebytkom a získajte odmenu za každého pozvaného suseda.',
     aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+5 000 iWatt','keď sused začne zdieľať')});
   const left=solSettingsCard();
   return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
