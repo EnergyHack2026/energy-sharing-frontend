@@ -1785,6 +1785,8 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 
 .dp-chart svg{width:100%;height:auto;display:block}.dp-legend{gap:12px;font-size:.8em;flex-wrap:wrap}.dp-legend span{display:flex;align-items:center;gap:5px}.dp-legend i{width:12px;height:4px;display:inline-block}
 
+.dp-chart-tools{margin:16px 0}.dp-series-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.dp-series-toggle{font:inherit;text-align:left;padding:12px;border:1px solid #d5dedb;border-radius:12px;background:#fff;cursor:pointer;color:inherit}.dp-series-toggle.on{background:#f0faf5;border-color:#159b7c}.dp-series-toggle.off{background:#f4f4f2;color:#65716e}.dp-series-title{display:flex;align-items:center;gap:8px;font-size:.85em}.dp-series-title i{width:28px;border-top-width:3px;flex-shrink:0}.dp-series-state{margin-left:auto;font-size:.8em;white-space:nowrap}.dp-series-description{display:block;font-size:.75em;margin:6px 0 0 36px;color:#596775}.dp-series-toggle:focus-visible{outline:2px solid #087c65;outline-offset:3px}@media(max-width:650px){.dp-series-controls{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -5041,7 +5043,22 @@ const DEMO_PROFILE={"groups":[{"group_id":4,"group_code":"DEMO-OPT-001","group_n
 let demoProfileTimer=null;
 function demoProfileState(){return S.dp||(S.dp={group:'4',day:'2026-08-15',place:'all',idx:96,playing:false})}
 function demoProfileRows(){const p=demoProfileState(),oms=S.wz.oms.filter(o=>o.on&&demoPlaceGroup(o)?.group_id===+p.group),allowed=new Set(oms.map(o=>o.source.connection_id));return DEMO_PROFILE.my_om_intervals.filter(r=>r.group_id===+p.group&&allowed.has(r.connection_id)&&(p.place==='all'||r.connection_id===+p.place));}
-function demoProfileChart(group,mine,idx){const series=[['group_production_kwh',group,'#ea9c00','Export skupiny'],['group_consumption_kwh',group,'#7895a8','Odber skupiny'],['production_kwh',mine,'#cb7900','Môj export'],['consumption_kwh',mine,'#254c83','Môj odber'],['sold_shared_kwh',mine,'#079d76','Predané do matchingu'],['received_shared_kwh',mine,'#8755b4','Prijaté z matchingu']];const max=Math.max(.01,...series.flatMap(([k,rows])=>rows.map(r=>r[k]||0))),x=i=>55+i/95*800,y=v=>245-v/max*210;return `<div class="dp-chart"><svg viewBox="0 0 890 285" role="img" aria-label="15-minútový profil exportu, odberu a zdieľania"><text x="5" y="15" font-size="11">kWh / 15 min</text>${[0,.5,1].map(f=>`<line x1="55" x2="855" y1="${y(f*max)}" y2="${y(f*max)}" stroke="#ddd"/><text x="2" y="${y(f*max)-4}" font-size="10">${fm(f*max,1)}</text>`).join('')}${[0,24,48,72,95].map(i=>`<text x="${x(i)}" y="270" text-anchor="middle" font-size="11">${I2T(i)}</text>`).join('')}${series.map(([k,rows,color])=>`<polyline fill="none" stroke="${color}" stroke-width="2" points="${rows.slice(0,idx).map((r,i)=>x(i)+','+y(r[k]||0)).join(' ')}"/>`).join('')}</svg></div><div class="row dp-legend">${series.map(([, ,c,l])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}</div>`}
+const DP_SERIES=[
+ ['group_production_kwh','#c87e00','Export celej skupiny','Prebytky všetkých členov dodané do siete.','8 5'],
+ ['group_consumption_kwh','#66849a','Odber celej skupiny','Odber zo siete všetkých členov.','8 5'],
+ ['production_kwh','#d55e00','Môj export do siete','Prebytky mojich vybraných miest.',''],
+ ['consumption_kwh','#2155a5','Môj odber zo siete','Odber mojich vybraných miest.',''],
+ ['sold_shared_kwh','#008567','Moje predané zdieľaním','Z mojej ponuky spárované s odberateľmi.',''],
+ ['received_shared_kwh','#9043b7','Moje prijaté zdieľaním','Energia pridelená mojim miestam od členov skupiny.','']
+];
+function demoProfileChart(group,mine,idx){
+ const p=demoProfileState(),hidden=p.hidden||[],visible=DP_SERIES.filter(([k])=>!hidden.includes(k));
+ const rowsFor=k=>k.startsWith('group_')?group:mine;
+ const max=Math.max(.01,...visible.flatMap(([k])=>rowsFor(k).map(r=>r[k]||0))),x=i=>55+i/95*800,y=v=>245-v/max*210;
+ return `<div class="dp-chart-tools"><p class="sm mut">Prerušované čiary = celá skupina. Plné čiary = moje vybrané miesta. Kliknutím na položku zapnete alebo vypnete krivku.</p><div class="row"><button class="btn sm" data-act="dpseriesall:show">Zobraziť všetky</button><button class="btn sm" data-act="dpseriesall:mine">Iba moje miesta</button><button class="btn sm" data-act="dpseriesall:hide">Skryť všetky</button></div></div>
+ <div class="dp-series-controls" role="group" aria-label="Viditeľné krivky grafu">${DP_SERIES.map(([k,c,l,d,dash])=>{const on=!hidden.includes(k);return `<button class="dp-series-toggle ${on?'on':'off'}" data-act="dpseries:${k}" aria-pressed="${on}"><span class="dp-series-title"><i style="border-color:${c};border-top-style:${dash?'dashed':'solid'}"></i><b>${l}</b><span class="dp-series-state">${on?'✓ Zapnuté':'Vypnuté'}</span></span><span class="dp-series-description">${d}</span></button>`}).join('')}</div>
+ <div class="dp-chart"><svg viewBox="0 0 890 285" role="img" aria-label="15-minútový profil; zobrazené krivky: ${visible.map(s=>s[2]).join(', ')}"><text x="5" y="15" font-size="11">kWh / 15 min</text>${[0,.5,1].map(f=>`<line x1="55" x2="855" y1="${y(f*max)}" y2="${y(f*max)}" stroke="#ddd"/><text x="2" y="${y(f*max)-4}" font-size="10">${fm(f*max,1)}</text>`).join('')}${[0,24,48,72,95].map(i=>`<text x="${x(i)}" y="270" text-anchor="middle" font-size="11">${I2T(i)}</text>`).join('')}${visible.map(([k,color,label,,dash])=>`<polyline fill="none" stroke="${color}" stroke-width="${dash?2:3}" stroke-dasharray="${dash}" points="${rowsFor(k).slice(0,idx).map((r,i)=>x(i)+','+y(r[k]||0)).join(' ')}"><title>${label}</title></polyline>`).join('')}${visible.length?'':'<text x="450" y="130" text-anchor="middle" font-size="16">Vyberte aspoň jednu krivku vyššie.</text>'}</svg></div><p class="xs mut">Mierka osi Y sa prispôsobuje zapnutým krivkám; počas prehrávania zostáva rovnaká pre celý zvolený deň.</p>`;
+}
 function vDemoProfile(){const p=demoProfileState(),g=DEMO_PROFILE.groups.find(g=>g.group_id===+p.group)||DEMO_PROFILE.groups[0],oms=S.wz.oms.filter(o=>o.on&&demoPlaceGroup(o)?.group_id===g.group_id);if(p.place!=='all'&&!oms.some(o=>o.source.connection_id===+p.place))p.place='all';const rows=demoProfileRows(),days=[...new Set(DEMO_PROFILE.group_intervals.map(r=>r.interval_start.slice(0,10)))];
  const total=(rs,k)=>sum(rs.map(r=>r[k]||0)),metric=(l,v)=>`<div><span class="xs mut">${l}</span><b>${fm(v,3)} kWh</b></div>`;
  const group=DEMO_PROFILE.group_intervals.filter(r=>r.group_id===g.group_id&&r.interval_start.startsWith(p.day));const mine=group.map(r=>{const rs=rows.filter(x=>x.interval_start===r.interval_start);return {production_kwh:total(rs,'production_kwh'),consumption_kwh:total(rs,'consumption_kwh'),sold_shared_kwh:total(rs,'sold_shared_kwh'),received_shared_kwh:total(rs,'received_shared_kwh'),offered_for_matching_kwh:total(rs,'offered_for_matching_kwh')}});
@@ -6542,6 +6559,8 @@ const ACT={
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
   wzimsoption:a=>{const [idx,option]=a.split(':');const o=S.wz.oms[+idx];if(!o||o.ims||!['1','170'].includes(option))return;o.imsOption=option;render(false)},
+  dpseries:k=>{if(!DP_SERIES.some(s=>s[0]===k))return;const p=demoProfileState(),h=new Set(p.hidden||[]);if(h.has(k))h.delete(k);else h.add(k);p.hidden=[...h];render(false)},
+  dpseriesall:a=>{demoProfileState().hidden=DP_SERIES.filter(([k])=>a==='hide'||a==='mine'&&k.startsWith('group_')).map(([k])=>k);render(false)},
   dpplay:()=>{const p=demoProfileState();if(p.playing){p.playing=false;clearInterval(demoProfileTimer);render(false);return}if(p.idx>=96)p.idx=0;p.playing=true;clearInterval(demoProfileTimer);demoProfileTimer=setInterval(()=>{if(S.view!=='home'){p.playing=false;clearInterval(demoProfileTimer);return}p.idx++;if(p.idx>=96){p.idx=96;p.playing=false;clearInterval(demoProfileTimer)}render(false)},250);render(false)},
   dpreset:()=>{const p=demoProfileState();p.idx=0;p.playing=false;clearInterval(demoProfileTimer);render(false)},
   wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},
