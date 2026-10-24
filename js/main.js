@@ -190,7 +190,7 @@ const ACT={
   landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else if(a==='challenges'){S.persona='peter';S.chtab='ch';S.chFrom='home';pubGo('challenges')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
-  rtab:a=>{S.rtab=a;render(false)},
+  rtab:a=>{S.rtab=['rep','inv'].includes(a)?a:'rep';render(false)},
   mtab:a=>{S.mtab=a;render(false)},
   mtabgo:a=>{S.mtab=a;pubGo('group')},
   /* výber skupiny z kariet skupín */

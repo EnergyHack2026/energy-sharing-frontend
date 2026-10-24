@@ -221,8 +221,10 @@ function heat(){
 }
 function funnel(rows){const mx=Math.max(...rows.map(r=>r[1]),1);return `<div class="gap" style="margin-top:8px">${rows.map(([l,v,c])=>`<div><div class="row between sm"><span>${l}</span><b>${fm(v,1)} kWh</b></div><div class="bar ${c||''}"><i style="width:${Math.max(0,v/mx*100)}%"></i></div></div>`).join('')}</div>`}
 function vReports(){
+ if(S.reg.demoCustomer&&S.wz)return vDemoReports();
+ if(!['rep','inv'].includes(S.rtab))S.rtab='rep';
   const per=S.persona,res=dayRun(),a=agg(res),d=S.sim.days,t=S.rtab;
-  const tabs=`<div class="hero-tabs"><span class="seg" role="tablist" aria-label="Prehľady">${[['rep','Mesačný report'],['pred','Predikcia a „Čo ak“'],['led','Ledger'],['inv','Vyúčtovanie']].map(([k,l])=>`<button role="tab" data-act="rtab:${k}" aria-pressed="${t===k}">${l}</button>`).join('')}</span></div>`;
+  const tabs=`<div class="hero-tabs"><span class="seg" role="tablist" aria-label="Prehľady">${[['rep','Mesačný report'],['inv','Vyúčtovanie']].map(([k,l])=>`<button role="tab" data-act="rtab:${k}" aria-pressed="${t===k}">${l}</button>`).join('')}</span></div>`;
   const mon=new Date().toLocaleDateString('sk-SK',{month:'long',year:'numeric'});
   let h=`<div class="gap">`+hero({cls:'compact',kicker:'Prehľady · '+mon,title:'Každá kWh. <em>Každé euro.</em>',extra:tabs});
   if(t==='inv')return h+(per==='admin'?invoiceHtml('peter')+invoiceHtml('anna'):invoiceHtml(per))+'</div>';
