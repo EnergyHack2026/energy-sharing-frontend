@@ -447,10 +447,10 @@ function solSettingsCard(){
   /* výber zaškrtnutím z číselníka – najviac 3, dar sa rozdelí rovným dielom */
   const row=k=>{const c=RCP[k],on=L.some(r=>r.id===k),dis=!on&&full;return `<label class="don-r don-pick ${on?'on':''} ${dis?'dis':''}"><input type="checkbox" data-act="donpick:${k}" ${on?'checked':''} ${dis?'disabled':''} aria-label="${c.name}"><span class="don-ic" aria-hidden="true">${c.ic}</span><span class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></span></label>`};
   return `<div class="card" id="sol-card"><h3 class="sol-h">${icon('heart')} Lúč pomoci</h3>${(S.persona==='peter')?'<p class="xs mut sol-for">Platí pre vaše miesto s výrobou: <b>Rodinný dom</b></p>':''}<p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
-   <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
-   ${S.don.on?`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
+   <div class="fields" style="margin-top:10px">${F('Koľko zo zvyšku prebytku darujete','don.pct',{t:'r',step:5,u:' %'})}</div>
+   ${`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
     <div class="don-list">${Object.keys(RCP).map(row).join('')}</div>
-    <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:''}</div>`;
+    ${S.don.on?`<p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:'<p class="sm mut" style="margin-top:10px">Posuňte posuvník a začnite darovať – vybraní príjemcovia dostanú dar rovným dielom.</p>'}`}</div>`;
 }
 function solReportCard(){
   const x=solStats();

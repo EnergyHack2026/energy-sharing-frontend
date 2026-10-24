@@ -1740,7 +1740,7 @@ const defaults=()=>({
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
-  don:{on:false,pct:40,rcp:'r2',need:30,rcps:[{id:'r2',w:50},{id:'r3',w:30},{id:'r1',w:20}],pub:false},esg:{on:false,kwh:20,rcp:'r2'},
+  don:{on:false,pct:0,rcp:'r2',need:30,rcps:[{id:'r2',w:50},{id:'r3',w:30},{id:'r1',w:20}],pub:false},esg:{on:false,kwh:20,rcp:'r2'},
   bank:{on:false,pct:100,bal:120,rate:90,fee:5,winter:0.19,month:0,pays:[],playing:false},
   gifts:[],send:{to:'k1',code:'',kwh:3,occ:'Narodeniny',msg:'Všetko najlepšie! Posielam ti kúsok slnka z Piešťan.',fee:0,src:'bank',anim:null,last:null},
   agent:{on:false,done:[],minA:0.09,maxP:0.12,goal:200,prio:'zarobiť',appl:{pw:true,pb:true,wash:true,ev:true},cancel:{}},
@@ -2966,10 +2966,10 @@ function solSettingsCard(){
   /* výber zaškrtnutím z číselníka – najviac 3, dar sa rozdelí rovným dielom */
   const row=k=>{const c=RCP[k],on=L.some(r=>r.id===k),dis=!on&&full;return `<label class="don-r don-pick ${on?'on':''} ${dis?'dis':''}"><input type="checkbox" data-act="donpick:${k}" ${on?'checked':''} ${dis?'disabled':''} aria-label="${c.name}"><span class="don-ic" aria-hidden="true">${c.ic}</span><span class="don-t"><b>${c.name}</b><span class="xs mut">${c.type} · ${c.via}</span></span></label>`};
   return `<div class="card" id="sol-card"><h3 class="sol-h">${icon('heart')} Lúč pomoci</h3>${(S.persona==='peter')?'<p class="xs mut sol-for">Platí pre vaše miesto s výrobou: <b>Rodinný dom</b></p>':''}<p class="sm mut" style="margin-top:4px">Darujte časť prebytku, ktorý sa nevyzdieľal v skupine ani neuložil do batérie a inak by išiel výkupcovi. Susedia v skupine majú vždy prednosť. Energiu doručíme bez provízie a bez poplatkov.</p>
-   <div class="fields" style="margin-top:10px">${F('Darovať časť zvyšku prebytku','don.on',{t:'c'})}${S.don.on?F('Koľko zo zvyšku prebytku','don.pct',{t:'r',step:5,u:' %'}):''}</div>
-   ${S.don.on?`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
+   <div class="fields" style="margin-top:10px">${F('Koľko zo zvyšku prebytku darujete','don.pct',{t:'r',step:5,u:' %'})}</div>
+   ${`<div class="don-head"><b>Komu darujete</b><span class="xs mut">Vybraní ${L.length} / ${DON_MAX} · dar sa rozdelí rovným dielom</span></div>
     <div class="don-list">${Object.keys(RCP).map(row).join('')}</div>
-    <p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:''}</div>`;
+    ${S.don.on?`<p class="sm" style="margin-top:10px">Odhad: <b>${fm(x.mon,0)} kWh mesačne</b> pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'} – hodnota pre nich ${eur(x.val)}. Vy sa vzdáte výkupu ${eur(x.lost)} mesačne.</p>`:'<p class="sm mut" style="margin-top:10px">Posuňte posuvník a začnite darovať – vybraní príjemcovia dostanú dar rovným dielom.</p>'}`}</div>`;
 }
 function solReportCard(){
   const x=solStats();
@@ -6083,6 +6083,7 @@ document.addEventListener('input',e=>{
   else if(t==='c')v=el.checked;else if(t==='i')v=parseInt(el.value,10);else if(t==='t'){if(!el.value)return;v=el.value}else v=el.value;
   setPath(k,v);
   {const pr=k.split('.');if(pr.length===3&&pr[2]==='orig'&&(pr[0]==='p'||pr[0]==='c')){const o=getPath(pr[0]+'.'+pr[1]);if(o&&!o.accepted)setPath(pr[0]+'.'+pr[1]+'.time',v)}}
+  if(k==='don.pct')S.don.on=S.don.pct>0;   /* darovanie je zapnuté, keď je podiel väčší ako 0 % */
   if(k==='sim.idx'&&S.sim.playing){S.sim.playing=false;stopTimer()}
   if(k==='pl.idx'){S.pl.playing=false;clearInterval(plT);renderModal();return}
   if(k==='bank.month'&&S.bank.playing){S.bank.playing=false;clearInterval(bankT)}

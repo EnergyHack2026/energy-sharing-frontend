@@ -121,6 +121,7 @@ document.addEventListener('input',e=>{
   else if(t==='c')v=el.checked;else if(t==='i')v=parseInt(el.value,10);else if(t==='t'){if(!el.value)return;v=el.value}else v=el.value;
   setPath(k,v);
   {const pr=k.split('.');if(pr.length===3&&pr[2]==='orig'&&(pr[0]==='p'||pr[0]==='c')){const o=getPath(pr[0]+'.'+pr[1]);if(o&&!o.accepted)setPath(pr[0]+'.'+pr[1]+'.time',v)}}
+  if(k==='don.pct')S.don.on=S.don.pct>0;   /* darovanie je zapnuté, keď je podiel väčší ako 0 % */
   if(k==='sim.idx'&&S.sim.playing){S.sim.playing=false;stopTimer()}
   if(k==='pl.idx'){S.pl.playing=false;clearInterval(plT);renderModal();return}
   if(k==='bank.month'&&S.bank.playing){S.bank.playing=false;clearInterval(bankT)}
