@@ -632,3 +632,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-st{gap:10px!important;padding:20px!important}.wz-st-h{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding-right:24px;min-height:78px}.wz-st-h>.pill{font-size:.68em}.wz-st-p{margin:4px 0!important}.wz-price-benefit{display:block;font-size:.9em;font-weight:800;color:#087c65;background:#e2f4e9;padding:10px;border-radius:8px}.wz-st.on .wz-price-benefit{background:#c8ead8}.wz-st .wz-st-ch{margin-top:8px}.wz-st>input{top:22px!important;right:16px!important}
 
 .ims-not-worth{background:#fff0ef;border:2px solid #d84242;border-left:6px solid #c52e2e;color:#842020;border-radius:12px;padding:16px 18px;margin-bottom:18px;line-height:1.6}.ims-not-worth>b{display:block;color:#a51d1d;font-size:1.05em}.ims-not-worth p{margin:8px 0 12px}.ims-not-worth .btn{border-color:#c52e2e;color:#a51d1d;background:#fff}
+
+.ims-long-payback{display:block;font-weight:800;color:#a51d1d;margin-bottom:8px}.ims-choice.ims-unfavorable.selected{background:#fff3f1;border-color:#c53939}.ims-unfavorable .ims-choice-state,.ims-unfavorable dd{color:#a51d1d}
