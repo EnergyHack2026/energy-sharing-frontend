@@ -186,6 +186,7 @@ const ACT={
   maphi:a=>{S.mapHi=S.mapHi===a?null:a;render(false)},
   print:()=>{try{window.print()}catch(e){toast('Tlač sa nepodarila')}},
   landingoffer:a=>{S.persona='peter';S.ob.role='cons';if(a==='1')S.bat.on=true;pubGo('home')},
+  lpside:a=>{S.lpSide=a;render(false)},
   landingfeature:a=>{if(a==='battery'){S.persona='anna';S.bat.on=true;pubGo('home')}else if(a==='solidarity'){S.persona='anna';pubGo('cert')}else if(a==='reports'){S.persona='peter';pubGo('reports')}else if(a==='challenges'){S.persona='peter';S.chtab='ch';S.chFrom='home';pubGo('challenges')}else{S.persona='peter';pubGo('rewards')}},
   persona:a=>{S.persona=a;if(a==='admin'&&!ADMIN_OK.includes(S.view)&&!S.view.startsWith('i_'))S.view='admin';else if(a!=='admin'&&S.view==='admin')S.view='home';render(true)},
   view:a=>{if(a==='register'&&S.reg.step==='load')S.reg.step='choose';if(a==='map'&&!S.sim.playing&&(S.sim.idx<36||S.sim.idx>=88))S.sim.idx=48;pubGo(a)},
