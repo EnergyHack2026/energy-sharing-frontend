@@ -1605,6 +1605,14 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-price-actions .btn{white-space:normal;text-align:center}
 @media(max-width:900px){.wz-price-actions{justify-items:start}.wz-price-pair,.wz-price-actions{grid-column:auto}}
 
+/* Meter capacity and supplied IMS scenarios. */
+.db-summary{margin:20px 0}.db-summary h2{margin:6px 0 12px}.db-site{margin:16px 0;padding-top:16px;border-top:1px solid var(--line,#e5dfd7)}
+.db-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.db-facts>div{display:grid;gap:5px}
+.db-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}.db-option{padding:18px;border:1px solid #e5dfd7;border-radius:16px;background:#fff}.db-option.recommended{border-color:#079d76;background:#f0faf5}
+.db-option dl{display:grid;gap:10px;margin:16px 0 0}.db-option dl>div{display:flex;justify-content:space-between;gap:14px}.db-option dt{font-size:.85em;color:#596775}.db-option dd{margin:0;font-weight:700;text-align:right}.db-total{display:block;font-size:1.9em;margin-top:14px}.db-total small{font-size:.45em;font-weight:400}
+.db-existing{display:grid;gap:6px;padding:14px;border-radius:12px;background:#f0faf5}.db-months{margin:16px 0}.db-months summary{font-weight:700;cursor:pointer}.db-table{overflow-x:auto}.db-table table{width:100%;border-collapse:collapse}.db-table th,.db-table td{padding:10px;border-bottom:1px solid #e5dfd7;text-align:right}.db-table th:first-child{text-align:left}
+@media(max-width:650px){.db-facts{grid-template-columns:1fr 1fr}.db-options{grid-template-columns:1fr}.db-option dl>div{flex-wrap:wrap}.db-summary .row.between{align-items:flex-start}.db-total{font-size:1.6em}}
+
 </style>
 </head>
 <body>
@@ -4031,6 +4039,43 @@ function demoDetails(o){const r=o.source;if(!r)return '';return `<details style=
 
 </script>
 <script>
+/* js/demo-benefits.js */
+/* User-supplied illustrative tariff/IMS comparison; no live tariff lookup. */
+const DEMO_BENEFITS=[
+ [1297,32,12.04,3287.50,9862.50,2630,263,178.52,263,.07,7.76,891.60,1145],
+ [1324,32,12.04,3097.50,9292.50,2478,247.80,163.32,247.80,.07,8.23,815.60,1069],
+ [1875,40,15.05,12850,0,2570,257,136.40,257,.09,7.94,681,1115],
+ [272,25,9.41,11670,0,2334,233.40],
+ [344,40,15.05,11304,16956,5652,565.20],
+ [417,32,12.04,21210,0,4242,424.20],
+ [540,32,12.04,9372,14058,4686,468.60],
+ [1225,40,15.05,26230,0,5246,524.60],
+ [1244,40,15.05,11888,17832,5944,594.40],
+ [1611,50,18.81,52940,0,10588,1058.80],
+ [1869,25,9.41,2560,3840,1280,128],
+ [1870,25,9.41,2564,3846,1282,128.20]
+].map(([id,amps,capacity,vt,nt,shared,gross,net1=gross,net170=gross,pay1=null,pay170=null,five1=gross*5,five170=gross*5])=>({id,amps,capacity,vt,nt,shared,gross,net1,net170,pay1,pay170,five1,five170}));
+const demoBenefit=o=>DEMO_BENEFITS.find(b=>b.id===o.source?.connection_id);
+function demoBenefitTotals(oms,option='170'){
+ return oms.filter(o=>o.on&&(!o.ims||o.opts.cons)).reduce((t,o)=>{const b=demoBenefit(o);if(!b)return t;
+  const cheap=option==='1',net=cheap?b.net1:b.net170;
+  t.annual+=net;t.investment+=o.ims?0:cheap?1:170;t.five+=cheap?b.five1:b.five170;
+  t.gross+=b.gross;t.shared+=b.shared;t.fees+=o.ims||!cheap?0:b.capacity-5;t.count++;return t;
+ },{annual:0,investment:0,five:0,gross:0,shared:0,fees:0,count:0});
+}
+function demoBenefitCard(o){const b=demoBenefit(o);if(!b)return '';return `<section class="db-site" aria-label="Istič a prínosy">
+ <div class="db-facts"><div><span class="xs mut">Hlavný istič · odhad</span><b>3 × ${b.amps} A</b></div><div><span class="xs mut">Pôvodná fixná platba</span><b>${eur(5)} / mes.</b></div><div><span class="xs mut">Modelová kapacitná platba</span><b>${eur(b.capacity)} / mes.</b></div><div><span class="xs mut">Rozdiel platby</span><b>+${eur(b.capacity-5)} / mes.</b></div></div>
+ <p class="xs mut">${esc(o.source.tariff)} · VT ${fm(b.vt,0)} kWh / rok · NT ${fm(b.nt,0)} kWh / rok · odhad zdieľania ${fm(b.shared,0)} kWh / rok</p>
+ ${o.ims?`<div class="db-existing"><b>IMS už máte</b><span>Prínos ${eur(b.gross/12)} / mes. · ${eur(b.gross)} / rok</span><span class="xs mut">Investícia 0 € · dodatočná kapacitná platba 0 € podľa dodaného modelu.</span></div>`:`<div class="db-options">${[['1',b.net1,b.pay1,b.five1],['170',b.net170,b.pay170,b.five170]].map(([k,net,pay,five])=>`<article class="db-option ${k==='170'?'recommended':''}"><div class="row between"><b>IMS za ${k} €</b>${k==='170'?'<span class="pill g">Odporúčané v modeli</span>':''}</div><dl><div><dt>Dodatočná platba mesačne</dt><dd>${eur(k==='1'?b.capacity-5:0)}</dd></div><div><dt>Čistý mesačný prínos</dt><dd>${eur(net/12)}</dd></div><div><dt>Čistý ročný prínos</dt><dd>${eur(net)}</dd></div><div><dt>Návratnosť investície</dt><dd>${fm(pay,2)} mes.</dd></div><div><dt>Prínos za 5 rokov po investícii</dt><dd>${eur(five)}</dd></div></dl></article>`).join('')}</div><p class="xs mut">Riešenie za 1 € počíta s navýšením fixnej platby. Riešenie za 170 € podľa dodaného modelu nepridáva mesačný poplatok. Zapojenie je možné až po inštalácii IMS.</p>`}
+ </section>`}
+function demoBenefitSummary(){if(!S.reg.demoCustomer||!S.wz)return '';const oms=S.wz.oms,a=demoBenefitTotals(oms,'1'),b=demoBenefitTotals(oms,'170'),n=oms.filter(o=>o.on).length,eics=oms.filter(o=>o.on).reduce((n,o)=>n+(o.source?.meters.length||1),0);
+ const box=(t,k)=>`<article class="db-option ${k==='170'?'recommended':''}"><b>${k==='170'?'IMS za 170 €':'IMS za 1 €'} · súčet portfólia</b><strong class="db-total">${eur(t.annual/12)} <small>/ mes.</small></strong><dl><div><dt>Čistý prínos za rok</dt><dd>${eur(t.annual)}</dd></div><div><dt>Jednorazová investícia</dt><dd>${eur(t.investment)}</dd></div><div><dt>Prvý rok po investícii</dt><dd>${eur(t.annual-t.investment)}</dd></div><div><dt>Prínos za 5 rokov po investícii</dt><dd>${eur(t.five)}</dd></div></dl></article>`;
+ return `<section class="wz-card db-summary"><div class="row between"><div><span class="kicker">Prínosy vybraných miest</span><h2>${n} miest · ${eics} EIC kódov</h2></div><div class="row"><button class="btn" data-act="wzall:1">Zvoliť všetko</button><button class="btn" data-act="wzall:0">Zrušiť výber</button></div></div><p class="sm mut">Súčet spotreby bez dvojitého započítania výrobného EIC. Model počíta s 20 % zdieľanej ročnej spotreby a úsporou 0,10 €/kWh; výnos z predaja výroby nie je zahrnutý. Vlastné ceny v ďalšom kroku tento dodaný model nemenia.</p>
+ <div class="db-options">${box(a,'1')}${box(b,'170')}</div><details class="db-months"><summary>Prínos za každý mesiac</summary><p class="xs mut">Rovnomerný odhad: ročný čistý prínos / 12. Sezónne merania chýbajú. Investícia je uvedená samostatne; sumy sa zaokrúhľujú až pri zobrazení.</p><div class="db-table"><table><thead><tr><th>Mesiac</th><th>IMS za 1 €</th><th>IMS za 170 €</th></tr></thead><tbody>${['Január','Február','Marec','Apríl','Máj','Jún','Júl','August','September','Október','November','December'].map(m=>`<tr><th>${m}</th><td>${eur(a.annual/12)}</td><td>${eur(b.annual/12)}</td></tr>`).join('')}</tbody><tfoot><tr><th>Ročne</th><td>${eur(a.annual)}</td><td>${eur(b.annual)}</td></tr></tfoot></table></div></details><p class="xs mut">Ističe sú odhadnuté (ESTIMATED). Platby, návratnosti a odporúčania vychádzajú z dodanej testovacej tabuľky. Miesta bez IMS sú zahrnuté ako budúci stav po inštalácii. Odškrtnutie príjmu energie pri mieste s IMS ho vyradí z výpočtu.</p></section>`;
+}
+
+</script>
+<script>
 /* js/views-public.js */
 'use strict';
 /* ---------- úvod, výhody, registrácia ---------- */
@@ -4364,9 +4409,9 @@ function vWizard(){
    ${o.pv?yn('bat-'+i,o.batAns,'wzbat:'+i,'Máte na tomto mieste batériu a chcete z nej zdieľať energiu vo vybraných časoch?'):''}
    ${o.pv&&o.batAns?`<p class="wz-info sm">✓ Zákaznícke centrum vás bude kontaktovať a spoločne overíme možnosti zapojenia batérie.</p>`:''}</div>`;
  if(n===1)return top+`<p class="lead wz-lead">Načítali sme odberné miesta z vášho účtu. Označte, ktoré chcete zapojiť, pomenujte ich a rovno vyberte, ako budú zdieľať. Dostupné možnosti sú predvolene zapnuté – zrušte tie, o ktoré nemáte záujem.</p>
-  <div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div class="wz-om-id">${omIc(o.icon)}<div><b class="wz-addr">${esc(o.addr)}</b><span class="wz-om-meta"><span class="xs mut">${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
+  ${demoBenefitSummary()}<div class="wz-list">${W.oms.map((o,i)=>`<div class="wz-card ${o.on?'on':''}"><div class="wz-om-top"><div class="wz-om-id">${omIc(o.icon)}<div><b class="wz-addr">${esc(o.addr)}</b><span class="wz-om-meta"><span class="xs mut">${EIC} ${esc(o.eic)}</span>${wzTags(o)}</span></div></div>${F('Zapojiť','wz.oms.'+i+'.on',{t:'c'})}</div>
    <div class="wz-om-edit">${F('Názov objektu','wz.oms.'+i+'.name',{t:'x'})}${omTypeField('wz.oms.'+i+'.icon',o.icon)}</div>
-   ${demoDetails(o)}${o.on?opts(o,i):''}</div>`).join('')}</div>
+   ${demoDetails(o)}${demoBenefitCard(o)}${o.on?opts(o,i):''}</div>`).join('')}</div>
   <div class="wz-card wz-extra">${yn('ev',W.ev,'wzev','Vlastníte elektromobil? <span class="xs mut">Nepovinné</span>')}</div>
   ${err}
   ${wzNav(0,'wznext')}`+end;
@@ -4397,7 +4442,7 @@ function vWizard(){
  /* odhad prínosu pred odoslaním – z enginu pre odporúčanú skupinu, s rozptylom podľa istoty predikcie */
  const best=grpBest(isP),y=grpEst(best,isP).m*12,u=UNC[S.p.conf]||.2;
  return top+`<p class="lead wz-lead">Skontrolujte údaje a vstúpte do Zdieľne. Upraviť ich môžete v ktoromkoľvek kroku – vyplnené údaje zostanú.</p>
-  <div class="wz-card wz-est"><span class="xs mut">${isP?'Odhad zárobku navyše oproti výkupu':'Odhad úspory na cene elektriny'}</span><b class="wz-est-n">${eur0(y)} <small>ročne</small></b><span class="xs mut">rozpätie ${eur0(y*(1-u))} – ${eur0(y*(1+u))} · modelový odhad pri odporúčaných cenách, nie garancia</span></div>
+  ${S.reg.demoCustomer?demoBenefitSummary():`<div class="wz-card wz-est"><span class="xs mut">${isP?'Odhad zárobku navyše oproti výkupu':'Odhad úspory na cene elektriny'}</span><b class="wz-est-n">${eur0(y)} <small>ročne</small></b><span class="xs mut">rozpätie ${eur0(y*(1-u))} – ${eur0(y*(1+u))} · modelový odhad pri odporúčaných cenách, nie garancia</span></div>`}
   <div class="wz-list">${sel.map(o=>`<div class="wz-card wz-sum"><div class="wz-sum-top">${wzHead(o)}${o.ims?'':wzNoIms(o)}</div>
    <div class="wz-sum-row"><span class="xs mut">Odberné miesto</span><span>${esc(o.name)} · ${esc(o.addr)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${!o.ims?`
    <div class="wz-sum-row"><span class="xs mut">Stav</span><span>${o.imsReq?'Žiadosť o inteligentný elektromer je podaná. Miesto zapojíme hneď po jeho inštalácii.':'Zapojíme ho hneď po inštalácii inteligentného elektromera.'}</span>${o.imsReq?'':wzImsReq(o)}</div>`:`
@@ -5496,6 +5541,7 @@ const ACT={
   obrole:a=>{S.ob.role=a;render(false)},obgroup:a=>{S.ob.group=a;const m=S.mem[S.persona==='admin'?'peter':S.persona];if(m==='NONE'||m==='MATCH'||m==='READY')S.group=a;render(false)},
   obnext:()=>{S.ob.step=Math.min(7,S.ob.step+1);render(false)},obprev:()=>{S.ob.step=Math.max(1,S.ob.step-1);render(false)},
   regfull:()=>{S.reg.step='full';S.ob.step=1;window.scrollTo(0,0);render(false)},
+  wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},
   wzgo:a=>{S.wz.step=+a;S.wz.err='';window.scrollTo(0,0);render(false)},
   wzedit:a=>{const W=S.wz,[idx,side]=a.split(':'),i=+idx;W.edit=i;W.editSide=side||'prod';const o=i<0?null:wzSide(W.oms[i],W.editSide);W.pick=o?(o.strat||wzRec(o)):null;W.own=o?(o.own??wzPrice(o)):null;render(false)},
   wzbat:a=>{const [i,b]=a.split(':'),o=S.wz.oms[+i];if(b==='1'){S.modal='batt:'+i;render(false);return}o.batAns=false;o.opts.bat=false;render(false)},

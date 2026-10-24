@@ -526,3 +526,11 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .wz-price-actions{justify-items:end}
 .wz-price-actions .btn{white-space:normal;text-align:center}
 @media(max-width:900px){.wz-price-actions{justify-items:start}.wz-price-pair,.wz-price-actions{grid-column:auto}}
+
+/* Meter capacity and supplied IMS scenarios. */
+.db-summary{margin:20px 0}.db-summary h2{margin:6px 0 12px}.db-site{margin:16px 0;padding-top:16px;border-top:1px solid var(--line,#e5dfd7)}
+.db-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.db-facts>div{display:grid;gap:5px}
+.db-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}.db-option{padding:18px;border:1px solid #e5dfd7;border-radius:16px;background:#fff}.db-option.recommended{border-color:#079d76;background:#f0faf5}
+.db-option dl{display:grid;gap:10px;margin:16px 0 0}.db-option dl>div{display:flex;justify-content:space-between;gap:14px}.db-option dt{font-size:.85em;color:#596775}.db-option dd{margin:0;font-weight:700;text-align:right}.db-total{display:block;font-size:1.9em;margin-top:14px}.db-total small{font-size:.45em;font-weight:400}
+.db-existing{display:grid;gap:6px;padding:14px;border-radius:12px;background:#f0faf5}.db-months{margin:16px 0}.db-months summary{font-weight:700;cursor:pointer}.db-table{overflow-x:auto}.db-table table{width:100%;border-collapse:collapse}.db-table th,.db-table td{padding:10px;border-bottom:1px solid #e5dfd7;text-align:right}.db-table th:first-child{text-align:left}
+@media(max-width:650px){.db-facts{grid-template-columns:1fr 1fr}.db-options{grid-template-columns:1fr}.db-option dl>div{flex-wrap:wrap}.db-summary .row.between{align-items:flex-start}.db-total{font-size:1.6em}}
