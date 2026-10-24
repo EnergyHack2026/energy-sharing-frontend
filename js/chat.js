@@ -25,7 +25,6 @@ function botAnswer(q){
   if(has('provizi','kolko stoji','cena sluzby'))return A(`Províziu platí <b>iba výrobca</b> z predanej energie${pub?'':` (${feeTxt()})`}. Odberateľ províziu neplatí a darovanie cez Lúč pomoci je bez provízie.`);
   if(has('kde najdem eic','eic'))return A(`EIC je 16-miestny kód odberného miesta. Nájdete ho na faktúre za elektrinu alebo v zákazníckom účte pri údajoch o odbernom mieste.`,[['Zaregistrovať sa','view:register']]);
   for(let k=0;k<LP_FAQ.length;k++)if(has(...LP_FAQ[k].k))return faq(k);
-  if(has('mapa','mape','kde su'))return A(`Na mape vidíte svoje odberné miesto aj ostatných členov skupiny anonymizovane.`,pub?[]:[['Otvoriť mapu','view:map']]);
   return A(`Na toto v Zdieľni zatiaľ odpoveď nemám. Skúste sa opýtať na úsporu, zárobok, slnečné okno, iWatt a výzvy, stratégie, Lúč pomoci alebo registráciu.`);
 }
 
