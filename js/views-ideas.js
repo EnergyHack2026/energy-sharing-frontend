@@ -3,7 +3,7 @@
 /* stav: ok = rozvíjame (dá sa otvoriť), soon = pripravujeme (sivá karta, neotvára sa) */
 const IDEAS=[
  ['i_badge','award','Varíme zo slnka od suseda','Značka a certifikát pre malé podniky, ktoré varia z lokálneho slnka.','ok'],
- ['i_sol','heart','Solidárne slnko','Darujte časť prebytku tým, ktorí to potrebujú – bez provízie a poplatkov.','ok']];
+ ['i_sol','heart','Lúč pomoci','Darujte časť prebytku tým, ktorí to potrebujú – bez provízie a poplatkov.','ok']];
 const ideaCard=([id,ic,t,d,st])=>st==='soon'?`<div class="idea soon" aria-disabled="true"><span class="idea-soon">Pripravujeme…</span><span class="ico">${icon(ic)}</span><b style="font-size:18px;letter-spacing:-.02em">${t}</b><span class="sm mut">${d}</span></div>`:`<button class="idea ${st==='q'?'q':''}" data-act="view:${id}"><span class="row between" style="width:100%"><span class="ico">${icon(ic)}</span>${st==='q'?pill('o','? na zváženie'):''}</span><b style="font-size:18px;letter-spacing:-.02em">${t}</b><span class="sm mut">${d}</span><span class="b go">Otvoriť →</span></button>`;
 function vIdeas(){
   return `<div class="gap">${hero({kicker:'Vízie',title:'Kam môže Zdieľňa <em>rásť.</em>',lead:'Vízie s vlastnou interaktívnou ukážkou – počítajú tým istým enginom ako celá aplikácia. Ide o koncepty, nie existujúce produkty.',aside:hstat('Rozvíjame',String(IDEAS.filter(x=>x[4]!=='soon').length),'nápady s ukážkou')+hstat('Pripravujeme',String(IDEAS.filter(x=>x[4]==='soon').length),IDEAS.filter(x=>x[4]==='soon').map(x=>x[2]).join(', '))})}
@@ -19,7 +19,7 @@ const gains=(cu,co)=>`<div class="gains"><div class="card" style="border-top:5px
 function badgeShare(){const a=agg(dayRun()),sh=a.peter.cons>0?a.peter.recv/a.peter.cons:0,lv=sh>=.6?'zlato':sh>=.4?'striebro':sh>=.2?'bronz':null;return {sh,lv,a}}
 const LVC={zlato:['#b8860b','🥇'],striebro:['#8a94a6','🥈'],bronz:['#a0522d','🥉']};
 /* ---------- Dobrý sused: znak iba pre prevádzky, ktoré spĺňajú všetky tri podmienky ----------
-   1 – energia zo slnka od susedov (aspoň 20 % spotreby), 2 – darujú cez Solidárne slnko, 3 – overené meraním (IMS).
+   1 – energia zo slnka od susedov (aspoň 20 % spotreby), 2 – darujú cez Lúč pomoci, 3 – overené meraním (IMS).
    Bez všeobecných „zelených“ tvrdení – na nálepke aj profile iba merateľné čísla.
    QR kód na nálepke otvorí verejný profil prevádzky s ponukou pridať sa do Zdieľne (s odporúčacím kódom prevádzky). */
 const ESG_MIN=.2;
@@ -49,13 +49,13 @@ const esgPill=(k,t,ok)=>`<span class="esg-p ${ok?'ok':''}"><b>${k}</b>${t}</span
 function vCert(){
   const x=esgStats(),name=S.badge.name||'Bistro',month=new Date().toLocaleDateString('sk-SK',{month:'long',year:'numeric'});
   const crit=[['1','Slnko od susedov',`${pct(x.sh)} spotreby z prebytkov susedov (potrebné aspoň ${pct(ESG_MIN)})`,x.okE,x.okE?'':'<button class="link" data-act="view:challenges">Ako zvýšiť podiel →</button>'],
-   ['2','Pomáha v okolí',x.okS?`Darujete ${fm(x.donKwh,0)} kWh mesačne pre ${x.r.name}`:'Darujte kWh zo slnka susedov cez Solidárne slnko – nastavíte nižšie.',x.okS,''],
+   ['2','Pomáha v okolí',x.okS?`Darujete ${fm(x.donKwh,0)} kWh mesačne pre ${x.r.name}`:'Darujte kWh zo slnka susedov cez Lúč pomoci – nastavíte nižšie.',x.okS,''],
    ['3','Overené meraním','Údaje z inteligentného elektromera (IMS), zúčtovanie cez Zdieľňu.',x.okG,'']];
   const head=hero({kicker:'Slnečný klub · Dobrý sused',title:x.ok?'Ste dobrý sused. <em>Ukážte to zákazníkom.</em>':'Staňte sa <em>dobrým susedom.</em>',
     lead:x.ok?'Vaša prevádzka spĺňa všetky tri podmienky. Nálepka s QR kódom ukáže zákazníkom konkrétne čísla – koľko slnka beriete od susedov a komu pomáhate – a pozve ich do Zdieľne.':'Znak dostanú iba prevádzky, ktoré berú elektrinu zo slnka od susedov a zároveň pomáhajú tým, ktorí to potrebujú. Splňte všetky tri podmienky.',
     aside:hstat('Splnené podmienky',`${[x.okE,x.okS,x.okG].filter(Boolean).length} / 3`,x.ok?'znak je aktívny':'znak sa odomkne po splnení všetkých')});
   const checks=`<div class="card"><span class="kicker">Podmienky znaku</span><h3>Tri podmienky</h3><div class="esg-crit">${crit.map(([k,t,d,ok,act])=>`<div class="esg-c ${ok?'ok':''}"><span class="esg-k">${ok?'✓':k}</span><div><b>${t}</b><p class="sm mut">${d}</p>${act}</div></div>`).join('')}</div></div>`;
-  const don=`<div class="card" id="esg-don"><h3>${icon('heart')} Solidárne slnko pre prevádzky</h3><p class="sm mut" style="margin-top:4px">Darujte kWh elektriny zo slnka vašich susedov. Odoberieme ich vo vašom mene a doručíme rodine, škole alebo charite vo vašom okolí – bez provízie a poplatkov.</p>
+  const don=`<div class="card" id="esg-don"><h3>${icon('heart')} Lúč pomoci pre prevádzky</h3><p class="sm mut" style="margin-top:4px">Darujte kWh elektriny zo slnka vašich susedov. Odoberieme ich vo vašom mene a doručíme rodine, škole alebo charite vo vašom okolí – bez provízie a poplatkov.</p>
    <div class="fields" style="margin-top:10px">${F('Darovať kWh mesačne','esg.on',{t:'c'})}${S.esg.on?F('Koľko kWh mesačne','esg.kwh',{t:'r',min:5,max:100,step:5,u:' kWh'})+F('Príjemca','esg.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])}):''}</div>
    ${S.esg.on?`<p class="sm" style="margin-top:8px">Mesačne <b>${fm(x.donKwh,0)} kWh</b> pre ${x.r.name} (${x.r.via}) – pre príjemcu hodnota ${eur(x.val)}. Vás to stojí ${eur(x.donEur)} za cenu zdieľania ${fpr(x.unit)} €/kWh, teda ${pct(x.donEur/Math.max(.01,x.saved))} z vašej mesačnej úspory ${eur(x.saved)}.</p>`:''}</div>`;
   const profile=`<div class="card"><span class="kicker">Čo uvidí zákazník po naskenovaní</span><h3>Verejný profil prevádzky</h3>
@@ -73,7 +73,7 @@ function vIdeaSol(){
   const mon=A.don*d,val=mon*S.c.ref,lost=mon*S.p.feedin,hh=S.don.need>0?Math.floor(mon/S.don.need):0;
   const ok=Math.abs(a.debT-a.netT-a.comT)<1e-9;
   return `<div class="gap">${ideaHead('i_sol','Anna má cez víkend viac slnka, než susedia minú. Časť zvyšku, ktorý by inak išiel výkupcovi za pár centov, daruje rodine v núdzi alebo škole. Energiu doručí obec – bez provízie a bez poplatkov.')}
-  <div class="grid g2"><div class="card"><h3>Nastavenie daru</h3><div class="fields one" style="margin-top:8px">${F('Zapojiť Solidárne slnko do výpočtu','don.on',{t:'c'})}${F('Darovať zo zvyšku prebytku (po skupine a batérii)','don.pct',{t:'r',u:' %'})}${F('Príjemca','don.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])})}${F('Mesačná podpora na domácnosť','don.need',{step:5,min:1,u:'kWh'})}</div>
+  <div class="grid g2"><div class="card"><h3>Nastavenie daru</h3><div class="fields one" style="margin-top:8px">${F('Zapojiť Lúč pomoci do výpočtu','don.on',{t:'c'})}${F('Darovať zo zvyšku prebytku (po skupine a batérii)','don.pct',{t:'r',u:' %'})}${F('Príjemca','don.rcp',{t:'s',opts:Object.entries(RCP).map(([k,v])=>[k,v.ic+' '+v.name])})}${F('Mesačná podpora na domácnosť','don.need',{step:5,min:1,u:'kWh'})}</div>
     ${on?'':`<p class="sm" style="margin-top:8px;color:var(--orange)">Náhľad – darovanie zatiaľ nie je zapnuté v enginu. Po zapnutí sa premietne do ledgera, auditu aj mapy.</p>`}</div>
    <div class="card" style="border-left:5px solid #f5b400"><h3>${r.ic} ${r.name}</h3><div class="xs mut">${r.via}</div>
     <div class="grid g2" style="margin-top:10px;gap:8px">${kpi('Darované dnes',fm(A.don,2)+' kWh')}${kpi('Darované mesačne',fm(mon,0)+' kWh')}${kpi('Hodnota pre príjemcu',eur(val),'pri cene '+fpr(S.c.ref)+' €/kWh')}${kpi('Podporené domácnosti',String(hh),'pri '+fm(S.don.need,0)+' kWh/mesiac')}</div>

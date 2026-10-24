@@ -13,7 +13,7 @@ function mapMembers(){
    {id:'C',addr:'Hlohovec',role:'Odberateľ',label:'',ims:true,grp:gname(S.group)},
    {id:'D',addr:'Bratislava',role:'Odberateľ (EV)',label:'',ims:true,grp:gname(S.group)},
    {id:'V1',addr:'Prešov',pv:true,bat:true,role:'Výrobca s batériou',ims:true,grp:'Poludnie 9'},{id:'V2',addr:'Košice',bistro:true,role:'Odberateľ (reštaurácia)',ims:true,grp:'Poludnie 9'},{id:'V3',addr:'Košice',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V4',addr:'Michalovce',role:'Odberateľ',ims:true,grp:'Poludnie 9'},{id:'V5',addr:'Poprad',pv:true,role:'Výrobca',ims:true,grp:'Poludnie 9'}];
-  if(S.don.on){const r=RCP[(S.don.rcps&&S.don.rcps[0]||{}).id||S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Solidárneho slnka',label:r.ic,ims:true,grp:'Solidárne slnko',rcp:true})}
+  if(S.don.on){const r=RCP[(S.don.rcps&&S.don.rcps[0]||{}).id||S.don.rcp];L.push({id:'rcp',addr:r.name,role:'Príjemca Lúča pomoci',label:r.ic,ims:true,grp:'Lúč pomoci',rcp:true})}
   for(const g of S.gifts){const c=CONTACTS[g.to];if(c&&!L.find(x=>x.id==='k_'+g.to))L.push({id:'k_'+g.to,addr:c.town,role:'Príjemca darčeka – '+c.name,label:'🎁',ims:true,grp:'Pošli slnko'})}
   const placed=[];
   for(const m of L){const g=geo(m.addr);let [x,y]=prj(g.ll);for(let k=0;k<10&&placed.some(p=>Math.hypot(p[0]-x,p[1]-y)<36);k++){x+=k%2?-34:30;y+=k%2?16:10}placed.push([x,y]);m.x=x;m.y=y;m.reg=regionOf(g.ll);m.town=g.town}
@@ -21,7 +21,7 @@ function mapMembers(){
   return L.filter(m=>m.reg!=='sse'||m.own);
 }
 /* legenda = prepínače zvýraznenia (S.mapHi) */
-const MAP_KEYS=[['zse','var(--map-zse-roof)','oblasť ZSE'],['sse','var(--map-sse-ink)','oblasť SSE – mimo služby'],['vse','var(--map-vse-roof)','oblasť VSE'],['flow','var(--map-flow)','tok cez deň'],['bat','var(--map-bat)','z batérie'],['gift','var(--map-gift)','dar (Solidárne slnko)'],['noims','','OM bez IMS']];
+const MAP_KEYS=[['zse','var(--map-zse-roof)','oblasť ZSE'],['sse','var(--map-sse-ink)','oblasť SSE – mimo služby'],['vse','var(--map-vse-roof)','oblasť VSE'],['flow','var(--map-flow)','tok cez deň'],['bat','var(--map-bat)','z batérie'],['gift','var(--map-gift)','dar (Lúč pomoci)'],['noims','','OM bez IMS']];
 function mapLegend(){
   return `<div class="map-legend" role="group" aria-label="Zvýrazniť na mape">${MAP_KEYS.map(([k,c,l])=>`<button class="${k==='noims'?'dash':''}" data-act="maphi:${k}" aria-pressed="${S.mapHi===k}">${c?`<i style="background:${c}"></i>`:''}${l}</button>`).join('')}</div>`;
 }
@@ -31,8 +31,8 @@ function mapNote(M,F_){
   if(hi==='sse')return 'Stredné Slovensko (SSE) je zatiaľ mimo služby – žiadne odberné miesta.';
   if(hi==='zse'||hi==='vse'){const L=M.filter(m=>m.reg===hi),pv=L.filter(m=>m.pv).length;return `Oblasť ${hi.toUpperCase()} – ${L.length} odberných miest, z toho ${pv} ${pv===1?'výrobca':pv<5?'výrobcovia':'výrobcov'}.`}
   if(hi==='noims'){const n=M.filter(m=>!m.ims).length;return n?`Bez inteligentného merania: ${n} ${n===1?'odberné miesto':'odberné miesta'} – zatiaľ nemôžu aktívne zdieľať.`:'Všetky odberné miesta majú IMS.'}
-  const L=F_.filter(f=>f.t===hi),k=sum(L.map(f=>f.k)),lab={flow:'Toky cez deň',bat:'Toky z batérie',gift:'Dary (Solidárne slnko)'}[hi];
-  if(!L.length)return hi==='gift'?'Zatiaľ žiadne dary – zapnite Solidárne slnko.':lab+': práve teraz žiadne.';
+  const L=F_.filter(f=>f.t===hi),k=sum(L.map(f=>f.k)),lab={flow:'Toky cez deň',bat:'Toky z batérie',gift:'Dary (Lúč pomoci)'}[hi];
+  if(!L.length)return hi==='gift'?'Zatiaľ žiadne dary – zapnite Lúč pomoci.':lab+': práve teraz žiadne.';
   return `${lab}: ${L.length} ${L.length===1?'spojenie':L.length<5?'spojenia':'spojení'}, práve teraz ${fm(k,2)} kWh za 15 minút.`;
 }
 function vMap(){

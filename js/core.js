@@ -29,7 +29,7 @@ const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}
 /* ---------- finálna verzia: zapnuté časti ----------
    Do finálu pridáš funkciu doplnením jej kľúča: obrazovka z VIEWS (home, market, register…) alebo 'chat', 'tour'.
    Vypnuté obrazovky sa nezobrazia a tlačidlá, ktoré na ne vedú, sa skryjú (gateActs v main.js). */
-const ON=new Set(['landing','register','home','challenges','group','reports','rewards','cert','profile','map','chat']);
+const ON=new Set(['landing','register','home','challenges','group','reports','rewards','help','cert','profile','map','chat']);
 const isOn=k=>ON.has(k);
 
 /* ---------- state ---------- */
@@ -86,7 +86,7 @@ const GROUPS=[
  /* ukážka presunu: skupina s lepším časovým súladom pre odberateľa aj výrobcu (operátor do nej presúva) */
  {id:'g21',code:'PS-ZSE-0521',dp:-0.002,name:'Poludňajšie slnko',prod:9,cons:18,cap:30,reg:'zse',town:'Trnava · Hlohovec',succ:81,tag:'Najlepší súlad s vaším profilom',why:'členovia vyrábajú presne v čase vašej spotreby',f:1.12}
 ];
-/* číselník príjemcov Solidárneho slnka – spravuje operátor; každý má odberné miesto s IMS v skupine zdieľania E.SK (ilustračné údaje) */
+/* číselník príjemcov Lúča pomoci – spravuje operátor; každý má odberné miesto s IMS v skupine zdieľania E.SK (ilustračné údaje) */
 const RCP={r1:{name:'Rodina v núdzi – Hlohovec',type:'Rodina v núdzi',via:'cez Mesto Hlohovec',town:'Hlohovec',ic:'🏠',eic:'24ZZS000000R001'},
  r2:{name:'ZŠ Komenského – Piešťany',type:'Škola',via:'cez Mesto Piešťany',town:'Piešťany',ic:'🏫',eic:'24ZZS000000R002'},
  r3:{name:'Charita – Trnava',type:'Charita',via:'cez Trnavskú arcidiecéznu charitu (ilustračne)',town:'Trnava',ic:'🤝',eic:'24ZZS000000R003'},
@@ -99,5 +99,5 @@ const gname=id=>(GROUPS.find(g=>g.id===id)||GROUPS[0]).name;
 const gOcc=g=>{const n=g.prod+g.cons;return {n,cap:g.cap,free:Math.max(0,g.cap-n),full:n>=g.cap,p:Math.min(1,n/g.cap)}};
 const REG={zse:{name:'Západ',co:'ZSE',on:true},sse:{name:'Stred',co:'SSE',on:false},vse:{name:'Východ',co:'VSE',on:true}};
 const logEv=m=>{S.log.unshift({t:new Date().toLocaleTimeString('sk-SK'),m})};
-const nm=id=>({anna:'Anna',peter:'Peter',B:'Výrobca B',C:'Odberateľ C',D:'Odberateľ D',SK:'Škola',NB:'Nabíjačka',don:'Solidárne slnko'}[id]||(String(id).startsWith('gift:')?'Pošli slnko → '+((CONTACTS[id.slice(5)]||{}).name||id.slice(5)):id));
+const nm=id=>({anna:'Anna',peter:'Peter',B:'Výrobca B',C:'Odberateľ C',D:'Odberateľ D',SK:'Škola',NB:'Nabíjačka',don:'Lúč pomoci'}[id]||(String(id).startsWith('gift:')?'Pošli slnko → '+((CONTACTS[id.slice(5)]||{}).name||id.slice(5)):id));
 

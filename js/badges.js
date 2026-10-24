@@ -32,8 +32,8 @@ const BADGES=[
  {id:'founder',cat:'komunita',who:'both',kind:'once',metal:'gold',icon:'award',col:'--brand',name:'Zakladateľ',how:'Patríte medzi prvých 10 členov skupiny Slnečný kruh 17.'},
  {id:'morning',cat:'komunita',who:'both',kind:'tier',tiers:[3,7,30],unit:'dní',icon:'sunrise',col:'--c-prod',name:'Ranné slniečko',how:'Dni, keď ste sa pozreli do Zdieľne. Každý deň dostanete na štart slnečné body – a za sériu viac.',live:c=>c.visits},
 
- {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Solidárne slnko.',live:c=>c.don>0.001},
- {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Solidárne slnko – bez provízie a bez poplatkov.',live:c=>c.don},
+ {id:'first_gift',cat:'srdce',who:'anna',kind:'once',metal:'bronze',icon:'heart',col:'--brand',name:'Prvý dar',how:'Prvá kWh darovaná cez Lúč pomoci.',live:c=>c.don>0.001},
+ {id:'donated',cat:'srdce',who:'anna',kind:'tier',tiers:[50,500],unit:'kWh',icon:'heart',col:'--c-prod',name:'Darované kWh',how:'Energia darovaná cez Lúč pomoci – bez provízie a bez poplatkov.',live:c=>c.don},
 
  {id:'longest',cat:'sezona',who:'both',kind:'once',metal:'slnko',icon:'sun',col:'--c-prod',name:'Najdlhší deň',how:'Zdieľali ste 21. júna, v deň letného slnovratu.'},
  {id:'spring',cat:'sezona',who:'both',kind:'once',metal:'silver',icon:'leaf',col:'--c-shared',name:'Prvý jarný lúč',how:'Prvé zdieľanie po zime.'},
