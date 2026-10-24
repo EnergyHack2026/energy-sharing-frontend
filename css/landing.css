@@ -520,3 +520,9 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .ssl-sec .icon{width:18px;height:18px;color:var(--green);flex:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){.ssl-bar i{transition:none}}
+
+/* Separate purchase and sale settings for each connection. */
+.wz-price-pair,.wz-price-actions{display:grid;gap:16px}
+.wz-price-actions{justify-items:end}
+.wz-price-actions .btn{white-space:normal;text-align:center}
+@media(max-width:900px){.wz-price-actions{justify-items:start}.wz-price-pair,.wz-price-actions{grid-column:auto}}

@@ -246,6 +246,7 @@ const WZ_HEAD={2:['Nájdite cenu, ktorá vám sedí','Porovnajte cenové straté
 const WZ_STRAT={match:{t:'Uprednostniť spárovanie',d:'Viac možností na prepojenie',sell:0.084,buy:0.122,ch:75,sh:55},
  bal:{t:'Vyvážená voľba',d:'Kompromis medzi cenou a využitím',sell:0.103,buy:0.103,ch:56,sh:42},
  price:{t:'Uprednostniť cenu',d:'Výhodnejšia cena, menej možností',sell:0.122,buy:0.084,ch:33,sh:26}};
+const wzSide=(o,side)=>side==='cons'?{...o,pv:false,strat:o.consStrat||null,own:o.consOwn??null}:o;
 const wzProd=o=>o.pv;                                   /* miesto vyrába (FVE) */
 const wzRec=o=>wzProd(o)?'bal':o.mwh>=10?'match':'bal'; /* odporúčanie podľa profilu miesta */
 const wzPrice=(o,k=o.strat||wzRec(o))=>k==='own'?o.own:WZ_STRAT[k][wzProd(o)?'sell':'buy'];
@@ -344,15 +345,15 @@ function vWizard(){
     <span class="xs mut">Odhad spárovaného objemu</span><b>${vol} kWh / modelový mesiac</b>
     <span class="xs mut">Priemerný spárovaný podiel</span><b>${x.sh} %</b></label>`};
   return top+`<p class="lead wz-lead">Pre každé odberné miesto sme podľa jeho profilu prednastavili odporúčanú cenu. Môžete ju rovno prijať a pokračovať, alebo si ju upraviť. Ceny sú bez DPH.</p>
-  <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,k=o.strat||wzRec(o);
+  <div class="wz-list">${sel.map(o=>{const i=W.oms.indexOf(o),ed=W.edit===i,e=wzSide(o,W.editSide),k=o.strat||wzRec(o);
+   const priceBlock=side=>{const p=wzSide(o,side),st=p.strat||wzRec(p);return `<div class="wz-pr-col"><span class="xs mut">${side==='prod'?'Cena výroby · predáte za':'Cena spotreby · zaplatíte najviac'}</span><b>${fpr(wzPrice(p))} €/kWh</b><span class="xs mut">${wzCtx(p)}</span><span class="xs ${st===wzRec(p)?'wz-ok':'mut'}">${st===wzRec(p)?'Odporúčaná cena':wzStratName(st)}</span></div>`};
    return `<div class="wz-card wz-pr ${ed?'on':''}"><div class="wz-pr-row">
-    <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.name||'Bez názvu')}</b><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
+    <div class="wz-pr-name">${omIc(o.icon)}<div><b>${esc(o.addr||o.name||'Bez názvu')}</b><span class="xs mut">${esc(o.name||'')}</span><span class="xs mut">${EIC} ${esc(o.eic)}</span></div></div>${wzTags(o)}
     <div class="wz-pr-col"><span class="xs mut">Ročná spotreba</span><b>${fm(o.mwh,1)} MWh</b>${o.pv?`<span class="xs mut">Ročná výroba</span><b>${o.pmwh==null?'Chýba ročný profil':fm(o.pmwh,1)+' MWh'}</b>`:''}</div>
-    ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-pr-col"><span class="xs mut">${wzPriceLbl(o)}</span><b>${fpr(wzPrice(o))} €/kWh</b><span class="xs mut">${wzCtx(o)}</span><span class="xs ${k===wzRec(o)?'wz-ok':'mut'}">${k===wzRec(o)?'Odporúčaná cena':wzStratName(k)}</span></div>
-    ${ed?'':`<button class="btn" data-act="wzedit:${i}">Upraviť cenu</button>`}`}</div>
-    ${ed?`<fieldset class="wz-strats"><legend>Cenová stratégia – ${esc(o.name)}</legend>${['match','bal','price'].map(k=>strat(o,k)).join('')}</fieldset>
-    <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(o)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
-     ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(o),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(o,W.own)}</span>${wzOwnWarn(o,W.own)?`<p class="wz-warn">${wzOwnWarn(o,W.own)}</p>`:''}</div></div>`:''}</div>
+    ${!o.ims?`<div class="wz-pr-col"><span class="xs mut">Cena</span><span class="xs mut">Nastavíte po inštalácii inteligentného elektromera</span></div>${wzNoIms(o)}`:`<div class="wz-price-pair">${o.pv?priceBlock('prod'):''}${priceBlock('cons')}</div><div class="wz-price-actions">${o.pv?`<button class="btn" data-act="wzedit:${i}:prod">Upraviť cenu výroby</button>`:''}<button class="btn" data-act="wzedit:${i}:cons">Upraviť cenu spotreby</button></div>`}</div>
+    ${ed?`<fieldset class="wz-strats"><legend>${W.editSide==='cons'?'Cena spotreby':'Cena výroby'} – ${esc(o.addr||o.name)}</legend>${['match','bal','price'].map(k=>strat(e,k)).join('')}</fieldset>
+    <div class="wz-own ${W.pick==='own'?'on':''}"><label class="wz-own-h"><input type="radio" name="wz-st" data-act="wzpick:own" ${W.pick==='own'?'checked':''}><span><b>Vlastná cena</b><span class="xs mut">Nastavte si cenu sami – ${wzProd(e)?'za koľko chcete susedom predávať':'koľko najviac chcete platiť'}.</span></span></label>
+     ${W.pick==='own'?`<div class="wz-own-in">${F(wzPriceLbl(e),'wz.own',{step:.001,min:0,max:1,u:'€/kWh'})}<div class="xs"><span class="mut">${wzCtx(e,W.own)}</span>${wzOwnWarn(e,W.own)?`<p class="wz-warn">${wzOwnWarn(e,W.own)}</p>`:''}</div></div>`:''}</div>
     <p class="xs mut">* Modelový odhad podľa profilu miesta a ponúk v skupine, nie záväzný prísľub.</p>
     <div class="wz-pr-act"><button class="btn" data-act="wzedit:-1">Zrušiť</button><button class="btn pri" data-act="wzprice:${i}">Potvrdiť výber</button></div>`:''}</div>`}).join('')}</div>${err}
   ${wzNav(1,'wznext')}`+end;}
@@ -368,7 +369,7 @@ function vWizard(){
    <div class="wz-sum-row"><span class="xs mut">Stav</span><span>${o.imsReq?'Žiadosť o inteligentný elektromer je podaná. Miesto zapojíme hneď po jeho inštalácii.':'Zapojíme ho hneď po inštalácii inteligentného elektromera.'}</span>${o.imsReq?'':wzImsReq(o)}</div>`:`
    <div class="wz-sum-row"><span class="xs mut">Možnosti zdieľania</span><span>${optTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>${o.pv?`
    <div class="wz-sum-row"><span class="xs mut">Zdieľanie z batérie</span><span>${batTxt(o)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div>`:''}
-   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${wzPriceLbl(o)} ${fpr(wzPrice(o))} €/kWh · ${(o.strat&&o.strat!==wzRec(o))?wzStratName(o.strat):'odporúčaná cena'}</span><button class="link" data-act="wzgo:2">Upraviť</button></div>`}</div>`).join('')}</div>
+   <div class="wz-sum-row"><span class="xs mut">Cenové nastavenia</span><span>${o.pv?'Výroba: '+fpr(wzPrice(o))+' €/kWh · ':''}Spotreba: ${fpr(wzPrice(wzSide(o,'cons')))} €/kWh</span><button class="link" data-act="wzgo:2">Upraviť</button></div>`}</div>`).join('')}</div>
   <div class="wz-card wz-sum wz-extra"><div class="wz-sum-row"><span class="xs mut">Elektromobil</span><span>${yn3(W.ev)}</span><button class="link" data-act="wzgo:1">Upraviť</button></div></div>
   ${err}
   ${wzNav(2,'wzsubmit','Vstúpiť do Zdieľne<span class="sig">.</span>',false,'dark sig-btn')}`+end;
@@ -466,4 +467,5 @@ function vRegister(){
    <div class="card"><span class="kicker">${sent?'Čo bude ďalej':'Čo sa stane po odoslaní'}</span><h3>Od žiadosti po prvé vyúčtovanie</h3>${regTimeline(isP,sent?'PENDING':'NONE',g)}
     ${sent?`<div class="row" style="margin-top:16px"><button class="btn pri" data-act="view:group">Skupina zdieľania →</button><button class="btn" data-act="view:home">Pozrieť, ako bude vyzerať Domov</button></div>`:''}</div></div>`;
 }
+
 
