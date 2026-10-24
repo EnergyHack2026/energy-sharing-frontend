@@ -325,7 +325,7 @@ function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
 const vCertView=()=>vGoodNeighbour();
 /* ---------- Výzvy – jedna odporúčaná akcia dňa, ostatné výzvy, splnené; odmena v iWatt ---------- */
-const CH_IW=1000,CH_CAP=3000;   /* iWatt za overenú výzvu, denný limit */
+const CH_IW=20,CH_CAP=60;   /* iWatt za overenú výzvu, denný limit */
 /* stav výzvy: new → wait (prijatá, čaká na čas) → done (overené IMS) / fail (neoverené, bez trestu) */
 function chState(ow,k){const o=A_(ow,k);if(!o.accepted)return 'new';if(S.sim.idx<T2I(o.time)+2)return 'wait';return verifyLoad(ow,k).ok?'done':'fail'}
 const chPickKey=(ow,k)=>ow+'_'+k;
@@ -531,20 +531,20 @@ const refUrl=()=>`https://zdielna.sk/pozvanka/${refCode()}`;
 function refCard(){
   const R=S.ref;
   return `<div class="card ref-card"><span class="kicker">Odporučte Zdieľňu</span><h3>Pozvite suseda, získajte odmenu</h3>
-   <p class="sm mut" style="margin-top:4px">Pošlite odkaz alebo ukážte QR kód. Keď sa sused zaregistruje a začne zdieľať, dostanete <b>+5 000 iWatt</b>.</p>
+   <p class="sm mut" style="margin-top:4px">Pošlite odkaz alebo ukážte QR kód. Keď sa sused zaregistruje a začne zdieľať, dostanete <b>+${fm(IW_REF,0)} iWatt</b>.</p>
    <div class="ref-link"><input id="ref-url" class="inp" readonly value="${refUrl()}" aria-label="Váš odkaz na pozvánku"><button class="btn pri" data-act="refcopy">Kopírovať</button></div>
    <div class="row" style="margin-top:10px"><button class="btn" data-act="refshare">${icon('arrow')} Zdieľať odkaz</button><span class="xs mut">Kód pozvánky: <b>${refCode()}</b></span></div>
    <div class="ref-qr"><div class="ref-qr-img">${R.qr?qrSvg(refUrl(),'#0b1424'):`<div class="ref-qr-ph">${icon('console')}<span class="xs mut">QR kód sa zobrazí tu</span></div>`}</div>
     <div><b>QR kód na pozvánku</b><p class="xs mut" style="margin:4px 0 10px">Naskenujú ho susedia v mobile – napríklad z letáku, na schôdzi alebo na dverách prevádzky.</p>
      ${R.qr?'<button class="btn sm" data-act="refqrpng">⬇ Stiahnuť QR (PNG)</button>':'<button class="btn sm dark" data-act="refqr">Vygenerovať QR kód</button>'}</div></div>
-   <div class="ref-stats"><div><b>${R.inv}</b><span class="xs mut">pozvaných</span></div><div><b>${R.act}</b><span class="xs mut">už zdieľa</span></div><div><b>${fm(R.act*5000,0)}</b><span class="xs mut">iWatt za odporúčania</span></div></div>
+   <div class="ref-stats"><div><b>${R.inv}</b><span class="xs mut">pozvaných</span></div><div><b>${R.act}</b><span class="xs mut">už zdieľa</span></div><div><b>${fm(R.act*IW_REF,0)}</b><span class="xs mut">iWatt za odporúčania</span></div></div>
    <p class="xs mut">Ukážkové údaje. Odmena sa pripíše až po aktivácii zdieľania odporučeného suseda.</p></div>`;
 }
 function vGoodNeighbour(){
   const per=S.persona==='admin'?'anna':S.persona,isP=per==='anna',x=solStats();
   const head=hero({kicker:'Dobrý sused',title:'Pomáhajte v okolí. <em>Pozvite susedov.</em>',
     lead:'Pomôžte prebytkom a získajte odmenu za každého pozvaného suseda.',
-    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+5 000 iWatt','keď sused začne zdieľať')});
+    aside:isP&&S.don.on?hstat('Darujete mesačne',fm(x.mon,0)+' kWh',`pre ${x.L.length} ${x.L.length===1?'príjemcu':'príjemcov'}`):hstat('Za odporúčanie','+'+fm(IW_REF,0)+' iWatt','keď sused začne zdieľať')});
   const left=solSettingsCard();
   return `<div class="gap">${head}<div class="grid g2 dn-grid">${left}${refCard()}</div></div>`;
 }

@@ -3,9 +3,11 @@
    iWatt nie sú peniaze – dajú sa vymeniť iba za zľavy a výhody (rovnaký princíp ako slnečné body). Ponuky sú ukážkové. */
 /* úrovne hry: [min. slniečok, odmena v iWatt]; odmenu za každú úroveň si vyzdvihnete raz za deň */
 /* úrovne hry: [min. slniečok, odmena]; z hry spolu najviac IW_DAY denne (vyššia úroveň doplní rozdiel) */
-const IW_LV=[[5,100],[15,200],[30,300]],IW_DAY=300;
+/* hodnota: 1 000 iWatt ≈ 2 € (podľa cien v e-shope) → odmeny malé voči reálnej úspore, aby sa nehralo len kvôli iWatt */
+const IW_LV=[[5,5],[15,10],[30,15]],IW_DAY=15;
+const IW_REF=2500,IW_BDG=100;   /* odporúčanie suseda (≈ 5 €), nový odznak */
 const iwLevel=n=>IW_LV.reduce((l,[min],i)=>n>=min?i+1:l,0);
-const IW_EARN=[['sun','Slnečný beh',`Úroveň 1 / 2 / 3: ${IW_LV.map(x=>fm(x[1],0)).join(' / ')} ${IWT}, spolu najviac ${IW_DAY} denne`],['star','Splnená výzva',`+1 000 ${IWT} po overení elektromerom`],['group','Odporúčanie suseda',`+5 000 ${IWT}, keď začne zdieľať`],['award','Nový odznak',`+2 000 ${IWT} za každý odznak`]];
+const IW_EARN=[['sun','Slnečný beh',`Úroveň 1 / 2 / 3: ${IW_LV.map(x=>fm(x[1],0)).join(' / ')} ${IWT}, spolu najviac ${IW_DAY} denne`],['star','Splnená výzva',`+${fm(CH_IW,0)} ${IWT} po overení elektromerom, najviac ${fm(CH_CAP,0)} denne`],['group','Odporúčanie suseda',`+${fm(IW_REF,0)} ${IWT}, keď začne zdieľať`],['award','Nový odznak',`+${fm(IW_BDG,0)} ${IWT} za každý odznak`]];
 const IW_PARTNERS=[
  {id:'p1',ic:'gift',who:'Kaviareň Pri fontáne',where:'Trnava',t:'Káva k zákusku zadarmo',c:4000,img:'assets/partner-kaviaren.jpg',pos:'40% 70%',alt:'Káva a čokoládový zákusok na stolíku v kaviarni'},
  {id:'p2',ic:'market',who:'Pekáreň Klások',where:'Hlohovec',t:'−15 % na celý nákup',c:6000,img:'assets/partner-pekaren.jpg',pos:'50% 50%',alt:'Čerstvý remeselný chlieb v pekárni'},
