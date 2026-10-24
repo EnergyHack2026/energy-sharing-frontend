@@ -597,3 +597,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 >>>>>>> final-last-version-
 
 .dg-composition>.dg-group-places{margin-top:20px}.dg-composition .dg-group-places>.wz-card{background:#fcfbf8}
+
+.dg-when-open{display:none}.dg-group-detail[open]>summary .dg-when-open{display:inline}.dg-group-detail[open]>summary .dg-when-closed{display:none}
