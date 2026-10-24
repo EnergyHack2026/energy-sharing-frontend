@@ -312,7 +312,7 @@ function welcomeModal(){
    :`<div class="wl-row"><span class="wl-tag">Zajtra</span><span><b>+${w.next} iWatt</b><span class="xs mut">za ${w.streak+1}. deň v rade</span></span></div>`;
   return `<div class="modal-bg" data-act="closemodal"><div class="modal welcome" role="dialog" aria-modal="true" aria-label="Uvítanie – deň ${w.day} v Zdieľni">
    <button class="btn sm wl-x" data-act="closemodal" aria-label="Zavrieť">✕</button>
-   <div class="wl-sun">${sunSvg(w.pts)}</div>
+   <div class="wl-iw"><img src="assets/iwattik-cut.png" alt="iWattík"><span class="wl-iw-pts">+${w.pts} <small>iWatt</small></span></div>
    <h2>${greet}, ${name}!</h2>
    <p class="wl-lead">${w.first?'Vitajte v Zdieľni.':w.streak>1?`${w.streak}. deň v rade.`:'Vitajte späť.'} Za dnešnú návštevu máte <b>+${w.pts} iWatt</b>.</p>
    ${extra}
