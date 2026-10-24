@@ -3226,9 +3226,9 @@ function refCard(){
    <p class="sm mut" style="margin-top:4px">Pošlite odkaz alebo ukážte QR kód. Keď sa sused zaregistruje a začne zdieľať, dostanete <b>+${fm(IW_REF,0)} iWatt</b>.</p>
    <div class="ref-link"><input id="ref-url" class="inp" readonly value="${refUrl()}" aria-label="Váš odkaz na pozvánku"><button class="btn pri" data-act="refcopy">Kopírovať</button></div>
    <div class="row" style="margin-top:10px"><button class="btn" data-act="refshare">${icon('arrow')} Zdieľať odkaz</button><span class="xs mut">Kód pozvánky: <b>${refCode()}</b></span></div>
-   <div class="ref-qr"><div class="ref-qr-img">${R.qr?qrSvg(refUrl(),'#0b1424'):`<div class="ref-qr-ph">${icon('console')}<span class="xs mut">QR kód sa zobrazí tu</span></div>`}</div>
+   <div class="ref-qr"><div class="ref-qr-img">${qrSvg(refUrl(),'#0b1424')}</div>
     <div><b>QR kód na pozvánku</b><p class="xs mut" style="margin:4px 0 10px">Naskenujú ho susedia v mobile – napríklad z letáku, na schôdzi alebo na dverách prevádzky.</p>
-     ${R.qr?'<button class="btn sm" data-act="refqrpng">⬇ Stiahnuť QR (PNG)</button>':'<button class="btn sm dark" data-act="refqr">Vygenerovať QR kód</button>'}</div></div>
+     <button class="btn sm" data-act="refqrpng">⬇ Stiahnuť QR (PNG)</button></div></div>
    <div class="ref-stats"><div><b>${R.inv}</b><span class="xs mut">pozvaných</span></div><div><b>${R.act}</b><span class="xs mut">už zdieľa</span></div><div><b>${fm(R.act*IW_REF,0)}</b><span class="xs mut">iWatt za odporúčania</span></div></div>
    <p class="xs mut">Ukážkové údaje. Odmena sa pripíše až po aktivácii zdieľania odporučeného suseda.</p></div>`;
 }
