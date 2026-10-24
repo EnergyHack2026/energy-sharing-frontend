@@ -368,8 +368,10 @@ function vChallengesNew(per){
   const inWin=h=>win&&h*4>=win.a-3&&h*4<win.b;
   const until=!win?'':now<win.a?`okno o ${Math.floor((win.a-now)/4)} h ${(win.a-now)%4*15} min`:now<win.b?'okno práve prebieha':'dnešné okno skončilo';
   const tl=`<div class="ch-tl" aria-hidden="true">${hours.map((x,h)=>`<i class="${inWin(h)?'w':''}" style="height:${Math.max(4,x/mxh*100)}%"></i>`).join('')}<b class="ch-now" style="left:${(now/96*100).toFixed(1)}%"></b></div><div class="ch-tl-l"><span>00:00</span><span>teraz ${I2T(now)} · ${until}</span><span>24:00</span></div>`;
-  const head=hero({kicker:'Dnes · slnečné okno',title:`${win?I2T(win.a)+' – '+I2T(win.b):'—'} <em>${isP?'susedia potrebujú slnko':'perieme so slnkom'}.</em>`,
-    lead:`${isP?'V okne skupina potrebuje':'Očakávaný prebytok v skupine'} ${fm(win?sum((isP?P.fc:P.fp).slice(win.a,win.b)):0,1)} kWh.`,
+  const kwh=fm(win?sum((isP?P.fc:P.fp).slice(win.a,win.b)):0,1);
+  const head=hero({kicker:`Dnes ${win?I2T(win.a)+' – '+I2T(win.b):''} · slnečné okno`,title:`Váš čas <em>na výhody.</em>`,
+    lead:isP?`Od ${win?I2T(win.a):'—'} do ${win?I2T(win.b):'—'} susedia potrebujú ${kwh} kWh slnka. Pranie či ohrev vody presuňte mimo tohto času – váš prebytok sa predá za lepšiu cenu.`
+     :`Od ${win?I2T(win.a):'—'} do ${win?I2T(win.b):'—'} je v skupine ${kwh} kWh slnka od susedov. Rovnaká pračka, rovnaký program – len o pár hodín skôr.`,
     aside:hstat('Dnes',`${doneN} / ${total} výziev`,`+${fm(iw,0)} iWatt · séria ${streak} ${streak===1?'deň':streak>1&&streak<5?'dni':'dní'}`)});
   const bestCard=best?`<div class="card ch-best"><span class="kicker">Odporúčame dnes</span><div class="ch-best-h"><span class="svc-ic">${icon(best.ic)}</span><div><h3>${best.verb} ${best.t}</h3><p class="sm mut">namiesto ${best.o.orig}</p></div></div>
     <div class="ch-gain"><span class="ch-iw">+${fm(CH_IW,0)} iWatt</span><span class="sm">${isP?'zarobíte':'ušetríte'} ~${eur(Math.max(0,best.eur))} mesačne</span></div>
