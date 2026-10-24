@@ -16,6 +16,8 @@ function lvlOf(p){let i=0;LEVELS.forEach(([,t],k)=>{if(p>=t)i=k});const nx=LEVEL
 /* bežná dodávka pre domácnosti – jednopásmová sadzba DD2, VT bez DPH (doc/cenniky.md) */
 const SUPPLY_HH=0.1233;
 /* čísla na úvode počíta ten istý engine ako aplikácia */
+/* je aktuálny čas v slnečnom okne „HH:MM – HH:MM“? (živá bodka len vtedy) */
+const lpWinNow=w=>{const m=String(w).match(/(\d+):(\d+)\D+(\d+):(\d+)/);if(!m)return false;const d=new Date(),t=d.getHours()*60+d.getMinutes();return t>=+m[1]*60+ +m[2]&&t<+m[3]*60+ +m[4]};
 function lpNums(){
  const r=potRun(),a=agg(r),P=r.P,win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i]))),d=S.sim.days;
  const succ=a.anna.offered>0?a.anna.shared/a.anna.offered:0;
@@ -39,11 +41,12 @@ function vLanding(){
   {h:'Lúč pomoci',p:'Výrobcovia darujú časť prebytkov školám, neziskovkám a rodinám v núdzi.',price:null,tag:'Solidárna ponuka',i:'heart',save:'bez provízie',cta:'Darovať prebytky',out:1}];
  return `<div class="lp">
  <section class="lp-hero bg" style="background-image:url(assets/hero-bg.jpg)" aria-labelledby="lp-heading"><div class="lp-wrap"><div class="lp-hero-grid"><div>
- <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
- <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
- <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Poďte s nami do sveta zdieľania energie</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
- </div><div class="lp-scene bg-cards"><div class="lp-float one">${icon('chart','lp-float-ic')}<span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two">${icon('clock','lp-float-ic')}<div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
+ <span class="kicker">Zdieľanie elektriny medzi susedmi</span>
+ <h1 id="lp-heading">Slnko od suseda. <em>Lacnejšie pre vás, výhodnejšie pre neho<span class="sig">.</span></em></h1>
+ <p class="lp-intro">Kto má panely, predá prebytky za lepšiu cenu ako výkup. Kto ich nemá, kúpi slnečnú elektrinu lacnejšie ako z bežnej dodávky.</p>
+ <div class="lp-hero-cta"><button class="btn pri lg" data-act="view:register">Mám panely – ponúknuť prebytky <span aria-hidden="true">→</span></button><button class="btn lg lp-hero-alt" data-act="view:register">Nemám panely – kúpiť lacnejšie <span aria-hidden="true">→</span></button></div>
+ <p class="lp-hero-trust">Bez záväzku · vyúčtuje váš dodávateľ</p>
+ </div><div class="lp-scene bg-cards"><div class="lp-float one">${icon('chart','lp-float-ic')}<span class="tag">Výrobca</span><b>+ ${eur(n.gainMonth)} mesačne</b><span class="positive">oproti výkupu</span><span class="lp-float-note">príklad: dom, ${fm(S.om.anna.kwp,1)} kWp</span></div><div class="lp-float three">${icon('home','lp-float-ic')}<span class="tag">Odberateľ</span><b>o ${Math.round((1-WZ_STRAT.bal.buy/SUPPLY_HH)*100)} % lacnejšie</b><span class="positive">ako bežná dodávka</span><span class="lp-float-note">v slnečnom okne</span></div><div class="lp-float two">${icon('clock','lp-float-ic')}<div class="lp-live">${lpWinNow(n.win)?'<i></i> ':''}Dnešné slnečné okno</div><b>${n.win}</b></div></div></div>
  </div></section>
  <section class="lp-section" id="lp-benefits"><div class="lp-wrap"><div class="lp-section-head"><div><span class="kicker">Dve strany. Jedna dobrá myšlienka.</span><h2>Zo slnka môže mať viac každý<span class="sig">.</span></h2></div></div><div class="lp-paths">
  <article class="lp-path consumer"><span class="kicker">Mám spotrebu</span><h3>Na slnečnú elektrinu nepotrebujete strechu.</h3><p>Vyberte si elektrinu od ľudí, ktorí jej majú navyše. Najväčší zmysel dáva vtedy, keď ju práve využijete.</p><ul><li>Výhodnejšia cena zdieľanej elektriny</li><li>Odporúčanie vhodného času spotreby</li><li>Bez provízie platforme pre odberateľa</li></ul><button class="btn dark lg" data-act="view:register">Nájsť lacnejšiu elektrinu <span aria-hidden="true">→</span></button>${icon('home','path-art')}</article>

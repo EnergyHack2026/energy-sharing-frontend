@@ -586,3 +586,17 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lpc-l-iw{font-weight:800;color:var(--green);white-space:nowrap;font-size:var(--fs-sm)}
 .lpc-l-n{margin:2px 0 0}
 @media(max-width:580px){.lpc-l-row{grid-template-columns:minmax(0,1fr) auto}.lpc-l-row .svc-ic,.lpc-l-h .xs{display:none}}
+/* hero – dve tlačidlá podľa role, dôvera, karta pre odberateľa */
+.lp-hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.lp-hero-alt{background:transparent;color:var(--on-dark);border:1.5px solid color-mix(in srgb,var(--on-dark) 55%,transparent)}
+.lp-hero-alt:hover{background:color-mix(in srgb,var(--on-dark) 10%,transparent)}
+.lp-hero-trust{margin-top:14px;font-size:var(--fs-sm);font-weight:700;color:var(--on-dark-mut)}
+.lp-float-note{display:block;margin-top:2px;color:var(--on-dark-mut);font-size:var(--fs-xs)}
+.lp-scene.bg-cards .lp-float.three{transform:rotate(-2deg);padding-right:52px}
+@media(min-width:821px){.lp-scene.bg-cards .lp-float.three{top:72%;right:5%;left:auto}}
+@media(max-width:820px){.lp-scene.bg-cards .lp-float.one{top:0;right:auto;left:0}.lp-scene.bg-cards .lp-float.three{top:0;right:0}.lp-scene.bg-cards .lp-float.two{bottom:2%;left:0}.lp-hero-cta .btn{width:100%;justify-content:center}}
+@media(max-width:820px){
+ .lp-scene.bg-cards .lp-float{max-width:62%}
+ .lp-scene.bg-cards .lp-float.three{top:44%;right:0}
+ .lp-hero-cta .btn{font-size:var(--fs-md);padding:14px 18px}
+}
