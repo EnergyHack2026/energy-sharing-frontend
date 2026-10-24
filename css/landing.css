@@ -599,3 +599,12 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .dg-composition>.dg-group-places{margin-top:20px}.dg-composition .dg-group-places>.wz-card{background:#fcfbf8}
 
 .dg-when-open{display:none}.dg-group-detail[open]>summary .dg-when-open{display:inline}.dg-group-detail[open]>summary .dg-when-closed{display:none}
+
+/* Group / personal subtotal / individual place hierarchy. */
+.dg-group-card{border:2px solid #bac9d4!important;padding:24px!important;overflow:hidden}
+.dg-group-header{background:#0e2033;color:#fff;margin:-24px -24px 20px;padding:22px 24px;gap:16px}.dg-group-header h3{font-size:1.5em;margin:7px 0}.dg-group-header .xs{color:#c7d5e4}.dg-group-label{display:flex;align-items:center;gap:8px;font-size:.7em;font-weight:800;letter-spacing:.12em;color:#9ce2cf}.dg-group-label .icon{width:18px;height:18px}
+.dg-scope-label{font-size:.75em;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#51677e;padding-bottom:10px;border-bottom:1px solid #e1e7ed}
+.dg-my-total{border-left:4px solid #079d76}.dg-my-total h3{margin:7px 0}
+.dg-group-detail{margin-top:22px;padding-top:0;border-top:0}.dg-group-detail>summary{display:flex!important;justify-content:space-between;gap:20px;padding:16px;background:#edf2f7;border:1px solid #cfdbe6;border-radius:10px;list-style:none}.dg-group-detail>summary::-webkit-details-marker{display:none}.dg-group-detail>summary::marker{content:''}.dg-expand-label{margin-left:auto;white-space:nowrap}.dg-group-detail[open]{background:#f1f4f7;border-radius:12px;padding-bottom:16px}.dg-group-detail>p{padding:0 18px}
+.dg-group-places{border-left:3px solid #b6c6d5;margin:18px 18px 0 26px;padding-left:18px;gap:16px}.dg-om-card{background:#fff!important;border:1px solid #d9e0e6!important;border-radius:12px!important;position:relative}.dg-om-label{font-size:.68em;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#586d80;margin-bottom:12px}.dg-om-card .dg-place-group{font-size:.8em;color:#66788b}.dg-om-card .dg-settlement{background:#f7f9fb;border:1px solid #e5ebef}.dg-om-card .wz-om-head b{font-size:1.15em}
+@media(max-width:650px){.dg-group-card{padding:16px!important}.dg-group-header{margin:-16px -16px 16px;padding:18px 16px}.dg-group-places{margin:14px 8px 0 12px;padding-left:10px}.dg-group-detail>summary{align-items:flex-start;flex-wrap:wrap;gap:10px}.dg-expand-label{margin-left:0}}
