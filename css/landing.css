@@ -545,3 +545,14 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .dg-settlement{margin-top:18px;padding:18px;border-radius:14px;background:#f0faf5}.dg-settlement .dg-metrics{margin:14px 0}
 .wz .wz-lead{max-width:none;margin:0 0 18px;font-size:var(--fs-lg);font-weight:600;color:var(--ink)}
 .wz .wz-info{margin-bottom:16px}
+/* úvod – karta výziev zo skutočnej aplikácie */
+.lpc{display:grid;gap:10px;transform:none}
+.lpc-h{display:flex;justify-content:space-between;align-items:center;gap:10px}.lpc-h .xs{color:var(--on-dark-mut)}
+.lpc-tl{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:4px}
+.lpc-tl i{flex:1;background:color-mix(in srgb,var(--on-dark) 20%,transparent);border-radius:3px 3px 0 0}.lpc-tl i.w{background:var(--accent-dark)}
+.lpc-tl-l{display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--on-dark-mut)}
+.lpc-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:var(--r);background:color-mix(in srgb,var(--on-dark) 6%,transparent)}
+.lpc-row>div{display:grid;gap:2px}.lpc-row .xs{color:var(--on-dark-mut)}
+.lpc-row.best{background:color-mix(in srgb,var(--accent-dark) 16%,transparent);border:1px solid color-mix(in srgb,var(--accent-dark) 45%,transparent)}
+.lpc-iw{font-weight:800;color:var(--accent-dark);white-space:nowrap}
+.lpc .svc-ic{background:color-mix(in srgb,var(--accent-dark) 18%,transparent);color:var(--accent-dark)}
