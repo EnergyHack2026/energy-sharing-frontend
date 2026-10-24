@@ -158,7 +158,7 @@ function loginModal(){
   <h2 style="margin-top:14px">Prihlásenie do zákazníckeho účtu</h2>
   <p class="sm mut" style="margin:6px 0 16px">Vyberte testovací účet z databázového exportu. Celý proces prebieha lokálne v prehliadači.</p>
   <div class="pill vis" style="margin-bottom:14px">🔒 Demo prihlásenie – údaje sú predvyplnené a nikam sa neodosielajú</div>
-  <div class="fields one">${demoPicker()}</div><p class="xs mut">12 scenárov · 11 zákazníkov. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
+  <div class="fields one">${demoPicker()}</div><p class="xs mut">1 zákazník · 12 odberných miest. Dodávateľ nie je v exporte; značka ZSE je iba ukážková. Bez pripojenia k backendu.</p>
   <div class="row" style="margin-top:16px"><button class="btn pri" data-act="sso:auto">Prihlásiť sa</button><button class="btn" data-act="closemodal">Zrušiť</button></div>
   <p class="xs mut" style="margin-top:14px">Ešte nemáte online účet? <button class="link" data-act="acc">Vytvoríme vám ho →</button></p></div></div>`;
 }
@@ -397,7 +397,7 @@ function pendingBar(){
 function vHomePending(){
  const per=regPer(),isP=per==='anna',W=S.wz,g=GROUPS.find(x=>x.id===S.group)||GROUPS[0],best=grpBest(isP),y=grpEst(best,isP).m*12;
  const st=o=>!o.on?['n','Nezapojené']:!o.ims?['y',o.imsReq?'Čaká na IMS · žiadosť podaná':'Čaká na IMS']:['b','Čaká na kontrolu distribútora'];
- return `<div class="gap">${hero({kicker:'Vitajte v Zdieľni',title:`${esc(SSO[per].name.split(' ')[0])}, <em>vaša žiadosť je na ceste.</em>`,
+ return `<div class="gap">${hero({kicker:'Vitajte v Zdieľni',title:`${esc(S.reg.demoCustomer?demoCustomerName():SSO[per].name.split(' ')[0])}, <em>vaša žiadosť je na ceste.</em>`,
    lead:'Distribútor overí vaše odberné miesta do 5 pracovných dní. Hneď po schválení sa odomkne celá Zdieľňa a začnete zdieľať.',
    acts:S.jury?'<button class="btn" data-act="regapprove">🎬 Simulovať schválenie</button>':'',
    aside:hstat(isP?'Odhad zárobku navyše':'Odhad úspory',eur0(y)+' ročne','modelový odhad, nie garancia')})}
