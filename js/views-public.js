@@ -46,7 +46,7 @@ function vLanding(){
  <span class="kicker">Zdieľňa · zdieľanie elektriny</span>
  <h1 id="lp-heading">Zelená energia je ešte lepšia, <em>keď sa zdieľa<span class="sig">.</span></em></h1>
  <p class="lp-intro">Máte elektrinu navyše? Podeľte sa o ňu a získajte viac. Nemáte vlastné panely? Využite slnečnú energiu od susedov.</p>
- <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Chcete sa pridať do sveta zdieľania energie?</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
+ <button class="lp-quick" type="button" data-act="view:register"><span class="lp-quick-q">Poďte s nami do sveta zdieľania energie</span><span class="lp-quick-btn">Pridať sa <span class="lp-quick-arr" aria-hidden="true">→</span></span></button>
  <div class="lp-hero-checks"><span><i class="lp-chk-dot"></i>Energia na autopilota</span><span><i class="lp-chk-dot"></i>Inteligentné párovanie</span><span><i class="lp-chk-dot"></i>Efektívne zdieľanie</span></div>
  </div><div class="lp-scene bg-cards"><div class="lp-float one">${icon('chart','lp-float-ic')}<span class="tag">Keď strecha nezaháľa</span><b>+ ${eur(n.gainMonth)}</b><span class="positive">oproti výkupu za mesiac</span></div><div class="lp-float two">${icon('clock','lp-float-ic')}<div class="lp-live"><i></i> Slnko práve spája</div><b>${n.win}</b><span>Čas na slnečnú elektrinu</span></div></div></div>
  </div></section>
