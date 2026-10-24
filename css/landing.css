@@ -562,3 +562,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lp-offer-meta{gap:10px}.lp-offer-meta b{text-align:right}
 
 .dp-chart svg{width:100%;height:auto;display:block}.dp-legend{gap:12px;font-size:.8em;flex-wrap:wrap}.dp-legend span{display:flex;align-items:center;gap:5px}.dp-legend i{width:12px;height:4px;display:inline-block}
+/* ponuky: štítok a tlačidlo zarovnané pri spodku všetkých kariet */
+.lp-offer-save{margin-top:auto}.lp-offer-body .btn{margin-top:0}
