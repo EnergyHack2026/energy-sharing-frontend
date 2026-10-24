@@ -1114,6 +1114,36 @@ div.todo{display:block;background:var(--green-t);border-radius:var(--r);padding:
 .don-pick.on{border-color:var(--brand);background:var(--brand-t)}
 .don-pick.dis{opacity:.5;cursor:default}
 .dn-grid{align-items:stretch}.dn-grid>.card{display:flex;flex-direction:column}.dn-grid>.card>p:last-child{margin-top:auto}
+/* ---------- Výzvy ---------- */
+.ch-tl{position:relative;display:flex;align-items:flex-end;gap:3px;height:46px;margin-top:16px;max-width:560px}
+.ch-tl i{flex:1;background:color-mix(in srgb,var(--on-dark) 22%,transparent);border-radius:3px 3px 0 0}
+.ch-tl i.w{background:var(--accent-dark)}
+.ch-now{position:absolute;top:-4px;bottom:0;width:2px;background:var(--sig)}
+.ch-now:before{content:'';position:absolute;top:-4px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--sig)}
+.ch-tl-l{display:flex;justify-content:space-between;max-width:560px;margin-top:4px;font-size:var(--fs-xs);color:var(--on-dark-mut)}
+.ch-tl-l span:nth-child(2){color:var(--on-dark);font-weight:700}
+.ch-top{align-items:stretch}
+.ch-best{display:grid;gap:12px;border:2px solid var(--brand)}
+.ch-best-h{display:flex;gap:14px;align-items:center}.ch-best-h h3{margin:0;font-size:var(--fs-h3)}.ch-best-h p{margin:2px 0 0}
+.ch-best .svc-ic{width:48px;height:48px}.ch-best .svc-ic .icon{width:24px;height:24px}
+.ch-gain{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px}
+.ch-iw{font-size:var(--fs-h2);font-weight:800;letter-spacing:-.02em;color:var(--brand-ink)}
+.ch-act{gap:10px;flex-wrap:wrap}
+.ch-time select{min-height:40px;border-radius:var(--r-pill);padding:6px 12px;border:1px solid var(--line-2);background:var(--card);font:inherit;font-size:var(--fs-sm)}
+.ch-time.sm select{min-height:34px;padding:4px 10px}
+.ch-prog{display:grid;gap:10px;align-content:start}
+.ch-pr{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ch-dots{display:flex;gap:6px}.ch-dots i{width:12px;height:12px;border-radius:50%;background:var(--line-2)}.ch-dots i.on{background:var(--yellow)}
+.ch-h{margin:4px 0 0;font-size:var(--fs-h3)}
+.ch-list{display:grid;gap:8px}
+.ch-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.ch-row-t{display:grid;gap:2px}
+.ch-row-a{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.ch-done .ch-row{background:var(--green-t);border-color:transparent}
+.ch-lock{opacity:.7;border-style:dashed}
+.ch-rules{text-align:center}
+@media(max-width:700px){.ch-row{grid-template-columns:auto minmax(0,1fr)}.ch-row-a{grid-column:1/-1;justify-content:flex-start}}
+.ch-h{margin-top:12px}
 
 </style>
 <style>
@@ -1736,7 +1766,7 @@ const defaults=()=>({
   o:{bPrice:0.12,cMax:0.10,dMax:0.14},
   mem:{anna:'ACTIVE',peter:'ACTIVE'},group:'g17',reserve:{anna:null,peter:null},
   pts:{base:340,baseA:210,cap:60},day:1,fu:{anna:null,peter:null},
-  imsReqd:{chata:true},ref:{qr:false,inv:3,act:1},iw:{bal:12000,best:0,day:1,red:{},got:{},pend:[]},wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
+  imsReqd:{chata:true},chPick:{},ref:{qr:false,inv:3,act:1},iw:{bal:12000,best:0,day:1,red:{},got:{},pend:[]},wz:null,acc:{cno:'',psc:'',email:'',ok:false,err:'',done:false},sup:{email:'',tel:'',ok:false,sent:false,err:''},calc:{pkwh:100,pprice:0.11,pfeed:0.036,ckwh:100,cprice:0.11,cref:0.17},fee:{mode:FEE_FIX,fix:15,pct:12},codeOk:false,pay:{sepa:false},cmp:[],notif:{email:true,push:true,pred:true,chal:true,state:true,price:true,month:true},
   ob:{step:1,role:'cons',consent:false,group:'g17'},
   reg:{step:'choose',company:'zse',load:0,sent:false},
   match:{done:false,sort:'match'},
@@ -2843,8 +2873,76 @@ let CH_MODE=false;
 function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
 const vCertView=()=>vGoodNeighbour();
+/* ---------- Výzvy – jedna odporúčaná akcia dňa, ostatné výzvy, splnené; odmena v iWatt ---------- */
+const CH_IW=1000,CH_CAP=3000;   /* iWatt za overenú výzvu, denný limit */
+/* stav výzvy: new → wait (prijatá, čaká na čas) → done (overené IMS) / fail (neoverené, bez trestu) */
+function chState(ow,k){const o=A_(ow,k);if(!o.accepted)return 'new';if(S.sim.idx<T2I(o.time)+2)return 'wait';return verifyLoad(ow,k).ok?'done':'fail'}
+const chPickKey=(ow,k)=>ow+'_'+k;
+const chPicked=(ow,k)=>(S.chPick||{})[chPickKey(ow,k)]||recKey(ow,k);
+/* časy v slnečnom okne (po 15 min) pre „Iný čas“ */
+/* odberateľ: časy v okne; výrobca: časy po okne (spotrebu presúva mimo slnka) */
+function chSlots(win,ow){const L=[];if(!win)return L;const [a,b]=ow==='p'?[win.b,Math.min(92,win.b+16)]:[win.a,win.b];for(let i=a;i<b;i++)L.push(I2T(i));return L}
+function chItems(per){
+  const isP=per==='anna',fu=S.fu[per],fuOpen=fu&&S.day>fu.from;
+  const L=isP?[['p','pw','home','Pračka mimo slnka','Presuňte pračku ('+fm(S.p.pw.kwh,1)+' kWh) na'],['p','pb','pump','Ohrev bojlera','Presuňte ohrev bojlera ('+fm(S.p.pb.kwh,1)+' kWh) na']]
+   :[['c','wash','home','Umývačka so slnkom','Spustite umývačku o'],['c','ev','car','Nabíjanie auta','Nabite auto ('+fm(S.c.ev.kwh,1)+' kWh) o'],['c','wh','pump','Ohrev vody','Presuňte ohrev vody na']];
+  if(fuOpen)L.push(isP?['p','pev','car','Elektromobil','Nabíjajte elektromobil ('+fm(S.p.pev.kwh,1)+' kWh) až o']:['c','ice','bolt','Výrobník ľadu','Presuňte cyklus výrobníka ľadu ('+fm(S.c.ice.kwh,1)+' kWh) na']);
+  return L.map(([ow,k,ic,name,verb])=>{const o=A_(ow,k),t=o.accepted?o.time:chPicked(ow,k),g=gainKey(ow,k,t);
+    return {ow,k,ic,name,verb,o,t,g,st:chState(ow,k),eur:(isP?g.earn:g.sav)*S.sim.days,rec:recKey(ow,k)}});
+}
+/* automaticky vyhodnocované výzvy (bez prijatia) */
+function chAuto(per){
+  if(per==='anna'){const st=annaStats();return [
+   {name:'Automatické obnovovanie ponuky',sub:'ponuka sa každý deň obnoví sama',done:S.p.auto,btn:'<button class="btn sm" data-act="setauto">Zapnúť</button>'},
+   {name:'Presná predikcia výroby',sub:'odchýlka do 10 % · teraz '+fm(st.err*100,1)+' %',done:st.err<=0.10},
+   {name:'Využite aspoň 75 % ponúknutého prebytku',sub:S.sim.idx<96?'vyhodnotí sa o 24:00':'zatiaľ '+pct(st.succ),done:st.succ>=0.75&&S.sim.idx>=96}]}
+  const res=dayRun(),mx=Math.max(0,...Array.from({length:96},(_,i)=>{const d=res.A.c[i],r=sum(res.recs.filter(x=>x.i===i&&x.to==='peter').map(x=>x.kwh));return d>0?r/d:0}));
+  return [{name:'Aspoň 60 % spotreby zo zdieľania v jednom intervale',sub:'vyhodnocuje sa automaticky · zatiaľ '+pct(mx),done:mx>=.6}];
+}
+const chVal=(it,per)=>`+${fm(CH_IW,0)} iWatt · ${per==='anna'?'zarobíte':'ušetríte'} ~${eur(Math.max(0,it.eur))}/mes.`;
+function chTimePick(it,win,cls=''){
+  const slots=chSlots(win,it.ow);if(!slots.includes(it.rec))slots.unshift(it.rec);
+  return `<label class="ch-time ${cls}"><span class="sr">Čas výzvy</span><select data-k="chPick.${chPickKey(it.ow,it.k)}" data-t="s">${slots.map(t=>`<option value="${t}" ${t===it.t?'selected':''}>${t===it.rec?t+' · odporúčaný':'Iný čas: '+t}</option>`).join('')}</select></label>`;
+}
+const chStPill=it=>it.st==='wait'?pill('o','Prijatá · čaká na '+it.o.time):it.st==='done'?pill('g','✓ Splnená · overené elektromerom'):it.st==='fail'?pill('n','Neoverené – nič sa nedeje'):'';
+function vChallengesNew(per){
+  const isP=per==='anna',P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
+  const items=chItems(per),auto=chAuto(per);
+  const doneN=items.filter(x=>x.st==='done').length+auto.filter(x=>x.done).length,total=items.length+auto.length;
+  const iw=Math.min(CH_CAP,doneN*CH_IW),v=S.visit[per]||{streak:0},streak=v.streak||0;
+  const open=items.filter(x=>x.st==='new'),best=[...open].sort((a,b)=>b.eur-a.eur)[0];
+  const rest=items.filter(x=>x!==best&&x.st!=='done'),done=items.filter(x=>x.st==='done');
+  /* časová os dňa – prebytok po hodinách, okno a „teraz“ */
+  const hours=Array.from({length:24},(_,h)=>sum(P.fp.slice(h*4,h*4+4))),mxh=Math.max(...hours,.01),now=Math.min(S.sim.idx,95);
+  const inWin=h=>win&&h*4>=win.a-3&&h*4<win.b;
+  const until=!win?'':now<win.a?`okno o ${Math.floor((win.a-now)/4)} h ${(win.a-now)%4*15} min`:now<win.b?'okno práve prebieha':'dnešné okno skončilo';
+  const tl=`<div class="ch-tl" aria-hidden="true">${hours.map((x,h)=>`<i class="${inWin(h)?'w':''}" style="height:${Math.max(4,x/mxh*100)}%"></i>`).join('')}<b class="ch-now" style="left:${(now/96*100).toFixed(1)}%"></b></div><div class="ch-tl-l"><span>00:00</span><span>teraz ${I2T(now)} · ${until}</span><span>24:00</span></div>`;
+  const head=hero({kicker:'Dnes · slnečné okno',title:`${win?I2T(win.a)+' – '+I2T(win.b):'—'} <em>${isP?'susedia potrebujú slnko':'perieme so slnkom'}.</em>`,
+    lead:`${isP?'V okne skupina potrebuje':'Očakávaný prebytok v skupine'} ${fm(win?sum((isP?P.fc:P.fp).slice(win.a,win.b)):0,1)} kWh.`,extra:`${tl}<div class="hero-tabs">${rewardTabs()}</div>`,
+    aside:hstat('Dnes',`${doneN} / ${total} výziev`,`+${fm(iw,0)} iWatt · séria ${streak} ${streak===1?'deň':streak>1&&streak<5?'dni':'dní'}`)});
+  const bestCard=best?`<div class="card ch-best"><span class="kicker">Odporúčame dnes</span><div class="ch-best-h"><span class="svc-ic">${icon(best.ic)}</span><div><h3>${best.verb} ${best.t}</h3><p class="sm mut">namiesto ${best.o.orig}</p></div></div>
+    <div class="ch-gain"><span class="ch-iw">+${fm(CH_IW,0)} iWatt</span><span class="sm">${isP?'zarobíte':'ušetríte'} ~${eur(Math.max(0,best.eur))} mesačne</span></div>
+    <div class="row ch-act"><button class="btn pri" data-act="acceptx:${best.ow}.${best.k}">Prijať výzvu</button>${chTimePick(best,win)}</div></div>`
+   :`<div class="card ch-best"><span class="kicker">Odporúčame dnes</span><h3>Všetky dnešné výzvy máte prijaté.</h3><p class="sm mut">Overíme ich podľa elektromera po skončení času výzvy. Zajtra ráno vás čakajú nové.</p></div>`;
+  const weekDots=Array.from({length:7},(_,i)=>`<i class="${i<Math.min(7,streak)?'on':''}"></i>`).join('');
+  const prog=`<div class="card ch-prog"><span class="kicker">Váš pokrok</span><div class="ch-pr"><span class="sm">Týždeň</span><span class="ch-dots">${weekDots}</span><b>${Math.min(7,streak)} / 7 dní</b></div>
+    <div class="ch-pr"><span class="sm">Séria</span><b>☀ ${streak} ${streak===1?'deň':streak>1&&streak<5?'dni':'dní'}</b></div>
+    <div class="ch-pr"><span class="sm">iWatt z výziev dnes</span><b>${fm(iw,0)} / ${fm(CH_CAP,0)}</b></div><span class="bar" style="display:block"><i style="width:${(iw/CH_CAP*100).toFixed(0)}%"></i></span>
+    <div class="ch-pr" style="margin-top:6px"><span class="sm">Odznaky</span>${bdgMini(per)}</div></div>`;
+  const row=it=>`<div class="ch-row"><span class="svc-ic">${icon(it.ic)}</span><div class="ch-row-t"><b>${it.verb} ${it.o.accepted?it.o.time:it.t}</b><span class="xs mut">namiesto ${it.o.orig} · ${chVal(it,per)}</span></div>
+    <div class="ch-row-a">${it.st==='new'?`${chTimePick(it,win,'sm')}<button class="btn sm" data-act="acceptx:${it.ow}.${it.k}">Prijať</button>`:chStPill(it)+(it.st!=='new'?` <button class="link" data-act="ver:${it.ow}.${it.k}">Kontrola</button>`:'')}</div></div>`;
+  const autoRow=a=>`<div class="ch-row"><span class="svc-ic">${icon('star')}</span><div class="ch-row-t"><b>${a.name}</b><span class="xs mut">${a.sub} · +${fm(CH_IW,0)} iWatt</span></div><div class="ch-row-a">${a.done?pill('g','✓ Splnená'):(a.btn||pill('n','vyhodnocuje sa'))}</div></div>`;
+  const lockRow=fu=>fu&&fu.shown&&!(S.day>fu.from)?`<div class="ch-row ch-lock"><span class="svc-ic">${icon('lock')}</span><div class="ch-row-t"><b>Nová výzva zajtra</b><span class="xs mut">Odomkne sa po polnoci (deň ${fu.from+1}).</span></div></div>`:'';
+  const restList=[...rest.map(row),...auto.filter(a=>!a.done).map(autoRow),lockRow(S.fu[per])].join('');
+  const doneList=[...done.map(row),...auto.filter(a=>a.done).map(autoRow)].join('');
+  return `<div class="gap">${head}<div class="grid g2 ch-top">${bestCard}${prog}</div>
+   ${restList?`<h3 class="ch-h">Ďalšie výzvy dnes</h3><div class="ch-list">${restList}</div>`:''}
+   ${doneList?`<h3 class="ch-h">Splnené ✓</h3><div class="ch-list ch-done">${doneList}</div>`:''}
+   <p class="xs mut ch-rules">Overuje inteligentný elektromer · ${fm(CH_IW,0)} iWatt za výzvu, denný limit ${fm(CH_CAP,0)} iWatt · nikdy nie za vyššiu spotrebu · nesplnená výzva nemá žiadny trest.</p></div>`;
+}
 function vRewards(){
   if(!CH_MODE)return vIwatt();
+  if(S.rwtab!=='bdg')return vChallengesNew(S.persona==='anna'?'anna':'peter');
   if(S.persona==='anna')return vRewardsAnna();
   if(S.rwtab==='bdg')return `<div class="gap">${hero({kicker:'Slnečný klub',title:'Odznaky, ktoré <em>si zaslúžite.</em>',lead:'Udeľujú sa až po overení podľa merania IMS – nikdy za vyššiu spotrebu.',extra:`<div class="hero-tabs">${rewardTabs()}</div>`})}${vBadges('peter')}</div>`;
   const P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
@@ -6203,7 +6301,7 @@ const ACT={
   exitok:()=>{const p=S.persona,r=(($('input[name=exitRes]:checked')||{}).value)||'';S.modal=null;S.mem[p]='ENDING';if(r)S.reserve[p]=gname(r)+' (rezervácia po skončení členstva)';logEv(`${nm(p)}: žiadosť o výstup${r?' + rezervácia '+gname(r):''}`);toast('Výstup nie je okamžitý – členstvo skončí ku koncu nasledujúceho mesiaca');notify('state',p,'Žiadosť o vystúpenie prijatá',`Zdieľanie pokračuje do konca nasledujúceho mesiaca.${r?' Rezervácia: '+gname(r)+'.':''}`,'group');render(true)},
   endmem:a=>{S.mem[a]='NONE';logEv(`${nm(a)}: členstvo ukončené`);toast('Členstvo ukončené');notify('state',a,'Členstvo ukončené','Novú skupinu si môžete vybrať v Mojej skupine.','group');render(true)},
   accept:()=>{S.c.appTime=recAppTime();S.c.accepted=true;logEv('Peter prijal výzvu: presun umývačky na '+S.c.appTime);toast('Výzva prijatá – umývačka presunutá na '+S.c.appTime);render(true);syncInputs()},
-  acceptx:a=>{const [ow,k]=a.split('.'),o=A_(ow,k),who=ow==='p'?'Anna':'Peter';o.time=recKey(ow,k);o.accepted=true;logEv(who+' prijal(a) výzvu: '+o.label+' presunutý na '+o.time);toast(who+': '+o.label+' presunutý na '+o.time);render(true);syncInputs()},
+  acceptx:a=>{const [ow,k]=a.split('.'),o=A_(ow,k),who=ow==='p'?'Anna':'Peter';o.time=(S.chPick||{})[ow+'_'+k]||recKey(ow,k);o.accepted=true;logEv(who+' prijal(a) výzvu: '+o.label+' presunutý na '+o.time);toast(who+': '+o.label+' presunutý na '+o.time);render(true);syncInputs()},
   ver:a=>{S.modal='ver:'+a;render(false)},
   setvis:a=>{S.p.vis=a;logEv('Anna: viditeľnosť ponuky → '+a);toast('Viditeľnosť ponuky: '+a);render(true)},
   newcode:()=>{S.p.code='SLNKO-'+(1000+Math.floor(Math.random()*9000));S.codeOk=false;logEv('Anna: nový prepájací kód');toast('Vygenerovaný nový prepájací kód');render(true)},
