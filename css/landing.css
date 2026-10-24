@@ -117,11 +117,13 @@ body.marketing .main{max-width:none;padding:0 0 40px}
 .lp-level-steps span.cur{background:var(--accent-dark);border-color:var(--accent-dark);color:var(--ink)}
 
 /* ---------- ponuky ---------- */
-.lp-offers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.lp-offers{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .lp-offer{border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--card)}
 .lp-offer-art{height:150px;background:var(--yellow-t);position:relative;overflow:hidden;display:grid;place-items:center;color:var(--yellow-ink)}
 .lp-offer:nth-child(2) .lp-offer-art{background:var(--purple-t);color:var(--purple)}
-.lp-offer:nth-child(3) .lp-offer-art{background:var(--tint-green);color:var(--green)}
+.lp-offer:nth-child(3) .lp-offer-art{background:var(--blue-t);color:var(--blue)}
+.lp-offer:nth-child(4) .lp-offer-art{background:var(--tint-green);color:var(--green)}
+.lp-offer:nth-child(2){border:2px solid var(--brand)}
 .lp-offer-art svg{width:150px;height:125px}
 .lp-offer-art .icon{width:64px;height:64px}
 .lp-offer-art .pill{position:absolute;top:14px;left:15px;background:rgba(255,255,255,.75)}
@@ -556,3 +558,5 @@ body.marketing.scrolled .top,body.marketing.scrolled:has(.lp-hero.bg) .top{backg
 .lpc-row.best{background:color-mix(in srgb,var(--accent-dark) 16%,transparent);border:1px solid color-mix(in srgb,var(--accent-dark) 45%,transparent)}
 .lpc-iw{font-weight:800;color:var(--accent-dark);white-space:nowrap}
 .lpc .svc-ic{background:color-mix(in srgb,var(--accent-dark) 18%,transparent);color:var(--accent-dark)}
+@media(max-width:1200px) and (min-width:581px){.lp-offers{grid-template-columns:repeat(2,1fr)}}
+.lp-offer-meta{gap:10px}.lp-offer-meta b{text-align:right}
