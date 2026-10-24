@@ -3032,7 +3032,7 @@ function invoiceHtml(who){
 }
 /* Výzvy – samostatná položka menu (pôvodne záložka Odmien); iWatt odmeny majú záložky iWatt, Odznaky, Certifikát */
 let CH_MODE=false;
-function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
+function vChallenges(){if(S.reg.demoCustomer&&S.wz)return demoChallengesView();const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
 const vCertView=()=>vGoodNeighbour();
 /* ---------- Výzvy – jedna odporúčaná akcia dňa, ostatné výzvy, splnené; odmena v iWatt ---------- */
@@ -3068,6 +3068,7 @@ function chTimePick(it,win,cls=''){
 }
 const chStPill=it=>it.st==='wait'?pill('o','Prijatá · čaká na '+it.o.time):it.st==='done'?pill('g','✓ Splnená · overené elektromerom'):it.st==='fail'?pill('n','Neoverené – nič sa nedeje'):'';
 function vChallengesNew(per){
+ if(S.reg.demoCustomer&&S.wz)return demoChallengesView();
   chCredit(per);
   const isP=per==='anna',P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
   const items=chItems(per),auto=chAuto(per);
@@ -3135,6 +3136,7 @@ function chEarnSection(per){
   chCredit(per);
   const items=chItems(per),auto=chAuto(per),open=items.filter(x=>x.st==='new').sort((a,b)=>b.eur-a.eur),doneN=items.filter(x=>x.st==='done').length+auto.filter(a=>a.done).length,tot=items.length+auto.length;
   const nx=open[0];
+  if(S.reg.demoCustomer&&S.wz)return `<div class="earn-grid"><div class="card earn-c"><b>Výzvy pre vaše energetické miesta</b><span class="sm mut">${demoRealChallenges().length} návrhov presunu spotreby podľa profilu 15. 8. 2026. Pri každom je miesto, EIC a konkrétny čas.</span><button class="btn sm" data-act="view:challenges">Zobraziť výzvy podľa miesta</button></div><div class="card earn-c"><b>Slnečný deň</b><span class="sm mut">Zahrajte si hru a zbierajte iWatt.</span><button class="btn sm" data-act="iwplay">Hrať</button></div><div class="card earn-c"><b>Pozvite suseda</b><span class="sm mut">Pozvite suseda do zdieľania.</span><button class="btn sm" data-act="view:cert">Pozvať</button></div></div>`;
   return `   <div class="earn-grid">
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('clock')}</span><span class="pill ${doneN?'g':'n'}">${doneN} / ${tot} splnené</span></div><b>Výzvy dnes</b><span class="sm mut">${nx?`Ďalej: ${nx.verb} ${nx.t} · +${fm(CH_IW,0)} iWatt`:'Dnešné výzvy máte prijaté.'}</span><button class="btn sm" data-act="chgo:rewards">Zobraziť výzvy</button></div>
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('sun')}</span><span class="pill n">do 150 iWatt denne</span></div><b>Slnečný deň</b><span class="sm mut">Cez deň zbierajte slnko, večer rozsvieťte domy susedov.</span><button class="btn sm" data-act="iwplay">Hrať</button></div>
@@ -5158,6 +5160,13 @@ function demoReportHeatmap(connectionId){const rows=DEMO_PROFILE.my_om_intervals
 
 </script>
 <script>
+/* js/demo-challenges.js */
+function demoRealChallenges(){const day='2026-08-15',items=[];for(const o of S.wz.oms.filter(o=>o.on&&o.ims)){const g=demoPlaceGroup(o);if(!g)continue;const group=DEMO_PROFILE.group_intervals.filter(r=>r.group_id===g.group_id&&r.interval_start.startsWith(day)).sort((a,b)=>a.interval_start.localeCompare(b.interval_start)),own=DEMO_PROFILE.my_om_intervals.filter(r=>r.connection_id===o.source.connection_id&&r.interval_start.startsWith(day)).sort((a,b)=>a.interval_start.localeCompare(b.interval_start));if(group.length!==96||own.length!==96)continue;
+ const windows=[];for(let i=0;i<=92;i+=4){windows.push({i,surplus:sum(group.slice(i,i+4).map(r=>Math.max(0,r.group_offered_for_matching_kwh-r.group_shared_kwh))),load:sum(own.slice(i,i+4).map(r=>r.consumption_kwh))});}const target=[...windows].sort((a,b)=>b.surplus-a.surplus)[0],source=windows.filter(w=>w.i!==target.i&&w.surplus<target.surplus).sort((a,b)=>b.load-a.load)[0];if(!source||source.load<=0||target.surplus<=0)continue;items.push({id:String(o.source.connection_id),o,g,source,target,kwh:Math.min(1,source.load,target.surplus),day});}return items;}
+function demoChallengesView(){const items=demoRealChallenges(),plans=S.demoChallengePlans||{};return `<div class="gap">${hero({kicker:'Výzvy podľa vašich profilov',title:'Presuňte spotrebu. <em>Využite prebytky skupiny.</em>',lead:'Odporúčania pre konkrétne energetické miesta z profilu 15. augusta 2026. Ide o spätnú ukážku, nie predpoveď na dnešný deň.'})}<p class="wz-info sm">Navrhujeme presun najviac 1 kWh z hodiny s vaším odberom do hodiny s väčším nezdieľaným prebytkom skupiny. Spotrebiče z merania nepoznáme; vyberte iba činnosť, ktorú môžete bezpečne presunúť, napríklad pranie alebo umývanie riadu. Prijatie plánu nepripisuje iWatt.</p><div class="wz-list">${items.map(c=>`<article class="wz-card"><span class="kicker">${esc(c.g.group_name)} · EIC ${esc(c.o.eic)}</span><h2>${esc(wzPlaceName(c.o))}</h2><h3>Presuňte približne ${fm(c.kwh,2)} kWh spotreby</h3><div class="dg-metrics"><div><span class="xs mut">Z pôvodného času</span><b>${I2T(c.source.i)}–${I2T(c.source.i+4)}</b></div><div><span class="xs mut">Na čas s prebytkom skupiny</span><b>${I2T(c.target.i)}–${I2T(c.target.i+4)}</b></div><div><span class="xs mut">Odber miesta v pôvodnej hodine</span><b>${fm(c.source.load,3)} kWh</b></div></div><p class="sm">Napríklad nastavte odložený štart práčky alebo umývačky na ${I2T(c.target.i)} namiesto ${I2T(c.source.i)}, ak ju vtedy používate. Presúva sa existujúca spotreba, nezvyšuje sa jej množstvo.</p><p class="xs mut">Dáta z ${c.day}: v cieľovej hodine zostalo v skupine ${fm(c.target.surplus,3)} kWh nevyužitej ponuky. To nie je rezervácia energie ani garancia spárovania či úspory. Cenu a úsporu po presune bez nového výpočtu neurčujeme.</p><button class="btn ${plans[c.id]?'':'pri'}" data-act="demochplan:${c.id}">${plans[c.id]?'Zrušiť môj plán':'Naplánovať presun pre toto miesto'}</button>${plans[c.id]?'<p class="pill y">Naplánované · čaká na overenie následným meraním</p>':''}</article>`).join('')||'<div class="card">Pre vybrané miesta nemáme vhodné odporúčanie z dostupných dát.</div>'}</div><p class="xs mut">Miesta bez IMS alebo bez 15-minútového profilu do odporúčaní nezahŕňame. Splnenie sa dá potvrdiť až z nového merania.</p></div>`;}
+
+</script>
+<script>
 /* js/views-public.js */
 'use strict';
 /* ---------- úvod, výhody, registrácia ---------- */
@@ -6643,6 +6652,7 @@ const ACT={
   wzimsoption:a=>{const [idx,option]=a.split(':');const o=S.wz.oms[+idx];if(!o||o.ims||!['1','170'].includes(option))return;if(o.imsOption!==option){o.imsConfirmed=null;o.imsReq=false}o.imsOption=option;render(false)},
   dpseries:k=>{if(!DP_SERIES.some(s=>s[0]===k))return;const p=demoProfileState(),h=new Set(p.hidden||[]);if(h.has(k))h.delete(k);else h.add(k);p.hidden=[...h];render(false)},
   dpseriesall:a=>{demoProfileState().hidden=DP_SERIES.filter(([k])=>a==='hide'||a==='mine'&&k.startsWith('group_')).map(([k])=>k);render(false)},
+  demochplan:id=>{if(!demoRealChallenges().some(c=>c.id===id))return;const plans=S.demoChallengePlans||(S.demoChallengePlans={});plans[id]=!plans[id];render(false)},
   dpplay:()=>{const p=demoProfileState();if(p.playing){p.playing=false;clearInterval(demoProfileTimer);render(false);return}if(p.idx>=96)p.idx=0;p.playing=true;clearInterval(demoProfileTimer);demoProfileTimer=setInterval(()=>{if(S.view!=='home'){p.playing=false;clearInterval(demoProfileTimer);return}p.idx++;if(p.idx>=96){p.idx=96;p.playing=false;clearInterval(demoProfileTimer)}render(false)},250);render(false)},
   dpreset:()=>{const p=demoProfileState();p.idx=0;p.playing=false;clearInterval(demoProfileTimer);render(false)},
   wzall:a=>{const on=a==='1';S.wz.oms.forEach(o=>{o.on=on;if(on){o.opts.cons=o.ims;o.opts.prod=o.ims&&o.pv}});S.wz.err='';render(false)},

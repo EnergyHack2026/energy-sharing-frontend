@@ -326,7 +326,7 @@ function invoiceHtml(who){
 }
 /* Výzvy – samostatná položka menu (pôvodne záložka Odmien); iWatt odmeny majú záložky iWatt, Odznaky, Certifikát */
 let CH_MODE=false;
-function vChallenges(){const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
+function vChallenges(){if(S.reg.demoCustomer&&S.wz)return demoChallengesView();const t=S.rwtab;CH_MODE=true;S.rwtab=S.chtab==='bdg'?'bdg':'ch';try{return vRewards()}finally{CH_MODE=false;S.rwtab=t}}
 /* certifikát prevádzky – samostatná položka menu (iba prevádzka) */
 const vCertView=()=>vGoodNeighbour();
 /* ---------- Výzvy – jedna odporúčaná akcia dňa, ostatné výzvy, splnené; odmena v iWatt ---------- */
@@ -362,6 +362,7 @@ function chTimePick(it,win,cls=''){
 }
 const chStPill=it=>it.st==='wait'?pill('o','Prijatá · čaká na '+it.o.time):it.st==='done'?pill('g','✓ Splnená · overené elektromerom'):it.st==='fail'?pill('n','Neoverené – nič sa nedeje'):'';
 function vChallengesNew(per){
+ if(S.reg.demoCustomer&&S.wz)return demoChallengesView();
   chCredit(per);
   const isP=per==='anna',P=profiles(S.c.appTime),win=bestWin(P.fp.map((v,i)=>Math.min(v,P.fc[i])));
   const items=chItems(per),auto=chAuto(per);
@@ -429,6 +430,7 @@ function chEarnSection(per){
   chCredit(per);
   const items=chItems(per),auto=chAuto(per),open=items.filter(x=>x.st==='new').sort((a,b)=>b.eur-a.eur),doneN=items.filter(x=>x.st==='done').length+auto.filter(a=>a.done).length,tot=items.length+auto.length;
   const nx=open[0];
+  if(S.reg.demoCustomer&&S.wz)return `<div class="earn-grid"><div class="card earn-c"><b>Výzvy pre vaše energetické miesta</b><span class="sm mut">${demoRealChallenges().length} návrhov presunu spotreby podľa profilu 15. 8. 2026. Pri každom je miesto, EIC a konkrétny čas.</span><button class="btn sm" data-act="view:challenges">Zobraziť výzvy podľa miesta</button></div><div class="card earn-c"><b>Slnečný deň</b><span class="sm mut">Zahrajte si hru a zbierajte iWatt.</span><button class="btn sm" data-act="iwplay">Hrať</button></div><div class="card earn-c"><b>Pozvite suseda</b><span class="sm mut">Pozvite suseda do zdieľania.</span><button class="btn sm" data-act="view:cert">Pozvať</button></div></div>`;
   return `   <div class="earn-grid">
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('clock')}</span><span class="pill ${doneN?'g':'n'}">${doneN} / ${tot} splnené</span></div><b>Výzvy dnes</b><span class="sm mut">${nx?`Ďalej: ${nx.verb} ${nx.t} · +${fm(CH_IW,0)} iWatt`:'Dnešné výzvy máte prijaté.'}</span><button class="btn sm" data-act="chgo:rewards">Zobraziť výzvy</button></div>
     <div class="card earn-c"><div class="earn-h"><span class="svc-ic">${icon('sun')}</span><span class="pill n">do 150 iWatt denne</span></div><b>Slnečný deň</b><span class="sm mut">Cez deň zbierajte slnko, večer rozsvieťte domy susedov.</span><button class="btn sm" data-act="iwplay">Hrať</button></div>
